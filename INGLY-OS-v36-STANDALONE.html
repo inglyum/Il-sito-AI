@@ -979,8 +979,24 @@ tr:hover td { background: rgba(255,255,255,.02) !important; }
     <!-- COL 3: Riepilogo -->
     <div>
       <div class="card mb-14">
-        <div class="card-title" style="font-size:12px;color:#fff;margin-bottom:12px">👤 CLIENTE (CRM)</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div class="card-title" style="font-size:12px;color:#fff;margin-bottom:0">👤 CLIENTE (CRM)</div>
+          <button onclick="const f=document.getElementById('q-new-client-form');f.style.display=f.style.display==='none'?'block':'none'" title="Aggiungi nuovo cliente" style="padding:3px 8px;background:var(--primary-dim);border:1px solid var(--primary-border);border-radius:6px;color:var(--primary);cursor:pointer;font-size:11px;font-weight:700">+ Nuovo</button>
+        </div>
         <div class="form-group"><select class="form-control" id="q-client"><option value="">-- Seleziona --</option></select></div>
+        <!-- Quick Add Client inline -->
+        <div id="q-new-client-form" style="display:none;background:var(--bg-card2);border:1px solid var(--primary-border);border-radius:9px;padding:12px;margin-top:6px">
+          <div style="font-size:11px;font-weight:700;color:var(--primary);margin-bottom:8px">➕ Nuovo Cliente Rapido</div>
+          <div style="display:grid;gap:6px;margin-bottom:8px">
+            <input id="qnc2-name" class="form-control" placeholder="Nome *" style="font-size:12px">
+            <input id="qnc2-phone" class="form-control" placeholder="Telefono" style="font-size:12px">
+            <input id="qnc2-email" class="form-control" placeholder="Email" style="font-size:12px">
+          </div>
+          <div style="display:flex;gap:6px">
+            <button onclick="Quoter._saveNewClient()" style="flex:1;padding:7px;background:var(--primary);border:none;border-radius:7px;color:#000;font-weight:700;cursor:pointer;font-size:11px">💾 Salva e Seleziona</button>
+            <button onclick="document.getElementById('q-new-client-form').style.display='none'" style="padding:7px 10px;background:var(--bg-card3);border:1px solid var(--border2);border-radius:7px;color:var(--text-muted);cursor:pointer;font-size:11px">✕</button>
+          </div>
+        </div>
         <div class="form-group"><label class="form-label">TITOLO LAVORO</label><input class="form-control" id="q-name" placeholder="es. Insegna LED Plexy"></div>
         <div class="form-row">
           <div class="form-group"><label class="form-label">SCADENZA</label><input class="form-control" id="q-deadline" type="date"></div>
@@ -1000,6 +1016,30 @@ tr:hover td { background: rgba(255,255,255,.02) !important; }
           </div>
         </div>
         <div class="stat-row" style="font-size:12px"><span class="text-muted">Costo Vivo</span><span class="stat-val" id="qr-cost">€0.00</span></div>
+        <!-- ➕ Costi Aggiuntivi Dettagliati v37 -->
+        <div style="margin:8px 0;border:1px solid var(--border2);border-radius:9px;overflow:hidden">
+          <button onclick="const b=document.getElementById('qr-extra-body');const ic=document.getElementById('qr-extra-ic');b.style.display=b.style.display==='none'?'block':'none';ic.textContent=b.style.display==='none'?'▶':'▼'" style="width:100%;background:var(--bg-card2);border:none;padding:8px 10px;color:var(--text-muted);font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:space-between;text-align:left">
+            <span>➕ Costi Aggiuntivi</span>
+            <span style="display:flex;align-items:center;gap:6px"><span id="qr-extra-total-label" style="color:var(--primary);font-size:10px"></span><span id="qr-extra-ic">▶</span></span>
+          </button>
+          <div id="qr-extra-body" style="display:none;padding:10px;background:var(--bg-card);border-top:1px solid var(--border)">
+            <div style="display:grid;grid-template-columns:1fr auto;gap:6px 8px;align-items:center;font-size:11px">
+              <label style="color:var(--text-muted)">📦 Imballaggio €/pz</label>
+              <input type="number" id="qr-ext-pack" value="0.50" step="0.10" min="0" oninput="Quoter.recalcRight()" style="width:70px;padding:4px 6px;background:var(--bg-card2);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-size:11px;text-align:right">
+              <label style="color:var(--text-muted)">🚚 Spedizione €</label>
+              <input type="number" id="qr-ext-ship" value="4.50" step="0.50" min="0" oninput="Quoter.recalcRight()" style="width:70px;padding:4px 6px;background:var(--bg-card2);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-size:11px;text-align:right">
+              <label style="color:var(--text-muted)">🎨 Verniciatura €</label>
+              <input type="number" id="qr-ext-paint" value="0.00" step="0.10" min="0" oninput="Quoter.recalcRight()" style="width:70px;padding:4px 6px;background:var(--bg-card2);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-size:11px;text-align:right">
+              <label style="color:var(--text-muted)">🔧 Lavoraz. extra €</label>
+              <input type="number" id="qr-ext-work" value="0.00" step="0.10" min="0" oninput="Quoter.recalcRight()" style="width:70px;padding:4px 6px;background:var(--bg-card2);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-size:11px;text-align:right">
+              <label style="color:var(--text-muted)">📋 Personalizzaz. €</label>
+              <input type="number" id="qr-ext-custom" value="0.00" step="0.50" min="0" oninput="Quoter.recalcRight()" style="width:70px;padding:4px 6px;background:var(--bg-card2);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-size:11px;text-align:right">
+              <label style="color:var(--text-muted)">💰 Altri costi €</label>
+              <input type="number" id="qr-ext-other" value="0.00" step="0.50" min="0" oninput="Quoter.recalcRight()" style="width:70px;padding:4px 6px;background:var(--bg-card2);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-size:11px;text-align:right">
+            </div>
+          </div>
+        </div>
+        <div class="stat-row" style="font-size:12px"><span class="text-muted">Costi Extra</span><span class="stat-val" id="qr-extra-sum" style="color:var(--orange)">€0.00</span></div>
         <div class="stat-row" style="font-size:12px"><span class="text-muted">Subtotale</span><span class="stat-val" id="qr-sub">€0.00</span></div>
         <div class="stat-row" id="qr-iva-row" style="font-size:12px"><span class="text-muted" id="qr-iva-label">IVA (22%)</span><span class="stat-val" id="qr-iva">€0.00</span></div>
         <div class="form-group mt-12">
@@ -2880,7 +2920,7 @@ tr:hover td { background: rgba(255,255,255,.02) !important; }
       <div class="card-title" data-i18n="settings.calcParams">Parametri Calcolo</div>
       <div class="form-group"><label class="form-label" data-i18n="settings.markup">Markup Default (%)</label><input class="form-control" id="set-markup" type="number" value="40"></div>
       <div class="form-group"><label class="form-label" data-i18n="settings.vat">IVA (%)</label><input class="form-control" id="set-vat" type="number" value="22"></div>
-      <div class="form-group"><label class="form-label" data-i18n="settings.machineCost">Costo Macchina (€/min)</label><input class="form-control" id="set-machine-cost" type="number" value="0.35" step="0.01"></div>
+      <div class="form-group"><label class="form-label" data-i18n="settings.machineCost">Costo Macchina (€/min)</label><input class="form-control" id="set-machine-cost" type="number" value="0.38" step="0.01"></div>
       <div class="form-group"><label class="form-label" data-i18n="settings.laborCost">Costo Lavoro (€/min)</label><input class="form-control" id="set-labor-cost" type="number" value="0.50" step="0.01"></div>
     </div>
     <div class="card">
@@ -12825,8 +12865,22 @@ const Quoter={
     if(this._recalcTimer) clearTimeout(this._recalcTimer);
     this._recalcTimer = setTimeout(()=>{ this._recalcNow(); this._recalcTimer=null; }, 60);
   },
+  _getExtraCosts(){
+    const qty=Math.max(1,this.lines.reduce((s,l)=>s+(+(l.qty)||1),0));
+    const pack  =parseFloat(eid('qr-ext-pack')?.value||0)*qty;
+    const ship  =parseFloat(eid('qr-ext-ship')?.value||0);
+    const paint =parseFloat(eid('qr-ext-paint')?.value||0);
+    const work  =parseFloat(eid('qr-ext-work')?.value||0);
+    const custom=parseFloat(eid('qr-ext-custom')?.value||0);
+    const other =parseFloat(eid('qr-ext-other')?.value||0);
+    const total =+(pack+ship+paint+work+custom+other).toFixed(2);
+    const lbl=eid('qr-extra-total-label'); if(lbl) lbl.textContent=total>0?'€'+total.toFixed(2):'';
+    const sumEl=eid('qr-extra-sum'); if(sumEl) sumEl.textContent='€'+total.toFixed(2);
+    return total;
+  },
   _recalcNow(){
-    const totalCost=this.lines.reduce((a,l)=>a+l.subtotal,0);
+    const extraCost=this._getExtraCosts();
+    const totalCost=this.lines.reduce((a,l)=>a+l.subtotal,0)+extraCost;
     const markup=parseFloat(eid('qr-markup')?.value||100)/100;
     const discount=parseFloat(eid('qr-discount')?.value||0)/100;
     const net=totalCost*(1+markup)*(1-discount);
@@ -20408,6 +20462,25 @@ ${photoBlock ? '<div class="section">'+photoBlock+'</div>' : ''}
       if(inp){ inp.value = name; inp.dataset.clientId = newClient.id; }
       document.getElementById('q-quick-client-form').style.display='none';
       ['qnc-name','qnc-phone','qnc-email'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+      toast('✅ Cliente "'+name+'" aggiunto e selezionato!','success');
+      Bus.emit('client:created', newClient);
+    } catch(e){ toast('Errore salvataggio cliente','error'); }
+  },
+
+  async _saveNewClient(){
+    const name = document.getElementById('qnc2-name')?.value?.trim();
+    if(!name){ toast('Inserisci almeno il nome','warning'); return; }
+    const phone = document.getElementById('qnc2-phone')?.value?.trim()||'';
+    const email = document.getElementById('qnc2-email')?.value?.trim()||'';
+    const newClient = { id:'c'+Date.now(), name, phone, email, createdAt:new Date().toISOString(), tags:['nuovo'], source:'quoter' };
+    try {
+      const clients = await AppStore.get('clients').catch(()=>[]);
+      clients.push(newClient);
+      await AppStore.set('clients', clients);
+      const sel = document.getElementById('q-client');
+      if(sel){ const opt=document.createElement('option'); opt.value=newClient.id; opt.textContent=name; opt.selected=true; sel.appendChild(opt); }
+      document.getElementById('q-new-client-form').style.display='none';
+      ['qnc2-name','qnc2-phone','qnc2-email'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
       toast('✅ Cliente "'+name+'" aggiunto e selezionato!','success');
       Bus.emit('client:created', newClient);
     } catch(e){ toast('Errore salvataggio cliente','error'); }
@@ -33991,6 +34064,9 @@ const EtsyPulse = {
     if(out) out.style.display='';
     if(txt) txt.innerHTML=`<div style="color:var(--text-muted)">🤖 AI analizza la nicchia "${niche.label}"…</div>`;
     try{
+      if(typeof AIStudio==='undefined'||typeof AIStudio._callAI!=='function'){
+        toast('AI non disponibile. Configura un provider in Impostazioni → AI Hub','warning'); return;
+      }
       const r = await AIStudio._callAI(`Analisi di mercato completa per la nicchia Etsy laser: "${niche.label}" (keyword: ${niche.kw})\n\n**OPPORTUNITÀ:** dimensione mercato, trend crescita, livello concorrenza\n**TOP 5 PRODOTTI** da lanciare ora con prezzo e margine stimato\n**KEYWORD PRINCIPALI:** 10 keyword con volume alto/medio\n**PREZZI DI MERCATO:** range basso/medio/premium\n**STAGIONALITÀ:** mesi migliori\n**AZIONE IMMEDIATA:** cosa fare questa settimana\n\nSii specifico per mercato italiano. Max 350 parole.`);
       if(txt) txt.innerHTML = `<div style="font-size:12px;font-weight:700;color:#f0728f;margin-bottom:10px">🎯 Analisi: ${niche.em} ${niche.label}</div>`
         + r.replace(/\*\*([^*]+)\*\*/g,'<strong style="color:var(--primary)">$1</strong>').replace(/\n/g,'<br>');
@@ -98643,6 +98719,8 @@ body.saas-active main {
     {id:'fi-20mopa',brand:'Fibra',model:'20W MOPA',tech:'Fibra',power_w:20,price:3500,life_h:50000,kw:0.050,maint:0.02,icon:'🔥',color:'#f43f5e'},
     {id:'fi-30',brand:'Fibra',model:'30W Raycus',tech:'Fibra',power_w:30,price:3000,life_h:60000,kw:0.080,maint:0.02,icon:'🔥',color:'#e11d48'},
     {id:'co-80',brand:'CO₂',model:'80W',tech:'CO₂',power_w:80,price:1200,life_h:6000,kw:0.200,maint:0.07,icon:'💨',color:'#06b6d4'},
+    {id:'co-100',brand:'CO₂',model:'100W Reci',tech:'CO₂',power_w:100,price:1800,life_h:8000,kw:0.280,maint:0.09,icon:'🔥',color:'#ef4444'},
+    {id:'cnc-3018',brand:'CNC',model:'Router 3018',tech:'CNC',power_w:60,price:120,life_h:2000,kw:0.100,maint:0.05,icon:'🔩',color:'#d97706'},
     {id:'dtf-pa3',brand:'Prestige',model:'A3 DTF',tech:'DTF',power_w:0,price:2500,life_h:3000,kw:0.500,maint:0.12,icon:'🖨️',color:'#fb7185'},
     {id:'uv-a3',brand:'UV',model:'A3 Flatbed',tech:'UV',power_w:0,price:6000,life_h:5000,kw:2.000,maint:0.15,icon:'🌈',color:'#818cf8'},
     {id:'sub-sg5',brand:'Sawgrass',model:'SG500',tech:'Sub',power_w:0,price:699,life_h:3000,kw:0.020,maint:0.02,icon:'🎨',color:'#fb923c'},
