@@ -13828,7 +13828,26 @@ const Quoter={
   _selectResource(id,type) { toast('Risorsa selezionata','info'); this.closeResourcePicker(); },
   _loadForEdit(id) { this.openQuoteModal?.(id); },
   _renderRPCatBtns() { /* resource picker category buttons - handled inline */ },
-  shareConfigurator() { const url=window.location.href; navigator.clipboard?.writeText(url).then(()=>toast('Link copiato!','success')).catch(()=>toast(url,'info',8000)); }
+  shareConfigurator() { const url=window.location.href; navigator.clipboard?.writeText(url).then(()=>toast('Link copiato!','success')).catch(()=>toast(url,'info',8000)); },
+
+  async _saveNewClient(){
+    const name = document.getElementById('qnc2-name')?.value?.trim();
+    if(!name){ toast('Inserisci almeno il nome','warning'); return; }
+    const phone = document.getElementById('qnc2-phone')?.value?.trim()||'';
+    const email = document.getElementById('qnc2-email')?.value?.trim()||'';
+    const newClient = { id:'c'+Date.now(), name, phone, email, createdAt:new Date().toISOString(), tags:['nuovo'], source:'quoter' };
+    try {
+      const clients = await AppStore.get('clients').catch(()=>[]);
+      clients.push(newClient);
+      await AppStore.set('clients', clients);
+      const sel = document.getElementById('q-client');
+      if(sel){ const opt=document.createElement('option'); opt.value=newClient.id; opt.textContent=name; opt.selected=true; sel.appendChild(opt); }
+      document.getElementById('q-new-client-form').style.display='none';
+      ['qnc2-name','qnc2-phone','qnc2-email'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+      toast('✅ Cliente "'+name+'" aggiunto e selezionato!','success');
+      if(typeof Bus!=='undefined') Bus.emit('client:created', newClient);
+    } catch(e){ toast('Errore salvataggio cliente','error'); console.error('[Quoter._saveNewClient]',e); }
+  }
 };
 if(typeof Quoter!=="undefined")window.Quoter=Quoter; // immediate window export
 if(!window.Quoter) console.warn('[INGLY] Quoter export failed');
@@ -20462,25 +20481,6 @@ ${photoBlock ? '<div class="section">'+photoBlock+'</div>' : ''}
       if(inp){ inp.value = name; inp.dataset.clientId = newClient.id; }
       document.getElementById('q-quick-client-form').style.display='none';
       ['qnc-name','qnc-phone','qnc-email'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
-      toast('✅ Cliente "'+name+'" aggiunto e selezionato!','success');
-      Bus.emit('client:created', newClient);
-    } catch(e){ toast('Errore salvataggio cliente','error'); }
-  },
-
-  async _saveNewClient(){
-    const name = document.getElementById('qnc2-name')?.value?.trim();
-    if(!name){ toast('Inserisci almeno il nome','warning'); return; }
-    const phone = document.getElementById('qnc2-phone')?.value?.trim()||'';
-    const email = document.getElementById('qnc2-email')?.value?.trim()||'';
-    const newClient = { id:'c'+Date.now(), name, phone, email, createdAt:new Date().toISOString(), tags:['nuovo'], source:'quoter' };
-    try {
-      const clients = await AppStore.get('clients').catch(()=>[]);
-      clients.push(newClient);
-      await AppStore.set('clients', clients);
-      const sel = document.getElementById('q-client');
-      if(sel){ const opt=document.createElement('option'); opt.value=newClient.id; opt.textContent=name; opt.selected=true; sel.appendChild(opt); }
-      document.getElementById('q-new-client-form').style.display='none';
-      ['qnc2-name','qnc2-phone','qnc2-email'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
       toast('✅ Cliente "'+name+'" aggiunto e selezionato!','success');
       Bus.emit('client:created', newClient);
     } catch(e){ toast('Errore salvataggio cliente','error'); }
@@ -46625,7 +46625,7 @@ const ModMgr = {
       const el = document.createElement('div');
       el.className = 'nav-item';
       el.dataset.section = sec.id;
-      el.onclick = ()=>{ toast(`${sec.label} — sezione personalizzata`,'info'); };
+      el.onclick = ()=>{ if(typeof SectionWorkspace!=='undefined') SectionWorkspace.open(sec); else toast(`${sec.label}`,'info'); };
       el.innerHTML = `<i class="${sec.icon||'fas fa-circle'}"></i> ${sec.label}`;
       if(sec.color) el.style.color = sec.color;
       el.style.fontWeight = '600';
@@ -46958,6 +46958,203 @@ const ModMgr = {
   init(){ this._apply(); }
 };
 window.ModMgr = ModMgr;
+
+// ── SectionWorkspace v1: workspace personalizzabile per sezioni custom ──────
+const SectionWorkspace = {
+  SK: 'ingly_section_workspaces_v1',
+
+  _data(){ try{ return JSON.parse(localStorage.getItem(this.SK)||'{}'); }catch{ return{}; } },
+  _save(d){ try{ localStorage.setItem(this.SK, JSON.stringify(d)); }catch{} },
+
+  open(sec){
+    let view = document.getElementById('view-'+sec.id);
+    if(!view){
+      view = document.createElement('div');
+      view.className = 'section-view';
+      view.id = 'view-'+sec.id;
+      const ci = document.getElementById('content-inner');
+      if(ci) ci.appendChild(view);
+    }
+    this._render(view, sec);
+    if(typeof App !== 'undefined') App.navigate(sec.id);
+  },
+
+  _render(view, sec){
+    const d = this._data();
+    const ws = d[sec.id] || { notes:'', pins:[], tasks:[] };
+    const safeid = sec.id.replace(/[^a-zA-Z0-9_]/g,'_');
+    const QUICK = ['dashboard','quoter','sales','clients','catalog','cashflow','inventory','lasercalc','goals'];
+    view.innerHTML = `
+      <div style="padding:20px 24px;max-width:960px">
+        <!-- Header -->
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap">
+          <div style="width:46px;height:46px;border-radius:12px;background:var(--primary-dim);border:1px solid var(--primary-border);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">${sec.icon?`<i class="${sec.icon}" style="color:${sec.color||'var(--primary)'}"></i>`:'📁'}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:20px;font-weight:800;color:var(--text);line-height:1.2">${sec.label}</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Workspace personalizzato · Sezione custom</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-shrink:0">
+            <button onclick="SectionWorkspace._editMeta('${sec.id}')" style="padding:7px 13px;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:12px;cursor:pointer;transition:.15s" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">✏️ Modifica</button>
+            <button onclick="ModMgr.open()" style="padding:7px 13px;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:12px;cursor:pointer;transition:.15s" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">⚙️ Gestisci Sezioni</button>
+          </div>
+        </div>
+
+        <!-- Description if set -->
+        ${ws.desc ? `<div style="padding:12px 16px;background:var(--bg-card2);border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.5">${ws.desc}</div>` : ''}
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+          <!-- Note Interne -->
+          <div style="background:var(--bg-card2);border:1px solid var(--border);border-radius:12px;padding:16px">
+            <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">📝 Note Interne</div>
+            <textarea id="ws-notes-${safeid}" placeholder="Scrivi note, idee, promemoria per questa sezione..."
+              style="width:100%;min-height:140px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px;resize:vertical;color:var(--text);font-size:13px;line-height:1.6;outline:none;box-sizing:border-box;font-family:inherit;transition:.2s"
+              onfocus="this.style.borderColor='var(--primary-border)'" onblur="this.style.borderColor='var(--border)';SectionWorkspace._saveNote('${sec.id}',this.value)"
+            >${ws.notes||''}</textarea>
+            <button onclick="SectionWorkspace._saveNote('${sec.id}',document.getElementById('ws-notes-${safeid}').value)" style="margin-top:8px;padding:5px 12px;background:var(--primary-dim);border:1px solid var(--primary-border);border-radius:7px;color:var(--primary);font-size:11px;font-weight:700;cursor:pointer">💾 Salva nota</button>
+          </div>
+
+          <!-- Task List -->
+          <div style="background:var(--bg-card2);border:1px solid var(--border);border-radius:12px;padding:16px">
+            <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">✅ Task / To-Do</div>
+            <div id="ws-tasks-${safeid}" style="margin-bottom:10px;max-height:160px;overflow-y:auto">
+              ${(ws.tasks||[]).map((t,i)=>`
+                <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+                  <input type="checkbox" ${t.done?'checked':''} onchange="SectionWorkspace._toggleTask('${sec.id}',${i},this.checked)"
+                    style="width:15px;height:15px;cursor:pointer;accent-color:var(--primary);flex-shrink:0">
+                  <span style="flex:1;font-size:12px;color:var(--text);${t.done?'text-decoration:line-through;opacity:.5':''}">${t.text}</span>
+                  <button onclick="SectionWorkspace._removeTask('${sec.id}',${i})" style="background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:13px;padding:0 4px" title="Rimuovi">✕</button>
+                </div>`).join('')||'<div style="font-size:12px;color:var(--text-dim);padding:8px 0">Nessun task — aggiungine uno sotto</div>'}
+            </div>
+            <div style="display:flex;gap:6px">
+              <input id="ws-newtask-${safeid}" placeholder="Nuovo task..." onkeydown="if(event.key==='Enter')SectionWorkspace._addTask('${sec.id}','${safeid}')"
+                style="flex:1;padding:6px 10px;background:var(--bg-card);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:12px;outline:none">
+              <button onclick="SectionWorkspace._addTask('${sec.id}','${safeid}')" style="padding:6px 12px;background:var(--primary-dim);border:1px solid var(--primary-border);border-radius:7px;color:var(--primary);font-size:11px;font-weight:700;cursor:pointer">+ Add</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pinned sections -->
+        <div style="background:var(--bg-card2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">📌 Sezioni Pinnate</div>
+            <button onclick="SectionWorkspace._pinPicker('${sec.id}','${safeid}')" style="padding:4px 10px;background:var(--primary-dim);border:1px solid var(--primary-border);border-radius:6px;color:var(--primary);font-size:11px;cursor:pointer;font-weight:700">+ Pin</button>
+          </div>
+          <div id="ws-pins-${safeid}" style="display:flex;flex-wrap:wrap;gap:8px">
+            ${(ws.pins||[]).length ? (ws.pins||[]).map(p=>`
+              <div style="display:flex;align-items:center;gap:6px;padding:7px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:9px;cursor:pointer;transition:.15s"
+                onclick="App.navigate('${p.id}')" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
+                <span style="font-size:12px;color:var(--text);font-weight:600">${p.label}</span>
+                <button onclick="event.stopPropagation();SectionWorkspace._unpin('${sec.id}','${safeid}','${p.id}')" style="background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:11px;padding:0;line-height:1" title="Rimuovi pin">✕</button>
+              </div>`).join('') : '<div style="font-size:12px;color:var(--text-dim)">Nessuna sezione pinnata — clicca + Pin</div>'}
+          </div>
+        </div>
+
+        <!-- Quick Access -->
+        <div style="background:var(--bg-card2);border:1px solid var(--border);border-radius:12px;padding:16px">
+          <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">⚡ Accesso Rapido</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            ${QUICK.map(s=>`<button onclick="App.navigate('${s}')" style="padding:6px 13px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:12px;cursor:pointer;transition:.15s" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">${s}</button>`).join('')}
+          </div>
+        </div>
+      </div>`;
+  },
+
+  _saveNote(sectionId, text){
+    const d = this._data();
+    if(!d[sectionId]) d[sectionId] = { notes:'', pins:[], tasks:[] };
+    d[sectionId].notes = text;
+    this._save(d);
+    toast('📝 Nota salvata','success');
+  },
+
+  _addTask(sectionId, safeid){
+    const inp = document.getElementById('ws-newtask-'+safeid);
+    if(!inp) return;
+    const text = inp.value.trim();
+    if(!text) return;
+    const d = this._data();
+    if(!d[sectionId]) d[sectionId] = { notes:'', pins:[], tasks:[] };
+    d[sectionId].tasks.push({ text, done:false });
+    this._save(d);
+    inp.value = '';
+    const sec = (typeof ModMgr !== 'undefined' ? ModMgr.getCustom() : []).find(s=>s.id===sectionId);
+    if(sec){ const v=document.getElementById('view-'+sectionId); if(v) this._render(v,sec); }
+  },
+
+  _toggleTask(sectionId, idx, done){
+    const d = this._data();
+    if(d[sectionId]&&d[sectionId].tasks[idx]) d[sectionId].tasks[idx].done = done;
+    this._save(d);
+  },
+
+  _removeTask(sectionId, idx){
+    const d = this._data();
+    if(d[sectionId]&&d[sectionId].tasks) d[sectionId].tasks.splice(idx,1);
+    this._save(d);
+    const sec = (typeof ModMgr !== 'undefined' ? ModMgr.getCustom() : []).find(s=>s.id===sectionId);
+    if(sec){ const v=document.getElementById('view-'+sectionId); if(v) this._render(v,sec); }
+  },
+
+  _pinPicker(sectionId, safeid){
+    const sections = [];
+    document.querySelectorAll('#sidebar-nav .nav-item[data-section]').forEach(el=>{
+      if(el.closest('#nav-favs-list')||el.closest('#nav-recent-list')) return;
+      const id = el.dataset.section; if(id===sectionId) return;
+      const tmp = el.cloneNode(true);
+      tmp.querySelectorAll('.nav-pin,.nav-badge,i').forEach(x=>x.remove());
+      sections.push({ id, label: (tmp.textContent||'').trim().slice(0,30) });
+    });
+
+    let ov = document.getElementById('ws-pin-picker-ov');
+    if(!ov){ ov=document.createElement('div'); ov.id='ws-pin-picker-ov'; ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center'; ov.onclick=(e)=>{if(e.target===ov)ov.remove();}; document.body.appendChild(ov); }
+    ov.innerHTML = `<div style="background:var(--bg-card);border:1px solid var(--border2);border-radius:16px;padding:20px;width:340px;max-height:480px;display:flex;flex-direction:column">
+      <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:12px">📌 Pinna una sezione</div>
+      <input placeholder="Cerca..." oninput="const q=this.value.toLowerCase();this.nextElementSibling.querySelectorAll('[data-l]').forEach(r=>{r.style.display=r.dataset.l.includes(q)?'':'none'})"
+        style="width:100%;padding:8px;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;outline:none;margin-bottom:10px;box-sizing:border-box">
+      <div style="overflow-y:auto;flex:1">
+        ${sections.map(s=>`<div data-l="${s.label.toLowerCase()}" style="padding:8px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--text);transition:.1s"
+          onclick="SectionWorkspace._pinSection('${sectionId}','${safeid}','${s.id}','${s.label.replace(/'/g,"\\'")}')" onmouseover="this.style.background='var(--bg-card2)'" onmouseout="this.style.background='none'">${s.label}</div>`).join('')}
+      </div>
+    </div>`;
+  },
+
+  _pinSection(sectionId, safeid, pinId, pinLabel){
+    const d = this._data();
+    if(!d[sectionId]) d[sectionId] = { notes:'', pins:[], tasks:[] };
+    if(!d[sectionId].pins.find(p=>p.id===pinId)){
+      d[sectionId].pins.push({ id:pinId, label:pinLabel });
+      this._save(d);
+      const ov=document.getElementById('ws-pin-picker-ov'); if(ov) ov.remove();
+      const sec = (typeof ModMgr !== 'undefined' ? ModMgr.getCustom() : []).find(s=>s.id===sectionId);
+      if(sec){ const v=document.getElementById('view-'+sectionId); if(v) this._render(v,sec); }
+      toast(`📌 "${pinLabel}" pinnata!`,'success');
+    }
+  },
+
+  _unpin(sectionId, safeid, pinId){
+    const d = this._data();
+    if(d[sectionId]) d[sectionId].pins = (d[sectionId].pins||[]).filter(p=>p.id!==pinId);
+    this._save(d);
+    const sec = (typeof ModMgr !== 'undefined' ? ModMgr.getCustom() : []).find(s=>s.id===sectionId);
+    if(sec){ const v=document.getElementById('view-'+sectionId); if(v) this._render(v,sec); }
+    toast('Pin rimosso','info');
+  },
+
+  _editMeta(sectionId){
+    const d = this._data();
+    const ws = d[sectionId] || { notes:'', pins:[], tasks:[] };
+    const desc = prompt('Descrizione del workspace (opzionale):', ws.desc||'');
+    if(desc===null) return;
+    if(!d[sectionId]) d[sectionId] = { notes:'', pins:[], tasks:[] };
+    d[sectionId].desc = desc;
+    this._save(d);
+    const sec = (typeof ModMgr !== 'undefined' ? ModMgr.getCustom() : []).find(s=>s.id===sectionId);
+    if(sec){ const v=document.getElementById('view-'+sectionId); if(v) this._render(v,sec); }
+    toast('✅ Workspace aggiornato','success');
+  }
+};
+window.SectionWorkspace = SectionWorkspace;
+
 // GlobalSearch → in final batch block
 
 
