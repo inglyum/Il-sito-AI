@@ -1765,6 +1765,30 @@ tr:hover td .badge { opacity: 1; }
     </div>
   </div>
   <div class="grid-3 mb-16" id="cashflow-kpis"></div>
+  <!-- BUDGET MENSILE -->
+  <div class="card mb-16" style="border:1px solid var(--primary-border)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="font-size:14px;font-weight:700">📊 Budget Mensile</div>
+      <button onclick="BudgetTracker.openEdit()" style="padding:4px 12px;background:var(--primary-dim);border:1px solid var(--primary-border);color:var(--primary);border-radius:6px;cursor:pointer;font-size:12px;font-weight:600">✏️ Imposta budget</button>
+    </div>
+    <div id="budget-tracker-rows" style="display:flex;flex-direction:column;gap:8px">
+      <div style="color:var(--text-muted);font-size:12px;text-align:center;padding:12px">Caricamento...</div>
+    </div>
+  </div>
+  <!-- IMPORT BANK CSV -->
+  <div class="card mb-16">
+    <div style="font-size:14px;font-weight:700;margin-bottom:10px">🏦 Import Estratto Conto</div>
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px">Importa CSV da banca (formato: data,descrizione,importo). I movimenti negativi sono uscite, positivi entrate.</div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <input type="file" id="bank-csv-input" accept=".csv,.txt" onchange="BankImport.importCSV(this)" style="font-size:12px;color:var(--text-muted);flex:1">
+      <select id="bank-csv-sep" style="background:var(--bg-card2);border:1px solid var(--border);color:var(--text);padding:6px;border-radius:6px;font-size:12px">
+        <option value=",">Separatore: virgola</option>
+        <option value=";">Separatore: punto e virgola</option>
+        <option value="\t">Separatore: tab</option>
+      </select>
+    </div>
+    <div id="bank-import-preview" style="margin-top:10px"></div>
+  </div>
   <div class="grid-2">
     <div class="card"><div class="card-title">Andamento</div><div class="chart-wrap"><canvas id="chart-cashflow"></canvas></div></div>
     <div class="card"><div class="card-title">Ultimi Movimenti</div><div id="cashflow-list"></div></div>
@@ -3081,18 +3105,57 @@ tr:hover td .badge { opacity: 1; }
         </div></div>
       <div class="form-group"><label class="form-label">Partita IVA</label>
         <input class="form-control" id="set-piva" placeholder="IT12345678901"></div>
+      <div class="form-group"><label class="form-label">Codice SDI <span style="color:var(--text-dim);font-size:10px">(7 cifre — fattura elettronica)</span></label>
+        <input class="form-control" id="set-sdi" placeholder="0000000" maxlength="7"></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Email</label>
         <input class="form-control" id="set-email" type="email" placeholder="info@miolab.it"></div>
-      <div class="form-group"><label class="form-label">Telefono</label>
-        <input class="form-control" id="set-phone" placeholder="+39 333 1234567"></div>
+      <div class="form-group"><label class="form-label">PEC <span style="color:var(--text-dim);font-size:10px">(per fattura elettronica)</span></label>
+        <input class="form-control" id="set-pec" type="email" placeholder="miolab@pec.it"></div>
     </div>
     <div class="form-row">
+      <div class="form-group"><label class="form-label">Telefono</label>
+        <input class="form-control" id="set-phone" placeholder="+39 333 1234567"></div>
       <div class="form-group"><label class="form-label">Indirizzo</label>
         <input class="form-control" id="set-address" placeholder="Via Roma 1, Milano"></div>
+    </div>
+    <div class="form-row">
       <div class="form-group"><label class="form-label">Aliquota IVA %</label>
         <input class="form-control" id="set-vat" type="number" min="0" max="30" value="22"></div>
+      <div class="form-group"><label class="form-label">Regime Fiscale</label>
+        <select class="form-control" id="set-regime">
+          <option value="RF01">RF01 — Ordinario</option>
+          <option value="RF02">RF02 — Contribuenti minimi</option>
+          <option value="RF19">RF19 — Regime forfettario</option>
+        </select></div>
+    </div>
+    <!-- NUMERAZIONE DOCUMENTI -->
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+      <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">📋 Numerazione Documenti</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Prefisso Fattura</label>
+          <input class="form-control" id="set-inv-prefix" placeholder="FT" maxlength="6" style="font-family:monospace"></div>
+        <div class="form-group"><label class="form-label">Numero progressivo fattura</label>
+          <input class="form-control" id="set-inv-num" type="number" min="1" placeholder="1"></div>
+        <div class="form-group"><label class="form-label">Prefisso Preventivo</label>
+          <input class="form-control" id="set-quot-prefix" placeholder="PV" maxlength="6" style="font-family:monospace"></div>
+        <div class="form-group"><label class="form-label">Numero progressivo prev.</label>
+          <input class="form-control" id="set-quot-num" type="number" min="1" placeholder="1"></div>
+      </div>
+    </div>
+    <!-- LOGO UPLOAD -->
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+      <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">🖼 Logo Aziendale</div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div id="set-logo-preview" style="width:80px;height:80px;border:2px dashed var(--border2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text-dim);text-align:center;overflow:hidden;flex-shrink:0">Nessun logo</div>
+        <div style="flex:1">
+          <div class="form-group" style="margin-bottom:8px"><label class="form-label">URL logo (esterna)</label>
+            <input class="form-control" id="set-logo" placeholder="https://... oppure lascia vuoto" oninput="Settings._previewLogo(this.value)"></div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">oppure carica file:</div>
+          <input type="file" id="set-logo-file" accept="image/*" onchange="Settings._uploadLogo(this)" style="font-size:12px;color:var(--text-muted)">
+        </div>
+      </div>
     </div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Markup default (%)</label>
@@ -6340,6 +6403,22 @@ Il sistema analizza revenue, margini, clienti a rischio, ordini in scadenza, pro
 
 <!-- Toast Container -->
 <div id="toast-container"></div>
+
+<!-- STICKY TIMER WIDGET -->
+<div id="sticky-timer" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg-card);border:1px solid var(--primary-border);border-radius:40px;padding:8px 18px;display:none;align-items:center;gap:12px;z-index:8000;box-shadow:0 8px 32px #0009;cursor:move;user-select:none" id="sticky-timer">
+  <div style="width:8px;height:8px;border-radius:50%;background:var(--red);animation:timerPulse 1s infinite" id="sticky-timer-dot"></div>
+  <div style="font-family:monospace;font-size:18px;font-weight:800;color:var(--text);min-width:70px;text-align:center" id="sticky-timer-display">00:00:00</div>
+  <div style="font-size:12px;color:var(--text-muted);max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="sticky-timer-label">—</div>
+  <button onclick="StickyTimer.pause()" id="sticky-timer-pause" style="background:none;border:none;color:var(--primary);cursor:pointer;font-size:16px;padding:2px 6px" title="Pausa">⏸</button>
+  <button onclick="StickyTimer.stop()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px;padding:2px 6px" title="Stop">⏹</button>
+  <button onclick="StickyTimer.minimize()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:14px;padding:2px 6px" title="Minimizza">⌃</button>
+</div>
+<div id="sticky-timer-mini" style="display:none;position:fixed;bottom:24px;right:24px;background:var(--primary);color:#000;border-radius:99px;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer;z-index:8000;box-shadow:0 4px 16px #0008" onclick="StickyTimer.maximize()">
+  ⏱ <span id="sticky-timer-mini-display">00:00:00</span>
+</div>
+<style>
+@keyframes timerPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.3)}}
+</style>
 
 <!-- ENGINE PANEL -->
 <div id="engine-panel">
@@ -10800,7 +10879,7 @@ const App={
       lasercalc:()=>LaserCalcPage.init(),
       // workflow → pipeline alias above
       // sales → pipeline alias above
-      cashflow:()=>{if(typeof Cashflow!=='undefined')(typeof Cashflow!=='undefined'&&Cashflow.render());},
+      cashflow:()=>{if(typeof Cashflow!=='undefined')(typeof Cashflow!=='undefined'&&Cashflow.render());if(typeof BudgetTracker!=='undefined')BudgetTracker.render();},
       inventory:()=>{if(typeof Inventory!=='undefined')(typeof Inventory!=='undefined'&&Inventory.render());},
       items:()=>{if(typeof Inventory!=='undefined')(typeof Inventory!=='undefined'&&Inventory.render());},
       materials:()=>{if(typeof Materials!=='undefined')(typeof Materials!=='undefined'&&Materials.render());},
@@ -23238,6 +23317,8 @@ const TimeTracker = {
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
         <h2 style="color:#06b6d4;margin:0;font-size:22px">⏱ Time Tracker</h2>
         <span style="font-size:11px;background:#06b6d415;color:#06b6d4;padding:3px 10px;border-radius:99px;border:1px solid #06b6d430;font-weight:700">PER ORDINE</span>
+        <button onclick="TimeTracker.exportPDF()" style="margin-left:auto;padding:6px 14px;background:#6366f120;border:1px solid #6366f140;color:#a5b4fc;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700"><i class="fas fa-file-pdf"></i> Timesheet PDF</button>
+        <button onclick="StickyTimer.start(document.getElementById('tt-order-sel')?.options[document.getElementById('tt-order-sel')?.selectedIndex]?.text||'Timer')" style="padding:6px 14px;background:#06b6d420;border:1px solid #06b6d440;color:#06b6d4;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700">⏱ Timer Sticky</button>
       </div>
       <p style="color:var(--text-muted);margin-bottom:20px;font-size:14px">Cronometra il tempo di produzione per ogni ordine — scopri il tuo €/ora reale</p>
 
@@ -25861,6 +25942,51 @@ Bus.on('data:updated', (payload) => {
 // ═══════════════════════════════════════════════════
 window.Workflow = Workflow;
 window.TimeTracker = TimeTracker;
+
+/* ─── TimeTracker: Timesheet PDF export + StickyTimer bridge ─── */
+TimeTracker.exportPDF = async function(){
+  const logs = await IDB.getAll('timelogs').catch(()=>[]);
+  const orders = await AppStore.get('orders').catch(()=>[]);
+  const cfg = await IDB.get('settings','main').catch(()=>{})||{};
+  if(!logs.length){ toast('Nessun log da esportare','warning'); return; }
+
+  const logoSrc = cfg.logoBase64 || cfg.logo || '';
+  const company = cfg.company || 'Ingly';
+  const now = new Date().toLocaleDateString('it-IT');
+
+  let rows = '';
+  let totalMin = 0;
+  logs.sort((a,b)=>new Date(a.startTime)-new Date(b.startTime)).forEach(l=>{
+    const ord = orders.find(o=>o.id==l.orderId);
+    const label = l.orderId==='free'?'Lavoro generico':ord?(ord.title||ord.clientName||'#'+l.orderId):'#'+l.orderId;
+    const h=Math.floor(l.minutes/60),m=l.minutes%60;
+    totalMin += l.minutes||0;
+    rows += `<tr><td>${l.date||'—'}</td><td>${label}</td><td>${l.note||'—'}</td><td style="text-align:right;font-weight:700">${h}h ${String(m).padStart(2,'0')}m</td></tr>`;
+  });
+  const tH=Math.floor(totalMin/60),tM=totalMin%60;
+
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Timesheet — ${company}</title>
+  <style>body{font-family:Arial,sans-serif;margin:30px;color:#1e293b}
+  h1{color:#6366f1;font-size:22px;margin:0}
+  .header{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid #6366f1}
+  table{width:100%;border-collapse:collapse;margin-top:12px}
+  th{background:#f1f5f9;padding:10px 12px;text-align:left;font-size:12px;border-bottom:2px solid #e2e8f0}
+  td{padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:13px}
+  .total{background:#6366f120;font-weight:700}
+  .footer{margin-top:20px;font-size:11px;color:#94a3b8}</style></head>
+  <body><div class="header">${logoSrc?`<img src="${logoSrc}" style="height:48px">`:''}<div><h1>Timesheet — ${company}</h1><div style="font-size:13px;color:#64748b">Generato il ${now}</div></div></div>
+  <table><thead><tr><th>Data</th><th>Commessa / Progetto</th><th>Note</th><th style="text-align:right">Ore</th></tr></thead>
+  <tbody>${rows}<tr class="total"><td colspan="3">TOTALE</td><td style="text-align:right">${tH}h ${String(tM).padStart(2,'0')}m</td></tr></tbody></table>
+  <div class="footer">Ingly OS — Timesheet Export</div>
+  <script>window.onload=()=>window.print()<\/script></body></html>`;
+
+  const w=window.open('','_blank'); if(!w)return toast('Abilita i popup per esportare','warning');
+  w.document.write(html); w.document.close();
+};
+
+TimeTracker.startStickyTimer = function(label, orderId){
+  if(typeof StickyTimer!=='undefined') StickyTimer.start(label, orderId);
+};
 window.Orders = typeof Orders !== 'undefined' ? Orders : {};
 window.Produzione = Produzione;
 window.Pipeline = Pipeline;
@@ -41947,9 +42073,16 @@ const Settings={
     eid('set-company').value=cfg.company||'';
     const bizName=document.getElementById('topbar-biz-name');if(bizName)bizName.textContent=cfg.company||'Ingly Design';
     if(eid('set-slogan')) eid('set-slogan').value=cfg.slogan||'';
-    if(eid('set-logo')) eid('set-logo').value=cfg.logo||'';
+    if(eid('set-logo')) { eid('set-logo').value=cfg.logo||''; Settings._previewLogo(cfg.logo||cfg.logoBase64||''); }
     if(eid('set-brand-color')) { eid('set-brand-color').value=cfg.brandColor||'#54F2F4'; eid('set-brand-color-pick').value=cfg.brandColor||'#54F2F4'; }
     eid('set-piva').value=cfg.piva||'';
+    if(eid('set-sdi')) eid('set-sdi').value=cfg.sdi||'';
+    if(eid('set-pec')) eid('set-pec').value=cfg.pec||'';
+    if(eid('set-regime')) eid('set-regime').value=cfg.regime||'RF01';
+    if(eid('set-inv-prefix')) eid('set-inv-prefix').value=cfg.invPrefix||'FT';
+    if(eid('set-inv-num')) eid('set-inv-num').value=cfg.invNum||1;
+    if(eid('set-quot-prefix')) eid('set-quot-prefix').value=cfg.quotPrefix||'PV';
+    if(eid('set-quot-num')) eid('set-quot-num').value=cfg.quotNum||1;
     eid('set-email').value=cfg.email||'';
     eid('set-phone').value=cfg.phone||'';
     if(eid('set-address'))eid('set-address').value=cfg.address||'';
@@ -41977,6 +42110,7 @@ const Settings={
     const orEl=eid('set-openrouter-key');
     if(orEl){ orEl.value=localStorage.getItem('ingly_openrouter_key')||''; }
     Settings._renderProviderUI(localStorage.getItem('ingly_ai_provider')||'smart');
+    Settings._previewLogo(cfg.logo||cfg.logoBase64||'');
     const badge=eid('ai-calls-badge');
     if(badge) badge.textContent=AIProvider.getCallsToday()+' chiamate oggi';
     }catch(e){console.warn('[Settings.load]',e);}
@@ -42004,8 +42138,16 @@ const Settings={
         company:     eid('set-company')?.value?.trim()||cfg.company||'',
         slogan:      eid('set-slogan')?.value?.trim()||cfg.slogan||'',
         logo:        eid('set-logo')?.value?.trim()||cfg.logo||'',
+        logoBase64:  cfg.logoBase64||'',
         brandColor:  eid('set-brand-color')?.value?.trim()||cfg.brandColor||'#54F2F4',
         piva:        eid('set-piva')?.value?.trim()||cfg.piva||'',
+        sdi:         eid('set-sdi')?.value?.trim()||cfg.sdi||'',
+        pec:         eid('set-pec')?.value?.trim()||cfg.pec||'',
+        regime:      eid('set-regime')?.value||cfg.regime||'RF01',
+        invPrefix:   eid('set-inv-prefix')?.value?.trim()||cfg.invPrefix||'FT',
+        invNum:      +(eid('set-inv-num')?.value||cfg.invNum||1),
+        quotPrefix:  eid('set-quot-prefix')?.value?.trim()||cfg.quotPrefix||'PV',
+        quotNum:     +(eid('set-quot-num')?.value||cfg.quotNum||1),
         email:       eid('set-email')?.value?.trim()||cfg.email||'',
         phone:       eid('set-phone')?.value?.trim()||cfg.phone||'',
         address:     eid('set-address')?.value?.trim()||cfg.address||'',
@@ -42039,7 +42181,25 @@ const Settings={
       console.error('[Settings.save]', e);
     }
   },
-    setProvider(provider){
+    _previewLogo(src){
+    const el=eid('set-logo-preview'); if(!el)return;
+    if(src){ el.innerHTML='<img src="'+src+'" style="max-width:100%;max-height:100%;object-fit:contain">'; }
+    else { el.innerHTML='<span style="font-size:11px;color:var(--text-dim)">Nessun logo</span>'; }
+  },
+  _uploadLogo(inp){
+    const f=inp.files[0]; if(!f)return;
+    const r=new FileReader();
+    r.onload=async function(e){
+      const b64=e.target.result;
+      const cfg=await IDB.get('settings','main').catch(()=>({}))||{};
+      await IDB.put('settings',{...cfg,id:'main',logoBase64:b64});
+      if(eid('set-logo')) eid('set-logo').value='';
+      Settings._previewLogo(b64);
+      toast('✅ Logo caricato!','success');
+    };
+    r.readAsDataURL(f);
+  },
+  setProvider(provider){
     localStorage.setItem('ingly_ai_provider',provider);
     Settings._renderProviderUI(provider);
   },
@@ -105999,6 +106159,195 @@ var iv=setInterval(function(){
 },250);
 
 })();
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   STICKY TIMER — floating persistent time tracker
+═══════════════════════════════════════════════════════════════════ */
+const StickyTimer = {
+  _sk: 'ingly_sticky_timer_v1',
+  _iv: null,
+  _state: null,
+  _fmt(s){ const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60; return [h,m,sec].map(x=>String(x).padStart(2,'0')).join(':'); },
+  start(label, projectId){
+    const now = Date.now();
+    this._state = { label: label||'Timer', projectId: projectId||null, startTs: now, elapsed: 0, running: true };
+    this._persist();
+    this._show();
+    this._tick();
+    toast('⏱ Timer avviato: '+(label||'Timer'), 'info');
+  },
+  resume(){
+    if(!this._state) { this._state = this._load(); }
+    if(!this._state) return;
+    this._state.startTs = Date.now() - (this._state.elapsed * 1000);
+    this._state.running = true;
+    this._persist();
+    this._show();
+    this._tick();
+  },
+  pause(){
+    if(!this._state) return;
+    clearInterval(this._iv); this._iv = null;
+    this._state.elapsed = Math.floor((Date.now() - this._state.startTs) / 1000);
+    this._state.running = false;
+    this._persist();
+    const d=document.getElementById('sticky-timer-dot'); if(d) d.style.animation='none';
+    const b=document.getElementById('sticky-timer-pause'); if(b){ b.textContent='▶'; b.onclick=()=>StickyTimer.resume(); b.title='Riprendi'; }
+  },
+  stop(){
+    if(!this._state) return;
+    clearInterval(this._iv); this._iv = null;
+    const elapsed = this._state.running ? Math.floor((Date.now()-this._state.startTs)/1000) : this._state.elapsed;
+    const entry = { id:'tt'+Date.now(), label:this._state.label, projectId:this._state.projectId, elapsed, date:new Date().toISOString(), source:'sticky-timer' };
+    try{ const k='ingly_time_entries_v1'; const arr=JSON.parse(localStorage.getItem(k)||'[]'); arr.push(entry); localStorage.setItem(k,JSON.stringify(arr)); }catch(e){}
+    toast('⏹ Timer fermato: '+this._fmt(elapsed)+' registrati','success');
+    this._state = null; localStorage.removeItem(this._sk);
+    document.getElementById('sticky-timer').style.display='none';
+    document.getElementById('sticky-timer-mini').style.display='none';
+    if(typeof Bus!=='undefined') Bus.emit('timeentry:created', entry);
+  },
+  minimize(){ document.getElementById('sticky-timer').style.display='none'; document.getElementById('sticky-timer-mini').style.display='flex'; },
+  maximize(){ document.getElementById('sticky-timer').style.display='flex'; document.getElementById('sticky-timer-mini').style.display='none'; },
+  _tick(){
+    clearInterval(this._iv);
+    this._iv = setInterval(()=>{
+      if(!this._state||!this._state.running) return;
+      const s = Math.floor((Date.now()-this._state.startTs)/1000);
+      const f = this._fmt(s);
+      const d=document.getElementById('sticky-timer-display'); if(d) d.textContent=f;
+      const m=document.getElementById('sticky-timer-mini-display'); if(m) m.textContent=f;
+    }, 1000);
+  },
+  _show(){
+    const t=document.getElementById('sticky-timer'); if(!t)return;
+    t.style.display='flex';
+    const l=document.getElementById('sticky-timer-label'); if(l) l.textContent=this._state.label||'—';
+    const b=document.getElementById('sticky-timer-pause'); if(b){ b.textContent='⏸'; b.onclick=()=>StickyTimer.pause(); b.title='Pausa'; }
+    const dot=document.getElementById('sticky-timer-dot'); if(dot) dot.style.animation='timerPulse 1s infinite';
+  },
+  _persist(){ try{ localStorage.setItem(this._sk, JSON.stringify(this._state)); }catch(e){} },
+  _load(){ try{ return JSON.parse(localStorage.getItem(this._sk)||'null'); }catch(e){ return null; } },
+  boot(){
+    const saved = this._load();
+    if(saved){ this._state=saved; if(saved.running){ this._state.startTs=Date.now()-(saved.elapsed*1000||0); } this._show(); if(saved.running) this._tick(); }
+    // Make draggable
+    const el=document.getElementById('sticky-timer');
+    if(el){ let ox=0,oy=0,dx=0,dy=0;
+      el.onmousedown=function(e){ if(e.target.tagName==='BUTTON')return; dx=e.clientX; dy=e.clientY; document.onmouseup=()=>{ document.onmousemove=null; document.onmouseup=null; }; document.onmousemove=function(e2){ ox=e2.clientX-dx; oy=e2.clientY-dy; dx=e2.clientX; dy=e2.clientY; el.style.top=(el.offsetTop+oy)+'px'; el.style.left=(el.offsetLeft+ox)+'px'; el.style.transform='none'; el.style.bottom='auto'; }; };
+    }
+  }
+};
+window.StickyTimer = StickyTimer;
+document.addEventListener('DOMContentLoaded', ()=>{ StickyTimer.boot(); });
+
+/* ═══════════════════════════════════════════════════════════════════
+   BUDGET TRACKER — monthly budget vs actual
+═══════════════════════════════════════════════════════════════════ */
+const BudgetTracker = {
+  _sk: 'ingly_budget_v1',
+  _get(){ try{ return JSON.parse(localStorage.getItem(this._sk)||'{}'); }catch(e){ return {}; } },
+  _set(d){ try{ localStorage.setItem(this._sk,JSON.stringify(d)); }catch(e){} },
+  async render(){
+    const el=document.getElementById('budget-tracker-rows'); if(!el) return;
+    const budget=this._get();
+    const now=new Date(); const ym=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+    let cashflow=[]; try{ cashflow=await AppStore.get('cashflow').catch(()=>[])||[]; }catch(e){}
+    const monthEntries=cashflow.filter(e=>{ try{ return e.date&&e.date.startsWith(ym); }catch(){ return false; } });
+    const cats=['Entrate','Uscite Fisse','Marketing','Materiali','Personale','Altro'];
+    const actuals={'Entrate':0,'Uscite Fisse':0,'Marketing':0,'Materiali':0,'Personale':0,'Altro':0};
+    monthEntries.forEach(e=>{
+      const cat=e.category||'Altro'; const amt=parseFloat(e.amount)||0;
+      if(e.type==='income'||amt>0) actuals['Entrate']+=Math.abs(amt);
+      else { const c=actuals[cat]!==undefined?cat:'Altro'; actuals[c]+=Math.abs(amt); }
+    });
+    el.innerHTML=cats.map(cat=>{
+      const budg=budget[cat]||0; const act=actuals[cat]||0;
+      const pct=budg>0?Math.min(100,Math.round(act/budg*100)):0;
+      const color=cat==='Entrate'?(pct>=100?'#22c55e':'#f59e0b'):(pct>=100?'#ef4444':'#22c55e');
+      const over=cat!=='Entrate'&&budg>0&&act>budg;
+      return `<div style="display:flex;flex-direction:column;gap:4px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:12px;font-weight:600;color:var(--text)">${cat}</span>
+          <span style="font-size:12px;color:var(--text-muted)">€${act.toFixed(0)} / <span style="font-weight:700;color:${budg?'var(--text)':'var(--text-dim)'}">€${budg||'—'}</span>${over?'<span style="color:#ef4444;font-size:10px;margin-left:4px">▲ OVER</span>':''}</span>
+        </div>
+        <div style="height:6px;background:var(--bg-card3);border-radius:99px;overflow:hidden">
+          <div style="height:100%;width:${pct}%;background:${color};border-radius:99px;transition:width .8s"></div>
+        </div>
+      </div>`;
+    }).join('');
+  },
+  openEdit(){
+    const budget=this._get();
+    const cats=['Entrate','Uscite Fisse','Marketing','Materiali','Personale','Altro'];
+    const fields=cats.map(c=>`<div class="form-group"><label class="form-label">${c} (€/mese)</label><input class="form-control" id="bgt-${c.replace(/\s/g,'_')}" type="number" value="${budget[c]||0}"></div>`).join('');
+    const m=document.createElement('div'); m.style.cssText='position:fixed;inset:0;background:#000a;z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px';
+    m.innerHTML=`<div style="background:var(--bg-card);border:1px solid var(--border2);border-radius:16px;width:100%;max-width:480px;padding:24px">
+      <div style="font-size:16px;font-weight:700;margin-bottom:16px">📊 Imposta Budget Mensile</div>
+      ${fields}
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+        <button onclick="this.closest('[style]').remove()" style="padding:8px 16px;background:var(--bg-card2);border:1px solid var(--border);color:var(--text);border-radius:8px;cursor:pointer">Annulla</button>
+        <button onclick="BudgetTracker._saveEdit(this)" style="padding:8px 16px;background:var(--primary);color:#000;border-radius:8px;cursor:pointer;font-weight:700">Salva</button>
+      </div>
+    </div>`;
+    document.body.appendChild(m);
+  },
+  _saveEdit(btn){
+    const cats=['Entrate','Uscite Fisse','Marketing','Materiali','Personale','Altro'];
+    const d={};
+    cats.forEach(c=>{ const el=document.getElementById('bgt-'+c.replace(/\s/g,'_')); if(el) d[c]=parseFloat(el.value)||0; });
+    this._set(d); btn.closest('[style]').remove(); this.render(); toast('✅ Budget salvato!','success');
+  }
+};
+window.BudgetTracker = BudgetTracker;
+
+/* ═══════════════════════════════════════════════════════════════════
+   BANK IMPORT — import bank statement CSV
+═══════════════════════════════════════════════════════════════════ */
+const BankImport = {
+  importCSV(inp){
+    const f=inp.files[0]; if(!f) return;
+    const sep=document.getElementById('bank-csv-sep')?.value||',';
+    const r=new FileReader();
+    r.onload=async function(e){
+      const lines=e.target.result.split('\n').map(l=>l.trim()).filter(Boolean);
+      const preview=document.getElementById('bank-import-preview'); if(!preview) return;
+      const entries=[]; const errors=[];
+      lines.forEach((line,i)=>{
+        if(i===0&&isNaN(parseFloat(line.split(sep)[2]))) return; // skip header
+        const parts=line.split(sep).map(p=>p.replace(/^["']|["']$/g,'').trim());
+        if(parts.length<3){ errors.push('Riga '+(i+1)+': formato non valido'); return; }
+        const dateRaw=parts[0], desc=parts[1], amtRaw=parts[2].replace(',','.');
+        const amt=parseFloat(amtRaw);
+        if(isNaN(amt)){ errors.push('Riga '+(i+1)+': importo non valido'); return; }
+        entries.push({ id:'bi'+Date.now()+i, date:dateRaw, description:desc, amount:amt, type:amt>=0?'income':'expense', category:amt>=0?'Entrate':'Uscite Fisse', source:'bank-import', createdAt:new Date().toISOString() });
+      });
+      preview.innerHTML=`<div style="padding:12px;background:var(--bg-card2);border-radius:8px;font-size:12px">
+        <div style="font-weight:700;margin-bottom:6px">📋 Anteprima: ${entries.length} movimenti trovati${errors.length?' ('+errors.length+' errori)':''}</div>
+        ${entries.slice(0,5).map(e=>`<div style="color:${e.amount>=0?'#22c55e':'#ef4444'}">${e.date} — ${e.description} — €${e.amount.toFixed(2)}</div>`).join('')}
+        ${entries.length>5?`<div style="color:var(--text-dim)">...e altri ${entries.length-5}</div>`:''}
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button onclick="BankImport._confirm(${JSON.stringify(entries).replace(/"/g,'&quot;')})" style="padding:6px 14px;background:var(--primary);color:#000;border-radius:6px;cursor:pointer;font-weight:700;font-size:12px">✅ Importa ${entries.length} movimenti</button>
+          <button onclick="document.getElementById('bank-import-preview').innerHTML=''" style="padding:6px 12px;background:var(--bg-card3);border:1px solid var(--border);color:var(--text-muted);border-radius:6px;cursor:pointer;font-size:12px">Annulla</button>
+        </div>
+      </div>`;
+    };
+    r.readAsText(f);
+  },
+  async _confirm(entries){
+    try{
+      const existing=await AppStore.get('cashflow').catch(()=>[])||[];
+      const merged=[...existing,...entries];
+      await AppStore.set('cashflow',merged);
+      document.getElementById('bank-import-preview').innerHTML='<div style="color:#22c55e;font-size:12px;padding:8px">✅ '+entries.length+' movimenti importati!</div>';
+      toast('✅ Import completato: '+entries.length+' movimenti','success');
+      if(typeof Cashflow!=='undefined') Cashflow.render();
+      BudgetTracker.render();
+    }catch(e){ toast('Errore import: '+e.message,'error'); }
+  }
+};
+window.BankImport = BankImport;
 </script>
 
 <script id="ingly-access-gate">
