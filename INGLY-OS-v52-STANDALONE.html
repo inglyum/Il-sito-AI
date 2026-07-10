@@ -106703,10 +106703,11 @@ async function doLogin(){
   var btn=document.getElementById('ia-l-go');
   btn.disabled=true; btn.textContent='Verifica…';
   var found=users().filter(function(x){return x.username.toLowerCase()===u.toLowerCase();})[0];
-  if(!found){_loginAttempts++;if(_loginAttempts>=5)_loginLocked=Date.now()+30000;btn.disabled=false;btn.textContent='🔓 Accedi';return showErr('Utente non trovato. Controlla lo username.');}
+  var _sCfg=lsG('ingly_sess_cfg',{maxAtt:5,lockDur:1800000,dur:86400000});
+  if(!found){_loginAttempts++;if(_sCfg.maxAtt>0&&_loginAttempts>=_sCfg.maxAtt)_loginLocked=Date.now()+(_sCfg.lockDur||1800000);btn.disabled=false;btn.textContent='🔓 Accedi';return showErr('Utente non trovato. Controlla lo username.');}
   if(!found.active){btn.disabled=false;btn.textContent='🔓 Accedi';return showErr('Account disattivato. Contatta l\'amministratore.');}
   var h=await hash(p);
-  if(h!==found.pass){_loginAttempts++;if(_loginAttempts>=5)_loginLocked=Date.now()+30000;btn.disabled=false;btn.textContent='🔓 Accedi';return showErr('Password errata ('+(5-_loginAttempts)+' tentativi rimasti).');}
+  if(h!==found.pass){_loginAttempts++;if(_sCfg.maxAtt>0&&_loginAttempts>=_sCfg.maxAtt)_loginLocked=Date.now()+(_sCfg.lockDur||1800000);btn.disabled=false;btn.textContent='🔓 Accedi';return showErr('Password errata ('+((_sCfg.maxAtt||5)-_loginAttempts)+' tentativi rimasti).');}
   _loginAttempts=0;
   found.lastLogin=now(); found.loginCount=(found.loginCount||0)+1;
   var us=users().map(function(x){return x.id===found.id?found:x;}); saveUsers(us);
@@ -106714,7 +106715,9 @@ async function doLogin(){
   login(found,rem);
 }
 function login(user,remember){
-  var exp=remember?(Date.now()+30*864e5):(Date.now()+8*36e5);
+  var _sCfg2=lsG('ingly_sess_cfg',{dur:86400000});
+  var dur=remember?(30*864e5):(_sCfg2.dur||864e5);
+  var exp=dur>0?(Date.now()+dur):null;
   var s={id:user.id,username:user.username,role:user.role,ts:now(),exp:exp};
   setSession(s); hideGate();
 }
@@ -106939,6 +106942,36 @@ var Admin = {
       +'<label class="ia-mini" style="width:100%;padding:8px;text-align:center;cursor:pointer;display:block;color:#f59e0b;border-color:#f59e0b40;background:#f59e0b10">📥 Importa utenti (JSON)<input type="file" accept=".json" style="display:none" onchange="Admin._importUsers(this)"></label>'
       +'<div style="font-size:10px;color:#5c5c68;margin-top:10px">⚠️ L\'importazione sovrascrive gli utenti esistenti. Fai un backup prima!</div>'
       +'</div>'
+      /* session settings */
+      +'<div class="ia-card" style="grid-column:span 2"><div class="ia-card-title">⏱️ Impostazioni Sessione</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:10px">'
+      +'<div><label class="ia-lb">Durata sessione</label>'
+      +'<select class="ia-in" id="ia-sess-dur" style="margin-top:4px">'
+      +'<option value="3600000">1 ora</option>'
+      +'<option value="28800000">8 ore</option>'
+      +'<option value="86400000" selected>24 ore</option>'
+      +'<option value="604800000">7 giorni</option>'
+      +'<option value="2592000000">30 giorni</option>'
+      +'<option value="0">Nessuna scadenza</option>'
+      +'</select></div>'
+      +'<div><label class="ia-lb">Max tentativi login</label>'
+      +'<select class="ia-in" id="ia-max-att" style="margin-top:4px">'
+      +'<option value="3">3 tentativi</option>'
+      +'<option value="5" selected>5 tentativi</option>'
+      +'<option value="10">10 tentativi</option>'
+      +'<option value="0">Illimitati</option>'
+      +'</select></div>'
+      +'<div><label class="ia-lb">Lockout dopo fallimenti</label>'
+      +'<select class="ia-in" id="ia-lock-dur" style="margin-top:4px">'
+      +'<option value="60000">1 minuto</option>'
+      +'<option value="300000">5 minuti</option>'
+      +'<option value="1800000">30 minuti</option>'
+      +'<option value="3600000">1 ora</option>'
+      +'</select></div>'
+      +'</div>'
+      +'<button class="ia-mini" id="ia-sess-save" style="margin-top:12px;background:#6366f125;color:#818cf8;border-color:#6366f150;padding:8px 16px">💾 Salva impostazioni sessione</button>'
+      +'<div id="ia-sess-msg" style="font-size:11px;margin-top:6px;color:#22c55e;display:none">✅ Salvato!</div>'
+      +'</div>'
       +'</div>';
     document.getElementById('ia-tp-go').onclick=async function(){
       var msg=document.getElementById('ia-tp-msg');
@@ -106956,6 +106989,17 @@ var Admin = {
       var nu=users().map(function(x){return x.id===u.id?Object.assign({},x,{pass:nh}):x;}); saveUsers(nu);
       logAdd(u.username,'change-password');
       m('✅ Password aggiornata!',true);
+    };
+    /* session settings init & save */
+    var sCfg=lsG('ingly_sess_cfg',{dur:86400000,maxAtt:5,lockDur:1800000});
+    var sdEl=document.getElementById('ia-sess-dur'); if(sdEl)sdEl.value=sCfg.dur||86400000;
+    var saEl=document.getElementById('ia-max-att'); if(saEl)saEl.value=sCfg.maxAtt||5;
+    var slEl=document.getElementById('ia-lock-dur'); if(slEl)slEl.value=sCfg.lockDur||1800000;
+    document.getElementById('ia-sess-save').onclick=function(){
+      var cfg={dur:+(document.getElementById('ia-sess-dur').value),maxAtt:+(document.getElementById('ia-max-att').value),lockDur:+(document.getElementById('ia-lock-dur').value)};
+      localStorage.setItem('ingly_sess_cfg',JSON.stringify(cfg));
+      var msg=document.getElementById('ia-sess-msg'); if(msg){msg.style.display='block';setTimeout(()=>{msg.style.display='none';},2500);}
+      logAdd('admin','sess-cfg-updated');
     };
   },
 
@@ -107062,7 +107106,7 @@ var Admin = {
 window.Admin=Admin;
 
 /* ═══════════ START ═══════════ */
-function valid(s){ return s && (s.guest || (s.exp && s.exp>Date.now())); }
+function valid(s){ return s && (s.guest || (s.exp===null) || (s.exp && s.exp>Date.now())); }
 function start(){
   var s=session();
   if(valid(s)){ hideGate(); return; }
