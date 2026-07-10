@@ -1015,10 +1015,24 @@ tr:hover td .badge { opacity: 1; }
   <div class="page-header">
     <div><div class="page-title"><i class="fas fa-chart-line"></i> <span data-i18n="dashboard.title">Dashboard ROI</span></div><div class="page-subtitle" data-i18n="dashboard.subtitle">Panoramica business in tempo reale</div></div>
     <div class="page-actions">
+      <!-- PERIOD SELECTOR -->
+      <select id="dash-period" onchange="Dashboard.setPeriod(this.value)" style="background:var(--bg-card2);border:1px solid var(--border2);color:var(--text);padding:6px 10px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">
+        <option value="today">Oggi</option>
+        <option value="7d">Ultimi 7 giorni</option>
+        <option value="30d" selected>Ultimi 30 giorni</option>
+        <option value="month">Questo mese</option>
+        <option value="quarter">Questo trimestre</option>
+        <option value="year">Quest'anno</option>
+        <option value="all">Tutto</option>
+      </select>
       <button class="btn btn-secondary btn-sm" onclick="Dashboard.render()"><i class="fas fa-sync"></i> <span data-i18n="dashboard.refresh">Aggiorna</span></button>
       <button class="btn btn-secondary btn-sm" onclick="DashLayout.openConfig()" title="Configura widget dashboard" style="color:#a78bfa;border-color:#a78bfa50"><i class="fas fa-sliders-h"></i> Configura</button>
       <button class="btn btn-primary btn-sm" onclick="App.navigate('quoter')"><i class="fas fa-plus"></i> <span data-i18n="dashboard.newQuote">Nuovo Preventivo</span></button>
     </div>
+  </div>
+  <div id="dash-period-label" style="font-size:12px;color:var(--text-muted);margin-bottom:8px;display:flex;align-items:center;gap:6px">
+    <span>📅 Periodo: </span><span id="dash-period-label-text" style="font-weight:700;color:var(--text)">Ultimi 30 giorni</span>
+    <span style="margin-left:auto;font-size:11px" id="dash-period-range"></span>
   </div>
   <div id="dashboard-ai-alert"></div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px" id="dashboard-kpis"></div>
@@ -1845,9 +1859,12 @@ tr:hover td .badge { opacity: 1; }
     </div>
     <div class="module-actions">
       <input type="file" id="vcf-file-input" accept=".vcf" style="display:none" onchange="Clients.importVCF(this)">
+      <input type="file" id="crm-csv-input" accept=".csv,.txt" style="display:none" onchange="CRMImport.importCSV(this)">
       <button class="btn btn-secondary btn-sm" onclick="document.getElementById('crm-roadmap-overlay').style.display='flex'" title="Roadmap CRM — miglioramenti pianificati"><i class="fas fa-map"></i> Roadmap</button>
-      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('vcf-file-input').click()" title="Importa contatti VCF/vCard"><i class="fas fa-address-book"></i> Importa</button>
-      <button class="btn btn-secondary btn-sm" onclick="ExcelExport.exportClients()" style="color:#22c55e;border-color:#22c55e40" title="Esporta Excel"><i class="fas fa-file-excel"></i> Export</button>
+      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('vcf-file-input').click()" title="Importa contatti VCF/vCard"><i class="fas fa-address-book"></i> VCF</button>
+      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('crm-csv-input').click()" title="Importa clienti da CSV (nome,email,telefono,note)"><i class="fas fa-file-csv"></i> CSV</button>
+      <button class="btn btn-secondary btn-sm" onclick="CRMImport.exportCSV()" style="color:#22c55e;border-color:#22c55e40" title="Esporta CSV clienti"><i class="fas fa-download"></i> Export CSV</button>
+      <button class="btn btn-secondary btn-sm" onclick="ExcelExport.exportClients()" style="color:#22c55e;border-color:#22c55e40" title="Esporta Excel"><i class="fas fa-file-excel"></i> Excel</button>
       <button class="btn btn-primary btn-sm" onclick="window.Clients&&window.Clients.openModal()"><i class="fas fa-plus"></i> Nuovo Cliente</button>
     </div>
   </div>
@@ -12548,6 +12565,36 @@ const GoalTracker = {
 // ═══════════════════════════════════════════════════════════════════════
 window.KPIEngine = KPIEngine;
 window.Dashboard = Dashboard;
+
+/* ── Dashboard period selector ── */
+Dashboard._period = '30d';
+Dashboard.setPeriod = function(val){
+  this._period = val;
+  const labels = {today:'Oggi','7d':'Ultimi 7 giorni','30d':'Ultimi 30 giorni',month:'Questo mese',quarter:'Questo trimestre',year:'Quest\'anno',all:'Tutto'};
+  const lbl=document.getElementById('dash-period-label-text'); if(lbl) lbl.textContent=labels[val]||val;
+  const range=document.getElementById('dash-period-range');
+  if(range){
+    const r=Dashboard._periodRange(val);
+    range.textContent=r?r.from.toLocaleDateString('it-IT')+' – '+r.to.toLocaleDateString('it-IT'):'';
+  }
+  this.render();
+};
+Dashboard._periodRange = function(period){
+  const now=new Date(), to=new Date(now);
+  let from=new Date(now);
+  if(period==='today'){ from.setHours(0,0,0,0); to.setHours(23,59,59,999); }
+  else if(period==='7d'){ from.setDate(now.getDate()-7); }
+  else if(period==='30d'){ from.setDate(now.getDate()-30); }
+  else if(period==='month'){ from=new Date(now.getFullYear(),now.getMonth(),1); }
+  else if(period==='quarter'){ const q=Math.floor(now.getMonth()/3); from=new Date(now.getFullYear(),q*3,1); }
+  else if(period==='year'){ from=new Date(now.getFullYear(),0,1); }
+  else if(period==='all'){ return null; }
+  return {from,to};
+};
+Dashboard.filterByPeriod = function(items, dateField){
+  const range=this._periodRange(this._period); if(!range) return items;
+  return items.filter(x=>{ try{ const d=new Date(x[dateField]||x.date||x.createdAt||x.ts); return d>=range.from&&d<=range.to; }catch(e){ return true; } });
+};
 window.DashLayout = DashLayout;
 window.KPICoherenceUI = KPICoherenceUI;
 window.KPIAutoTest = KPIAutoTest;
@@ -106348,6 +106395,65 @@ const BankImport = {
   }
 };
 window.BankImport = BankImport;
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   CRM IMPORT/EXPORT — CSV import & export for clients
+═══════════════════════════════════════════════════════════════════ */
+const CRMImport = {
+  importCSV(inp){
+    const f=inp.files[0]; if(!f) return;
+    const r=new FileReader();
+    r.onload=async function(e){
+      const lines=e.target.result.split('\n').map(l=>l.trim()).filter(Boolean);
+      const sep=lines[0].includes(';')?';':',';
+      const headerLine=lines[0].toLowerCase();
+      const isHeader=headerLine.includes('nome')||headerLine.includes('name')||headerLine.includes('email');
+      const dataLines=isHeader?lines.slice(1):lines;
+      const imported=[]; const errors=[];
+      dataLines.forEach((line,i)=>{
+        const p=line.split(sep).map(x=>x.replace(/^["']|["']$/g,'').trim());
+        if(p.length<1||!p[0]){ errors.push('Riga '+(i+2)+': nome mancante'); return; }
+        imported.push({ id:'c'+Date.now()+i, name:p[0]||'', email:p[1]||'', phone:p[2]||'', note:p[3]||'', tags:[], source:'csv-import', createdAt:new Date().toISOString(), active:true });
+      });
+      if(!imported.length){ toast('Nessun cliente trovato nel file','warning'); return; }
+      if(!confirm('Importare '+imported.length+' clienti dal CSV? I duplicati NON vengono rimossi automaticamente.')) return;
+      try{
+        const existing=await AppStore.get('clients').catch(()=>[])||[];
+        const merged=[...existing,...imported];
+        await AppStore.set('clients',merged);
+        toast('✅ Importati '+imported.length+' clienti!','success');
+        if(errors.length) toast(errors.length+' righe saltate per errori','warning');
+        if(typeof Clients!=='undefined') Clients.render?.();
+        if(typeof Bus!=='undefined') Bus.emit('clients:updated');
+      }catch(e){ toast('Errore import: '+e.message,'error'); }
+      inp.value='';
+    };
+    r.readAsText(f,'UTF-8');
+  },
+  async exportCSV(){
+    const clients=await AppStore.get('clients').catch(()=>[])||[];
+    if(!clients.length){ toast('Nessun cliente da esportare','warning'); return; }
+    const header='Nome,Email,Telefono,Città,Tags,Note,Creato';
+    const rows=clients.map(c=>[
+      c.name||'',c.email||'',c.phone||'',c.city||'',
+      (c.tags||[]).join('|'),c.note||'',
+      c.createdAt?new Date(c.createdAt).toLocaleDateString('it-IT'):''
+    ].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(','));
+    const csv=[header,...rows].join('\n');
+    const b=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(b);
+    a.download='clienti_ingly_'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
+    toast('✅ Esportati '+clients.length+' clienti','success');
+  },
+  showTemplate(){
+    const csv='Nome,Email,Telefono,Note\n"Mario Rossi","mario@example.com","+39 333 1234567","Cliente premium"\n"Giulia Bianchi","giulia@example.com","+39 347 9876543",""';
+    const b=new Blob([csv],{type:'text/csv'}); const a=document.createElement('a');
+    a.href=URL.createObjectURL(b); a.download='template_clienti.csv'; a.click();
+  }
+};
+window.CRMImport=CRMImport;
 </script>
 
 <script id="ingly-access-gate">
