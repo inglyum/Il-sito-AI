@@ -1823,7 +1823,7 @@ tr:hover td .badge { opacity: 1; }
   </div>
   <div id="inventory-alerts" class="mb-16"></div>
   <div class="table-wrap"><table><thead><tr>
-    <th data-i18n="inv.sku">SKU</th><th data-i18n="inv.item">Articolo</th><th data-i18n="inv.cat">Categoria</th><th data-i18n="inv.stock">Stock</th><th data-i18n="inv.min">Min.</th><th data-i18n="inv.cost">Costo</th><th data-i18n="inv.value">Valore</th><th data-i18n="inv.status">Stato</th><th data-i18n="inv.actions">Azioni</th>
+    <th data-i18n="inv.sku">SKU</th><th data-i18n="inv.item">Articolo</th><th data-i18n="inv.cat">Categoria</th><th data-i18n="inv.stock">Stock</th><th data-i18n="inv.min">Min.</th><th data-i18n="inv.cost">Costo</th><th data-i18n="inv.value">Valore</th><th>Ubicazione</th><th data-i18n="inv.status">Stato</th><th data-i18n="inv.actions">Azioni</th>
   </tr></thead><tbody id="inventory-tbody"></tbody></table></div>
 </div>
 
@@ -5484,6 +5484,18 @@ Il sistema analizza revenue, margini, clienti a rischio, ordini in scadenza, pro
         <div class="form-group"><label class="form-label">Costo (€)</label><input class="form-control" id="inv-cost" type="number" step="0.01" value="0"></div>
       </div>
       <div class="form-group"><label class="form-label">Fornitore</label><input class="form-control" id="inv-supplier"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Ubicazione / Magazzino</label>
+          <input class="form-control" id="inv-location" placeholder="Es. Scaffale A3, Magazzino Ovest"></div>
+        <div class="form-group"><label class="form-label">Codice Lotto</label>
+          <input class="form-control" id="inv-lot" placeholder="LOT-2025-001"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Scadenza Lotto</label>
+          <input class="form-control" id="inv-expiry" type="date"></div>
+        <div class="form-group"><label class="form-label">Note</label>
+          <input class="form-control" id="inv-notes" placeholder="Note interne..."></div>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('inventory')">Annulla</button>
@@ -15310,6 +15322,7 @@ const Inventory={
         <td style="color:var(--text-muted)">${i.minStock}</td>
         <td style="color:var(--primary)">${fmtCur(i.costPrice)}</td>
         <td><strong>${fmtCur((+i.stock||0)*(+i.costPrice||0))}</strong></td>
+        <td style="color:var(--text-muted);font-size:11px">${i.location||'—'}${i.lot?'<br><small>Lotto: '+i.lot+'</small>':''}</td>
         <td><span class="badge ${statusClass}" style="white-space:nowrap">${statusTxt}</span></td>
         <td>
           <div class="act-group">
@@ -15331,11 +15344,11 @@ const Inventory={
   async openModal(id=null){
     this.editId=id;
     eid('modal-inv-title').textContent=id?'Modifica Articolo':'Aggiungi Articolo';
-    if(id){const i=await IDB.get('inventory',id);if(i){eid('inv-sku').value=i.sku;eid('inv-name').value=i.name;eid('inv-cat').value=i.category;eid('inv-unit').value=i.unit||'pz';eid('inv-stock').value=i.stock;eid('inv-min').value=i.minStock;eid('inv-cost').value=i.costPrice;eid('inv-supplier').value=i.supplier||'';}}
+    if(id){const i=await IDB.get('inventory',id);if(i){eid('inv-sku').value=i.sku;eid('inv-name').value=i.name;eid('inv-cat').value=i.category;eid('inv-unit').value=i.unit||'pz';eid('inv-stock').value=i.stock;eid('inv-min').value=i.minStock;eid('inv-cost').value=i.costPrice;eid('inv-supplier').value=i.supplier||'';if(eid('inv-location'))eid('inv-location').value=i.location||'';if(eid('inv-lot'))eid('inv-lot').value=i.lot||'';if(eid('inv-expiry'))eid('inv-expiry').value=i.expiry||'';if(eid('inv-notes'))eid('inv-notes').value=i.notes||'';}}
     openModal('inventory');
   },
   async save(){
-    const item={sku:eid('inv-sku').value,name:eid('inv-name').value,category:eid('inv-cat').value,unit:eid('inv-unit').value,stock:+eid('inv-stock').value||0,minStock:+eid('inv-min').value||0,costPrice:+eid('inv-cost').value||0,supplier:eid('inv-supplier').value};
+    const item={sku:eid('inv-sku').value,name:eid('inv-name').value,category:eid('inv-cat').value,unit:eid('inv-unit').value,stock:+eid('inv-stock').value||0,minStock:+eid('inv-min').value||0,costPrice:+eid('inv-cost').value||0,supplier:eid('inv-supplier').value,location:eid('inv-location')?.value?.trim()||'',lot:eid('inv-lot')?.value?.trim()||'',expiry:eid('inv-expiry')?.value||'',notes:eid('inv-notes')?.value?.trim()||''};
     if(this.editId)item.id=this.editId; else { item.id = Date.now(); }
     const id=await IDB.put('inventory',item).catch(e=>{toast('Errore salvataggio','error');console.error('[Inventory.save]',e);});
     await logAction('inventory',id,this.editId?'updated':'created');
