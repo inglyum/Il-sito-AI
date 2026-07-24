@@ -439,6 +439,10 @@ tr.rowc{cursor:pointer}tr.rowc:hover td{background:rgba(140,160,220,.05)}
         <div><label>Telefono</label><input type="text" data-b="CONFIG.seo.telefono"></div>
       </div>
       <div class="hint" style="margin-top:10px" id="seoLen"></div>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:10px">
+        <button class="btn" id="seoAiGen">✨ Genera meta SEO con AI</button>
+        <span class="hint" id="seoAiStatus"></span>
+      </div>
       <hr class="hr"><h3 style="font-size:13.5px">Anteprima su Google</h3>
       <div id="seoPrev" style="background:#0d1122;border:1px solid var(--line);border-radius:10px;padding:12px 14px;max-width:600px"></div>
       <div class="hint" style="margin-top:10px">Alla pubblicazione vengono rigenerati automaticamente <span class="mono">sitemap.xml</span> (con tutte le pagine e tutti i prodotti) e <span class="mono">robots.txt</span>.</div>
@@ -512,6 +516,16 @@ tr.rowc{cursor:pointer}tr.rowc:hover td{background:rgba(140,160,220,.05)}
     <div class="card"><h3>🧭 Diagnosi caricamento dati</h3><div class="kv" id="loadDiag">—</div>
       <div style="margin-top:10px"><button class="btn" id="sReload">↺ Riprova a caricare i dati</button></div></div>
     <div class="card"><h3>ℹ️ Sito</h3><div class="kv" id="setInfo"></div></div>
+    <div class="card"><h3>🤖 Claude AI (facoltativo)</h3>
+      <label>API Key Anthropic (generazione automatica descrizioni e meta SEO)</label>
+      <input type="password" id="sClaudeKey" placeholder="sk-ant-…">
+      <div style="display:flex;gap:10px;align-items:center;margin-top:8px">
+        <button class="btn" id="sSaveClaudeKey">💾 Salva (sessione)</button>
+        <button class="btn err" id="sClearClaudeKey">✕ Rimuovi</button>
+        <span class="hint" id="sClaudeStatus"></span>
+      </div>
+      <div class="hint" style="margin-top:8px">La chiave è salvata solo nella sessione corrente del browser e non viene mai inviata al repository. Ottienila su <b>console.anthropic.com</b> → API Keys.</div>
+    </div>
   </section>
 
   </div>
@@ -756,6 +770,10 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
   <div class="row c3"><div><label>Etichetta (es. Best)</label><input type="text" id="ep_tag" value="${esc(p.tag||'')}"></div><div><label>Collezioni (virgola)</label><input type="text" id="ep_coll" value="${esc((p.coll||[]).join(','))}"></div><div><label>Recensioni (n°)</label><input type="number" id="ep_rev" value="${p.rev||0}"></div></div>
   <label>Descrizione (IT)</label><textarea id="ep_dit">${esc((p.desc&&p.desc.it)||'')}</textarea>
   <label>Description (EN)</label><textarea id="ep_den">${esc((p.desc&&p.desc.en)||'')}</textarea>
+  <div style="display:flex;gap:10px;align-items:center;margin-top:4px;margin-bottom:12px">
+   <button class="btn" id="ep_aiGen">✨ Genera con AI</button>
+   <span class="hint" id="ep_aiStatus"></span>
+  </div>
   <div class="row c2">
    <div><label>🎬 Video del prodotto (URL mp4)</label><input type="url" id="ep_video" value="${esc(p.video||'')}" placeholder="https://…/prodotto.mp4"></div>
    <div><label>Poster del video (percorso immagine)</label><input type="text" id="ep_poster" value="${esc(p.poster||'')}" placeholder="img/${p.id}.webp"></div>
@@ -2144,6 +2162,67 @@ $('sTest').onclick=async()=>{const o=$('sTestOut');o.textContent='verifica…';
  try{const r=await gh('');if(!(r.permissions&&r.permissions.push))throw new Error('il token legge ma non scrive: aggiungi Contents → Read and write');
   o.innerHTML='<span style="color:var(--ok)">✔ Connesso a '+esc(r.full_name)+' con permesso di scrittura</span>'}
  catch(e){o.innerHTML='<span style="color:var(--err)">✖ '+esc(ghErrHint(e))+'</span>'}};
+
+/* ================== CLAUDE AI ================== */
+function claudeKey(){return sessionStorage.getItem('ingly_claude_key')||''}
+function setClaudeKey(k){if(k)sessionStorage.setItem('ingly_claude_key',k);else sessionStorage.removeItem('ingly_claude_key')}
+
+/* Settings panel — Claude key bindings (called inside renderSet) */
+const _origRenderSet=renderSet;
+renderSet=function(){_origRenderSet();
+ $('sClaudeKey').value=claudeKey()?'••••••••••••••••••':'';
+ $('sClaudeStatus').textContent=claudeKey()?'✔ Chiave configurata (sessione)':'Non configurata';
+ $('sSaveClaudeKey').onclick=()=>{const k=$('sClaudeKey').value.trim();if(!k||k.startsWith('•'))return toast('Inserisci la chiave API');setClaudeKey(k);$('sClaudeKey').value='';$('sClaudeStatus').textContent='✔ Chiave configurata (sessione)';toast('Chiave Claude salvata in sessione')};
+ $('sClearClaudeKey').onclick=()=>{setClaudeKey('');$('sClaudeKey').value='';$('sClaudeStatus').textContent='Non configurata';toast('Chiave rimossa')}};
+
+async function callClaude(systemPrompt,userPrompt){
+ const key=claudeKey();if(!key)throw new Error('Configura prima la chiave API Claude in Impostazioni → Claude AI');
+ const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+  body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:500,system:systemPrompt,messages:[{role:'user',content:userPrompt}]})});
+ if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||'HTTP '+r.status)}
+ const d=await r.json();return d.content[0].text}
+
+/* Product description AI generation — wired in editProd */
+async function aiGenDesc(p){
+ const status=$('ep_aiStatus');if(!status)return;
+ const key=claudeKey();if(!key){status.innerHTML='<span style="color:var(--warn)">Chiave AI mancante — vai in Impostazioni → Claude AI</span>';return}
+ const cat=(S.CATS||[]).find(c=>c.id===p.cat);
+ const sub=cat?.sub?.[p.sub-1]?.it||'';
+ const userPrompt=`Prodotto: ${p.n.it} / ${p.n.en}\nCategoria: ${cat?.n?.it||p.cat}${sub?' · '+sub:''}\nMateriale: ${p.mat}\nPrezzo: €${p.price}\nTag: ${p.tag||'—'}\n\nGenera una descrizione professionale e persuasiva in JSON: {"it":"…","en":"…"}.\nIT: 70-100 parole, tono artigianale made-in-Italy, includi materiale e uso pratico.\nEN: traduzione fedele ma naturale. Niente parole come straordinario, meraviglioso, fantastico.`;
+ const sys='Sei un copywriter esperto di prodotti artigianali laser engraving e stampa personalizzata per INGLY DESIGN, Cesena IT. Rispondi SOLO con JSON valido, nessun testo extra.';
+ status.textContent='Generazione in corso…';$('ep_aiGen').disabled=true;
+ try{const raw=await callClaude(sys,userPrompt);
+  const desc=JSON.parse(raw.trim().replace(/^```json\n?|\n?```$/g,''));
+  if(!desc.it||!desc.en)throw new Error('Risposta incompleta');
+  $('ep_dit').value=desc.it;$('ep_den').value=desc.en;
+  status.innerHTML='<span style="color:var(--ok)">✔ Generato — controlla e salva</span>'}
+ catch(e){status.innerHTML='<span style="color:var(--err)">✖ '+esc(e.message)+'</span>'}
+ finally{$('ep_aiGen').disabled=false}}
+
+/* Wire AI button after editProd renders the modal */
+const _origEditProd=editProd;
+editProd=function(id){_origEditProd(id);const p=(S.P||[]).find(x=>x.id===id);if(!p)return;
+ const btn=$('ep_aiGen');if(btn)btn.onclick=()=>aiGenDesc(p)};
+
+/* SEO meta AI generation */
+$('seoAiGen').onclick=async()=>{
+ const status=$('seoAiStatus');
+ const seo=S.CONFIG.seo||{};
+ const cats=(S.CATS||[]).map(c=>c.n.it).join(', ');
+ const userPrompt=`Sito: INGLY DESIGN, studio di incisione laser, stampa UV, DTF e 3D printing. Cesena, Italia.\nCategorie prodotto: ${cats}\nAzienda: ${seo.azienda||'INGLY DESIGN'} · Città: ${seo.citta||'Cesena'}\n\nGenera in JSON: {"titolo":"…","descrizione":"…","keywords":"…"}.\nTitolo: max 60 caratteri, include brand + keyword principale.\nDescrizione: max 155 caratteri, persuasiva con CTA.\nKeywords: 8-10 keywords IT separate da virgola.`;
+ const sys='Sei un esperto SEO per ecommerce artigianali italiani. Rispondi SOLO con JSON valido.';
+ status.textContent='Generazione in corso…';$('seoAiGen').disabled=true;
+ try{const raw=await callClaude(sys,userPrompt);
+  const meta=JSON.parse(raw.trim().replace(/^```json\n?|\n?```$/g,''));
+  if(!meta.titolo||!meta.descrizione)throw new Error('Risposta incompleta');
+  S.CONFIG.seo=S.CONFIG.seo||{};
+  if(meta.titolo)S.CONFIG.seo.titolo=meta.titolo;
+  if(meta.descrizione)S.CONFIG.seo.descrizione=meta.descrizione;
+  if(meta.keywords)S.CONFIG.seo.keywords=meta.keywords;
+  markDirty();bindAll();seoLen();
+  status.innerHTML='<span style="color:var(--ok)">✔ Meta SEO aggiornati — controlla e pubblica</span>'}
+ catch(e){status.innerHTML='<span style="color:var(--err)">✖ '+esc(e.message)+'</span>'}
+ finally{$('seoAiGen').disabled=false}};
 
 /* ================== AVVIO ================== */
 (async()=>{renderPipe();const ok=await loadAll();if(ok){go('dash');if(token())scanRepo().catch(()=>{})}else go('set')})();
