@@ -30,3 +30,11 @@ jobs:
           (C.PORT||[]).forEach(t=>check(t[3]));
           console.log(warn?warn+" avvisi immagini (non bloccanti)":"✔ riferimenti immagini ok");
           '
+      - name: Lighthouse CI — budget performance
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: 'https://www.inglydesign.it/'
+          budgetPath: '.lighthousebudget.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+        continue-on-error: true

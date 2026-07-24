@@ -1,0 +1,20 @@
+[{
+  "path": "/",
+  "timings": [
+    { "metric": "first-contentful-paint", "budget": 2000 },
+    { "metric": "interactive",             "budget": 4000 },
+    { "metric": "speed-index",             "budget": 3000 },
+    { "metric": "total-blocking-time",     "budget": 300  }
+  ],
+  "scores": [
+    { "category": "performance",   "minScore": 80 },
+    { "category": "accessibility", "minScore": 90 },
+    { "category": "best-practices","minScore": 85 },
+    { "category": "seo",           "minScore": 90 }
+  ],
+  "resourceSizes": [
+    { "resourceType": "script",     "budget": 200 },
+    { "resourceType": "stylesheet", "budget": 100 },
+    { "resourceType": "total",      "budget": 1500 }
+  ]
+}]
