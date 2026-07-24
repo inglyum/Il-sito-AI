@@ -73,6 +73,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk&family=Exo+2:ital,wght@0,600;0,700;1,600;1,700;1,800;1,900&family=Inter:wght@400;500;600&family=Caveat:wght@600&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
 
 <script>(function(){try{var m=localStorage.getItem("ingly_mode");if(!m)m=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-mode",m)}catch(e){}})();</script>
+<!-- Preload critical assets -->
+<link rel="preload" as="image" href="assets/images/og-image.jpg" fetchpriority="high">
+<link rel="modulepreload" href="assets/js/app.js">
+<link rel="modulepreload" href="assets/js/data-loader.js">
+<link rel="modulepreload" href="assets/js/main.js">
+<link rel="modulepreload" href="assets/js/products.js">
+
 <script src="assets/js/artwork.js"></script>
 <link rel="stylesheet" href="assets/css/reset.css">
 <link rel="stylesheet" href="assets/css/variables.css">

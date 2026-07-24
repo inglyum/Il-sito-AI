@@ -88,7 +88,7 @@ function card(x){const a=matArt(x.mat);
 
 export function toggleWish(id,el){wish.has(id)?wish.delete(id):wish.add(id);el.classList.toggle('on');
   const b=$('wishBadge');b.textContent=wish.size;b.classList.toggle('on',wish.size>0);
-  toast(wish.has(id)?T('wAdd'):T('wRm'))}
+  saveWish();toast(wish.has(id)?T('wAdd'):T('wRm'))}
 
 export const currentProduct = () => cur;
 
@@ -248,12 +248,16 @@ export function renderDigital(){$('digGrid').innerHTML=DIG.map(d=>`<div class="d
   <div class="fmt">${d.f.map(f=>`<i>${f}</i>`).join('')}</div>
   <span class="lic">${T('lic')}</span>
   <div class="dl"><span class="price">${eur(d.price)}</span><button class="btn btn-blue" style="padding:10px 20px;font-size:13.5px" data-action="dig-add" data-id="${d.id}">⬇ ${T('buy')}</button></div></div>`).join('')}
-export function addDigital(id){const d=DIG.find(x=>x.id===+id);cart.push({dig:d,q:1,u:d.price});renderCart();toast(T('added'));openCart()}
+export function addDigital(id){const d=DIG.find(x=>x.id===+id);cart.push({dig:d,q:1,u:d.price});renderCart();saveCart();toast(T('added'));openCart()}
 
 /* ---- carrello ---- */
-export function addToCart(id,q=1,mat,txt,u){const x=P.find(k=>k.id===+id);cart.push({p:x,q,mat:mat||MATN[x.mat][L],txt:txt||'',u:u??x.price});renderCart();toast(T('added'));openCart()}
-export function rmCart(i){cart.splice(+i,1);renderCart()}
-export function cQty(i,d){i=+i;cart[i].q=Math.max(1,cart[i].q+ +d);renderCart()}
+function saveCart(){try{localStorage.setItem('ingly_cart',JSON.stringify(cart.map(i=>i.dig?{dig:i.dig.id,q:i.q,u:i.u}:{id:i.p.id,q:i.q,mat:i.mat,txt:i.txt,u:i.u})))}catch(e){}}
+function loadCart(){try{const c=localStorage.getItem('ingly_cart');if(!c)return;JSON.parse(c).forEach(i=>{if(i.dig){const d=DIG.find(x=>x.id===i.dig);if(d)cart.push({dig:d,q:i.q,u:i.u})}else{const p=P.find(x=>x.id===i.id);if(p)cart.push({p,q:i.q,mat:i.mat,txt:i.txt,u:i.u})}})}catch(e){}}
+function saveWish(){try{localStorage.setItem('ingly_wish',JSON.stringify([...wish]))}catch(e){}}
+function loadWish(){try{const w=localStorage.getItem('ingly_wish');if(w)wish=new Set(JSON.parse(w))}catch(e){}}
+export function addToCart(id,q=1,mat,txt,u){const x=P.find(k=>k.id===+id);cart.push({p:x,q,mat:mat||MATN[x.mat][L],txt:txt||'',u:u??x.price});renderCart();saveCart();toast(T('added'));openCart()}
+export function rmCart(i){cart.splice(+i,1);renderCart();saveCart()}
+export function cQty(i,d){i=+i;cart[i].q=Math.max(1,cart[i].q+ +d);renderCart();saveCart()}
 export function renderCart(){const n=cart.reduce((s,i)=>s+i.q,0),b=$('cartBadge');b.textContent=n;b.classList.toggle('on',n>0);
   $('drItems').innerHTML=cart.length?cart.map((i,x)=>{const nm=i.dig?i.dig.n[L]:i.p.n[L],ic=i.dig?i.dig.icon:i.p.icon,bg=i.dig?MAT_ART.File.bg:matArt(i.p.mat).bg,meta=i.dig?i.dig.f.join(' · '):i.mat+(i.txt?' · “'+i.txt+'”':'');
   return `<div class="ditem"><div class="di-img" style="background:${bg}">${ic}</div><div style="flex:1"><h4>${nm}</h4><div class="di-meta">${meta}</div>
@@ -280,6 +284,7 @@ export function checkoutWhatsApp(){
 /* ---- controlli statici dello shop ---- */
 export function setColl(c,btn){collCur=c;document.querySelectorAll('#collTabs .tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active');renderColl()}
 export function initShopControls(){
+  loadCart();loadWish();renderCart();
   $('q').addEventListener('input',()=>{renderShop();renderChips()});
   $('pRange').addEventListener('input',e=>{$('pv').textContent='€'+e.target.value;renderShop();renderChips()});
   $('sortSel').addEventListener('change',e=>setSort(e.target.value));
