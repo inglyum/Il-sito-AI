@@ -1,0 +1,395 @@
+[
+ {
+  "id": "casa",
+  "ic": "🏠",
+  "n": {
+   "it": "Casa & Arredamento",
+   "en": "Home & Living"
+  },
+  "s": {
+   "it": "Targhe, lampade, quadri",
+   "en": "Plaques, lamps, art"
+  },
+  "sub": [
+   {
+    "it": "Decorazioni nome",
+    "en": "Name decor"
+   },
+   {
+    "it": "Targhe casa",
+    "en": "House plaques"
+   },
+   {
+    "it": "Quadri incisi",
+    "en": "Engraved art"
+   },
+   {
+    "it": "Lampade LED",
+    "en": "LED lamps"
+   },
+   {
+    "it": "Segnaletica interna",
+    "en": "Interior signage"
+   },
+   {
+    "it": "Decor 3D",
+    "en": "3D decor"
+   },
+   {
+    "it": "Portachiavi casa",
+    "en": "House keychains"
+   }
+  ],
+  "big": 1,
+  "bg": "linear-gradient(150deg,#f3e7d3,#e2c9a2)",
+  "icon": "casa"
+ },
+ {
+  "id": "eventi",
+  "ic": "🎉",
+  "n": {
+   "it": "Eventi, Feste & Ricorrenze",
+   "en": "Events & Celebrations"
+  },
+  "s": {
+   "it": "Nozze, lauree, compleanni",
+   "en": "Weddings, graduations, birthdays"
+  },
+  "sub": [
+   {
+    "it": "Compleanni",
+    "en": "Birthdays"
+   },
+   {
+    "it": "Nozze",
+    "en": "Weddings"
+   },
+   {
+    "it": "Lauree",
+    "en": "Graduations"
+   },
+   {
+    "it": "Battesimi & Comunioni",
+    "en": "Baptisms & Communions"
+   },
+   {
+    "it": "Baby shower & Gender reveal",
+    "en": "Baby shower & Gender reveal"
+   },
+   {
+    "it": "Anniversari",
+    "en": "Anniversaries"
+   },
+   {
+    "it": "Festa mamma/papà/nonni",
+    "en": "Mother's/Father's day"
+   }
+  ],
+  "big": 1,
+  "bg": "linear-gradient(150deg,#fdf1f3,#fadde3)",
+  "icon": "eventi"
+ },
+ {
+  "id": "animali",
+  "ic": "🐾",
+  "n": {
+   "it": "Animali",
+   "en": "Pets"
+  },
+  "s": {
+   "it": "Medagliette & ritratti",
+   "en": "Tags & portraits"
+  },
+  "sub": [
+   {
+    "it": "Medagliette cane/gatto",
+    "en": "Dog/cat tags"
+   },
+   {
+    "it": "QR pet tag",
+    "en": "QR pet tags"
+   },
+   {
+    "it": "Ritratti su legno",
+    "en": "Wood portraits"
+   },
+   {
+    "it": "Targhe pet",
+    "en": "Pet plaques"
+   }
+  ],
+  "icon": "animali"
+ },
+ {
+  "id": "accessori",
+  "ic": "🎒",
+  "n": {
+   "it": "Accessori",
+   "en": "Accessories"
+  },
+  "s": {
+   "it": "Portachiavi, gioielli, cover",
+   "en": "Keychains, jewelry, covers"
+  },
+  "sub": [
+   {
+    "it": "Portachiavi",
+    "en": "Keychains"
+   },
+   {
+    "it": "Apribottiglie",
+    "en": "Bottle openers"
+   },
+   {
+    "it": "Etichette bagagli",
+    "en": "Luggage tags"
+   },
+   {
+    "it": "Collane & charms",
+    "en": "Necklaces & charms"
+   },
+   {
+    "it": "Bracciali",
+    "en": "Bracelets"
+   },
+   {
+    "it": "Cover",
+    "en": "Covers"
+   }
+  ],
+  "icon": "accessori"
+ },
+ {
+  "id": "b2b",
+  "ic": "🏢",
+  "n": {
+   "it": "Aziendale & B2B",
+   "en": "Corporate & B2B"
+  },
+  "s": {
+   "it": "Gadget, targhe, conto terzi",
+   "en": "Gadgets, plaques, production"
+  },
+  "sub": [
+   {
+    "it": "Targhe professionali",
+    "en": "Professional plaques"
+   },
+   {
+    "it": "Gadget aziendali",
+    "en": "Corporate gadgets"
+   },
+   {
+    "it": "Penne & borracce",
+    "en": "Pens & bottles"
+   },
+   {
+    "it": "QR menu",
+    "en": "QR menus"
+   },
+   {
+    "it": "Conto terzi",
+    "en": "Third-party production"
+   },
+   {
+    "it": "Incisioni industriali",
+    "en": "Industrial engraving"
+   },
+   {
+    "it": "Prototipazione",
+    "en": "Prototyping"
+   }
+  ],
+  "w": 1,
+  "icon": "aziendale"
+ },
+ {
+  "id": "bambini",
+  "ic": "👶",
+  "n": {
+   "it": "Bambini",
+   "en": "Kids"
+  },
+  "s": {
+   "it": "Nascita & cameretta",
+   "en": "Birth & nursery"
+  },
+  "sub": [
+   {
+    "it": "Targhe nascita",
+    "en": "Birth plaques"
+   },
+   {
+    "it": "Nome 3D",
+    "en": "3D names"
+   },
+   {
+    "it": "Misuratori crescita",
+    "en": "Growth charts"
+   },
+   {
+    "it": "Lampade baby",
+    "en": "Baby lamps"
+   },
+   {
+    "it": "Cornici baby",
+    "en": "Baby frames"
+   }
+  ],
+  "bg": "linear-gradient(150deg,#eefaf1,#d6f2df)",
+  "icon": "bambini"
+ },
+ {
+  "id": "stagionale",
+  "ic": "🎄",
+  "n": {
+   "it": "Stagionale",
+   "en": "Seasonal"
+  },
+  "s": {
+   "it": "Natale, Pasqua, Halloween…",
+   "en": "Christmas, Easter, Halloween…"
+  },
+  "sub": [
+   {
+    "it": "Natale",
+    "en": "Christmas"
+   },
+   {
+    "it": "San Valentino",
+    "en": "Valentine's"
+   },
+   {
+    "it": "Pasqua",
+    "en": "Easter"
+   },
+   {
+    "it": "Halloween",
+    "en": "Halloween"
+   },
+   {
+    "it": "Estate & viaggio",
+    "en": "Summer & travel"
+   },
+   {
+    "it": "Back to school",
+    "en": "Back to school"
+   }
+  ],
+  "bg": "linear-gradient(150deg,#fdeaea,#f6cfcf)",
+  "icon": "stagionale"
+ },
+ {
+  "id": "digitale",
+  "ic": "💾",
+  "n": {
+   "it": "Digitale",
+   "en": "Digital"
+  },
+  "s": {
+   "it": "SVG, DXF, STL, progetti",
+   "en": "SVG, DXF, STL, projects"
+  },
+  "sub": [
+   {
+    "it": "File SVG",
+    "en": "SVG files"
+   },
+   {
+    "it": "File DXF",
+    "en": "DXF files"
+   },
+   {
+    "it": "File 3D STL",
+    "en": "3D STL files"
+   },
+   {
+    "it": "Template",
+    "en": "Templates"
+   },
+   {
+    "it": "Bundle makers",
+    "en": "Maker bundles"
+   }
+  ],
+  "bg": "linear-gradient(150deg,#f4f0ff,#e3daf8)",
+  "go": "digital",
+  "icon": "digitale"
+ },
+ {
+  "id": "custom",
+  "ic": "🛠️",
+  "n": {
+   "it": "Custom su Richiesta",
+   "en": "Custom on Request"
+  },
+  "s": {
+   "it": "Su misura, il tuo oggetto",
+   "en": "Made to measure"
+  },
+  "sub": [],
+  "bg": "linear-gradient(150deg,#211f2e,#3a3752)",
+  "darkc": 1,
+  "go": "quote",
+  "w": 1,
+  "icon": "custom"
+ },
+ {
+  "id": "materiali",
+  "ic": "🧱",
+  "n": {
+   "it": "Materiali",
+   "en": "Materials"
+  },
+  "s": {
+   "it": "8 materiali lavorabili",
+   "en": "8 workable materials"
+  },
+  "sub": [],
+  "go": "about",
+  "icon": "materiali"
+ },
+ {
+  "id": "tecnologie",
+  "ic": "🔥",
+  "n": {
+   "it": "Tecnologie",
+   "en": "Technologies"
+  },
+  "s": {
+   "it": "CO₂, F2, MOPA, UV, DTF, 3D",
+   "en": "CO₂, F2, MOPA, UV, DTF, 3D"
+  },
+  "sub": [],
+  "go": "about",
+  "icon": "tecnologie"
+ },
+ {
+  "id": "limited",
+  "ic": "🧨",
+  "n": {
+   "it": "Edizioni Limitate",
+   "en": "Limited Editions"
+  },
+  "s": {
+   "it": "Serie speciali & collab",
+   "en": "Special series & collabs"
+  },
+  "sub": [
+   {
+    "it": "Serie speciali",
+    "en": "Special series"
+   },
+   {
+    "it": "Collaborazioni",
+    "en": "Collaborations"
+   },
+   {
+    "it": "Collezioni tematiche",
+    "en": "Themed collections"
+   }
+  ],
+  "bg": "linear-gradient(150deg,#fff8e0,#fdeeb5)",
+  "icon": "limited"
+ }
+]

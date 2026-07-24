@@ -1,0 +1,699 @@
+[
+ {
+  "id": 1,
+  "cat": "casa",
+  "sub": 1,
+  "n": {
+   "it": "Targa Casa Personalizzata",
+   "en": "Custom House Plaque"
+  },
+  "mat": "Legno",
+  "price": 34,
+  "icon": "🪧",
+  "rev": 67,
+  "coll": [
+   "best"
+  ],
+  "tag": "Best",
+  "prod": 3
+ },
+ {
+  "id": 2,
+  "cat": "casa",
+  "sub": 1,
+  "n": {
+   "it": "Decorazione Nome Plexi",
+   "en": "Plexi Name Decor"
+  },
+  "mat": "Plexiglass",
+  "price": 24,
+  "icon": "🔤",
+  "rev": 104,
+  "coll": [
+   "best"
+  ],
+  "prod": 3
+ },
+ {
+  "id": 3,
+  "cat": "casa",
+  "sub": 2,
+  "n": {
+   "it": "Quadro Inciso — Ritratto",
+   "en": "Engraved Portrait Art"
+  },
+  "mat": "Legno",
+  "price": 59,
+  "icon": "🖼️",
+  "rev": 141,
+  "coll": [],
+  "prod": 5
+ },
+ {
+  "id": 4,
+  "cat": "casa",
+  "sub": 3,
+  "n": {
+   "it": "Lampada LED Personalizzata",
+   "en": "Custom LED Lamp"
+  },
+  "mat": "Plexiglass",
+  "price": 49,
+  "icon": "💡",
+  "rev": 178,
+  "coll": [
+   "best",
+   "new"
+  ],
+  "tag": "New",
+  "prod": 3
+ },
+ {
+  "id": 5,
+  "cat": "casa",
+  "sub": 4,
+  "n": {
+   "it": "Segnaletica Interna Set",
+   "en": "Interior Signage Set"
+  },
+  "mat": "Plexiglass",
+  "price": 29,
+  "icon": "🚪",
+  "rev": 215,
+  "coll": [],
+  "prod": 3
+ },
+ {
+  "id": 6,
+  "cat": "casa",
+  "sub": 5,
+  "n": {
+   "it": "Decorazione 3D Stampata",
+   "en": "3D Printed Decor"
+  },
+  "mat": "PLA",
+  "price": 27,
+  "icon": "🧊",
+  "rev": 252,
+  "coll": [
+   "new"
+  ],
+  "prod": 3
+ },
+ {
+  "id": 7,
+  "cat": "eventi",
+  "sub": 1,
+  "n": {
+   "it": "Cake Topper Plexi",
+   "en": "Plexi Cake Topper"
+  },
+  "mat": "Plexiglass",
+  "price": 16,
+  "icon": "🎂",
+  "rev": 289,
+  "coll": [
+   "best"
+  ],
+  "tag": "Best",
+  "prod": 3
+ },
+ {
+  "id": 8,
+  "cat": "eventi",
+  "sub": 1,
+  "n": {
+   "it": "Segnaposto Nozze ×20",
+   "en": "Wedding Place Cards ×20"
+  },
+  "mat": "Legno",
+  "price": 38,
+  "icon": "💍",
+  "rev": 46,
+  "coll": [],
+  "prod": 5
+ },
+ {
+  "id": 9,
+  "cat": "eventi",
+  "sub": 1,
+  "n": {
+   "it": "Guestbook Nozze Inciso",
+   "en": "Engraved Wedding Guestbook"
+  },
+  "mat": "Legno",
+  "price": 54,
+  "icon": "📖",
+  "rev": 83,
+  "coll": [],
+  "prod": 3
+ },
+ {
+  "id": 10,
+  "cat": "eventi",
+  "sub": 1,
+  "n": {
+   "it": "Bomboniere Personalizzate ×10",
+   "en": "Custom Wedding Favors ×10"
+  },
+  "mat": "Legno",
+  "price": 32,
+  "icon": "🎀",
+  "rev": 120,
+  "coll": [],
+  "prod": 3
+ },
+ {
+  "id": 11,
+  "cat": "eventi",
+  "sub": 1,
+  "n": {
+   "it": "QR Menu Plexi/Legno",
+   "en": "QR Menu Plexi/Wood"
+  },
+  "mat": "Plexiglass",
+  "price": 22,
+  "icon": "📱",
+  "rev": 157,
+  "coll": [
+   "corporate"
+  ],
+  "prod": 3
+ },
+ {
+  "id": 12,
+  "cat": "eventi",
+  "sub": 2,
+  "n": {
+   "it": "Targa Laurea",
+   "en": "Graduation Plaque"
+  },
+  "mat": "Plexiglass",
+  "price": 28,
+  "icon": "🎓",
+  "rev": 194,
+  "coll": [
+   "best"
+  ],
+  "prod": 3
+ },
+ {
+  "id": 13,
+  "cat": "eventi",
+  "sub": 2,
+  "n": {
+   "it": "Penna Incisa Laurea",
+   "en": "Engraved Graduation Pen"
+  },
+  "mat": "Metallo",
+  "price": 15,
+  "icon": "🖊️",
+  "rev": 231,
+  "coll": [],
+  "prod": 3
+ },
+ {
+  "id": 14,
+  "cat": "eventi",
+  "sub": 5,
+  "n": {
+   "it": "Targa Anniversario",
+   "en": "Anniversary Plaque"
+  },
+  "mat": "Vetro",
+  "price": 36,
+  "icon": "💞",
+  "rev": 268,
+  "coll": [],
+  "prod": 3
+ },
+ {
+  "id": 15,
+  "cat": "eventi",
+  "sub": 3,
+  "n": {
+   "it": "Ricordo Battesimo",
+   "en": "Baptism Keepsake"
+  },
+  "mat": "Legno",
+  "price": 26,
+  "icon": "🕊️",
+  "rev": 305,
+  "coll": [],
+  "prod": 3
+ },
+ {
+  "id": 16,
+  "cat": "eventi",
+  "sub": 4,
+  "n": {
+   "it": "Set Gender Reveal",
+   "en": "Gender Reveal Set"
+  },
+  "mat": "Plexiglass",
+  "price": 31,
+  "icon": "🎈",
+  "rev": 62,
+  "coll": [
+   "new"
+  ],
+  "prod": 3
+ },
+ {
+  "id": 17,
+  "cat": "animali",
+  "sub": 1,
+  "n": {
+   "it": "Medaglietta Cane/Gatto",
+   "en": "Dog/Cat ID Tag"
+  },
+  "mat": "Metallo",
+  "price": 13,
+  "icon": "🐕",
+  "rev": 99,
+  "coll": [
+   "best"
+  ],
+  "tag": "Best",
+  "prod": 3
+ },
+ {
+  "id": 18,
+  "cat": "animali",
+  "sub": 1,
+  "n": {
+   "it": "QR Pet Tag",
+   "en": "QR Pet Tag"
+  },
+  "mat": "Metallo",
+  "price": 16,
+  "icon": "📡",
+  "rev": 136,
+  "coll": [
+   "new"
+  ],
+  "tag": "New",
+  "prod": 3
+ },
+ {
+  "id": 19,
+  "cat": "animali",
+  "sub": 2,
+  "n": {
+   "it": "Ritratto Pet su Legno",
+   "en": "Pet Portrait on Wood"
+  },
+  "mat": "Legno",
+  "price": 44,
+  "icon": "🐾",
+  "rev": 173,
+  "coll": [],
+  "prod": 5
+ },
+ {
+  "id": 20,
+  "cat": "accessori",
+  "sub": 1,
+  "n": {
+   "it": "Portachiavi Metallo F2",
+   "en": "F2 Metal Keychain"
+  },
+  "mat": "Metallo",
+  "price": 14,
+  "icon": "🔑",
+  "rev": 210,
+  "coll": [
+   "best"
+  ],
+  "prod": 3
+ },
+ {
+  "id": 21,
+  "cat": "accessori",
+  "sub": 1,
+  "n": {
+   "it": "Portachiavi Legno/Plexi",
+   "en": "Wood/Plexi Keychain"
+  },
+  "mat": "Legno",
+  "price": 9,
+  "icon": "🗝️",
+  "rev": 247,
+  "coll": [],
+  "prod": 3
+ },
+ {
+  "id": 22,
+  "cat": "accessori",
+  "sub": 1,
+  "n": {
+   "it": "Apribottiglie Inciso",
+   "en": "Engraved Bottle Opener"
+  },
+  "mat": "Metallo",
+  "price": 12,
+  "icon": "🍾",
+  "rev": 284,
+  "coll": [],
+  "prod": 3
+ },
+ {
+  "id": 23,
+  "cat": "accessori",
+  "sub": 2,
+  "n": {
+   "it": "Etichetta Bagaglio",
+   "en": "Luggage Tag"
+  },
+  "mat": "Pelle",
+  "price": 11,
+  "icon": "🧳",
+  "rev": 41,
+  "coll": [],
+  "prod": 3
+ },
+ {
+  "id": 24,
+  "cat": "accessori",
+  "sub": 3,
+  "n": {
+   "it": "Collana con Charm",
+   "en": "Charm Necklace"
+  },
+  "mat": "Metallo",
+  "price": 19,
+  "icon": "📿",
+  "rev": 78,
+  "coll": [],
+  "prod": 3
+ },
+ {
+  "id": 25,
+  "cat": "accessori",
+  "sub": 4,
+  "n": {
+   "it": "Bracciale Inciso",
+   "en": "Engraved Bracelet"
+  },
+  "mat": "Pelle",
+  "price": 17,
+  "icon": "⛓️",
+  "rev": 115,
+  "coll": [],
+  "prod": 3
+ },
+ {
+  "id": 26,
+  "cat": "b2b",
+  "sub": 1,
+  "n": {
+   "it": "Targa Professionale",
+   "en": "Professional Plaque"
+  },
+  "mat": "Plexiglass",
+  "price": 42,
+  "icon": "🏷️",
+  "rev": 152,
+  "coll": [
+   "corporate"
+  ],
+  "tag": "B2B",
+  "prod": 3
+ },
+ {
+  "id": 27,
+  "cat": "b2b",
+  "sub": 1,
+  "n": {
+   "it": "Kit Gadget Aziendali",
+   "en": "Corporate Gadget Kit"
+  },
+  "mat": "Legno",
+  "price": 89,
+  "icon": "🎁",
+  "rev": 189,
+  "coll": [
+   "corporate"
+  ],
+  "prod": 7
+ },
+ {
+  "id": 28,
+  "cat": "b2b",
+  "sub": 2,
+  "n": {
+   "it": "Borraccia Incisa",
+   "en": "Engraved Bottle"
+  },
+  "mat": "Metallo",
+  "price": 21,
+  "icon": "🍶",
+  "rev": 226,
+  "coll": [
+   "corporate",
+   "best"
+  ],
+  "prod": 3
+ },
+ {
+  "id": 29,
+  "cat": "b2b",
+  "sub": 2,
+  "n": {
+   "it": "Set Penne Incise ×10",
+   "en": "Engraved Pen Set ×10"
+  },
+  "mat": "Metallo",
+  "price": 65,
+  "icon": "🖊️",
+  "rev": 263,
+  "coll": [
+   "corporate"
+  ],
+  "prod": 3
+ },
+ {
+  "id": 30,
+  "cat": "b2b",
+  "sub": 3,
+  "n": {
+   "it": "QR Menu Ristorante ×10",
+   "en": "Restaurant QR Menu ×10"
+  },
+  "mat": "Legno",
+  "price": 75,
+  "icon": "🍽️",
+  "rev": 300,
+  "coll": [
+   "corporate"
+  ],
+  "prod": 6
+ },
+ {
+  "id": 31,
+  "cat": "bambini",
+  "sub": 1,
+  "n": {
+   "it": "Targa Nascita",
+   "en": "Birth Plaque"
+  },
+  "mat": "Legno",
+  "price": 29,
+  "icon": "👶",
+  "rev": 57,
+  "coll": [
+   "best"
+  ],
+  "prod": 3
+ },
+ {
+  "id": 32,
+  "cat": "bambini",
+  "sub": 1,
+  "n": {
+   "it": "Nome 3D Cameretta",
+   "en": "3D Nursery Name"
+  },
+  "mat": "PLA",
+  "price": 23,
+  "icon": "🔠",
+  "rev": 94,
+  "coll": [
+   "new"
+  ],
+  "prod": 3
+ },
+ {
+  "id": 33,
+  "cat": "bambini",
+  "sub": 2,
+  "n": {
+   "it": "Misuratore di Crescita",
+   "en": "Growth Chart"
+  },
+  "mat": "Legno",
+  "price": 47,
+  "icon": "📏",
+  "rev": 131,
+  "coll": [],
+  "prod": 3
+ },
+ {
+  "id": 34,
+  "cat": "bambini",
+  "sub": 3,
+  "n": {
+   "it": "Lampada Plexi Baby",
+   "en": "Baby Plexi Lamp"
+  },
+  "mat": "Plexiglass",
+  "price": 39,
+  "icon": "🌙",
+  "rev": 168,
+  "coll": [],
+  "prod": 3
+ },
+ {
+  "id": 35,
+  "cat": "stagionale",
+  "sub": 1,
+  "n": {
+   "it": "Set Decorazioni Natale ×6",
+   "en": "Christmas Ornament Set ×6"
+  },
+  "mat": "Legno",
+  "price": 26,
+  "icon": "🎄",
+  "rev": 205,
+  "coll": [
+   "season",
+   "best"
+  ],
+  "tag": "Xmas",
+  "prod": 3
+ },
+ {
+  "id": 36,
+  "cat": "stagionale",
+  "sub": 1,
+  "n": {
+   "it": "Cuore San Valentino",
+   "en": "Valentine Heart"
+  },
+  "mat": "Plexiglass",
+  "price": 18,
+  "icon": "❤️",
+  "rev": 242,
+  "coll": [
+   "season"
+  ],
+  "prod": 3
+ },
+ {
+  "id": 37,
+  "cat": "stagionale",
+  "sub": 2,
+  "n": {
+   "it": "Coniglietto di Pasqua",
+   "en": "Easter Bunny Decor"
+  },
+  "mat": "Legno",
+  "price": 14,
+  "icon": "🐰",
+  "rev": 279,
+  "coll": [
+   "season"
+  ],
+  "prod": 3
+ },
+ {
+  "id": 38,
+  "cat": "stagionale",
+  "sub": 3,
+  "n": {
+   "it": "Zucca Halloween",
+   "en": "Halloween Pumpkin"
+  },
+  "mat": "MDF",
+  "price": 15,
+  "icon": "🎃",
+  "rev": 36,
+  "coll": [
+   "season"
+  ],
+  "prod": 3
+ },
+ {
+  "id": 39,
+  "cat": "stagionale",
+  "sub": 4,
+  "n": {
+   "it": "Travel Tag Estate",
+   "en": "Summer Travel Tag"
+  },
+  "mat": "Pelle",
+  "price": 12,
+  "icon": "✈️",
+  "rev": 73,
+  "coll": [
+   "season",
+   "new"
+  ],
+  "prod": 3
+ },
+ {
+  "id": 40,
+  "cat": "limited",
+  "sub": 1,
+  "n": {
+   "it": "Serie Speciale Oro",
+   "en": "Gold Special Series"
+  },
+  "mat": "Metallo",
+  "price": 79,
+  "icon": "🥇",
+  "rev": 110,
+  "coll": [
+   "limited"
+  ],
+  "tag": "Limited",
+  "prod": 7
+ },
+ {
+  "id": 41,
+  "cat": "limited",
+  "sub": 1,
+  "n": {
+   "it": "Collab Artista — Skyline",
+   "en": "Artist Collab — Skyline"
+  },
+  "mat": "Legno",
+  "price": 69,
+  "icon": "🌆",
+  "rev": 147,
+  "coll": [
+   "limited"
+  ],
+  "tag": "Limited",
+  "prod": 3
+ },
+ {
+  "id": 42,
+  "cat": "limited",
+  "sub": 2,
+  "n": {
+   "it": "Collezione Alpi",
+   "en": "Alps Collection"
+  },
+  "mat": "Legno",
+  "price": 49,
+  "icon": "🏔️",
+  "rev": 184,
+  "coll": [
+   "limited",
+   "season"
+  ],
+  "tag": "Limited",
+  "prod": 3
+ }
+]

@@ -1,0 +1,30 @@
+/* ============ KEYFRAMES ============ */
+
+@keyframes beamdot{0%{left:0;opacity:0}8%{opacity:1}92%{opacity:1}100%{left:100%;opacity:0}}
+@keyframes pagein{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(50px,40px) scale(1.12)}}
+@keyframes pulse{50%{opacity:.35}}
+@keyframes wordup{to{transform:none}}
+@keyframes sweep{0%{left:0;opacity:1}95%{opacity:1}100%{left:100%;opacity:0}}
+@keyframes fillin{to{clip-path:inset(0 0 0 0)}}
+@keyframes floaty{0%,100%{margin-top:0}50%{margin-top:-20px}}
+
+@keyframes cue{from{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}to{transform:scaleY(0);transform-origin:bottom}}
+@keyframes mq{to{transform:translateX(-50%)}}
+@keyframes pop{40%{transform:scale(1.4)}}
+@keyframes spinc{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes fluttua{0%,100%{margin-top:0}50%{margin-top:-16px}}
+@keyframes respiro{0%,100%{filter:drop-shadow(0 0 22px rgba(59,125,224,.45)) drop-shadow(0 0 70px rgba(59,125,224,.22)) drop-shadow(0 30px 50px rgba(0,0,0,.6))}
+50%{filter:drop-shadow(0 0 40px rgba(59,125,224,.75)) drop-shadow(0 0 120px rgba(59,125,224,.4)) drop-shadow(0 30px 50px rgba(0,0,0,.6))}}
+@keyframes sweepfx{0%,62%{transform:rotate(-14deg) translateX(-120vw);opacity:0}66%{opacity:.6}78%{opacity:.6}84%,100%{transform:rotate(-14deg) translateX(120vw);opacity:0}}
+@keyframes lload{0%{transform:translateX(-100%)}100%{transform:translateX(450%)}}
+@keyframes faqin{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
+/* Failsafe: se il JS non parte, il loader si dissolve da solo dopo 5s */
+.loader{animation:loaderfailsafe .8s ease 5s forwards}
+@keyframes loaderfailsafe{to{opacity:0;visibility:hidden}}
+
+/* Uscita morbida di pagina (l'ingresso usa già "pagein" in layout.css) */
+.page.leaving{animation:pageout .14s ease forwards}
+@keyframes pageout{to{opacity:0;transform:translateY(-10px)}}
+@media (prefers-reduced-motion: reduce){ .page.leaving{animation:none} }

@@ -1,0 +1,102 @@
+/* ============ RESPONSIVE (globale) ============
+   Strategia: le media query specifiche restano ACCANTO al loro componente
+   (in layout/components/pages) per non alterare la cascata.
+   Qui vivono solo le regole globali. Breakpoint del progetto:
+   340 / 480 / 560 / 640 / 700 / 820 / 860 / 900 / 920 / 940 / 980 / 1080 / 1160 px */
+
+/* Accessibility — reduced motion */
+@media (prefers-reduced-motion:reduce){.laserfx,canvas#fx{display:none}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+}
+
+/* ── ≤1160 ── */
+@media (max-width:1160px){
+  .wrap{padding:0 clamp(16px,3.5vw,40px)}
+  .hero-grid{grid-template-columns:1fr;text-align:center}
+  .hero-visual{justify-content:center;margin-top:48px}
+  .hero-meta{justify-content:center}
+  .hero-ctas{justify-content:center}
+  .about-grid{grid-template-columns:1fr;gap:48px}
+  .shop-layout{grid-template-columns:1fr}
+  .filters{position:static;width:100%;display:flex;flex-wrap:wrap;gap:12px;border-right:none;border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:24px}
+  .fgroup{flex:1;min-width:160px}
+}
+
+/* ── ≤980 ── */
+@media (max-width:980px){
+  .h2{font-size:clamp(1.9rem,4.5vw,2.8rem)}
+  .bento{grid-template-columns:repeat(3,1fr)}
+  .mach-grid{grid-template-columns:repeat(2,1fr)}
+  .b2b-cards{grid-template-columns:1fr 1fr}
+  .rev-grid{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .fgrid{grid-template-columns:1fr 1fr}
+  .matgrid{grid-template-columns:repeat(3,1fr)}
+  .portgrid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ── ≤820 ── Nav mobile ── */
+@media (max-width:820px){
+  .nav-links{display:none}
+  .burger{display:flex}
+  .topbar .wrap{flex-wrap:wrap;gap:6px}
+  .hero-grid h1{font-size:clamp(2.4rem,8vw,4rem)}
+  .coin{width:240px;height:240px}
+  .cring{display:none}
+  .fcard{display:none}
+  .bento{grid-template-columns:repeat(2,1fr)}
+  .b2b-cards{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .rev-grid{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:1fr}
+  .portgrid{grid-template-columns:1fr}
+  .about-grid{text-align:center}
+  .counters{justify-content:center}
+  .filters{display:none}
+  .filters.open{display:flex;flex-direction:column}
+}
+
+/* ── ≤640 ── Mobile S ── */
+@media (max-width:640px){
+  .sec{padding:clamp(60px,10vw,90px) 0}
+  .h2{font-size:clamp(1.7rem,6.5vw,2.4rem)}
+  .sub{font-size:.97rem}
+  .bento{grid-template-columns:1fr}
+  .mach-grid{grid-template-columns:1fr}
+  .pgrid{grid-template-columns:1fr}
+  .matgrid{grid-template-columns:repeat(2,1fr)}
+  .hero-meta{flex-direction:column;gap:8px;align-items:center}
+  .news{padding:clamp(28px,6vw,48px)}
+  .nform{flex-direction:column}
+  .nform input{width:100%}
+  .nform button{width:100%;justify-content:center}
+  .pp-grid{grid-template-columns:1fr}
+  .quote-form{grid-template-columns:1fr}
+  .quote-form .full{grid-column:auto}
+  .logo-strip{font-size:.72rem;letter-spacing:.08em}
+  .ig{grid-template-columns:repeat(3,1fr)}
+  .gal{padding:0 12px}
+  .fgrid>div:last-child{display:none}
+  .stickybuy{padding:10px 16px}
+}
+
+/* ── ≤480 ── Mobile XS ── */
+@media (max-width:480px){
+  nav{padding:0 14px}
+  .brand span{display:none}
+  .matgrid{grid-template-columns:1fr}
+  .ig{grid-template-columns:repeat(2,1fr)}
+  .hero-ctas{flex-direction:column;align-items:center}
+  .btn{padding:13px 22px;font-size:.9rem}
+  .counter b{font-size:clamp(2rem,8vw,3rem)}
+  .fcard{display:none}
+}
+
+/* ── ≤340 ── Tiny ── */
+@media (max-width:340px){
+  .wrap{padding:0 10px}
+  .coin{width:180px;height:180px}
+  .ig{grid-template-columns:1fr}
+}

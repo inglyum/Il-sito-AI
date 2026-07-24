@@ -1,0 +1,19 @@
+name: Valida i dati del catalogo
+on:
+  push:
+    paths:
+      - 'data/**'
+  pull_request:
+    paths:
+      - 'data/**'
+
+jobs:
+  valida:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Controlla prodotti, categorie e riferimenti
+        run: node scripts/validate-data.mjs

@@ -1,0 +1,2152 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INGLY Admin 2.0</title>
+<meta name="robots" content="noindex">
+<style>
+:root{--bg:#0a0d18;--panel:#0b0e1c;--card:#12162a;--card2:#171c36;--ink:#eef1fb;--soft:#9aa3c7;--mut:#5c6389;--line:rgba(140,160,220,.18);--blue:#3b7de0;--laser:#f5d94e;--ok:#3ecf8e;--warn:#ff8a3c;--err:#ff5d5d;--r:14px;--mono:ui-monospace,'Cascadia Code',Menlo,Consolas,monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+html{color-scheme:dark}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:radial-gradient(ellipse at 50% 0%,#131a33,#0a0d18) fixed;color:var(--ink);line-height:1.5;font-size:14px}
+button{font-family:inherit;color:inherit}
+::selection{background:rgba(245,217,78,.25)}
+a{color:var(--blue)}
+.shell{display:flex;min-height:100vh}
+/* ===== Sidebar ===== */
+.side{width:232px;flex:0 0 232px;background:var(--panel);border-right:1px solid var(--line);padding:16px 10px 90px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 10px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.brand img{width:32px;height:32px}
+.brand b{font-size:15px;font-style:italic;letter-spacing:.01em}
+.brand span{display:block;font-size:10px;color:var(--laser);letter-spacing:.14em;text-transform:uppercase;font-style:normal}
+.navlabel{padding:14px 12px 4px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);font-weight:700}
+.nit{position:relative;display:flex;align-items:center;gap:9px;width:100%;padding:7px 10px 7px 14px;border:none;background:none;border-radius:8px;font-size:13.3px;font-weight:500;color:#cbd0e8;cursor:pointer;text-align:left;transition:.12s}
+.nit:hover{background:rgba(140,160,220,.07);color:var(--ink)}
+.nit.on{background:rgba(59,125,224,.14);color:#fff;font-weight:600}
+.nit.on::before{content:'';position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--laser)}
+.nit .bdg{margin-left:auto;font-size:10.5px;background:var(--laser);color:#1a1500;border-radius:9px;padding:0 7px;font-weight:700}
+.nit .bdg:empty{display:none}
+/* ===== Topbar ===== */
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;padding:10px 22px;background:rgba(10,13,24,.86);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top h1{font-size:16.5px;font-weight:650}
+.sync{display:flex;align-items:center;gap:7px;font-size:12.3px;color:var(--soft);margin-left:auto}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--mut);box-shadow:0 0 0 3px rgba(140,160,220,.12)}
+.dot.ok{background:var(--ok)}.dot.dirty{background:var(--laser)}.dot.err{background:var(--err)}
+.content{padding:22px;max-width:1160px;width:100%;margin:0 auto}
+/* ===== Cards / forms ===== */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:16px}
+.card h3{font-size:14.5px;margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.card h3 .sp{margin-left:auto}
+.hint{font-size:12.5px;color:var(--soft)}
+label{display:block;font-size:12px;color:var(--soft);margin:10px 0 4px;font-weight:600}
+input[type=text],input[type=number],input[type=password],input[type=url],select,textarea{width:100%;background:#0d1122;border:1px solid var(--line);border-radius:9px;color:var(--ink);padding:8px 11px;font-size:13.5px;font-family:inherit;outline:none;transition:border .12s}
+input:focus,select:focus,textarea:focus{border-color:var(--blue)}
+textarea{resize:vertical;min-height:64px}
+.row{display:grid;gap:12px}.row.c2{grid-template-columns:1fr 1fr}.row.c3{grid-template-columns:repeat(3,1fr)}.row.c4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.row.c2,.row.c3,.row.c4{grid-template-columns:1fr}.side{width:64px;flex-basis:64px}.side .brand b,.side .brand span,.side .navlabel,.nit span.t{display:none}}
+.btn{display:inline-flex;align-items:center;gap:7px;background:var(--card2);border:1px solid var(--line);border-radius:9px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:.12s}
+.btn:hover{border-color:var(--blue)}
+.btn.pri{background:var(--laser);border-color:var(--laser);color:#1a1500}
+.btn.pri:hover{filter:brightness(1.07)}
+.btn.ok{background:rgba(62,207,142,.13);border-color:rgba(62,207,142,.5);color:var(--ok)}
+.btn.err{background:rgba(255,93,93,.1);border-color:rgba(255,93,93,.45);color:var(--err)}
+.btn.sm{padding:4px 9px;font-size:12px;border-radius:7px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;border:1px solid var(--line);border-radius:20px;padding:2px 10px;color:var(--soft)}
+.chip.ok{color:var(--ok);border-color:rgba(62,207,142,.4)}.chip.warn{color:var(--warn);border-color:rgba(255,138,60,.4)}.chip.err{color:var(--err);border-color:rgba(255,93,93,.4)}.chip.laser{color:var(--laser);border-color:rgba(245,217,78,.4)}
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:13.3px}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--mut);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+td{padding:7px 8px;border-bottom:1px solid rgba(140,160,220,.08);vertical-align:middle}
+tr.rowc{cursor:pointer}tr.rowc:hover td{background:rgba(140,160,220,.05)}
+.mono{font-family:var(--mono);font-size:12px}
+.pill{font-size:11px;border-radius:6px;padding:1px 7px;background:var(--card2);border:1px solid var(--line)}
+/* dashboard */
+.dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
+.dcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:15px 17px}
+.dcard b{display:block;font-size:26px;font-style:italic;color:var(--laser);line-height:1.2}
+.dcard span{font-size:12px;color:var(--soft)}
+.dcard.w b{color:var(--warn)}.dcard.g b{color:var(--ok)}
+/* media grid */
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:11px}
+.mit{background:var(--card2);border:1px solid var(--line);border-radius:11px;overflow:hidden;position:relative}
+.mit img{width:100%;height:96px;object-fit:cover;display:block;background:#0d1122}
+.mit .nm{font-size:10.6px;padding:5px 7px 1px;font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--soft)}
+.mit .meta{font-size:10px;color:var(--mut);padding:0 7px 5px}
+.mit .tag{position:absolute;top:6px;left:6px;font-size:9.5px;font-weight:700;border-radius:5px;padding:1px 6px;background:rgba(10,13,24,.82)}
+.mit .tag.st{color:var(--laser)}.mit .tag.rp{color:var(--ok)}.mit .tag.or{color:var(--warn)}
+.mit .x{position:absolute;top:5px;right:5px;background:rgba(10,13,24,.85);border:1px solid var(--line);border-radius:6px;width:22px;height:22px;cursor:pointer;font-size:11px;display:grid;place-items:center}
+.drop{border:1.5px dashed rgba(140,160,220,.4);border-radius:12px;padding:26px;text-align:center;color:var(--soft);cursor:pointer;transition:.15s;font-size:13px}
+.drop:hover,.drop.on{border-color:var(--laser);color:var(--ink);background:rgba(245,217,78,.04)}
+/* publish pipeline — the laser line */
+.pipe{position:relative;margin:14px 0 6px;padding-left:26px}
+.pipe::before{content:'';position:absolute;left:8px;top:8px;bottom:8px;width:2px;background:var(--line);border-radius:2px}
+.beam{position:absolute;left:8px;top:8px;width:2px;background:linear-gradient(var(--laser),rgba(245,217,78,.25));border-radius:2px;box-shadow:0 0 10px rgba(245,217,78,.55);height:0;transition:height .5s}
+.pst{position:relative;padding:5px 0;font-size:13.2px;color:var(--mut);display:flex;gap:9px;align-items:baseline}
+.pst::before{content:'';position:absolute;left:-23px;top:11px;width:9px;height:9px;border-radius:50%;background:var(--card2);border:1.5px solid var(--line)}
+.pst.run{color:var(--ink)}.pst.run::before{background:var(--laser);border-color:var(--laser);box-shadow:0 0 8px rgba(245,217,78,.7);animation:pl 1.1s infinite}
+.pst.done{color:var(--soft)}.pst.done::before{background:var(--ok);border-color:var(--ok)}
+.pst.fail{color:var(--err)}.pst.fail::before{background:var(--err);border-color:var(--err)}
+.pst small{color:var(--mut);font-size:11.5px}
+@keyframes pl{50%{box-shadow:0 0 3px rgba(245,217,78,.4)}}
+/* modal + toast */
+.ovl{position:fixed;inset:0;background:rgba(6,8,16,.65);backdrop-filter:blur(3px);z-index:60;display:none;align-items:flex-start;justify-content:center;padding:7vh 16px;overflow-y:auto}
+.ovl.on{display:flex}
+.modal{width:min(640px,100%);background:#11152a;border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.modal h3{font-size:15px;margin-bottom:6px}
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(80px);background:#171c36;border:1px solid var(--line);border-radius:12px;padding:10px 18px;font-size:13.3px;z-index:80;opacity:0;transition:.25s;box-shadow:0 10px 30px rgba(0,0,0,.45);max-width:min(560px,92vw)}
+#toast.on{opacity:1;transform:translateX(-50%)}
+.hr{border:none;border-top:1px solid var(--line);margin:14px 0}
+.list-it{display:flex;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:var(--card2)}
+.gal{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.gal .g{position:relative;width:74px;height:74px;border-radius:9px;overflow:hidden;border:1px solid var(--line)}
+.gal .g img{width:100%;height:100%;object-fit:cover}
+.gal .g .x{position:absolute;top:3px;right:3px;width:19px;height:19px;font-size:10px;background:rgba(10,13,24,.85);border:1px solid var(--line);border-radius:5px;cursor:pointer;display:grid;place-items:center}
+.gal .g .mv{position:absolute;bottom:3px;left:3px;display:flex;gap:3px}
+.gal .g .mv button{width:19px;height:19px;font-size:10px;background:rgba(10,13,24,.85);border:1px solid var(--line);border-radius:5px;cursor:pointer}
+.searchrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.searchrow input,.searchrow select{width:auto;flex:1;min-width:140px}
+.hlog{font-size:12.6px;line-height:1.75}
+.hlog .ok::before{content:'✔ ';color:var(--ok)}.hlog .warn::before{content:'⚠ ';color:var(--warn)}.hlog .err::before{content:'✖ ';color:var(--err)}
+.kv{font-size:12.5px;color:var(--soft)}.kv b{color:var(--ink);font-weight:600}
+.view{display:none}.view.on{display:block}
+.emoji-in{width:64px!important;text-align:center;font-size:18px}
+.footbar{position:fixed;left:0;bottom:0;width:232px;padding:10px;background:var(--panel);border-top:1px solid var(--line);border-right:1px solid var(--line);font-size:11px;color:var(--mut);z-index:31}
+@media(max-width:900px){.footbar{display:none}}
+</style>
+</head>
+<body>
+<script src="assets/js/artwork.js"></script>
+<div class="shell">
+<aside class="side">
+  <div class="brand"><img src="assets/images/logo.png" onerror="this.style.display='none'" alt=""><div><b>INGLY</b><span>Admin 2.0</span></div></div>
+  <div id="nav"></div>
+</aside>
+<div class="footbar">Fonte di verità: <span class="mono">data/*.json</span> · commit atomici</div>
+<div class="main">
+  <div class="top">
+    <h1 id="vtitle">Dashboard</h1>
+    <div class="sync"><span class="dot" id="syncDot"></span><span id="syncTxt">caricamento…</span></div>
+    <button class="btn" id="goPrev" title="Apri il sito con i dati in bozza">👁 Anteprima</button>
+  <button class="btn pri" id="goPub">🚀 Pubblica <span id="pubN" class="pill" style="background:rgba(0,0,0,.18);border:none"></span></button>
+  </div>
+  <div class="content">
+
+  <!-- ============ DASHBOARD ============ -->
+  <section class="view" id="v-dash">
+    <div class="dash" id="dashCards"></div>
+    <div class="card"><h3>⚡ Stato del sistema <button class="btn sm sp" data-go="health">Health Center →</button></h3><div class="hlog" id="dashHealth">…</div></div>
+    <div class="card"><h3>Azioni rapide</h3>
+      <button class="btn" data-go="prod">➕ Nuovo prodotto</button>
+      <button class="btn" data-go="media">🖼 Carica foto</button>
+      <button class="btn" data-go="hero">🎯 Home & Hero</button>
+      <button class="btn" data-go="hist">🕘 Cronologia</button>
+    </div>
+  </section>
+
+  <!-- ============ PRODOTTI ============ -->
+  <section class="view" id="v-prod">
+    <div class="searchrow">
+      <input type="text" id="pSearch" placeholder="Cerca prodotto…">
+      <select id="pCatF"></select>
+      <button class="btn pri" id="pNew">➕ Nuovo prodotto</button>
+    </div>
+    <div class="card" style="padding:8px 12px"><table id="pTable"></table></div>
+  </section>
+
+  <!-- ============ CATEGORIE ============ -->
+  <section class="view" id="v-cats">
+    <div class="searchrow"><span class="hint">Le categorie e sottocategorie sono completamente dinamiche. L'integrità dei prodotti collegati è controllata automaticamente.</span><button class="btn pri" id="cNew" style="margin-left:auto">➕ Nuova categoria</button></div>
+    <div id="catList"></div>
+  </section>
+
+  <!-- ============ DIGITALI ============ -->
+  <section class="view" id="v-dig">
+    <div class="searchrow"><span class="hint">File digitali in vendita (SVG, DXF, STL…).</span><button class="btn pri" id="dNew" style="margin-left:auto">➕ Nuovo digitale</button></div>
+    <div class="card" style="padding:8px 12px"><table id="dTable"></table></div>
+  </section>
+
+  <!-- ============ MEDIA ============ -->
+  <section class="view" id="v-media">
+    <div class="card"><h3>📥 Carica immagini <span class="chip laser sp">compressione automatica → WEBP</span></h3>
+      <div class="drop" id="mDrop">Trascina qui le immagini (anche più di una) oppure clicca<br><small class="hint">JPG/PNG → ridimensionate max 1600px e convertite in WEBP · SVG passa senza modifiche</small></div>
+      <input type="file" id="mFile" accept="image/*,.svg" multiple hidden>
+      <div id="mAssign" style="display:none;margin-top:14px">
+        <h3 style="font-size:13.5px;margin-bottom:6px">Scegli destinazione per ogni immagine</h3>
+        <div class="row c3" style="align-items:end;margin-bottom:10px">
+          <div><label>Applica a tutte — destinazione</label><select id="mAllDest"></select></div>
+          <div><label>Applica a tutte — ruolo</label><select id="mAllSlot"><option value="main">Foto principale</option><option value="gal">Gallery</option><option value="both">Principale + Gallery</option></select></div>
+          <div><button class="btn sm" id="mApplyAll">⇊ Applica a tutte</button></div>
+        </div>
+        <div id="mRows"></div>
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <button class="btn ok" id="mDoAssign">📌 Assegna e metti in pubblicazione</button>
+          <button class="btn" id="mCancel">Annulla</button>
+        </div>
+      </div>
+    </div>
+    <div class="card"><h3>🗂 Libreria <span class="sp"></span>
+      <button class="btn sm" id="mScan">🔍 Scansiona repository</button>
+      <input type="text" id="mSearch" placeholder="Cerca…" style="width:160px">
+    </h3>
+    <div class="hint" id="mStats" style="margin-bottom:10px"></div>
+    <div id="mSelBar" style="display:none;position:sticky;top:56px;z-index:20;background:var(--card2);border:1px solid var(--laser);border-radius:11px;padding:9px 13px;margin-bottom:11px;display:none;align-items:center;gap:10px;flex-wrap:wrap">
+      <b id="mSelN" style="color:var(--laser)"></b>
+      <button class="btn sm ok" id="mSelAssign">📌 Assegna a un prodotto</button>
+      <button class="btn sm" id="mSelCat">🗂 Imposta come sfondo categoria</button>
+      <button class="btn sm err" id="mSelDel">🗑 Elimina dal repository</button>
+      <button class="btn sm" id="mSelNone" style="margin-left:auto">Deseleziona</button>
+    </div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px" class="hint">
+      <label style="margin:0;display:flex;gap:6px;align-items:center;font-weight:500"><input type="checkbox" id="mHideVar" checked style="width:auto"> Raggruppa le varianti responsive</label>
+      <label style="margin:0;display:flex;gap:6px;align-items:center;font-weight:500"><input type="checkbox" id="mOnlyOrph" style="width:auto"> Mostra solo le orfane</label>
+      <label style="margin:0;display:flex;gap:6px;align-items:center;font-weight:500"><input type="checkbox" id="mOnlyDup" style="width:auto"> Mostra solo i doppioni</label>
+      <button class="btn sm" id="mSelAll">Seleziona tutte le visibili</button>
+    </div>
+    <div class="mgrid" id="mGrid"></div></div>
+  </section>
+
+  <!-- ============ PORTFOLIO ============ -->
+  <section class="view" id="v-port">
+    <div class="card"><h3>📸 Instagram</h3>
+      <div class="row c2">
+        <div><label>Profilo Instagram (handle o URL)</label><input type="text" data-b="CONFIG.social.instagram"></div>
+        <div style="align-self:end"><span class="hint">Ogni tessera qui sotto può avere il link a un post: la foto la carichi tu, il click porta al post.</span></div>
+      </div></div>
+    <div class="searchrow"><span class="hint">Le tessere compaiono in Portfolio, Lavori recenti e Dal laboratorio. La foto sostituisce il segnaposto colorato ovunque, automaticamente.</span><span style="margin-left:auto"></span>
+      <button class="btn pri" id="ptBulk">📷 Carica più foto</button>
+      <button class="btn" id="ptLib">🗂 Dalla libreria</button>
+      <button class="btn" id="ptCat">📦 Dal catalogo</button>
+      <button class="btn" id="ptNew">➕ Tessera vuota</button></div>
+    <div id="portList"></div>
+  </section>
+
+  <!-- ============ HOME & HERO ============ -->
+  <section class="view" id="v-hero">
+    <div class="card"><h3>🎯 Prodotti in evidenza nella Hero</h3>
+      <div class="hint">Le 3 card della Home leggono nome, prezzo, materiale e foto direttamente dal catalogo: qui scegli <b>quali</b> prodotti mostrare.</div>
+      <div class="row c3" id="heroPick" style="margin-top:8px"></div>
+    </div>
+    <div class="card"><h3>🎬 Video Hero (opzionale)</h3>
+      <label>URL video mp4 (vuoto = nessun video)</label><input type="url" id="heroVideo" data-b="CONFIG.heroVideo">
+    </div>
+    <div class="card"><h3>🏭 Visual della sezione «Chi siamo»</h3>
+      <div class="hint">Il riquadro a destra di «Artigianato, guidato dai laser»: puoi lasciare il logo animato oppure mettere una tua foto o una clip video.</div>
+      <div class="row c2" style="margin-top:8px">
+        <div><label>Cosa mostrare</label><select id="abTipo">
+          <option value="logo">Logo animato (predefinito)</option>
+          <option value="immagine">Immagine personalizzata</option>
+          <option value="video">Video / clip (mp4)</option></select></div>
+        <div><label>&nbsp;</label><div style="display:flex;gap:8px"><button class="btn" id="abPick">📷 Carica immagine</button><button class="btn sm err" id="abClear">Rimuovi</button></div></div>
+      </div>
+      <div id="abVideoRow" style="display:none"><label>URL del video mp4</label><input type="text" id="abVideo" placeholder="https://…/clip.mp4"></div>
+      <div id="abPrev" style="margin-top:10px"></div>
+    </div>
+    <div class="card"><h3>📊 Statistiche in Home</h3>
+      <div class="row c4">
+        <div><label>Pezzi realizzati</label><input type="number" data-b="CONFIG.statistiche.pezzi"></div>
+        <div><label>Clienti</label><input type="number" data-b="CONFIG.statistiche.clienti"></div>
+        <div><label>Materiali</label><input type="number" data-b="CONFIG.statistiche.materiali"></div>
+        <div><label>Puntualità %</label><input type="number" data-b="CONFIG.statistiche.puntualita"></div>
+      </div>
+      <label>Rating</label><input type="text" style="width:120px" data-b="CONFIG.statistiche.rating">
+    </div>
+  </section>
+
+  <!-- ============ SPONSOR & PARTNER ============ -->
+  <section class="view" id="v-sponsor">
+    <div class="card"><h3>🤝 Sezione Sponsor & Partner <span class="chip sp" id="spState"></span></h3>
+      <div class="hint">Compare in fondo a ogni pagina, sopra il piè di pagina. I loghi restano <b>a colori</b>;
+       puoi passare al bianco e nero (che si colora al passaggio del mouse) se preferisci un effetto più sobrio.</div>
+      <div class="row c3" style="margin-top:8px">
+        <div><label>Sezione</label><select data-b="CONTENT.SPONSORS.attivo"><option value="true">Visibile</option><option value="false">Nascosta</option></select></div>
+        <div><label>Loghi</label><select data-b="CONTENT.SPONSORS.grigio"><option value="false">A colori</option><option value="true">Bianco e nero (colore al passaggio)</option></select></div>
+        <div><label>Link dell'invito</label><input type="text" data-b="CONTENT.SPONSORS.ctaLink" placeholder="#/contatti"></div>
+      </div>
+      <div class="row c2">
+        <div><label>Titolo (IT)</label><input type="text" data-b="CONTENT.SPONSORS.titolo.it"></div>
+        <div><label>Title (EN)</label><input type="text" data-b="CONTENT.SPONSORS.titolo.en"></div>
+      </div>
+      <div class="row c2">
+        <div><label>Sottotitolo (IT)</label><input type="text" data-b="CONTENT.SPONSORS.sottotitolo.it"></div>
+        <div><label>Subtitle (EN)</label><input type="text" data-b="CONTENT.SPONSORS.sottotitolo.en"></div>
+      </div>
+      <div class="row c2">
+        <div><label>Invito finale (IT)</label><input type="text" data-b="CONTENT.SPONSORS.cta.it" placeholder="Vuoi comparire qui? Scrivici."></div>
+        <div><label>Closing line (EN)</label><input type="text" data-b="CONTENT.SPONSORS.cta.en"></div>
+      </div>
+    </div>
+
+    <div class="card"><h3>Partner in elenco <span class="chip sp" id="spCount"></span>
+      <span class="sp"></span><button class="btn pri sm" id="spNew">➕ Aggiungi partner</button></h3>
+      <div class="hint">Livelli: <b>Gold</b> occupa spazio doppio con logo più grande, <b>Silver</b> e <b>Bronze</b> spazio normale.
+       È la struttura più usata per gli accordi a pagamento.</div>
+      <div id="spList" style="margin-top:11px"></div>
+    </div>
+  </section>
+
+  <!-- ============ TEMI STAGIONALI ============ -->
+  <section class="view" id="v-themes">
+    <div class="card"><h3>🎨 Tema attivo <span class="chip laser sp" id="thNow"></span></h3>
+      <div class="row c3" style="align-items:end">
+        <div><label>Tema selezionato a mano</label><select id="thSel"></select></div>
+        <div><label>Programmazione automatica</label><select id="thAuto">
+          <option value="true">Accesa — il calendario decide</option><option value="false">Spenta — comando manuale</option></select></div>
+        <div><button class="btn pri" id="thApplyNow">⚡ Applica ora a tutto il sito</button></div>
+      </div>
+      <div class="hint" id="thWhy" style="margin-top:8px"></div>
+    </div>
+
+    <div class="card"><h3>📅 Calendario dei temi attivi</h3>
+      <div class="hint">Solo i temi «in calendario» partecipano al cambio automatico. Vince quello con priorità più alta tra quelli in finestra.</div>
+      <div id="thPlan" style="margin-top:10px"></div>
+    </div>
+
+    <div class="card"><h3>🎞 Striscia portfolio</h3>
+      <div class="hint">Velocità di scorrimento delle foto in home. Più alto = più lento e rilassato.
+       Il passaggio del mouse mette comunque in pausa, e il clic apre lo zoom.</div>
+      <div class="row c2" style="margin-top:8px">
+        <div><label>Durata di un giro completo (secondi)</label>
+         <input type="number" min="30" max="240" step="10" data-b="CONTENT.GALSPEED"></div>
+        <div style="display:flex;align-items:flex-end"><span class="hint">Consigliato: 96 secondi. Sotto i 60 diventa frenetico.</span></div>
+      </div>
+    </div>
+
+    <div class="card"><h3>📣 Fascia promozionale <span class="chip sp" id="promoState"></span></h3>
+      <div class="hint">La striscia in cima al sito. Con le date si accende e si spegne da sola (formato MM-GG);
+       lasciando le date vuote resta sempre attiva quando è accesa.</div>
+      <div class="row c3" style="margin-top:8px">
+        <div><label>Stato</label><select data-b="CONTENT.PROMO.attivo"><option value="true">Accesa</option><option value="false">Spenta</option></select></div>
+        <div><label>Dal (MM-GG)</label><input type="text" data-b="CONTENT.PROMO.dal" placeholder="11-20"></div>
+        <div><label>Al (MM-GG)</label><input type="text" data-b="CONTENT.PROMO.al" placeholder="12-01"></div>
+      </div>
+      <div class="row c2">
+        <div><label>Testo (IT)</label><input type="text" data-b="CONTENT.PROMO.testo.it"></div>
+        <div><label>Text (EN)</label><input type="text" data-b="CONTENT.PROMO.testo.en"></div>
+      </div>
+      <div class="row c3">
+        <div><label>Pulsante (IT)</label><input type="text" data-b="CONTENT.PROMO.cta.it"></div>
+        <div><label>Button (EN)</label><input type="text" data-b="CONTENT.PROMO.cta.en"></div>
+        <div><label>Link</label><input type="text" data-b="CONTENT.PROMO.link" placeholder="#/shop"></div>
+      </div>
+      <label>Colori della fascia (2 hex, virgola)</label><input type="text" data-b="CONTENT.PROMO.colori">
+      <div style="margin-top:12px"><b class="hint">Anteprima</b><div id="promoPrev" style="margin-top:6px"></div></div>
+    </div>
+
+    <div class="card"><h3>📚 Libreria temi <span class="chip sp" id="thCount"></span></h3>
+      <div class="searchrow">
+        <input type="text" id="thQ" placeholder="Cerca tema, mood, parola chiave…">
+        <select id="thFilter"><option value="">Tutti</option><option value="cal">In calendario</option><option value="art">Con artwork</option><option value="stag">Stagionali</option></select>
+        <button class="btn" id="thNew">➕ Nuovo tema</button>
+        <button class="btn" id="thExp">⬇ Esporta</button>
+        <button class="btn" id="thImpBtn">⬆ Importa</button>
+        <input type="file" id="thImp" accept=".json" hidden>
+      </div>
+      <div id="thGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:11px"></div>
+    </div>
+  </section>
+
+  <!-- ============ TECNOLOGIE ============ -->
+  <section class="view" id="v-tech">
+    <div class="searchrow"><span class="hint">Le schede «🔥 Tecnologie» del sito: aggiungi, modifica, riordina o elimina.</span><button class="btn pri" id="techNew" style="margin-left:auto">➕ Nuova tecnologia</button></div>
+    <div id="techList"></div>
+  </section>
+
+  <!-- ============ TESTI ============ -->
+  <section class="view" id="v-texts">
+    <div class="searchrow"><input type="text" id="tSearch" placeholder="Cerca testo o chiave…"><span class="chip" id="tCount"></span></div>
+    <div class="card" style="padding:8px 12px"><table id="tTable"></table></div>
+  </section>
+
+  <!-- ============ FAQ & RECENSIONI ============ -->
+  <section class="view" id="v-faq">
+    <div class="card"><h3>❓ FAQ <button class="btn sm sp" id="fNew">➕ Aggiungi</button></h3><div id="faqList"></div></div>
+    <div class="card"><h3>⭐ Recensioni <button class="btn sm sp" id="rNew">➕ Aggiungi</button></h3><div id="revList"></div></div>
+  </section>
+
+  <!-- ============ AVANZATE ============ -->
+  <section class="view" id="v-adv">
+    <div class="card"><h3>🧩 Sezioni avanzate del catalogo</h3>
+      <div class="hint">Materiali, tecnologie, step, font, opzioni: modifica guidata in JSON con validazione. Il formato viene controllato prima di accettare la modifica — impossibile rompere il sito.</div>
+      <label>Sezione</label><select id="advSec"></select>
+      <textarea id="advTa" class="mono" style="min-height:300px;margin-top:8px"></textarea>
+      <div style="margin-top:10px;display:flex;gap:10px"><button class="btn ok" id="advSave">✔ Valida e applica</button><span class="hint" id="advMsg"></span></div>
+    </div>
+  </section>
+
+  <!-- ============ BUSINESS ============ -->
+  <section class="view" id="v-biz">
+    <div class="card"><h3>🏢 Titoli della sezione Business</h3>
+      <div class="hint">È la sezione «Ingly Business — Il tuo brand, marcato per sempre».</div>
+      <div id="bizTexts"></div>
+    </div>
+    <div class="card"><h3>🧱 Servizi Business <button class="btn sm sp" id="bizNew">➕ Aggiungi servizio</button></h3>
+      <div id="bizList"></div>
+    </div>
+  </section>
+
+  <!-- ============ CONTATTI & SOCIAL ============ -->
+  <section class="view" id="v-contacts">
+    <div class="card"><h3>📞 Contatti</h3>
+      <div class="row c2">
+        <div><label>Email</label><input type="text" data-b="CONFIG.email"></div>
+        <div><label>WhatsApp (link)</label><input type="url" data-b="CONFIG.whatsapp"></div>
+      </div>
+      <label>Copyright</label><input type="text" data-b="CONFIG.copyright">
+      <label>Riga legale</label><input type="text" data-b="CONFIG.legale">
+      <div class="row c2" style="margin-top:4px">
+        <div><label>Formspree preventivi (endpoint)</label><input type="text" data-b="CONFIG.moduli.formspreePreventivo"></div>
+        <div><label>Formspree newsletter (endpoint)</label><input type="text" data-b="CONFIG.moduli.formspreeNewsletter"></div>
+      </div>
+    </div>
+    <div class="card"><h3>💬 Pulsante WhatsApp del sito <span class="chip laser sp">visibile su tutte le pagine</span></h3>
+      <div class="hint">Il pulsante verde flottante in basso a destra: porta direttamente alla tua chat WhatsApp.</div>
+      <div class="row c3">
+        <div><label>Numero (con prefisso, solo cifre)</label><input type="text" data-b="CONFIG.whatsappFab.numero" placeholder="393331234567"></div>
+        <div><label>Messaggio precompilato</label><input type="text" data-b="CONFIG.whatsappFab.messaggio" placeholder="Ciao! Vorrei un preventivo"></div>
+        <div><label>Attivo</label><select data-b="CONFIG.whatsappFab.attivo"><option value="true">Sì, mostra il pulsante</option><option value="false">No, nascondi</option></select></div>
+      </div>
+      <div class="row c2">
+        <div><label>Etichetta (IT)</label><input type="text" data-b="CONFIG.whatsappFab.etichetta.it" placeholder="Scrivici su WhatsApp"></div>
+        <div><label>Etichetta (EN)</label><input type="text" data-b="CONFIG.whatsappFab.etichetta.en" placeholder="Chat on WhatsApp"></div>
+      </div>
+    </div>
+    <div class="card"><h3>🌐 Profili social</h3>
+      <div class="row c2">
+        <div><label>Instagram</label><input type="url" data-b="CONFIG.social.instagram"></div>
+        <div><label>Facebook</label><input type="url" data-b="CONFIG.social.facebook"></div>
+        <div><label>TikTok</label><input type="url" data-b="CONFIG.social.tiktok"></div>
+        <div><label>Pinterest</label><input type="url" data-b="CONFIG.social.pinterest"></div>
+        <div><label>Etsy</label><input type="url" data-b="CONFIG.social.etsy"></div>
+        <div><label>WhatsApp</label><input type="url" data-b="CONFIG.social.whatsapp"></div>
+      </div>
+      <div class="hint" style="margin-top:8px">I link delle icone nel footer (social.json) vengono allineati automaticamente a questi valori alla pubblicazione.</div>
+    </div>
+  </section>
+
+  <!-- ============ SEO ============ -->
+  <section class="view" id="v-seo">
+    <div class="card"><h3>🔎 SEO del sito</h3>
+      <label>Dominio</label><input type="url" data-b="CONFIG.seo.dominio">
+      <label>Titolo (tag title)</label><input type="text" data-b="CONFIG.seo.titolo">
+      <label>Descrizione (meta description)</label><textarea data-b="CONFIG.seo.descrizione"></textarea>
+      <label>Keywords</label><textarea data-b="CONFIG.seo.keywords"></textarea>
+      <div class="row c3">
+        <div><label>Azienda</label><input type="text" data-b="CONFIG.seo.azienda"></div>
+        <div><label>Città</label><input type="text" data-b="CONFIG.seo.citta"></div>
+        <div><label>Telefono</label><input type="text" data-b="CONFIG.seo.telefono"></div>
+      </div>
+      <div class="hint" style="margin-top:10px" id="seoLen"></div>
+      <hr class="hr"><h3 style="font-size:13.5px">Anteprima su Google</h3>
+      <div id="seoPrev" style="background:#0d1122;border:1px solid var(--line);border-radius:10px;padding:12px 14px;max-width:600px"></div>
+      <div class="hint" style="margin-top:10px">Alla pubblicazione vengono rigenerati automaticamente <span class="mono">sitemap.xml</span> (con tutte le pagine e tutti i prodotti) e <span class="mono">robots.txt</span>.</div>
+    </div>
+  </section>
+
+  <!-- ============ PUBBLICA ============ -->
+  <section class="view" id="v-pub">
+    <div id="pubCheck"></div>
+    <div class="card"><h3>📦 Modifiche in attesa <span class="chip laser sp" id="pubChip"></span></h3>
+      <div id="pubList" class="hint">Nessuna modifica.</div>
+      <hr class="hr">
+      <label>Messaggio del commit</label><input type="text" id="pubMsg" placeholder="Aggiornamento contenuti">
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn pri" id="pubGo">🚀 Pubblica tutto (commit unico)</button>
+        <button class="btn" id="pubReload">↺ Scarta e ricarica da GitHub</button>
+      </div>
+    </div>
+    <div class="card"><h3>🛰 Pipeline di pubblicazione</h3>
+      <div class="pipe"><div class="beam" id="beam"></div><div id="pipeSteps"></div></div>
+      <div class="hint" id="pubOut"></div>
+      <div style="margin-top:12px"><button class="btn" id="pubVerify">🔍 Verifica ora il sito online</button>
+      <button class="btn" id="pubDiag">🩺 Diagnosi GitHub Pages</button></div>
+    </div>
+  </section>
+
+  <!-- ============ CRONOLOGIA ============ -->
+  <section class="view" id="v-hist">
+    <div class="card"><h3>🕘 Cronologia pubblicazioni <button class="btn sm sp" id="histRefresh">↺ Aggiorna</button></h3>
+      <div id="histList" class="hint">…</div>
+      <div class="hint" style="margin-top:10px">«Ripristina» carica i dati di quel commit come <b>bozza</b> nell'Admin: controlli e poi pubblichi (nessuna modifica avviene senza un tuo commit).</div>
+    </div>
+  </section>
+
+  <!-- ============ HEALTH ============ -->
+  <section class="view" id="v-health">
+    <div class="card"><h3>🩺 Health Center <button class="btn pri sm sp" id="hRun">▶ Esegui tutti i controlli</button></h3>
+      <div class="hint">Agenti di controllo: Sync · Dati · Media · Deploy · SEO. Segnalano i problemi prima che diventino errori visibili sul sito.</div>
+      <hr class="hr"><div class="hlog" id="hLog">Premi «Esegui».</div>
+    </div>
+  </section>
+
+  <!-- ============ BACKUP ============ -->
+  <section class="view" id="v-backup">
+    <div class="card"><h3>💾 Backup completo</h3>
+      <div class="hint">Esporta tutti i dati del sito in un unico file. L'importazione carica il backup come bozza da pubblicare.</div>
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <button class="btn ok" id="bkExp">⬇ Esporta backup</button>
+        <button class="btn" id="bkImpBtn">⬆ Importa backup</button>
+        <input type="file" id="bkImp" accept=".json" hidden>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ IMPOSTAZIONI ============ -->
+  <section class="view" id="v-set">
+    <div class="card"><h3>🔗 Repository GitHub</h3>
+      <div class="row c3">
+        <div><label>Owner</label><input type="text" id="sOwner"></div>
+        <div><label>Repository</label><input type="text" id="sRepo"></div>
+        <div><label>Branch</label><input type="text" id="sBranch"></div>
+      </div>
+      <label>Token (fine-grained · solo questo repo · Contents: Read and write)</label>
+      <input type="password" id="sTok" placeholder="github_pat_…">
+      <div style="display:flex;gap:14px;align-items:center;margin-top:8px;flex-wrap:wrap">
+        <label style="margin:0;display:flex;gap:6px;align-items:center;font-weight:500"><input type="checkbox" id="sRemember" style="width:auto"> Ricorda il token su questo computer</label>
+        <button class="btn" id="sTest">🧪 Test connessione</button><span class="hint" id="sTestOut"></span>
+      </div>
+      <div class="hint" style="margin-top:10px">Come crearlo: GitHub → foto profilo → Settings → Developer settings → Personal access tokens → Fine-grained → Generate. Repository access: <b>solo questo repository</b> · Permissions: <b>Contents → Read and write</b> (facoltativo: Pages → Read per lo stato del deploy).</div>
+    </div>
+    <div class="card"><h3>🧭 Diagnosi caricamento dati</h3><div class="kv" id="loadDiag">—</div>
+      <div style="margin-top:10px"><button class="btn" id="sReload">↺ Riprova a caricare i dati</button></div></div>
+    <div class="card"><h3>ℹ️ Sito</h3><div class="kv" id="setInfo"></div></div>
+  </section>
+
+  </div>
+</div>
+</div>
+<div class="ovl" id="ovl"><div class="modal" id="modal"></div></div>
+<div id="toast"></div>
+<script>
+/* ================================================================
+   INGLY ADMIN 2.0 — motore
+   Fonte di verità: data/*.json · pubblicazione atomica via Git Data API
+   ================================================================ */
+'use strict';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let toastT;function toast(m){$('toast').textContent=m;$('toast').classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>$('toast').classList.remove('on'),3400)}
+function modal(html){$('modal').innerHTML=html;$('ovl').classList.add('on')}
+function closeModal(){$('ovl').classList.remove('on')}
+$('ovl').addEventListener('click',e=>{if(e.target.id==='ovl')closeModal()});
+
+/* ---------- impostazioni ---------- */
+const SET=Object.assign({owner:'inglyum',repo:'Sito-ingly',branch:'main',remember:false},JSON.parse(localStorage.getItem('ingly2_set')||'{}'));
+let AUTODETECTED=false;
+(function autodetect(){try{const h=location.hostname.toLowerCase();
+ if(!/\.github\.io$/.test(h))return; /* dominio personalizzato o locale: valgono le impostazioni salvate */
+ const owner=h.split('.')[0];
+ const parts=location.pathname.split('/').filter(Boolean);
+ const first=(parts[0]||'').replace(/\.html$/,'');
+ const repo=(first&&first!=='admin'&&first!=='index')?parts[0]:h; /* user-site → repo = owner.github.io */
+ if(SET.owner!==owner||SET.repo!==repo){SET.owner=owner;SET.repo=repo;saveSet()}
+ AUTODETECTED=true;
+}catch(e){}})();
+function saveSet(){localStorage.setItem('ingly2_set',JSON.stringify({owner:SET.owner,repo:SET.repo,branch:SET.branch,remember:SET.remember}))}
+function token(){return (SET.remember?localStorage.getItem('ingly2_tok'):sessionStorage.getItem('ingly2_tok'))||''}
+function setToken(t){if(SET.remember)localStorage.setItem('ingly2_tok',t);else sessionStorage.setItem('ingly2_tok',t)}
+const API=()=>`https://api.github.com/repos/${SET.owner}/${SET.repo}`;
+const LIVE=()=>`https://${SET.owner.toLowerCase()}.github.io/${SET.repo}/`;
+function ghH(extra){const h=Object.assign({Accept:'application/vnd.github+json'},extra||{});const t=token();if(t)h.Authorization='Bearer '+t;return h}
+async function gh(path,opt){const r=await fetch(API()+path,Object.assign({headers:ghH((opt||{}).headers)},opt));
+ if(!r.ok){const b=await r.text().catch(()=>'');
+  if(r.status===403&&r.headers.get('x-ratelimit-remaining')==='0')throw new Error('GitHub RATELIMIT su '+path);
+  throw new Error('GitHub '+r.status+' su '+path+(b?' — '+b.slice(0,140):''))}
+ return r.status===204?null:r.json()}
+function ghErrHint(e){const m=String(e.message||e);
+ if(m.includes('RATELIMIT'))return 'Limite API di GitHub superato (60 richieste/ora senza token). Inserisci il token in Impostazioni: il limite sale a 5000/ora.';
+ if(m.includes(' 401 '))return 'Token non valido o scaduto: creane uno nuovo (Developer settings → Fine-grained tokens).';
+ if(m.includes(' 404 '))return 'Il token non vede il repository '+SET.owner+'/'+SET.repo+': rigenera il token selezionando ESATTAMENTE questo repository (controlla il nome in Impostazioni).';
+ if(m.includes(' 403 '))return 'Permessi insufficienti sul repository '+SET.owner+'/'+SET.repo+': il token deve avere Contents → Read and write per QUESTO repository (o è un token di un altro repo).';
+ if(m.includes('Failed to fetch'))return 'Rete non raggiungibile o richiesta bloccata dal browser.';
+ return m}
+
+/* ---------- stato ---------- */
+const FILES=['config','texts','social','products','categories','content'];
+const KEY={config:'CONFIG',texts:'D',social:'SOCIALS',products:'P',categories:'CATS',content:'C'};
+const S={CONFIG:null,D:null,SOCIALS:null,P:null,CATS:null,C:null};
+let SNAP={},MEDIA=[],REPO_IMG=null,LOADED_FROM='',BOOTED=false,DATA_OK=false,MISSING=[],LOAD_LOG=[];
+const jstr=o=>JSON.stringify(o);
+function changedFiles(){const out=[];for(const f of FILES){if(S[KEY[f]]&&SNAP[f]!==undefined&&jstr(S[KEY[f]])!==SNAP[f])out.push(f)}return out}
+function pending(){return changedFiles().length+MEDIA.length+(typeof DELETES!=='undefined'?DELETES.length:0)}
+function refreshSync(){const n=pending();$('pubN').textContent=n||'';const d=$('syncDot');
+ if(!BOOTED){d.className='dot';$('syncTxt').textContent='caricamento…';return}
+ if(LOADED_FROM==='errore'){d.className='dot err';$('syncTxt').textContent='dati non caricati';return}
+ if(n){d.className='dot dirty';$('syncTxt').textContent=n+' modifiche in bozza'}else{d.className='dot ok';$('syncTxt').textContent='sincronizzato · '+LOADED_FROM}}
+function markDirty(){refreshSync();if(VIEW==='pub')renderPub()}
+window.addEventListener('beforeunload',e=>{if(pending()){e.preventDefault();e.returnValue=''}});
+
+/* ---------- utf8/base64 ---------- */
+function b64utf8(str){const b=new TextEncoder().encode(str);let s='';for(let i=0;i<b.length;i+=0x8000)s+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000));return btoa(s)}
+function b64buf(buf){const b=new Uint8Array(buf);let s='';for(let i=0;i<b.length;i+=0x8000)s+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000));return btoa(s)}
+async function sha1(buf){const h=await crypto.subtle.digest('SHA-1',buf);return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+
+/* ---------- caricamento dati (resiliente, per singolo file) ---------- */
+function assignFile(f,v){if(f==='content')S.C=v;else S[KEY[f]]=v}
+function normalize(){
+ S.CONFIG=S.CONFIG||{};S.CONFIG.social=S.CONFIG.social||{};S.CONFIG.seo=S.CONFIG.seo||{};
+ S.CONFIG.statistiche=S.CONFIG.statistiche||{pezzi:0,clienti:0,materiali:0,puntualita:0,rating:''};
+ S.CONFIG.moduli=S.CONFIG.moduli||{};S.CONFIG.cartellaImmagini=S.CONFIG.cartellaImmagini||'img/';
+ S.D=S.D||{};S.D.it=S.D.it||{};S.D.en=S.D.en||{};
+ S.SOCIALS=Array.isArray(S.SOCIALS)?S.SOCIALS:[];
+ S.P=Array.isArray(S.P)?S.P:[];S.CATS=Array.isArray(S.CATS)?S.CATS:[];S.C=S.C||{};
+ /* auto-correzione materiali: un valore fuori elenco fa CROLLARE il sito (MAT_ART[mat].bg) */
+ const MA=(S.C&&S.C.MAT_ART)||{};const mats=Object.keys(MA).filter(k=>k!=='File');
+ if(mats.length)S.P.forEach(p=>{if(!MA[p.mat]){
+  const ci=mats.find(m=>m.toLowerCase()===String(p.mat||'').toLowerCase());p.mat=ci||mats[0]}});
+ /* auto-correzione: una sottocategoria fuori scala fa sparire il prodotto dai filtri del sito */
+ S.P.forEach(p=>{const c=S.CATS.find(x=>x.id===p.cat);
+  if(c&&(!(p.sub>=1)||p.sub>c.sub.length))p.sub=1});
+ S.C.BIZ=Array.isArray(S.C.BIZ)?S.C.BIZ:[];S.C.PORT=Array.isArray(S.C.PORT)?S.C.PORT:[];
+ S.C.TECH=Array.isArray(S.C.TECH)?S.C.TECH:[];
+ /* MV: mappa percorso → larghezze esistenti. Il vecchio formato ad array viene scartato
+    perché poteva dichiarare varianti inesistenti (immagini rotte sul sito). */
+ if(!S.C.MV||Array.isArray(S.C.MV)||typeof S.C.MV!=='object')S.C.MV={};
+ if(!S.C.FOCAL||typeof S.C.FOCAL!=='object'||Array.isArray(S.C.FOCAL))S.C.FOCAL={};
+ S.C.THEMES=S.C.THEMES||{attivo:'default',auto:true,temi:[]};
+ S.C.SPONSORS=Object.assign({attivo:true,grigio:false,titolo:{it:'Partner & Sponsor',en:'Partners & Sponsors'},
+  sottotitolo:{it:'',en:''},cta:{it:'',en:''},ctaLink:'#/contatti',lista:[]},S.C.SPONSORS||{});
+ ['titolo','sottotitolo','cta'].forEach(k=>{S.C.SPONSORS[k]=S.C.SPONSORS[k]||{it:'',en:''}});
+ S.C.SPONSORS.lista=Array.isArray(S.C.SPONSORS.lista)?S.C.SPONSORS.lista:[];
+ if(!(S.C.GALSPEED>=20))S.C.GALSPEED=96;
+ S.C.PROMO=Object.assign({attivo:false,id:'promo-1',dal:'',al:'',testo:{it:'',en:''},cta:{it:'',en:''},link:'#/shop',colori:'#1E3A8A,#111827'},S.C.PROMO||{});
+ S.C.PROMO.testo=S.C.PROMO.testo||{it:'',en:''};S.C.PROMO.cta=S.C.PROMO.cta||{it:'',en:''};
+ S.C.THEMES.temi=Array.isArray(S.C.THEMES.temi)?S.C.THEMES.temi:[];
+ S.CONFIG.aboutMedia=S.CONFIG.aboutMedia||{tipo:'logo',src:''};
+ const w=S.CONFIG.whatsappFab=S.CONFIG.whatsappFab||{};
+ if(w.attivo===undefined)w.attivo=true;
+ if(!w.numero)w.numero=String(S.CONFIG.whatsapp||'').replace(/[^0-9]/g,'');
+ w.etichetta=w.etichetta||{it:'Scrivici su WhatsApp',en:'Chat on WhatsApp'};}
+async function tryEach(label,getter){
+ const got=[],miss=[];
+ const res=await Promise.allSettled(FILES.map(getter));
+ res.forEach((r,i)=>{const f=FILES[i];
+  if(r.status==='fulfilled'){assignFile(f,r.value);got.push(f)}
+  else miss.push({f,why:String(r.reason&&r.reason.message||r.reason||'errore')})});
+ return {label,got,miss}}
+async function loadAll(){
+ MISSING=[];LOAD_LOG=[];DATA_OK=false;let winner=null;
+ /* 1) repository GitHub (verità assoluta) */
+ const a=await tryEach('GitHub',f=>gh(`/contents/data/${f}.json?ref=${SET.branch}`,{headers:{Accept:'application/vnd.github.raw+json'}}));
+ LOAD_LOG.push(a);
+ if(a.got.length===FILES.length)winner=a;
+ else{
+  /* 2) copia locale servita accanto all'admin (solo file mancanti) */
+  const need=a.miss.map(x=>x.f);
+  const b={label:'copia locale',got:[],miss:[]};
+  const res=await Promise.allSettled(need.map(f=>fetch('data/'+f+'.json?t='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})));
+  res.forEach((r,i)=>{const f=need[i];if(r.status==='fulfilled'){assignFile(f,r.value);b.got.push(f)}else b.miss.push({f,why:String(r.reason&&r.reason.message||r.reason)})});
+  LOAD_LOG.push(b);
+  if(a.got.length===0&&b.got.length===0){
+   /* 3) file:// → script legacy */
+   try{await loadLegacyScripts();LOAD_LOG.push({label:'riserva locale (data/*.js)',got:FILES.slice(),miss:[]});winner={label:'riserva locale'}}
+   catch(e3){LOAD_LOG.push({label:'riserva locale',got:[],miss:[{f:'*',why:String(e3.message||e3)}]})}
+  }
+  if(!winner){
+   const gotAll=new Set([...a.got,...b.got]);
+   MISSING=FILES.filter(f=>!gotAll.has(f));
+   winner={label:a.got.length?'GitHub'+(b.got.length?' + copia locale':''):'copia locale'}
+  }
+ }
+ normalize();
+ FILES.forEach(f=>SNAP[f]=MISSING.includes(f)?'"__MANCANTE__"':jstr(S[KEY[f]]));
+ DATA_OK=FILES.length-MISSING.length>0&&!MISSING.includes('products')&&!MISSING.includes('categories');
+ LOADED_FROM=winner?winner.label:'errore';BOOTED=true;refreshSync();
+ if(MISSING.length)toast('Attenzione: file dati non trovati: '+MISSING.join(', ')+' — vedi Impostazioni per la diagnosi');
+ return DATA_OK}
+function loadDiagHtml(){
+ return LOAD_LOG.map(l=>`<div style="margin:4px 0"><b>${esc(l.label)}</b>: ${l.got.length?'<span style="color:var(--ok)">✔ '+l.got.join(', ')+'</span>':''} ${l.miss.length?'<span style="color:var(--warn)">✖ '+l.miss.map(m=>esc(m.f)+' ('+esc(m.why.slice(0,90))+')').join(' · ')+'</span>':''}</div>`).join('')
+ +(MISSING.length?`<div style="color:var(--err);margin-top:6px">File mancanti ovunque: <b>${MISSING.join(', ')}</b>. Verranno <b>creati</b> alla prossima pubblicazione (compaiono come «nuovo» in Pubblica). Se non è voluto, carica i file JSON originali nella cartella <span class="mono">data/</span> del repository.</div>`:'')}
+function loadLegacyScripts(){window.INGLY={};return new Promise((res,rej)=>{const fl=['config','i18n','socials','catalog'];let i=0;
+ const next=()=>{if(i>=fl.length){const g=window.INGLY;if(!g.CATS)return rej(new Error('riserva incompleta'));
+  S.CONFIG=g.CONFIG;S.D=g.D;S.SOCIALS=g.SOCIALS;S.P=g.P;S.CATS=g.CATS;
+  const C={};for(const k of ['MAT_ART','MATN','DIG','TECH','MATERIALS','STEPS','REVIEWS','BIZ','FAQS','PORT','FONTS','MOPT'])if(g[k]!==undefined)C[k]=g[k];S.C=C;return res()}
+  const s=document.createElement('script');s.src='data/'+fl[i++]+'.js';s.onload=next;s.onerror=()=>rej(new Error('manca '+s.src));document.head.appendChild(s)}
+ ;next()})}
+
+/* ---------- rigenerazione legacy .js (stessa logica di scripts/build.mjs) ---------- */
+function genLegacy(){return{
+ 'data/config.js':`/* GENERATO dai JSON — non modificare a mano */\nwindow.INGLY=window.INGLY||{};\nwindow.INGLY.CONFIG=${jstr(S.CONFIG)};\n`,
+ 'data/i18n.js':`/* GENERATO dai JSON */\nwindow.INGLY=window.INGLY||{};\nwindow.INGLY.D=${jstr(S.D)};\n`,
+ 'data/socials.js':`/* GENERATO dai JSON */\nwindow.INGLY=window.INGLY||{};\nwindow.INGLY.SOCIALS=${jstr(S.SOCIALS)};\n`,
+ 'data/catalog.js':`/* GENERATO dai JSON */\nwindow.INGLY=window.INGLY||{};\nObject.assign(window.INGLY,${jstr(Object.assign({P:S.P,CATS:S.CATS},S.C))},{P:${jstr(S.P)},CATS:${jstr(S.CATS)}});\n`}}
+
+/* ---------- binding automatico dei form ---------- */
+function getPath(obj,path){return path.split('.').reduce((o,k)=>o&&o[k],obj)}
+function setPath(root,path,val){const ks=path.split('.');let o=root;for(let i=0;i<ks.length-1;i++){if(o[ks[i]]==null)o[ks[i]]={};o=o[ks[i]]}o[ks[ks.length-1]]=val}
+const BROOT=r=>r==='CONTENT'?S.C:S[r];
+function bindAll(){document.querySelectorAll('[data-b]').forEach(el=>{
+ const p=el.dataset.b,root=p.split('.')[0],rest=p.slice(root.length+1);
+ const v=getPath(BROOT(root)||{},rest);el.value=v==null?'':v;
+ if(el.tagName==='SELECT'&&(v===true||v===false))el.value=String(v);
+ el.oninput=el.onchange=()=>{let val=el.value;if(el.type==='number')val=val===''?0:+val;
+  if(val==='true')val=true;else if(val==='false')val=false;
+  setPath(BROOT(root),rest,val);
+  if(root==='CONTENT'&&VIEW==='themes')promoPreview();
+  if(root==='CONFIG'&&rest.startsWith('social.'))syncSocialLinks();markDirty();if(VIEW==='seo')seoLen()}})}
+function syncSocialLinks(){if(!Array.isArray(S.SOCIALS))return;const map={instagram:'Instagram',facebook:'Facebook',tiktok:'TikTok',pinterest:'Pinterest',etsy:'Etsy',whatsapp:'WhatsApp'};
+ for(const k in map){const url=S.CONFIG.social&&S.CONFIG.social[k];const row=S.SOCIALS.find(r=>r[0]===map[k]);if(row&&url)row[1]=url}}
+
+/* ---------- navigazione ---------- */
+const NAV=[['Panoramica',[['dash','📊','Dashboard']]],
+ ['Catalogo',[['prod','📦','Prodotti'],['cats','🗂','Categorie'],['dig','💾','Digitali']]],
+ ['Contenuti',[['media','🖼','Media Library'],['port','🏆','Portfolio'],['biz','🏢','Sezione Business'],['sponsor','🤝','Sponsor & Partner'],['themes','🎨','Temi stagionali'],['tech','🔥','Tecnologie'],['hero','🎯','Home & Hero'],['texts','✍️','Testi IT/EN'],['faq','❓','FAQ & Recensioni'],['adv','🧩','Avanzate']]],
+ ['Configurazione',[['contacts','📞','Contatti & Social'],['seo','🔎','SEO'],['set','⚙️','Impostazioni']]],
+ ['Sistema',[['pub','🚀','Pubblica & Deploy'],['hist','🕘','Cronologia'],['health','🩺','Health Center'],['backup','💾','Backup']]]];
+const TITLES={};let VIEW='dash';
+$('nav').innerHTML=NAV.map(([g,items])=>`<div class="navlabel">${g}</div>`+items.map(([id,ic,t])=>{TITLES[id]=t;return `<button class="nit" data-go="${id}"><span>${ic}</span><span class="t">${t}</span>${id==='pub'?'<span class="bdg" id="navPubN"></span>':''}</button>`}).join('')).join('');
+function go(v){
+ if(BOOTED&&!DATA_OK&&!['set','health','pub','hist'].includes(v)){toast('Prima risolvi il caricamento dati: vedi la diagnosi in Impostazioni');v='set'}
+ VIEW=v;document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
+ document.querySelectorAll('.nit').forEach(x=>x.classList.toggle('on',x.dataset.go===v));
+ $('vtitle').textContent=TITLES[v]||'';
+ const R={dash:renderDash,prod:renderProd,cats:renderCats,dig:renderDig,media:renderMedia,port:()=>{renderPort();bindAll()},biz:renderBiz,sponsor:renderSponsor,themes:renderThemes,tech:renderTech,hero:renderHero,texts:renderTexts,faq:renderFaq,adv:renderAdv,contacts:bindAll,seo:()=>{bindAll();seoLen()},pub:renderPub,hist:renderHist,set:renderSet,health:()=>{},backup:()=>{}};
+ if(R[v])R[v]();window.scrollTo(0,0)}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(g.dataset.go)});
+$('goPub').onclick=()=>go('pub');
+/* ANTEPRIMA: apre il sito reale usando i dati in bozza (sessionStorage, solo per te) */
+$('goPrev').onclick=()=>{
+ try{
+  const payload=Object.assign({CONFIG:S.CONFIG,D:S.D,SOCIALS:S.SOCIALS,P:S.P,CATS:S.CATS},S.C);
+  sessionStorage.setItem('__INGLY_PREVIEW__',JSON.stringify(payload));
+  const base=location.pathname.replace(/admin\.html?$/,'').replace(/admin\/?$/,'');
+  const w=window.open(base+'index.html?__preview=1#/home','_ingly_preview');
+  if(!w)toast('Il browser ha bloccato la finestra: consenti i popup per questo sito');
+  else toast('Anteprima aperta: vedi le modifiche NON ancora pubblicate');
+ }catch(e){toast('Anteprima non disponibile: '+(e.message||e))}};
+
+/* ================== DASHBOARD ================== */
+function renderDash(){const P=S.P||[],dig=(S.C&&S.C.DIG)||[],port=(S.C&&S.C.PORT)||[];
+ const noPhoto=P.filter(p=>!p.img&&!hasStaged('img/'+p.id+'.webp')&&!(REPO_IMG||[]).includes(p.id+'.webp')).length;
+ $('dashCards').innerHTML=[
+  ['Prodotti',P.length,''],['Categorie',(S.CATS||[]).length,''],['Digitali',dig.length,''],
+  ['Portfolio',port.length,''],['Senza foto'+((REPO_IMG?'':' *')),noPhoto,noPhoto?'w':'g'],['In bozza',pending(),pending()?'w':'g']
+ ].map(([t,v,c])=>`<div class="dcard ${c}"><b>${v}</b><span>${t}</span></div>`).join('');
+ const h=[];h.push(`<div>Repository: <b class="mono">${esc(SET.owner)}/${esc(SET.repo)}</b> · branch <b class="mono">${esc(SET.branch)}</b></div>`);
+ h.push(`<div class="${token()?'ok':'warn'}">${token()?'Token configurato':'Token mancante — vai in Impostazioni per pubblicare con un click'}</div>`);
+ h.push(`<div class="${LOADED_FROM==='GitHub'?'ok':'warn'}">Dati caricati da: ${esc(LOADED_FROM||'—')}${LOADED_FROM==='GitHub'?'':' (consiglio: configura il token per leggere sempre dal repository)'}</div>`);
+ if(!REPO_IMG)h.push('<div class="warn">Foto: esegui «Scansiona repository» nella Media Library per il conteggio esatto</div>');
+ $('dashHealth').innerHTML=h.join('')}
+function hasStaged(path){return MEDIA.some(m=>m.path===path)}
+
+/* ================== PRODOTTI ================== */
+function catOptions(sel){return (S.CATS||[]).map(c=>`<option value="${esc(c.id)}"${c.id===sel?' selected':''}>${esc(c.ic)} ${esc(c.n.it)}</option>`).join('')}
+function subOptions(catId,sel){const c=(S.CATS||[]).find(x=>x.id===catId);return (c?c.sub:[]).map((s,i)=>`<option value="${i+1}"${(i+1)===+sel?' selected':''}>${i+1} · ${esc(s.it)}</option>`).join('')}
+function prodImgSrc(p){const st=MEDIA.find(m=>m.path===(p.img||'img/'+p.id+'.webp'));if(st)return st.url;return (LOADED_FROM==='GitHub'?LIVE():'')+(p.img||'img/'+p.id+'.webp')}
+function renderProd(){
+ $('pCatF').innerHTML='<option value="">Tutte le categorie</option>'+catOptions();
+ const q=($('pSearch').value||'').toLowerCase(),cf=$('pCatF').value;
+ const rows=(S.P||[]).filter(p=>(!cf||p.cat===cf)&&(!q||(p.n.it+' '+p.n.en+' '+p.id).toLowerCase().includes(q)));
+ $('pTable').innerHTML='<tr><th></th><th>ID</th><th>Nome</th><th>Categoria</th><th>Prezzo</th><th>Materiale</th><th>Foto</th><th></th></tr>'+
+  rows.map(p=>{const hasPhoto=p.img||hasStaged('img/'+p.id+'.webp')||(REPO_IMG||[]).includes(p.id+'.webp');
+  return `<tr class="rowc" data-pid="${p.id}"><td style="font-size:17px">${esc(p.icon||'')}</td><td class="mono">${p.id}</td><td><b>${esc(p.n.it)}</b><br><small class="hint">${esc(p.n.en)}</small></td><td>${esc(p.cat)} / ${p.sub}</td><td>€${p.price}</td><td>${esc(p.mat||'')}</td><td>${hasPhoto?'<span class="chip ok">sì</span>':(REPO_IMG?'<span class="chip warn">no</span>':'<span class="chip">?</span>')}</td><td><button class="btn sm" data-edit="${p.id}">✎</button></td></tr>`}).join('');
+ $('pTable').querySelectorAll('[data-edit]').forEach(b=>b.onclick=e=>{e.stopPropagation();editProd(+b.dataset.edit)});
+ $('pTable').querySelectorAll('tr[data-pid]').forEach(r=>r.onclick=()=>editProd(+r.dataset.pid))}
+$('pSearch').oninput=renderProd;$('pCatF').onchange=renderProd;
+$('pNew').onclick=()=>{const id=Math.max(0,...(S.P||[]).map(p=>p.id))+1;
+ S.P.push({id,cat:(S.CATS[0]||{}).id||'casa',sub:1,n:{it:'Nuovo prodotto',en:'New product'},mat:'Legno',price:10,icon:'✨',rev:0,prod:3});markDirty();editProd(id)};
+function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
+ const gal=(p.gallery||[]);
+ modal(`<h3>✎ Prodotto <span class="mono">#${p.id}</span></h3>
+  <div class="row c2"><div><label>Nome (IT)</label><input type="text" id="ep_nit" value="${esc(p.n.it)}"></div><div><label>Nome (EN)</label><input type="text" id="ep_nen" value="${esc(p.n.en)}"></div></div>
+  <div class="row c3"><div><label>Categoria</label><select id="ep_cat">${catOptions(p.cat)}</select></div><div><label>Sottocategoria</label><select id="ep_sub">${subOptions(p.cat,p.sub)}</select></div><div><label>Icona</label><input type="text" id="ep_icon" class="emoji-in" value="${esc(p.icon||'')}"></div></div>
+  <div class="row c3"><div><label>Prezzo €</label><input type="number" id="ep_price" value="${p.price}" step="0.5"></div><div><label>Materiale</label><select id="ep_mat">${Object.keys(S.C.MAT_ART||{}).filter(k=>k!=='File').map(m=>`<option${m===p.mat?' selected':''}>${esc(m)}</option>`).join('')}${(S.C.MAT_ART&&S.C.MAT_ART[p.mat])?'':`<option selected>${esc(p.mat||'')}</option>`}</select></div><div><label>Giorni produzione</label><input type="number" id="ep_prod" value="${p.prod||3}"></div></div>
+  <div class="row c3"><div><label>Etichetta (es. Best)</label><input type="text" id="ep_tag" value="${esc(p.tag||'')}"></div><div><label>Collezioni (virgola)</label><input type="text" id="ep_coll" value="${esc((p.coll||[]).join(','))}"></div><div><label>Recensioni (n°)</label><input type="number" id="ep_rev" value="${p.rev||0}"></div></div>
+  <label>Descrizione (IT)</label><textarea id="ep_dit">${esc((p.desc&&p.desc.it)||'')}</textarea>
+  <label>Description (EN)</label><textarea id="ep_den">${esc((p.desc&&p.desc.en)||'')}</textarea>
+  <div class="row c2">
+   <div><label>🎬 Video del prodotto (URL mp4)</label><input type="url" id="ep_video" value="${esc(p.video||'')}" placeholder="https://…/prodotto.mp4"></div>
+   <div><label>Poster del video (percorso immagine)</label><input type="text" id="ep_poster" value="${esc(p.poster||'')}" placeholder="img/${p.id}.webp"></div>
+  </div>
+  <div class="row c2"><div><label>Codice SKU (facoltativo)</label><input type="text" id="ep_sku" value="${esc(p.sku||'')}" placeholder="INGLY-${p.id}"></div>
+   <div><label>Valutazione media (1–5, per le stelle su Google)</label><input type="number" id="ep_rating" min="1" max="5" step="0.1" value="${esc(p.rating||'')}" placeholder="4.9"></div></div>
+  <label>📐 Tabella misure — una riga per voce, formato <span class="mono">Etichetta | Valore</span></label>
+  <textarea id="ep_sizes" class="mono" style="min-height:78px" placeholder="Dimensioni | 30 × 20 cm&#10;Spessore | 5 mm&#10;Peso | 250 g">${esc((p.misure||[]).map(r=>r[0]+' | '+r[1]).join('\n'))}</textarea>
+  <label>🔗 Prodotti correlati scelti a mano</label>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+   <select id="ep_reladd" style="flex:1;min-width:180px"><option value="">— aggiungi un prodotto —</option>
+    ${(S.P||[]).filter(x=>x.id!==p.id).map(x=>`<option value="${x.id}">#${x.id} · ${esc(x.n.it)}</option>`).join('')}</select>
+  </div>
+  <div id="ep_rellist" style="margin-top:6px">${(p.rel||[]).map((rid,k)=>{const rp=(S.P||[]).find(x=>x.id===rid);
+    return `<span class="chip" style="margin:0 6px 6px 0">${rp?esc(rp.n.it):'#'+rid} <button class="btn sm err" data-relx="${k}" style="padding:0 6px;margin-left:4px">✕</button></span>`}).join('')||'<span class="hint">Nessuno: il sito riempie da solo con prodotti simili.</span>'}</div>
+  <hr class="hr"><h3 style="font-size:14px;margin:2px 0 4px">🖼 Immagini del prodotto</h3>
+  <div class="hint" style="margin-bottom:8px">La <b>foto principale</b> è quella mostrata nel catalogo. Le immagini della <b>gallery</b>
+   appaiono come miniature nella pagina prodotto: dettagli, altre prospettive, varianti di colore. Puoi caricarne quante vuoi.</div>
+  <label>Foto principale</label>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+   <div style="width:92px;height:92px;border-radius:11px;overflow:hidden;border:1px solid var(--line);background:#0d1122;flex:0 0 92px">
+    <img id="ep_mainimg" src="${esc(imgPreviewSrc(p.img||'img/'+p.id+'.webp'))}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.opacity=.15"></div>
+   <button class="btn" id="ep_up">📷 Carica foto</button>
+   <button class="btn" id="ep_lib">🗂 Scegli dalla libreria</button>
+   <button class="btn" id="ep_galup">➕ Aggiungi alla gallery</button>
+   <span class="hint mono">${esc(p.img||'img/'+p.id+'.webp')}</span>
+  </div>
+  <label>Gallery — ${gal.length} ${gal.length===1?'immagine':'immagini'} <span class="hint">(trascina ← → per riordinare)</span></label><div class="gal" id="ep_gal">${gal.map((g,i)=>`<div class="g"><img src="${esc((LOADED_FROM==='GitHub'&&!hasStaged(g)?LIVE():''))+esc(g)}" onerror="this.style.opacity=.2"><button class="x" data-gx="${i}">✕</button><div class="mv"><button data-gm="${i},-1">←</button><button data-gm="${i},1">→</button></div></div>`).join('')||'<span class="hint">Nessuna — aggiungi dalla Media Library («Gallery»)</span>'}</div>
+  <hr class="hr"><div style="display:flex;gap:10px;flex-wrap:wrap">
+   <button class="btn pri" id="ep_save">✔ Salva</button><button class="btn" id="ep_dup">⧉ Duplica</button><button class="btn err" id="ep_del">🗑 Elimina</button><button class="btn" onclick="closeModal()">Annulla</button></div>`);
+ $('ep_cat').onchange=()=>{$('ep_sub').innerHTML=subOptions($('ep_cat').value,1)};
+ $('ep_reladd').onchange=()=>{const v=+$('ep_reladd').value;if(!v)return;
+  p.rel=p.rel||[];if(!p.rel.includes(v))p.rel.push(v);markDirty();editProd(id)};
+ document.querySelectorAll('[data-relx]').forEach(b=>b.onclick=()=>{p.rel.splice(+b.dataset.relx,1);
+  if(!p.rel.length)delete p.rel;markDirty();editProd(id)});
+ $('ep_up').onclick=()=>pickImage('img/'+p.id,path=>{if(path!=='img/'+p.id+'.webp')p.img=path;else delete p.img;markDirty();editProd(id)},'prodotto');
+ $('ep_galup').onclick=()=>{const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=true;
+  inp.onchange=async()=>{const files=[...inp.files];if(!files.length)return;
+   p.gallery=p.gallery||[];toast('Elaboro '+files.length+' immagini…');let ok=0;
+   for(const f of files){try{const proc=await processImage(f);
+    let n=(p.gallery||[]).length+1;while((REPO_IMG||[]).includes(p.id+'-g'+n+'.webp')||MEDIA.some(m=>m.path==='img/'+p.id+'-g'+n+'.webp'))n++;
+    const path='img/'+p.id+'-g'+n+'.'+proc.ext;await stageWithVariants(path,proc);p.gallery.push(path);ok++;
+   }catch(e){console.warn(e)}}
+   markDirty();editProd(id);toast(ok+' immagini aggiunte alla gallery')};
+  inp.click()};
+ $('ep_lib').onclick=()=>pickFromLibrary(sel=>{
+  if(!sel.length)return;p.img=sel[0];
+  if(sel.length>1){p.gallery=p.gallery||[];sel.slice(1).forEach(s=>{if(!p.gallery.includes(s))p.gallery.push(s)})}
+  markDirty();editProd(id)});
+ $('ep_gal').querySelectorAll('[data-gx]').forEach(b=>b.onclick=()=>{p.gallery.splice(+b.dataset.gx,1);if(!p.gallery.length)delete p.gallery;markDirty();editProd(id)});
+ $('ep_gal').querySelectorAll('[data-gm]').forEach(b=>b.onclick=()=>{const[i,d]=b.dataset.gm.split(',').map(Number);const j=i+d;if(j<0||j>=p.gallery.length)return;[p.gallery[i],p.gallery[j]]=[p.gallery[j],p.gallery[i]];markDirty();editProd(id)});
+ $('ep_save').onclick=()=>{p.n.it=$('ep_nit').value;p.n.en=$('ep_nen').value;p.cat=$('ep_cat').value;p.sub=+$('ep_sub').value||1;
+  p.icon=$('ep_icon').value;p.price=+$('ep_price').value||0;p.mat=$('ep_mat').value;p.prod=+$('ep_prod').value||3;p.rev=+$('ep_rev').value||0;
+  const dit=$('ep_dit').value.trim(),den=$('ep_den').value.trim();
+  if(dit||den)p.desc={it:dit,en:den||dit};else delete p.desc;
+  const sku=$('ep_sku').value.trim();sku?p.sku=sku:delete p.sku;
+  const rat=parseFloat($('ep_rating').value);(rat>=1&&rat<=5)?p.rating=rat:delete p.rating;
+  const vid=$('ep_video').value.trim();vid?p.video=vid:delete p.video;
+  const pos=$('ep_poster').value.trim();pos?p.poster=pos:delete p.poster;
+  const sz=$('ep_sizes').value.split('\n').map(r=>r.split('|').map(s=>s.trim())).filter(r=>r[0]&&r[1]);
+  sz.length?p.misure=sz:delete p.misure;
+  const tag=$('ep_tag').value.trim();tag?p.tag=tag:delete p.tag;
+  const coll=$('ep_coll').value.split(',').map(s=>s.trim()).filter(Boolean);coll.length?p.coll=coll:delete p.coll;
+  markDirty();closeModal();renderProd();toast('Prodotto salvato in bozza')};
+ $('ep_dup').onclick=()=>{const nid=Math.max(...S.P.map(x=>x.id))+1;const c=JSON.parse(jstr(p));c.id=nid;c.n.it+=' (copia)';delete c.img;delete c.gallery;S.P.push(c);markDirty();closeModal();renderProd();toast('Duplicato come #'+nid)};
+ $('ep_del').onclick=()=>{const used=(S.CONFIG.heroFeatured||[]).includes(p.id);
+  if(!confirm('Eliminare «'+p.n.it+'»?'+(used?'\nATTENZIONE: è tra i prodotti in evidenza della Hero — verrà rimosso anche da lì.':'')))return;
+  S.P=S.P.filter(x=>x.id!==id);if(used)S.CONFIG.heroFeatured=S.CONFIG.heroFeatured.filter(x=>x!==id);
+  markDirty();closeModal();renderProd();toast('Prodotto eliminato (in bozza)')}}
+
+/* ================== CATEGORIE ================== */
+function renderCats(){$('catList').innerHTML=(S.CATS||[]).map((c,i)=>{
+ const nprod=(S.P||[]).filter(p=>p.cat===c.id).length;
+ return `<div class="card"><h3><span style="font-size:19px;color:var(--laser)">${c.icon?iconSvg(c.icon,20):esc(c.ic)}</span> ${esc(c.n.it)} <span class="chip">${nprod} prodotti</span><span class="chip">${c.sub.length} sottocategorie</span>
+  <span class="sp"></span><button class="btn sm" data-cm="${i},-1">↑</button><button class="btn sm" data-cm="${i},1">↓</button><button class="btn sm" data-ce="${i}">✎ Modifica</button><button class="btn sm err" data-cd="${i}">🗑</button></h3>
+  <div class="hint">${esc(c.s.it)} · slug <span class="mono">${esc(c.id)}</span></div></div>`}).join('');
+ document.querySelectorAll('[data-cm]').forEach(b=>b.onclick=()=>{const[i,d]=b.dataset.cm.split(',').map(Number);const j=i+d;if(j<0||j>=S.CATS.length)return;[S.CATS[i],S.CATS[j]]=[S.CATS[j],S.CATS[i]];markDirty();renderCats()});
+ document.querySelectorAll('[data-ce]').forEach(b=>b.onclick=()=>editCat(+b.dataset.ce));
+ document.querySelectorAll('[data-cd]').forEach(b=>b.onclick=()=>{const c=S.CATS[+b.dataset.cd];const n=(S.P||[]).filter(p=>p.cat===c.id).length;
+  if(n)return toast('Impossibile: '+n+' prodotti usano questa categoria. Spostali prima.');
+  if(confirm('Eliminare la categoria «'+c.n.it+'»?')){S.CATS.splice(+b.dataset.cd,1);markDirty();renderCats()}})}
+$('cNew').onclick=()=>{S.CATS.push({id:'nuova-'+Date.now().toString(36),ic:'✨',n:{it:'Nuova categoria',en:'New category'},s:{it:'Descrizione',en:'Description'},sub:[{it:'Generale',en:'General'}],big:'✨',bg:'#e8d5b0,#c9a876'});markDirty();editCat(S.CATS.length-1)};
+function editCat(i){const c=S.CATS[i];
+ modal(`<h3>✎ Categoria</h3>
+  <div class="row c3"><div><label>Slug (URL)</label><input type="text" id="ec_id" value="${esc(c.id)}"></div><div><label>Emoji (riserva)</label><input type="text" id="ec_ic" class="emoji-in" value="${esc(c.ic)}"></div>
+  <div><label>Icona vettoriale INGLY</label><button class="btn" id="ec_ico" style="width:100%;justify-content:center">${c.icon?iconSvg(c.icon,20)+' '+esc(c.icon):'— scegli —'}</button></div></div>
+  <input type="hidden" id="ec_big" value="${esc(c.big||'')}">
+  <div class="row c2"><div><label>Nome (IT)</label><input type="text" id="ec_nit" value="${esc(c.n.it)}"></div><div><label>Nome (EN)</label><input type="text" id="ec_nen" value="${esc(c.n.en)}"></div></div>
+  <div class="row c2"><div><label>Sottotitolo (IT)</label><input type="text" id="ec_sit" value="${esc(c.s.it)}"></div><div><label>Sottotitolo (EN)</label><input type="text" id="ec_sen" value="${esc(c.s.en)}"></div></div>
+  <label>Colori banner (2 hex separati da virgola)</label><input type="text" id="ec_bg" value="${esc(c.bg||'')}">
+  <label>Immagine della card (compare in «12 mondi di personalizzazione»)</label>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+   <div style="width:96px;height:64px;border-radius:9px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(140deg,${esc(c.bg||'#333,#555')})">${c.img?`<img src="${esc(imgPreviewSrc(c.img))}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.opacity=.2">`:''}</div>
+   <button class="btn" id="ec_pick">📷 ${c.img?'Sostituisci':'Carica'} immagine</button>
+   ${c.img?'<button class="btn sm err" id="ec_rmimg">rimuovi</button>':''}
+   <span class="hint">${c.img?'<span class="mono">'+esc(c.img)+'</span>':'senza immagine resta il colore attuale'}</span>
+  </div>
+  <label>Sottocategorie (illimitate)</label><div id="ec_subs">${c.sub.map((s,k)=>subRow(s,k)).join('')}</div>
+  <button class="btn sm" id="ec_addsub">➕ Aggiungi sottocategoria</button>
+  <hr class="hr"><button class="btn pri" id="ec_save">✔ Salva</button> <button class="btn" onclick="closeModal()">Annulla</button>`);
+ function subRow(s,k){return `<div class="list-it" data-k="${k}"><span class="mono" style="width:22px">${k+1}</span><input type="text" value="${esc(s.it)}" data-f="it" placeholder="IT"><input type="text" value="${esc(s.en)}" data-f="en" placeholder="EN"><button class="btn sm err" data-sx="${k}">✕</button></div>`}
+ $('ec_ico').onclick=()=>pickIcon(c.icon,n=>{n?c.icon=n:delete c.icon;markDirty();editCat(i)});
+ $('ec_pick').onclick=()=>pickImage('img/cat-'+(c.id||'x'),path=>{c.img=path;markDirty();editCat(i)},'categoria');
+ const ecrm=$('ec_rmimg');if(ecrm)ecrm.onclick=()=>{MEDIA=MEDIA.filter(m=>m.path!==c.img);delete c.img;markDirty();editCat(i)};
+ $('ec_addsub').onclick=()=>{c.sub.push({it:'Nuova',en:'New'});markDirty();editCat(i)};
+ document.querySelectorAll('[data-sx]').forEach(b=>b.onclick=()=>{const k=+b.dataset.sx;
+  const users=(S.P||[]).filter(p=>p.cat===c.id&&p.sub===k+1).length;
+  if(users&&!confirm(users+' prodotti usano questa sottocategoria: verranno spostati sulla prima. Continuare?'))return;
+  c.sub.splice(k,1);(S.P||[]).forEach(p=>{if(p.cat===c.id){if(p.sub===k+1)p.sub=1;else if(p.sub>k+1)p.sub--}});markDirty();editCat(i)});
+ $('ec_save').onclick=()=>{const oldId=c.id,nid=$('ec_id').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'-')||oldId;
+  document.querySelectorAll('#ec_subs .list-it').forEach(row=>{const k=+row.dataset.k;row.querySelectorAll('input').forEach(inp=>c.sub[k][inp.dataset.f]=inp.value)});
+  c.id=nid;c.ic=$('ec_ic').value;c.big=$('ec_big').value;c.n.it=$('ec_nit').value;c.n.en=$('ec_nen').value;c.s.it=$('ec_sit').value;c.s.en=$('ec_sen').value;c.bg=$('ec_bg').value;
+  if(nid!==oldId)(S.P||[]).forEach(p=>{if(p.cat===oldId)p.cat=nid});
+  markDirty();closeModal();renderCats();toast('Categoria salvata in bozza')}}
+
+/* ================== DIGITALI ================== */
+function renderDig(){const D=(S.C.DIG=S.C.DIG||[]);
+ $('dTable').innerHTML='<tr><th></th><th>ID</th><th>Nome</th><th>Formati</th><th>Prezzo</th><th></th></tr>'+D.map((d,i)=>`<tr><td style="font-size:17px">${esc(d.icon||'')}</td><td class="mono">${d.id}</td><td><b>${esc(d.n.it)}</b><br><small class="hint">${esc(d.n.en)}</small></td><td>${(d.f||[]).map(f=>'<span class="pill">'+esc(f)+'</span>').join(' ')}</td><td>€${d.price}</td><td><button class="btn sm" data-de="${i}">✎</button> <button class="btn sm err" data-dd="${i}">🗑</button></td></tr>`).join('');
+ document.querySelectorAll('[data-de]').forEach(b=>b.onclick=()=>editDig(+b.dataset.de));
+ document.querySelectorAll('[data-dd]').forEach(b=>b.onclick=()=>{if(confirm('Eliminare?')){S.C.DIG.splice(+b.dataset.dd,1);markDirty();renderDig()}})}
+$('dNew').onclick=()=>{const id=Math.max(100,...(S.C.DIG||[]).map(d=>d.id))+1;S.C.DIG.push({id,n:{it:'Nuovo file',en:'New file'},f:['SVG'],price:9,icon:'📁'});markDirty();editDig(S.C.DIG.length-1)};
+function editDig(i){const d=S.C.DIG[i];
+ modal(`<h3>✎ Prodotto digitale <span class="mono">#${d.id}</span></h3>
+ <div class="row c2"><div><label>Nome (IT)</label><input type="text" id="ed_it" value="${esc(d.n.it)}"></div><div><label>Nome (EN)</label><input type="text" id="ed_en" value="${esc(d.n.en)}"></div></div>
+ <div class="row c3"><div><label>Formati (virgola)</label><input type="text" id="ed_f" value="${esc((d.f||[]).join(','))}"></div><div><label>Prezzo €</label><input type="number" id="ed_p" value="${d.price}"></div><div><label>Icona</label><input type="text" id="ed_ic" class="emoji-in" value="${esc(d.icon||'')}"></div></div>
+ <hr class="hr"><button class="btn pri" id="ed_save">✔ Salva</button> <button class="btn" onclick="closeModal()">Annulla</button>`);
+ $('ed_save').onclick=()=>{d.n.it=$('ed_it').value;d.n.en=$('ed_en').value;d.f=$('ed_f').value.split(',').map(s=>s.trim()).filter(Boolean);d.price=+$('ed_p').value||0;d.icon=$('ed_ic').value;markDirty();closeModal();renderDig()}}
+
+/* ================== MEDIA LIBRARY ================== */
+let STAGE_TMP=[]; /* file appena caricati, in attesa di destinazione */
+/* ---- Editor di ritaglio: zoom, spostamento, rotazione, punto focale ---- */
+const ASPECTS={prodotto:1,categoria:1.6,portfolio:1.35,about:1,logo:0,libero:0};
+function openCrop(file,aspectKey,cb){
+ const aspect=ASPECTS[aspectKey]!==undefined?ASPECTS[aspectKey]:1;
+ const url=URL.createObjectURL(file);
+ modal(`<h3>✂️ Ritaglia e inquadra</h3>
+  <div class="hint">Trascina per spostare · rotellina o cursore per lo zoom. Quello che vedi nel riquadro è esattamente ciò che finirà sul sito.</div>
+  <div style="display:grid;place-items:center;margin:12px 0">
+   <canvas id="crCv" style="max-width:100%;border-radius:12px;border:1px solid var(--line);background:#0d1122;cursor:grab;touch-action:none"></canvas></div>
+  <div class="row c3">
+   <div><label>Zoom</label><input type="range" id="crZoom" min="100" max="400" value="100"></div>
+   <div><label>Proporzione</label><select id="crAsp">
+     <option value="1">Quadrata 1:1 (prodotti)</option><option value="1.6">Larga 16:10 (categorie)</option>
+     <option value="1.35">4:3 (portfolio)</option><option value="0.8">Verticale 4:5</option></select></div>
+   <div><label>Rotazione</label><div style="display:flex;gap:6px"><button class="btn sm" id="crRotL">⟲</button><button class="btn sm" id="crRotR">⟳</button><button class="btn sm" id="crReset">reset</button></div></div>
+  </div>
+  <hr class="hr"><div style="display:flex;gap:10px;flex-wrap:wrap">
+   <button class="btn pri" id="crOk">✔ Applica ritaglio</button>
+   <button class="btn" id="crSkip">Usa immagine intera</button>
+   <button class="btn" id="crCancel">Annulla</button></div>`);
+ const cv=$('crCv'),ctx=cv.getContext('2d');
+ const st={zoom:1,rot:0,x:0,y:0,asp:aspect||1,img:null};
+ $('crAsp').value=String(st.asp);
+ const VIEW_W=520;
+ function fit(){cv.width=VIEW_W;cv.height=Math.round(VIEW_W/st.asp);draw()}
+ function draw(){if(!st.img)return;ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.save();ctx.translate(cv.width/2+st.x,cv.height/2+st.y);ctx.rotate(st.rot*Math.PI/180);
+  const iw=st.img.width,ih=st.img.height;
+  const base=Math.max(cv.width/iw,cv.height/ih);const sc=base*st.zoom;
+  ctx.drawImage(st.img,-iw*sc/2,-ih*sc/2,iw*sc,ih*sc);ctx.restore()}
+ const im=new Image();im.onload=()=>{st.img=im;fit()};im.src=url;
+ let drag=null;
+ cv.addEventListener('pointerdown',e=>{drag={x:e.clientX-st.x,y:e.clientY-st.y};cv.setPointerCapture(e.pointerId);cv.style.cursor='grabbing'});
+ cv.addEventListener('pointermove',e=>{if(!drag)return;st.x=e.clientX-drag.x;st.y=e.clientY-drag.y;draw()});
+ cv.addEventListener('pointerup',()=>{drag=null;cv.style.cursor='grab'});
+ cv.addEventListener('wheel',e=>{e.preventDefault();st.zoom=Math.min(4,Math.max(1,st.zoom*(e.deltaY<0?1.08:0.93)));$('crZoom').value=Math.round(st.zoom*100);draw()},{passive:false});
+ $('crZoom').oninput=()=>{st.zoom=+$('crZoom').value/100;draw()};
+ $('crAsp').onchange=()=>{st.asp=+$('crAsp').value;fit()};
+ $('crRotL').onclick=()=>{st.rot-=90;draw()};
+ $('crRotR').onclick=()=>{st.rot+=90;draw()};
+ $('crReset').onclick=()=>{st.zoom=1;st.rot=0;st.x=0;st.y=0;$('crZoom').value=100;draw()};
+ $('crCancel').onclick=()=>{URL.revokeObjectURL(url);closeModal()};
+ $('crSkip').onclick=async()=>{closeModal();const p=await processImage(file);URL.revokeObjectURL(url);cb(p)};
+ $('crOk').onclick=async()=>{
+  const outW=Math.min(1600,Math.round(st.img.width*st.zoom));const outH=Math.round(outW/st.asp);
+  const oc=document.createElement('canvas');oc.width=outW;oc.height=outH;const octx=oc.getContext('2d');
+  const k=outW/cv.width;
+  octx.save();octx.translate(oc.width/2+st.x*k,oc.height/2+st.y*k);octx.rotate(st.rot*Math.PI/180);
+  const iw=st.img.width,ih=st.img.height;const base=Math.max(oc.width/iw,oc.height/ih);const sc=base*st.zoom;
+  octx.drawImage(st.img,-iw*sc/2,-ih*sc/2,iw*sc,ih*sc);octx.restore();
+  closeModal();URL.revokeObjectURL(url);
+  const blob=await new Promise(r=>oc.toBlob(r,'image/webp',.85));
+  cb({ext:'webp',blob,buf:await blob.arrayBuffer(),w:outW,h:outH,canvas:oc})};
+}
+/* ---- varianti responsive: 1600 / 800 / 400 ---- */
+async function makeVariants(proc){
+ if(proc.ext!=='webp')return[];
+ const srcCv=proc.canvas||await(async()=>{const b=await createImageBitmap(proc.blob);const c=document.createElement('canvas');
+  c.width=b.width;c.height=b.height;c.getContext('2d').drawImage(b,0,0);return c})();
+ const out=[];
+ for(const w of [800,400]){
+  if(srcCv.width<=w)continue;
+  const h=Math.round(srcCv.height*w/srcCv.width);
+  const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(srcCv,0,0,w,h);
+  const blob=await new Promise(r=>c.toBlob(r,'image/webp',.8));
+  out.push({w,blob,buf:await blob.arrayBuffer()})}
+ return out}
+async function stageWithVariants(path,proc){
+ await stageFile(path,proc);
+ if(!path.endsWith('.webp'))return;
+ const vs=await makeVariants(proc);
+ for(const v of vs){const p=path.replace(/\.webp$/,'-'+v.w+'.webp');
+  MEDIA=MEDIA.filter(m=>m.path!==p);
+  MEDIA.push({path:p,b64:b64buf(v.buf),url:URL.createObjectURL(v.blob),size:v.buf.byteLength,w:v.w,h:0,hash:'',variant:true})}
+ if(!S.C.MV||Array.isArray(S.C.MV))S.C.MV={};
+ if(vs.length)S.C.MV[path]=vs.map(v=>v.w).sort((x,y)=>x-y);else delete S.C.MV[path];
+ markDirty()}
+async function processImage(file){
+ if(file.type==='image/svg+xml'||/\.svg$/i.test(file.name)){const buf=await file.arrayBuffer();return{ext:'svg',blob:new Blob([buf],{type:'image/svg+xml'}),buf,w:0,h:0}}
+ const bmp=await createImageBitmap(file);const MAX=1600;const sc=Math.min(1,MAX/Math.max(bmp.width,bmp.height));
+ const w=Math.round(bmp.width*sc),h=Math.round(bmp.height*sc);
+ const cv=document.createElement('canvas');cv.width=w;cv.height=h;cv.getContext('2d').drawImage(bmp,0,0,w,h);
+ const blob=await new Promise(r=>cv.toBlob(r,'image/webp',.82));const buf=await blob.arrayBuffer();
+ return{ext:'webp',blob,buf,w,h}}
+async function stageFile(path,proc){const hash=await sha1(proc.buf);
+ const dup=MEDIA.find(m=>m.hash===hash&&m.path!==path);
+ MEDIA=MEDIA.filter(m=>m.path!==path);
+ MEDIA.push({path,b64:b64buf(proc.buf),url:URL.createObjectURL(proc.blob),size:proc.buf.byteLength,w:proc.w,h:proc.h,hash});
+ if(dup)toast('Nota: immagine identica già presente come '+dup.path);
+ markDirty()}
+function destOptions(){return '<optgroup label="Prodotti">'+(S.P||[]).map(p=>`<option value="p:${p.id}">#${p.id} · ${esc(p.n.it)}</option>`).join('')+'</optgroup>'+
+ '<optgroup label="Portfolio / Dal laboratorio">'+((S.C.PORT)||[]).map((t,i)=>`<option value="t:${i}">Tessera ${i+1} · ${esc(t[1].it)}</option>`).join('')+'</optgroup>'+
+ '<optgroup label="Categorie (12 mondi)">'+(S.CATS||[]).map(c=>`<option value="c:${esc(c.id)}">${esc(c.ic)} ${esc(c.n.it)}</option>`).join('')+'</optgroup>'+
+ '<optgroup label="Altro"><option value="about">Immagine «Chi siamo»</option><option value="free">Solo libreria</option></optgroup>'}
+function renderMRows(){
+ $('mRows').innerHTML=STAGE_TMP.map((s,i)=>`<div class="list-it" style="align-items:center">
+  <img src="${s.url}" style="width:62px;height:62px;object-fit:cover;border-radius:9px;border:1px solid var(--line)">
+  <div style="flex:1;min-width:0"><div class="mono" style="font-size:11.5px;overflow:hidden;text-overflow:ellipsis">${esc(s.name)}</div>
+   <div class="hint">${Math.round(s.proc.buf.byteLength/1024)} KB${s.proc.w?' · '+s.proc.w+'×'+s.proc.h:''}</div></div>
+  <div style="width:34%;min-width:150px"><select data-mrd="${i}">${destOptions()}</select></div>
+  <div style="width:22%;min-width:120px"><select data-mrs="${i}">
+   <option value="main">Foto principale</option><option value="gal">Gallery</option><option value="both">Principale + Gallery</option></select></div>
+  <button class="btn sm err" data-mrx="${i}">✕</button></div>`).join('');
+ STAGE_TMP.forEach((s,i)=>{const d=document.querySelector(`[data-mrd="${i}"]`),sl=document.querySelector(`[data-mrs="${i}"]`);
+  if(s.dest)d.value=s.dest;else s.dest=d.value;
+  if(s.slot)sl.value=s.slot;else s.slot=sl.value;
+  d.onchange=()=>{s.dest=d.value};sl.onchange=()=>{s.slot=sl.value}});
+ document.querySelectorAll('[data-mrx]').forEach(b=>b.onclick=()=>{STAGE_TMP.splice(+b.dataset.mrx,1);
+  if(!STAGE_TMP.length){$('mAssign').style.display='none';return}renderMRows()})}
+async function handleFiles(files){if(!files.length)return;STAGE_TMP=[];
+ toast('Elaborazione di '+files.length+' immagini…');
+ for(const f of files){try{const proc=await processImage(f);const hash=await sha1(proc.buf);
+  STAGE_TMP.push({name:f.name,proc,hash,url:URL.createObjectURL(proc.blob)})}catch(e){toast('File non leggibile: '+f.name)}}
+ if(!STAGE_TMP.length)return;
+ $('mAssign').style.display='';
+ $('mAllDest').innerHTML=destOptions();
+ renderMRows();
+ toast(STAGE_TMP.length+' immagini pronte: scegli dove va ognuna')}
+$('mApplyAll').onclick=()=>{const d=$('mAllDest').value,s=$('mAllSlot').value;
+ STAGE_TMP.forEach(x=>{x.dest=d;x.slot=s});renderMRows();toast('Applicato a tutte')};
+$('mCancel').onclick=()=>{STAGE_TMP=[];$('mAssign').style.display='none'};
+async function addToGallery(p,proc){p.gallery=p.gallery||[];let n=1,path;
+ do{path='img/'+p.id+'-g'+n+'.'+proc.ext;n++}while(p.gallery.includes(path)||MEDIA.some(m=>m.path===path));
+ await stageFile(path,proc);p.gallery.push(path);return path}
+$('mDoAssign').onclick=async()=>{let n=0;
+ for(const s of STAGE_TMP){const dest=s.dest||'free',slot=s.slot||'main';
+  if(dest.startsWith('p:')){const p=S.P.find(x=>x.id===+dest.slice(2));if(!p)continue;
+   if(slot==='main'||slot==='both'){const path='img/'+p.id+'.'+s.proc.ext;await stageWithVariants(path,s.proc);
+    if(s.proc.ext!=='webp')p.img=path;else delete p.img}
+   if(slot==='gal'||slot==='both')await addToGallery(p,s.proc);
+  }else if(dest.startsWith('c:')){const cat=S.CATS.find(x=>x.id===dest.slice(2));if(!cat)continue;
+   const path='img/cat-'+cat.id+'.'+s.proc.ext;await stageWithVariants(path,s.proc);cat.img=path;
+  }else if(dest.startsWith('t:')){const i=+dest.slice(2),t=S.C.PORT[i];if(!t)continue;
+   const path='img/port-'+(i+1)+'.'+s.proc.ext;await stageWithVariants(path,s.proc);t[3]=path;
+  }else if(dest==='about'){const path='img/about.'+s.proc.ext;await stageFile(path,s.proc);
+   S.CONFIG.aboutMedia=S.CONFIG.aboutMedia||{};S.CONFIG.aboutMedia.tipo='immagine';S.CONFIG.aboutMedia.src=path;
+  }else{const base=(s.name.replace(/\.[^.]+$/,'').toLowerCase().replace(/[^a-z0-9-]/g,'-')||'img');
+   let path='img/'+base+'.'+s.proc.ext,k=2;while(MEDIA.some(m=>m.path===path)){path='img/'+base+'-'+k+'.'+s.proc.ext;k++}
+   await stageFile(path,s.proc)}
+  n++}
+ STAGE_TMP=[];$('mAssign').style.display='none';markDirty();renderMedia();
+ toast(n+' immagini assegnate ✔ — sono nella coda di pubblicazione')};
+$('mDrop').onclick=()=>$('mFile').click();
+$('mFile').onchange=e=>handleFiles([...e.target.files]);
+['dragover','dragleave','drop'].forEach(ev=>$('mDrop').addEventListener(ev,e=>{e.preventDefault();$('mDrop').classList.toggle('on',ev==='dragover');if(ev==='drop')handleFiles([...e.dataTransfer.files])}));
+let REPO_META={},DELETES=[];
+async function scanRepo(){try{const ls=await gh(`/contents/img?ref=${SET.branch}`);
+ const files=ls.filter(x=>x.type==='file');
+ REPO_IMG=files.map(x=>x.name);REPO_META={};files.forEach(x=>REPO_META[x.name]={sha:x.sha,size:x.size});
+ /* auto-riparazione: MV viene ricostruito da ciò che esiste DAVVERO nella cartella img/ */
+ const have=new Set(REPO_IMG);const mv={};
+ REPO_IMG.filter(n=>!isVariant('img/'+n)&&/\.webp$/.test(n)).forEach(n=>{
+  const ws=[400,800].filter(w=>have.has(n.replace(/\.webp$/,'-'+w+'.webp')));
+  if(ws.length)mv['img/'+n]=ws});
+ MEDIA.filter(m=>!isVariant(m.path)).forEach(m=>{
+  const ws=[400,800].filter(w=>MEDIA.some(x=>x.path===m.path.replace(/\.webp$/,'-'+w+'.webp')));
+  if(ws.length)mv[m.path]=ws});
+ const before=jstr(S.C.MV||{});
+ S.C.MV=mv;
+ if(jstr(mv)!==before){markDirty();toast('Elenco formati responsive riallineato ai file reali')}
+ renderMedia();toast('Repository scansionato: '+REPO_IMG.length+' immagini in img/')}
+ catch(e){if(String(e).includes('404')){REPO_IMG=[];REPO_META={};renderMedia();toast('La cartella img/ non esiste ancora nel repository (verrà creata alla prima pubblicazione)')}else toast(ghErrHint(e))}}
+const isVariant=p=>/-(400|800)\.webp$/.test(p);
+const parentOf=p=>p.replace(/-(400|800)\.webp$/,'.webp');
+$('mScan').onclick=scanRepo;
+function referencedPaths(){const set=new Set();(S.P||[]).forEach(p=>{set.add(p.img||'img/'+p.id+'.webp');(p.gallery||[]).forEach(g=>set.add(g))});
+ ((S.C&&S.C.PORT)||[]).forEach(t=>{if(t[3])set.add(t[3])});
+ (S.CATS||[]).forEach(c=>{if(c.img)set.add(c.img)});
+ const am=S.CONFIG&&S.CONFIG.aboutMedia;if(am&&am.tipo==='immagine'&&am.src)set.add(am.src);
+ (((S.C&&S.C.THEMES)||{}).temi||[]).forEach(t=>Object.values(t.art||{}).forEach(p=>set.add(p)));
+ ((S.C&&S.C.REVIEWS)||[]).forEach(r=>(r.ph||[]).forEach(p=>set.add(p)));
+ (((S.C&&S.C.SPONSORS)||{}).lista||[]).forEach(s=>{if(s.logo)set.add(s.logo)});
+ [...set].forEach(p=>{if(/\.webp$/.test(p)){set.add(p.replace(/\.webp$/,'-800.webp'));set.add(p.replace(/\.webp$/,'-400.webp'))}});return set}
+let SEL=new Set();
+function usageOf(path,ref){const u=[];
+ (S.P||[]).forEach(p=>{if((p.img||'img/'+p.id+'.webp')===path)u.push('foto principale #'+p.id);
+  if((p.gallery||[]).includes(path))u.push('gallery #'+p.id)});
+ (S.CATS||[]).forEach(c=>{if(c.img===path)u.push('categoria '+c.n.it)});
+ ((S.C&&S.C.PORT)||[]).forEach((t,i)=>{if(t[3]===path)u.push('portfolio '+(i+1))});
+ const am=S.CONFIG.aboutMedia;if(am&&am.src===path)u.push('Chi siamo');
+ (((S.C&&S.C.THEMES)||{}).temi||[]).forEach(t=>{Object.entries(t.art||{}).forEach(([c,p])=>{if(p===path)u.push('tema '+t.n.it+' · '+c)})});
+ ((S.C&&S.C.REVIEWS)||[]).forEach(r=>{if((r.ph||[]).includes(path))u.push('recensione '+(r.w||''))});
+ (((S.C&&S.C.SPONSORS)||{}).lista||[]).forEach(s=>{if(s.logo===path)u.push('sponsor '+s.nome)});
+ return u}
+function mediaItems(){const ref=referencedPaths();const items=[];const bySha={};
+ MEDIA.forEach(m=>items.push({path:m.path,src:m.url,st:true,size:m.size,w:m.w,h:m.h,variant:isVariant(m.path)}));
+ (REPO_IMG||[]).forEach(n=>{const path='img/'+n;if(MEDIA.some(m=>m.path===path))return;
+  const meta=REPO_META[n]||{};
+  items.push({path,src:LIVE()+path+'?v='+(meta.sha||'').slice(0,8),repo:true,sha:meta.sha,size:meta.size,variant:isVariant(path)})});
+ items.forEach(i=>{if(i.sha){(bySha[i.sha]=bySha[i.sha]||[]).push(i)}});
+ items.forEach(i=>{i.used=usageOf(i.path,ref);
+  i.dup=i.sha&&bySha[i.sha].length>1?bySha[i.sha].filter(x=>x.path!==i.path).map(x=>x.path):[];
+  i.orph=!i.used.length&&!i.variant&&!DELETES.includes(i.path);
+  i.variants=(REPO_IMG||[]).filter(n=>isVariant('img/'+n)&&parentOf('img/'+n)===i.path).length
+             +MEDIA.filter(m=>isVariant(m.path)&&parentOf(m.path)===i.path).length});
+ return items}
+function renderMedia(){const q=($('mSearch').value||'').toLowerCase();
+ const all=mediaItems();
+ let show=all.filter(i=>!q||i.path.toLowerCase().includes(q));
+ if($('mHideVar').checked)show=show.filter(i=>!i.variant);
+ if($('mOnlyOrph').checked)show=show.filter(i=>i.orph);
+ if($('mOnlyDup').checked)show=show.filter(i=>i.dup.length);
+ $('mGrid').innerHTML=show.map(i=>{
+  const tag=i.st?['st','IN CODA']:i.dup.length?['or','DOPPIONE']:i.orph?['or','ORFANA']:['rp','USATA'];
+  const del=DELETES.includes(i.path);
+  return `<div class="mit${del?' mdel':''}" style="${SEL.has(i.path)?'outline:2px solid var(--laser);outline-offset:-2px':''}">
+   <span class="tag ${tag[0]}">${tag[1]}</span>
+   <input type="checkbox" class="msel" data-msel="${esc(i.path)}" ${SEL.has(i.path)?'checked':''} style="position:absolute;top:6px;right:6px;width:17px;height:17px;z-index:3;cursor:pointer">
+   <img src="${esc(i.src)}" loading="lazy" onerror="this.style.opacity=.15" data-mzoom="${esc(i.path)}" style="cursor:zoom-in">
+   <div class="nm">${esc(i.path)}</div>
+   <div class="meta">${del?'<span style="color:var(--err)">DA ELIMINARE</span>':
+     (i.used.length?'<span style="color:var(--ok)">'+esc(i.used.slice(0,2).join(', '))+'</span>':'non usata')
+     +(i.size?' · '+Math.round(i.size/1024)+' KB':'')
+     +(i.variants?' · <span style="color:var(--laser)">+'+i.variants+' formati</span>':'')
+     +(i.dup.length?'<br><span style="color:var(--warn)">identica a '+esc(i.dup[0])+'</span>':'')}</div></div>`}).join('')
+  ||'<span class="hint">Nessuna immagine con questi filtri.</span>';
+ document.querySelectorAll('[data-msel]').forEach(c=>c.onchange=()=>{c.checked?SEL.add(c.dataset.msel):SEL.delete(c.dataset.msel);renderSelBar();renderMedia()});
+ document.querySelectorAll('[data-mzoom]').forEach(im=>im.onclick=()=>{const p=im.dataset.mzoom;
+  const cur=S.C.FOCAL[p]||'';
+  modal(`<h3 style="word-break:break-all">${esc(p)}</h3>
+   <div class="hint">🎯 <b>Punto focale</b>: clicca sull'immagine nel punto che deve restare sempre inquadrato
+   (viso, soggetto). Vale su ogni schermo, anche dove il ritaglio CSS taglia l'immagine.</div>
+   <div style="position:relative;margin-top:8px;cursor:crosshair" id="fcWrap">
+    <img id="fcImg" src="${esc(im.src)}" style="width:100%;border-radius:12px;border:1px solid var(--line);display:block">
+    <div id="fcDot" style="position:absolute;width:22px;height:22px;border:2.5px solid var(--laser);border-radius:50%;box-shadow:0 0 0 2px rgba(0,0,0,.6),0 0 14px rgba(245,217,78,.8);transform:translate(-50%,-50%);pointer-events:none;display:${cur?'block':'none'};left:${cur?cur.split(' ')[0]:'50%'};top:${cur?cur.split(' ')[1]:'50%'}"></div>
+   </div>
+   <div class="hint" style="margin-top:8px">${esc((usageOf(p)||[]).join(', ')||'non usata da nessun contenuto')}${cur?' · punto focale: <span class="mono">'+esc(cur)+'</span>':''}</div>
+   <hr class="hr"><div style="display:flex;gap:8px">
+    ${cur?'<button class="btn err sm" id="fcClear">rimuovi punto focale</button>':''}
+    <button class="btn" onclick="closeModal()">Chiudi</button></div>`);
+  $('fcWrap').onclick=e=>{const r=$('fcImg').getBoundingClientRect();
+   const x=Math.round((e.clientX-r.left)/r.width*100),y=Math.round((e.clientY-r.top)/r.height*100);
+   S.C.FOCAL[p]=x+'% '+y+'%';markDirty();
+   const d=$('fcDot');d.style.display='block';d.style.left=x+'%';d.style.top=y+'%';
+   toast('Punto focale: '+x+'% '+y+'% ✔ (in bozza)')};
+  const fc=$('fcClear');if(fc)fc.onclick=()=>{delete S.C.FOCAL[p];markDirty();closeModal();toast('Punto focale rimosso')}});
+ const orph=all.filter(i=>i.orph&&!i.variant).length,dup=all.filter(i=>i.dup.length).length;
+ $('mStats').innerHTML=`In coda: <b>${MEDIA.filter(m=>!isVariant(m.path)).length}</b> · Nel repository: <b>${REPO_IMG?REPO_IMG.filter(n=>!isVariant('img/'+n)).length:'? (scansiona)'}</b>`
+  +(orph?` · <span style="color:var(--warn)">orfane: ${orph}</span>`:'')
+  +(dup?` · <span style="color:var(--warn)">doppioni: ${dup}</span>`:'')
+  +(DELETES.length?` · <span style="color:var(--err)">da eliminare: ${DELETES.length}</span>`:'');
+ renderSelBar()}
+function renderSelBar(){const n=SEL.size;$('mSelBar').style.display=n?'flex':'none';$('mSelN').textContent=n+' selezionate'}
+['mSearch'].forEach(id=>$(id).oninput=renderMedia);
+['mHideVar','mOnlyOrph','mOnlyDup'].forEach(id=>$(id).onchange=renderMedia);
+$('mSelNone').onclick=()=>{SEL.clear();renderMedia()};
+$('mSelAll').onclick=()=>{document.querySelectorAll('[data-msel]').forEach(c=>SEL.add(c.dataset.msel));renderMedia()};
+$('mSelDel').onclick=()=>{const list=[...SEL];
+ const used=list.filter(p=>usageOf(p).length);
+ if(used.length&&!confirm(used.length+' immagini selezionate sono ANCORA USATE dal sito.\nEliminarle lascerà dei buchi. Continuare?'))return;
+ list.forEach(p=>{ // elimina anche le varianti collegate
+  [p,p.replace(/\.webp$/,'-800.webp'),p.replace(/\.webp$/,'-400.webp')].forEach(x=>{
+   if((REPO_IMG||[]).includes(x.replace(/^img\//,''))&&!DELETES.includes(x))DELETES.push(x)});
+  MEDIA=MEDIA.filter(m=>m.path!==p)});
+ SEL.clear();markDirty();renderMedia();toast(list.length+' immagini messe in coda di eliminazione — premi Pubblica per applicare')};
+$('mSelAssign').onclick=()=>{const list=[...SEL].filter(p=>!isVariant(p));if(!list.length)return toast('Nessuna immagine selezionata');
+ modal(`<h3>📌 Assegna ${list.length} immagini a un prodotto</h3>
+  <div class="gal" style="margin-bottom:10px">${list.slice(0,8).map(p=>`<div class="g"><img src="${esc(imgPreviewSrc(p))}"></div>`).join('')}</div>
+  <div class="row c2"><div><label>Prodotto</label><select id="asP">${(S.P||[]).map(p=>`<option value="${p.id}">#${p.id} · ${esc(p.n.it)}</option>`).join('')}</select></div>
+  <div><label>Ruolo</label><select id="asR"><option value="main">Foto principale (la prima)</option><option value="gal">Aggiungi alla gallery</option><option value="both">Prima principale, le altre in gallery</option></select></div></div>
+  <div class="hint" style="margin-top:8px">Le immagini sono già nel repository: l'assegnazione cambia solo i dati del prodotto, non ricarica nulla.</div>
+  <hr class="hr"><button class="btn pri" id="asOk">✔ Assegna</button> <button class="btn" onclick="closeModal()">Annulla</button>`);
+ $('asOk').onclick=()=>{const p=S.P.find(x=>x.id===+$('asP').value),r=$('asR').value;
+  list.forEach((path,k)=>{
+   if(r==='main'||(r==='both'&&k===0)){p.img=path}
+   else{p.gallery=p.gallery||[];if(!p.gallery.includes(path))p.gallery.push(path)}});
+  SEL.clear();markDirty();closeModal();renderMedia();toast('Assegnate a #'+p.id+' ✔')}};
+$('mSelCat').onclick=()=>{const list=[...SEL].filter(p=>!isVariant(p));if(!list.length)return toast('Nessuna immagine selezionata');
+ modal(`<h3>🗂 Sfondo categoria</h3><div class="gal" style="margin-bottom:10px"><div class="g"><img src="${esc(imgPreviewSrc(list[0]))}"></div></div>
+  <label>Categoria</label><select id="asC">${(S.CATS||[]).map(c=>`<option value="${esc(c.id)}">${esc(c.ic)} ${esc(c.n.it)}</option>`).join('')}</select>
+  <div class="hint" style="margin-top:6px">Viene usata la prima immagine selezionata.</div>
+  <hr class="hr"><button class="btn pri" id="asCok">✔ Imposta</button> <button class="btn" onclick="closeModal()">Annulla</button>`);
+ $('asCok').onclick=()=>{const c=S.CATS.find(x=>x.id===$('asC').value);c.img=list[0];SEL.clear();markDirty();closeModal();renderMedia();toast('Sfondo impostato per «'+c.n.it+'»')}};
+
+/* upload immagine singola su percorso indicato (senza estensione) */
+function pickImage(basePath,cb,aspectKey){const inp=document.createElement('input');inp.type='file';inp.accept='image/*,.svg';
+ inp.onchange=async()=>{const f=inp.files[0];if(!f)return;
+  const finish=async proc=>{try{const path=basePath+'.'+proc.ext;await stageWithVariants(path,proc);
+    cb(path);toast('Immagine pronta ✔ — è nella coda di pubblicazione')}catch(e){toast('Errore: '+(e.message||e))}};
+  if(/svg/i.test(f.type)||/\.svg$/i.test(f.name)){finish(await processImage(f));return}
+  try{openCrop(f,aspectKey||'prodotto',finish)}catch(e){finish(await processImage(f))}};
+ inp.click()}
+function imgPreviewSrc(path){const st=MEDIA.find(m=>m.path===path);return st?st.url:(LOADED_FROM.indexOf('GitHub')>=0?LIVE():'')+path}
+
+/* ===== INGLY ICON SYSTEM (admin) ===== */
+const ICONS=['home','shop','portfolio','digital','b2b','about','faq','quote','contact','cart','search','user',
+ 'casa','eventi','animali','accessori','aziendale','bambini','stagionale','digitale','custom','limited',
+ 'tecnologie','laser','uv','dtf','3d','incisione','taglio','stampa','legno','materiali','metallo',
+ 'instagram','whatsapp','check','truck','shield'];
+const ICON_SPRITE='assets/icons/ingly-icons.svg';
+function iconSvg(n,size){return n&&ICONS.includes(n)
+ ?`<svg style="width:${size||20}px;height:${size||20}px;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.15em"><use href="${ICON_SPRITE}#ic-${n}"></use></svg>`:''}
+function pickIcon(current,cb){
+ modal(`<h3>🎨 Icona vettoriale INGLY</h3>
+  <div class="hint">Stile coerente col logo. Scegli «nessuna» per tornare all'emoji.</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;max-height:52vh;overflow-y:auto;margin-top:10px">
+   <div class="mit" data-ico="" style="cursor:pointer;padding:12px 6px;text-align:center;${!current?'outline:2px solid var(--laser);outline-offset:-2px':''}">
+     <div style="font-size:20px">—</div><div class="meta">nessuna</div></div>
+   ${ICONS.map(n=>`<div class="mit" data-ico="${n}" style="cursor:pointer;padding:12px 6px;text-align:center;${current===n?'outline:2px solid var(--laser);outline-offset:-2px':''}">
+     <div style="color:var(--laser)">${iconSvg(n,26)}</div><div class="meta" style="padding:4px 2px 0">${n}</div></div>`).join('')}
+  </div>
+  <hr class="hr"><button class="btn" onclick="closeModal()">Chiudi</button>`);
+ document.querySelectorAll('[data-ico]').forEach(el=>el.onclick=()=>{closeModal();cb(el.dataset.ico)})}
+
+/* selettore immagini dalla libreria del repository */
+function pickFromLibrary(cb){
+ if(!REPO_IMG){toast('Prima esegui «Scansiona repository» nella Media Library');return}
+ const list=(REPO_IMG||[]).map(n=>'img/'+n).filter(p=>!isVariant(p));
+ const chosen=new Set();
+ modal(`<h3>🗂 Scegli dalla libreria <span class="chip">${list.length} immagini</span></h3>
+  <input type="text" id="lbQ" placeholder="Cerca…" style="margin-bottom:10px">
+  <div id="lbGrid" class="mgrid" style="max-height:52vh;overflow-y:auto"></div>
+  <hr class="hr"><button class="btn pri" id="lbOk">✔ Usa selezionate</button> <button class="btn" onclick="closeModal()">Annulla</button>
+  <div class="hint" style="margin-top:6px">La prima selezionata diventa la foto principale, le altre vanno in gallery.</div>`);
+ const draw=()=>{const q=($('lbQ').value||'').toLowerCase();
+  $('lbGrid').innerHTML=list.filter(p=>!q||p.toLowerCase().includes(q)).map(p=>
+   `<div class="mit" data-lb="${esc(p)}" style="cursor:pointer;${chosen.has(p)?'outline:2px solid var(--laser);outline-offset:-2px':''}">
+     ${chosen.has(p)?'<span class="tag st">'+([...chosen].indexOf(p)+1)+'</span>':''}
+     <img src="${esc(LIVE()+p)}" loading="lazy" onerror="this.style.opacity=.15"><div class="nm">${esc(p)}</div></div>`).join('');
+  $('lbGrid').querySelectorAll('[data-lb]').forEach(el=>el.onclick=()=>{const p=el.dataset.lb;
+   chosen.has(p)?chosen.delete(p):chosen.add(p);draw()})};
+ $('lbQ').oninput=draw;draw();
+ $('lbOk').onclick=()=>{closeModal();cb([...chosen])}}
+
+/* ================== SEZIONE BUSINESS ================== */
+const BIZ_KEYS=['bizEye','bizH2','bizSub','bizCta'];
+function renderBiz(){
+ $('bizTexts').innerHTML=BIZ_KEYS.filter(k=>S.D.it[k]!==undefined).map(k=>
+  `<div class="row c2"><div><label>${esc(k)} — Italiano</label><textarea data-bk="it,${k}" style="min-height:44px">${esc(S.D.it[k])}</textarea></div>
+   <div><label>${esc(k)} — English</label><textarea data-bk="en,${k}" style="min-height:44px">${esc(S.D.en[k]||'')}</textarea></div></div>`).join('')
+  ||'<span class="hint">Nessun testo trovato: modificali dalla sezione «Testi IT/EN».</span>';
+ document.querySelectorAll('[data-bk]').forEach(t=>t.oninput=()=>{const[l,k]=t.dataset.bk.split(',');S.D[l][k]=t.value;markDirty()});
+ $('bizList').innerHTML=(S.C.BIZ||[]).map((b,i)=>`<div class="list-it" style="flex-direction:column;align-items:stretch">
+  <div style="display:flex;gap:8px;align-items:center"><span style="font-size:22px">${esc(b[0])}</span><b style="flex:1">${esc(b[1].it)}</b>
+   <button class="btn sm" data-bm="${i},-1">↑</button><button class="btn sm" data-bm="${i},1">↓</button><button class="btn sm err" data-bx="${i}">✕</button></div>
+  <div class="row c3"><div><label>Icona</label><input type="text" class="emoji-in" value="${esc(b[0])}" data-bi="${i},0"></div>
+   <div><label>Titolo IT</label><input type="text" value="${esc(b[1].it)}" data-bt="${i},1,it"></div>
+   <div><label>Title EN</label><input type="text" value="${esc(b[1].en)}" data-bt="${i},1,en"></div></div>
+  <div class="row c2"><div><label>Testo IT</label><textarea data-bt="${i},2,it">${esc(b[2].it)}</textarea></div>
+   <div><label>Text EN</label><textarea data-bt="${i},2,en">${esc(b[2].en)}</textarea></div></div></div>`).join('')
+  ||'<span class="hint">Nessun servizio. Aggiungine uno ↑</span>';
+ document.querySelectorAll('[data-bi]').forEach(el=>el.oninput=()=>{const[i]=el.dataset.bi.split(',');S.C.BIZ[+i][0]=el.value;markDirty()});
+ document.querySelectorAll('[data-bt]').forEach(el=>el.oninput=()=>{const[i,j,l]=el.dataset.bt.split(',');S.C.BIZ[+i][+j][l]=el.value;markDirty()});
+ document.querySelectorAll('[data-bm]').forEach(b=>b.onclick=()=>{const[i,d]=b.dataset.bm.split(',').map(Number);const j=i+d;if(j<0||j>=S.C.BIZ.length)return;[S.C.BIZ[i],S.C.BIZ[j]]=[S.C.BIZ[j],S.C.BIZ[i]];markDirty();renderBiz()});
+ document.querySelectorAll('[data-bx]').forEach(b=>b.onclick=()=>{if(confirm('Eliminare il servizio?')){S.C.BIZ.splice(+b.dataset.bx,1);markDirty();renderBiz()}})}
+$('bizNew').onclick=()=>{S.C.BIZ.push(['✨',{it:'Nuovo servizio',en:'New service'},{it:'Descrizione del servizio.',en:'Service description.'}]);markDirty();renderBiz()};
+
+/* ================== PORTFOLIO ================== */
+function renderPort(){const PT=(S.C.PORT=S.C.PORT||[]);
+ $('portList').innerHTML=PT.map((t,i)=>{const img=t[3];const staged=img&&MEDIA.find(m=>m.path===img);
+  return `<div class="card"><h3><span style="font-size:19px">${esc(t[0])}</span> ${esc(t[1].it)}
+   ${img?'<span class="chip ok">foto ✔</span>':'<span class="chip warn">segnaposto colorato</span>'}
+   <span class="sp"></span><button class="btn sm" data-tm="${i},-1">↑</button><button class="btn sm" data-tm="${i},1">↓</button><button class="btn sm" data-te="${i}">✎</button><button class="btn sm err" data-td="${i}">🗑</button></h3>
+   <div style="display:flex;gap:12px;align-items:center">
+    <div style="width:150px;height:110px;border-radius:11px;background:linear-gradient(140deg,${esc(t[2])});overflow:hidden;flex:0 0 150px">${img?`<img src="${esc(staged?staged.url:imgPreviewSrc(img))}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.opacity=.2">`:''}</div>
+    <div><div class="hint">${esc(t[1].en)}${img?' · <span class="mono">'+esc(img)+'</span>':''}</div>
+     ${t[4]?`<div class="hint">🔗 <a href="${esc(t[4])}" target="_blank" rel="noopener">post Instagram</a></div>`:''}
+     <div style="margin-top:8px;display:flex;gap:7px"><button class="btn sm" data-tup="${i}">📷 ${img?'Sostituisci foto':'Carica foto'}</button>
+      ${img?`<button class="btn sm err" data-trm="${i}">rimuovi foto</button>`:''}</div></div></div></div>`}).join('');
+ document.querySelectorAll('[data-tup]').forEach(b=>b.onclick=()=>{const i=+b.dataset.tup;pickImage('img/port-'+(i+1),path=>{S.C.PORT[i][3]=path;markDirty();renderPort()},'portfolio')});
+ document.querySelectorAll('[data-trm]').forEach(b=>b.onclick=()=>{const i=+b.dataset.trm;MEDIA=MEDIA.filter(m=>m.path!==S.C.PORT[i][3]);S.C.PORT[i][3]='';markDirty();renderPort()});
+ document.querySelectorAll('[data-tm]').forEach(b=>b.onclick=()=>{const[i,d]=b.dataset.tm.split(',').map(Number);const j=i+d;if(j<0||j>=S.C.PORT.length)return;[S.C.PORT[i],S.C.PORT[j]]=[S.C.PORT[j],S.C.PORT[i]];markDirty();renderPort()});
+ document.querySelectorAll('[data-te]').forEach(b=>b.onclick=()=>editPort(+b.dataset.te));
+ document.querySelectorAll('[data-td]').forEach(b=>b.onclick=()=>{if(confirm('Eliminare la tessera?')){S.C.PORT.splice(+b.dataset.td,1);markDirty();renderPort()}})}
+$('ptNew').onclick=()=>{S.C.PORT.push(['✨',{it:'Nuovo lavoro',en:'New work'},'#e8d5b0,#c9a876']);markDirty();editPort(S.C.PORT.length-1)};
+const PORT_BG=['#e8d5b0,#c9a876','#eef7f7,#cfe6e8','#f4f0ff,#d9ccf5','#ffeede,#f6cfa8','#e3f0e8,#bcd9c6','#fde8ef,#f3c3d3'];
+const nextPortPath=()=>{let n=1;const used=new Set((S.C.PORT||[]).map(t=>t[3]).filter(Boolean));
+ while(used.has('img/port-'+n+'.webp')||MEDIA.some(m=>m.path==='img/port-'+n+'.webp')||(REPO_IMG||[]).includes('port-'+n+'.webp'))n++;
+ return 'img/port-'+n};
+/* 📷 più foto in una volta: una tessera per ogni immagine, indipendenti dal catalogo */
+$('ptBulk').onclick=()=>{const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=true;
+ inp.onchange=async()=>{const files=[...inp.files];if(!files.length)return;
+  toast('Elaboro '+files.length+' immagini…');let ok=0;
+  for(const f of files){try{
+    const proc=await processImage(f);
+    const path=nextPortPath()+'.'+proc.ext;
+    await stageWithVariants(path,proc);
+    const nome=f.name.replace(/\.[a-z0-9]+$/i,'').replace(/[-_]+/g,' ').trim();
+    S.C.PORT.push(['✨',{it:nome||'Nuovo lavoro',en:nome||'New work'},PORT_BG[S.C.PORT.length%PORT_BG.length],path,'']);
+    ok++;
+  }catch(e){console.warn(e)}}
+  markDirty();renderPort();
+  toast(ok+' tessere create — controlla i titoli e pubblica')};
+ inp.click()};
+/* 🗂 dalla libreria: immagini già presenti nel repository */
+$('ptLib').onclick=()=>pickFromLibrary(sel=>{
+ if(!sel.length)return;
+ sel.forEach(path=>{const nome=path.split('/').pop().replace(/\.[a-z0-9]+$/i,'').replace(/[-_]+/g,' ');
+  S.C.PORT.push(['✨',{it:nome,en:nome},PORT_BG[S.C.PORT.length%PORT_BG.length],path,''])});
+ markDirty();renderPort();toast(sel.length+' tessere aggiunte dalla libreria')});
+/* 📦 dal catalogo: opzione secondaria */
+$('ptCat').onclick=()=>{const chosen=new Set();
+ modal(`<h3>📦 Aggiungi dal catalogo</h3>
+  <div class="hint">Comodo, ma secondario: il portfolio è più credibile con foto <b>reali dei lavori consegnati</b>,
+   diverse dalle schede prodotto.</div>
+  <input type="text" id="pcQ" placeholder="Cerca prodotto…" style="margin:10px 0">
+  <div id="pcGrid" class="mgrid" style="max-height:48vh;overflow-y:auto"></div>
+  <hr class="hr"><button class="btn pri" id="pcOk">✔ Aggiungi selezionati</button>
+  <button class="btn" onclick="closeModal()">Annulla</button>`);
+ const draw=()=>{const q=($('pcQ').value||'').toLowerCase();
+  $('pcGrid').innerHTML=(S.P||[]).filter(p=>!q||p.n.it.toLowerCase().includes(q)).slice(0,60).map(p=>{
+   const img=p.img||('img/'+p.id+'.webp');
+   return `<div class="mit" data-pc="${p.id}" style="cursor:pointer;padding:0;${chosen.has(p.id)?'outline:2px solid var(--laser);outline-offset:-2px':''}">
+    <img src="${esc(imgPreviewSrc(img))}" loading="lazy" onerror="this.style.opacity=.15">
+    <div class="nm">${esc(p.n.it)}</div></div>`}).join('');
+  $('pcGrid').querySelectorAll('[data-pc]').forEach(el=>el.onclick=()=>{const id=+el.dataset.pc;
+   chosen.has(id)?chosen.delete(id):chosen.add(id);draw()})};
+ $('pcQ').oninput=draw;draw();
+ $('pcOk').onclick=()=>{[...chosen].forEach(id=>{const p=S.P.find(x=>x.id===id);if(!p)return;
+   S.C.PORT.push([p.icon||'✨',{it:p.n.it,en:p.n.en},PORT_BG[S.C.PORT.length%PORT_BG.length],p.img||('img/'+p.id+'.webp'),''])});
+  markDirty();closeModal();renderPort();toast(chosen.size+' tessere aggiunte dal catalogo')}};
+function editPort(i){const t=S.C.PORT[i];
+ const D=(t[5]&&typeof t[5]==='object')?t[5]:{};
+ modal(`<h3>✎ Tessera portfolio</h3>
+ <div class="row c3"><div><label>Icona</label><input type="text" id="et_ic" class="emoji-in" value="${esc(t[0])}"></div><div><label>Colori (2 hex, virgola)</label><input type="text" id="et_bg" value="${esc(t[2])}"></div><div><label>Foto</label><div style="display:flex;gap:6px;align-items:center;margin-top:4px"><button class="btn sm" id="et_pick">📷 ${t[3]?'Sostituisci':'Carica'}</button>${t[3]?'<button class="btn sm err" id="et_rmimg">rimuovi</button>':''}</div></div></div>
+ ${t[3]?`<div style="margin-top:8px"><img src="${esc(imgPreviewSrc(t[3]))}" style="max-width:220px;border-radius:10px;border:1px solid var(--line)" onerror="this.style.opacity=.2"><div class="hint mono">${esc(t[3])}</div></div>`:''}
+ <div class="row c2"><div><label>Titolo (IT)</label><input type="text" id="et_it" value="${esc(t[1].it)}"></div><div><label>Titolo (EN)</label><input type="text" id="et_en" value="${esc(t[1].en)}"></div></div>
+ <label>Link Instagram del post (facoltativo)</label><input type="url" id="et_link" value="${esc(t[4]||'')}" placeholder="https://www.instagram.com/p/…">
+ <hr class="hr">
+ <h3 style="font-size:14px;margin:4px 0">📖 Dettagli del progetto <span class="chip">opzionali — raccontano il lavoro</span></h3>
+ <div class="hint" style="margin-bottom:8px">Compilando questi campi, cliccando la tessera sul sito si apre la <b>scheda progetto</b> completa
+  (foto multiple, prima/dopo, video, cliente, materiali, il racconto). Lasciandoli vuoti, la tessera resta semplice.</div>
+ <div class="row c3">
+  <div><label>Cliente</label><input type="text" id="pj_cli" value="${esc(D.cliente||'')}"></div>
+  <div><label>Data</label><input type="text" id="pj_data" value="${esc(D.data||'')}" placeholder="Marzo 2026"></div>
+  <div><label>Durata</label><input type="text" id="pj_dur" value="${esc(D.durata||'')}" placeholder="2 settimane"></div>
+ </div>
+ <div class="row c3">
+  <div><label>Settore</label><input type="text" id="pj_set" value="${esc(D.settore||'')}" placeholder="Ristorazione"></div>
+  <div><label>Macchina usata</label><input type="text" id="pj_mac" value="${esc(D.macchina||'')}" placeholder="Laser CO₂ 100W"></div>
+  <div><label>Materiali (virgola)</label><input type="text" id="pj_mat" value="${esc((D.materiali||[]).join(', '))}"></div>
+ </div>
+ <div class="row c2">
+  <div><label>Tecnologie (virgola)</label><input type="text" id="pj_tec" value="${esc((D.tecnologie||[]).join(', '))}" placeholder="Incisione, Taglio"></div>
+  <div><label>Tag (virgola)</label><input type="text" id="pj_tag" value="${esc((D.tag||[]).join(', '))}"></div>
+ </div>
+ <label>Racconto del progetto (IT)</label><textarea id="pj_it" style="min-height:80px">${esc((D.racconto&&D.racconto.it)||'')}</textarea>
+ <label>Project story (EN)</label><textarea id="pj_en" style="min-height:80px">${esc((D.racconto&&D.racconto.en)||'')}</textarea>
+ <div class="row c2">
+  <div><label>Video (URL mp4, facoltativo)</label><input type="url" id="pj_vid" value="${esc(D.video||'')}"></div>
+  <div><label>In evidenza</label><select id="pj_hl"><option value="">No</option><option value="1"${D.evidenza?' selected':''}>Sì — progetto in evidenza</option></select></div>
+ </div>
+ <label>🖼 Foto del progetto <span class="hint">(oltre alla copertina) — dettagli, prospettive, fasi di lavoro</span></label>
+ <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:5px">
+  ${(D.foto||[]).map((f,k)=>`<div style="position:relative;width:76px;height:76px;border-radius:10px;overflow:hidden;border:1px solid var(--line)">
+    <img src="${esc(imgPreviewSrc(f))}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.opacity=.2">
+    <button class="btn sm err" data-pjx="${k}" style="position:absolute;top:2px;right:2px;padding:0 5px">✕</button></div>`).join('')}
+  <button class="btn sm" id="pj_add">➕ Aggiungi foto</button>
+  <button class="btn sm" id="pj_lib">🗂 Dalla libreria</button>
+ </div>
+ <div class="row c2" style="margin-top:10px">
+  <div><label>Prima / Dopo — foto PRIMA</label>
+   <button class="btn sm" id="pj_ba" style="width:100%;margin-top:4px">${(D.prima)?'✎ '+esc(D.prima.split('/').pop()):'📷 Carica «prima»'}</button></div>
+  <div><label>Prima / Dopo — foto DOPO</label>
+   <button class="btn sm" id="pj_bb" style="width:100%;margin-top:4px">${(D.dopo)?'✎ '+esc(D.dopo.split('/').pop()):'📷 Carica «dopo»'}</button></div>
+ </div>
+ <div class="row c2">
+  <div><label>Prodotti collegati (ID, virgola)</label><input type="text" id="pj_prod" value="${esc((D.prodotti||[]).join(', '))}" placeholder="1, 5, 12"></div>
+  <div><label>Link social del progetto</label><input type="url" id="pj_soc" value="${esc(D.social||'')}"></div>
+ </div>
+ <hr class="hr"><button class="btn pri" id="et_save">✔ Salva</button> <button class="btn" onclick="closeModal()">Annulla</button>`);
+ $('et_pick').onclick=()=>pickImage('img/port-'+(i+1),path=>{t[3]=path;markDirty();editPort(i)},'portfolio');
+ const rm=$('et_rmimg');if(rm)rm.onclick=()=>{MEDIA=MEDIA.filter(m=>m.path!==t[3]);t.length=3;markDirty();editPort(i)};
+ const arr=v=>v.split(',').map(s=>s.trim()).filter(Boolean);
+ $('pj_add').onclick=()=>{D.foto=D.foto||[];const n=D.foto.length+1;
+  pickImage('img/proj-'+(i+1)+'-'+n,path=>{D.foto.push(path);t[5]=D;markDirty();editPort(i)},'portfolio')};
+ $('pj_lib').onclick=()=>pickFromLibrary(sel=>{if(!sel.length)return;D.foto=D.foto||[];
+  sel.forEach(s=>{if(!D.foto.includes(s))D.foto.push(s)});t[5]=D;markDirty();editPort(i)});
+ document.querySelectorAll('[data-pjx]').forEach(b=>b.onclick=()=>{const k=+b.dataset.pjx;
+  MEDIA=MEDIA.filter(m=>m.path!==D.foto[k]);D.foto.splice(k,1);t[5]=D;markDirty();editPort(i)});
+ $('pj_ba').onclick=()=>pickImage('img/proj-'+(i+1)+'-prima',path=>{D.prima=path;t[5]=D;markDirty();editPort(i)},'portfolio');
+ $('pj_bb').onclick=()=>pickImage('img/proj-'+(i+1)+'-dopo',path=>{D.dopo=path;t[5]=D;markDirty();editPort(i)},'portfolio');
+ $('et_save').onclick=()=>{t[0]=$('et_ic').value;t[2]=$('et_bg').value;t[1].it=$('et_it').value;t[1].en=$('et_en').value;
+  const lk=$('et_link').value.trim();
+  /* raccoglie i dettagli progetto */
+  const d={};
+  const cli=$('pj_cli').value.trim();if(cli)d.cliente=cli;
+  const dt=$('pj_data').value.trim();if(dt)d.data=dt;
+  const du=$('pj_dur').value.trim();if(du)d.durata=du;
+  const se=$('pj_set').value.trim();if(se)d.settore=se;
+  const ma=$('pj_mac').value.trim();if(ma)d.macchina=ma;
+  const mt=arr($('pj_mat').value);if(mt.length)d.materiali=mt;
+  const te=arr($('pj_tec').value);if(te.length)d.tecnologie=te;
+  const tg=arr($('pj_tag').value);if(tg.length)d.tag=tg;
+  const rit=$('pj_it').value.trim(),ren=$('pj_en').value.trim();
+  if(rit||ren)d.racconto={it:rit,en:ren||rit};
+  const vd=$('pj_vid').value.trim();if(vd)d.video=vd;
+  if($('pj_hl').value)d.evidenza=true;
+  if(D.foto&&D.foto.length)d.foto=D.foto;
+  if(D.prima)d.prima=D.prima; if(D.dopo)d.dopo=D.dopo;
+  const pr=arr($('pj_prod').value).map(Number).filter(Boolean);if(pr.length)d.prodotti=pr;
+  const so=$('pj_soc').value.trim();if(so)d.social=so;
+  const hasProj=Object.keys(d).length>0;
+  /* normalizza la lunghezza della tupla: link in posizione 4, dettagli in posizione 5 */
+  if(lk){while(t.length<4)t.push('');t[4]=lk}
+  else if(!hasProj&&t.length>4)t.length=4;
+  else if(t.length<5)while(t.length<4)t.push('');
+  if(hasProj){while(t.length<5)t.push(t.length===4?'':'');t[5]=d}
+  else if(t.length>5)t.length=5;
+  markDirty();closeModal();renderPort()}}
+
+/* ================== HOME & HERO ================== */
+function renderHero(){bindAll();renderAbout();const hf=(S.CONFIG.heroFeatured=S.CONFIG.heroFeatured||[]);
+ $('heroPick').innerHTML=[0,1,2].map(i=>{const cur=hf[i];
+  return `<div><label>Card ${i+1}</label><select data-hf="${i}"><option value="">—</option>${(S.P||[]).map(p=>`<option value="${p.id}"${p.id===cur?' selected':''}>#${p.id} · ${esc(p.n.it)} · €${p.price}</option>`).join('')}</select></div>`}).join('');
+ document.querySelectorAll('[data-hf]').forEach(s=>s.onchange=()=>{const v=[...document.querySelectorAll('[data-hf]')].map(x=>+x.value).filter(Boolean);S.CONFIG.heroFeatured=v;markDirty()})}
+
+/* ================== VISUAL «CHI SIAMO» ================== */
+function renderAbout(){const am=S.CONFIG.aboutMedia=S.CONFIG.aboutMedia||{tipo:'logo',src:''};
+ $('abTipo').value=am.tipo||'logo';
+ $('abVideoRow').style.display=am.tipo==='video'?'':'none';
+ $('abVideo').value=am.tipo==='video'?(am.src||''):'';
+ $('abPick').style.display=am.tipo==='immagine'?'':'none';
+ $('abPrev').innerHTML=am.src&&am.tipo==='immagine'
+  ?`<img src="${esc(imgPreviewSrc(am.src))}" style="max-width:240px;border-radius:14px;border:1px solid var(--line)" onerror="this.style.opacity=.2"><div class="hint mono">${esc(am.src)}</div>`
+  :(am.tipo==='video'&&am.src?`<div class="hint mono">${esc(am.src)}</div>`:'<div class="hint">Nessun media: resta il logo animato.</div>');
+ $('abTipo').onchange=()=>{am.tipo=$('abTipo').value;if(am.tipo==='logo')am.src='';markDirty();renderAbout()};
+ $('abVideo').oninput=()=>{am.src=$('abVideo').value;markDirty()};
+ $('abPick').onclick=()=>pickImage('img/about',path=>{am.tipo='immagine';am.src=path;markDirty();renderAbout()},'about');
+ $('abClear').onclick=()=>{MEDIA=MEDIA.filter(m=>m.path!==am.src);am.tipo='logo';am.src='';markDirty();renderAbout()}}
+
+/* ================== VALIDAZIONE PRIMA DELLA PUBBLICAZIONE ==================
+   Stessi controlli di scripts/validate-data.mjs, eseguiti PRIMA di creare il commit:
+   meglio bloccare qui che pubblicare dati che fanno crollare il sito. */
+function validaBozza(){
+ const err=[],warn=[];
+ const MA=(S.C&&S.C.MAT_ART)||{};
+ const cats=S.CATS||[],prods=S.P||[];
+ if(!cats.length)err.push('Nessuna categoria: il sito non può funzionare.');
+ if(!prods.length)warn.push('Nessun prodotto nel catalogo.');
+ const ids=prods.map(p=>p.id);
+ ids.forEach((id,i)=>{if(ids.indexOf(id)!==i)err.push('ID prodotto duplicato: #'+id)});
+ prods.forEach(p=>{
+  if(!p.n||!p.n.it)err.push('Prodotto #'+p.id+': manca il nome italiano.');
+  else if(!p.n.en)warn.push('Prodotto #'+p.id+': manca il nome inglese.');
+  if(!MA[p.mat])err.push('Prodotto #'+p.id+': materiale «'+p.mat+'» non esiste (farebbe crollare il sito).');
+  const c=cats.find(x=>x.id===p.cat);
+  if(!c)err.push('Prodotto #'+p.id+': categoria «'+p.cat+'» inesistente.');
+  else if(!(p.sub>=1)||p.sub>c.sub.length)err.push('Prodotto #'+p.id+': sottocategoria fuori scala.');
+  if(!(p.price>=0))warn.push('Prodotto #'+p.id+': prezzo mancante o non valido.');
+ });
+ const catIds=cats.map(c=>c.id);
+ catIds.forEach((id,i)=>{if(catIds.indexOf(id)!==i)err.push('ID categoria duplicato: '+id)});
+ ((S.CONFIG&&S.CONFIG.heroFeatured)||[]).forEach(i=>{if(!ids.includes(i))warn.push('In evidenza: il prodotto #'+i+' non esiste più.')});
+ ((S.C&&S.C.REVIEWS)||[]).forEach((r,i)=>{if(!r.w)warn.push('Recensione '+(i+1)+': manca il nome del cliente.')});
+ (((S.C&&S.C.SPONSORS)||{}).lista||[]).forEach((s,i)=>{
+  if(!s.nome)err.push('Partner '+(i+1)+': manca il nome.');
+  if(s.link&&!/^https?:\/\//i.test(s.link))err.push('Partner «'+(s.nome||(i+1))+'»: il link deve iniziare con https://');
+ });
+ ((S.C&&S.C.PORT)||[]).forEach((t,i)=>{if(!t[1]||!t[1].it)warn.push('Tessera portfolio '+(i+1)+': manca il titolo.')});
+ try{FILES.forEach(f=>JSON.parse(jstr(S[KEY[f]])))}catch(e){err.push('Dati non serializzabili: '+e.message)}
+ return {err,warn};
+}
+
+/* ================== SPONSOR & PARTNER ================== */
+const TIERS=[['gold','Gold','#e5c04a'],['silver','Silver','#c3ccd8'],['bronze','Bronze','#c9885a'],['','Nessun livello','#8a93a6']];
+function renderSponsor(){bindAll();
+ const SP=S.C.SPONSORS,L=SP.lista;
+ const vis=SP.attivo!==false&&L.filter(x=>x.nome&&x.attivo!==false).length>0;
+ $('spState').textContent=vis?'visibile sul sito':(SP.attivo===false?'sezione nascosta':'nessun partner: non compare');
+ $('spState').className='chip sp '+(vis?'ok':'warn');
+ $('spCount').textContent=L.length+(L.length===1?' partner':' partner');
+ $('spList').innerHTML=L.map((s,i)=>{const t=TIERS.find(x=>x[0]===(s.livello||''))||TIERS[3];
+  return `<div class="card" style="margin-bottom:10px">
+   <h3><span style="color:${t[2]}">●</span> ${esc(s.nome||'(senza nome)')}
+    <span class="chip" style="color:${t[2]}">${esc(t[1])}</span>
+    ${s.attivo===false?'<span class="chip warn">nascosto</span>':''}
+    <span class="sp"></span>
+    <button class="btn sm" data-spm="${i},-1">↑</button><button class="btn sm" data-spm="${i},1">↓</button>
+    <button class="btn sm err" data-spx="${i}">🗑</button></h3>
+   <div style="display:flex;gap:13px;align-items:flex-start;flex-wrap:wrap">
+    <div style="width:150px;height:84px;border-radius:11px;border:1px solid var(--line);background:#0d1122;
+     display:grid;place-items:center;overflow:hidden;flex:0 0 150px">
+     ${s.logo?`<img src="${esc(imgPreviewSrc(s.logo))}" style="max-width:88%;max-height:76%;object-fit:contain" onerror="this.style.opacity=.2">`
+       :'<span class="hint" style="font-size:11px">nessun logo</span>'}</div>
+    <div style="flex:1;min-width:260px">
+     <div class="row c2"><div><label>Nome</label><input type="text" value="${esc(s.nome||'')}" data-spf="${i},nome"></div>
+      <div><label>Sito (link)</label><input type="url" value="${esc(s.link||'')}" data-spf="${i},link" placeholder="https://"></div></div>
+     <div class="row c3"><div><label>Livello</label><select data-spf="${i},livello">${TIERS.map(x=>`<option value="${x[0]}"${(s.livello||'')===x[0]?' selected':''}>${x[1]}</option>`).join('')}</select></div>
+      <div><label>Stato</label><select data-spb="${i},attivo"><option value="1">Visibile</option><option value=""${s.attivo===false?' selected':''}>Nascosto</option></select></div>
+      <div><label>Scadenza accordo</label><input type="text" value="${esc(s.fino||'')}" data-spf="${i},fino" placeholder="12/2026"></div></div>
+     <div class="row c2"><div><label>Descrizione (IT)</label><input type="text" value="${esc((s.desc&&s.desc.it)||'')}" data-spd="${i},it" placeholder="Falegnameria · Cesena"></div>
+      <div><label>Description (EN)</label><input type="text" value="${esc((s.desc&&s.desc.en)||'')}" data-spd="${i},en"></div></div>
+     <div style="margin-top:8px;display:flex;gap:7px;flex-wrap:wrap">
+      <button class="btn sm" data-spu="${i}">📷 ${s.logo?'Sostituisci logo':'Carica logo'}</button>
+      <button class="btn sm" data-spl="${i}">🗂 Dalla libreria</button>
+      ${s.logo?`<button class="btn sm err" data-spr="${i}">rimuovi logo</button>`:''}</div>
+    </div></div></div>`}).join('')||'<span class="hint">Nessun partner. Premi «Aggiungi partner».</span>';
+
+ document.querySelectorAll('[data-spf]').forEach(el=>{const h=()=>{const[i,f]=el.dataset.spf.split(',');
+   S.C.SPONSORS.lista[+i][f]=el.value;markDirty();if(f==='livello')renderSponsor()};
+  el.tagName==='SELECT'?el.onchange=h:el.oninput=h});
+ document.querySelectorAll('[data-spd]').forEach(el=>el.oninput=()=>{const[i,l]=el.dataset.spd.split(',');
+  const s=S.C.SPONSORS.lista[+i];s.desc=s.desc||{it:'',en:''};s.desc[l]=el.value;markDirty()});
+ document.querySelectorAll('[data-spb]').forEach(el=>el.onchange=()=>{const[i,f]=el.dataset.spb.split(',');
+  el.value?delete S.C.SPONSORS.lista[+i][f]:S.C.SPONSORS.lista[+i][f]=false;markDirty();renderSponsor()});
+ document.querySelectorAll('[data-spm]').forEach(b=>b.onclick=()=>{const[i,d]=b.dataset.spm.split(',').map(Number);
+  const j=i+d,L=S.C.SPONSORS.lista;if(j<0||j>=L.length)return;[L[i],L[j]]=[L[j],L[i]];markDirty();renderSponsor()});
+ document.querySelectorAll('[data-spx]').forEach(b=>b.onclick=()=>{if(!confirm('Eliminare il partner?'))return;
+  S.C.SPONSORS.lista.splice(+b.dataset.spx,1);markDirty();renderSponsor()});
+ document.querySelectorAll('[data-spu]').forEach(b=>b.onclick=()=>{const i=+b.dataset.spu;
+  pickImage('img/sponsor-'+(i+1),path=>{S.C.SPONSORS.lista[i].logo=path;markDirty();renderSponsor()},'logo')});
+ document.querySelectorAll('[data-spl]').forEach(b=>b.onclick=()=>{const i=+b.dataset.spl;
+  pickFromLibrary(sel=>{if(!sel.length)return;S.C.SPONSORS.lista[i].logo=sel[0];markDirty();renderSponsor()})});
+ document.querySelectorAll('[data-spr]').forEach(b=>b.onclick=()=>{const i=+b.dataset.spr;
+  MEDIA=MEDIA.filter(m=>m.path!==S.C.SPONSORS.lista[i].logo);delete S.C.SPONSORS.lista[i].logo;markDirty();renderSponsor()})}
+$('spNew').onclick=()=>{S.C.SPONSORS.lista.push({nome:'Nuovo partner',link:'',livello:'silver',desc:{it:'',en:''}});
+ markDirty();renderSponsor()};
+
+/* ================== THEME MANAGEMENT SYSTEM ================== */
+const MD=s=>{const m=String(s||'').match(/^(\d{2})-(\d{2})$/);return m?s:''};
+function themeActive(){const TH=S.C.THEMES;const list=TH.temi||[];
+ if(TH.auto!==false){const d=new Date();
+  const md=String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const inWin=(a,b)=>a&&b?(a<=b?(md>=a&&md<=b):(md>=a||md<=b)):false;
+  const c=list.filter(t=>t.stato==='attivo'&&inWin(t.dal,t.al)).sort((x,y)=>(y.prio||0)-(x.prio||0));
+  if(c.length)return{t:c[0],why:'calendario automatico ('+c[0].dal+' → '+c[0].al+', priorità '+(c[0].prio||0)+')'}}
+ const t=list.find(x=>x.id===TH.attivo);
+ return{t:t||null,why:t?'selezione manuale':'nessun tema'}}
+/* --- generatore di prompt: struttura fissa, cambiano solo Theme e Visual Elements --- */
+function buildPrompt(theme,cat){
+ const catName=cat?((S.CATS.find(c=>c.id===cat)||{}).n||{}).it||cat:'All categories';
+ return `Create a premium wide background illustration for an ecommerce category card.
+
+Brand Style:
+Ingly Design — Premium Personalized Creations
+
+Category:
+${catName}
+
+Theme:
+${theme.n.en} — ${theme.mood}
+
+Visual Elements:
+${theme.elementi}
+Colour palette: ${(theme.palette||[]).join(', ')}
+Lighting: ${theme.lighting}
+
+Style:
+Premium digital illustration (not photorealistic)
+Apple + Shopify + Linear design language
+Dark luxury background
+Navy Blue (#111827)
+Elegant blue gradients
+Warm golden lights (#FACC15)
+Premium workshop atmosphere
+Minimal composition
+Soft depth
+Soft cinematic lighting
+High-end ecommerce artwork
+
+Composition:
+Objects mainly on the right.
+Large empty space on the left for title and description.
+
+No text
+No logo
+No UI
+No borders
+Aspect Ratio 16:9
+Ultra HD
+
+Brand Identity:
+Ingly Design
+
+Visual Language:
+Luxury Craftsmanship
+Premium Personalization
+Laser Engraving
+Wood + Acrylic + Metal
+Modern Italian Design
+Creative Workshop
+Elegant Materials
+Apple inspired simplicity
+Shopify ecommerce quality
+Linear interface aesthetic
+Premium lighting
+Minimal composition
+Soft depth
+High contrast
+Negative space
+Professional ecommerce hero artwork
+Ultra detailed digital illustration
+Not photorealistic
+Consistent visual identity across every category.`}
+const NEG_PROMPT='text, letters, words, watermark, logo, signature, UI elements, buttons, frames, borders, people faces, cluttered composition, photorealistic photo, low resolution, jpeg artifacts, oversaturated colours, busy background, stock photo look';
+
+function promoPreview(){const p=S.C.PROMO||{},c=(p.colori||'#1E3A8A,#111827').split(',');
+ const oggi=new Date(),md=String(oggi.getMonth()+1).padStart(2,'0')+'-'+String(oggi.getDate()).padStart(2,'0');
+ const inWin=(!p.dal||!p.al)?true:(p.dal<=p.al?(md>=p.dal&&md<=p.al):(md>=p.dal||md<=p.al));
+ const live=p.attivo===true&&inWin&&!!(p.testo&&p.testo.it);
+ $('promoState').textContent=live?'visibile ora':(p.attivo?'accesa, fuori periodo':'spenta');
+ $('promoState').className='chip sp '+(live?'ok':'warn');
+ $('promoPrev').innerHTML=`<div style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;
+  padding:10px 16px;border-radius:10px;font-size:13.5px;font-weight:600;color:#fff;
+  background:linear-gradient(90deg,${esc(c[0]||'#1E3A8A')},${esc(c[1]||'#111827')});opacity:${live?1:.45}">
+  <span>${esc((p.testo&&p.testo.it)||'(testo mancante)')}</span>
+  ${(p.cta&&p.cta.it)?`<span style="background:var(--laser);color:#1a1500;border-radius:999px;padding:4px 12px;font-weight:700;font-size:12.5px">${esc(p.cta.it)}</span>`:''}
+  </div>${live?'':'<div class="hint" style="margin-top:5px">Non visibile ora: '+(p.attivo?'siamo fuori dal periodo indicato':'la fascia è spenta')+'</div>'}`}
+function renderThemes(){const TH=S.C.THEMES,list=TH.temi;bindAll();promoPreview();
+ const act=themeActive();
+ $('thNow').textContent=act.t?act.t.n.it:'nessuno';
+ $('thWhy').innerHTML=act.t?`In questo momento il sito userebbe <b>${esc(act.t.n.it)}</b> — ${esc(act.why)}.`
+  :'Nessun tema attivo: le categorie usano le loro immagini fisse.';
+ $('thSel').innerHTML=list.map(t=>`<option value="${esc(t.id)}"${t.id===TH.attivo?' selected':''}>${esc(t.n.it)}</option>`).join('');
+ $('thAuto').value=String(TH.auto!==false);
+ $('thSel').onchange=()=>{TH.attivo=$('thSel').value;markDirty();renderThemes()};
+ $('thAuto').onchange=()=>{TH.auto=$('thAuto').value==='true';markDirty();renderThemes()};
+ /* calendario */
+ const plan=list.filter(t=>t.stato==='attivo').sort((a,b)=>(b.prio||0)-(a.prio||0));
+ $('thPlan').innerHTML=plan.length?plan.map(t=>`<div class="list-it">
+   <span style="width:12px;height:34px;border-radius:4px;background:${esc((t.palette||['#333'])[2]||'#333')}"></span>
+   <b style="flex:1">${esc(t.n.it)}</b>
+   <span class="chip">${esc(t.dal||'—')} → ${esc(t.al||'—')}</span>
+   <span class="chip">priorità ${t.prio||0}</span>
+   ${t.bg?`<span class="chip ok">sfondo ${esc((window.INGLY_ART?window.INGLY_ART.label(t.bg).it:t.bg))}</span>`:''}
+   <span class="chip ${Object.keys(t.art||{}).length?'ok':''}">${Object.keys(t.art||{}).length} foto</span>
+   <button class="btn sm" data-thed="${esc(t.id)}">✎</button>
+   <button class="btn sm err" data-thoff="${esc(t.id)}">togli</button></div>`).join('')
+  :'<span class="hint">Nessun tema in calendario. Aprine uno dalla libreria e premi «Metti in calendario».</span>';
+ document.querySelectorAll('[data-thed]').forEach(b=>b.onclick=()=>editTheme(b.dataset.thed));
+ document.querySelectorAll('[data-thoff]').forEach(b=>b.onclick=()=>{const t=list.find(x=>x.id===b.dataset.thoff);t.stato='libreria';markDirty();renderThemes()});
+ /* libreria */
+ const q=($('thQ').value||'').toLowerCase(),f=$('thFilter').value;
+ let show=list.filter(t=>!q||(t.n.it+' '+t.n.en+' '+t.mood+' '+(t.kw||[]).join(' ')).toLowerCase().includes(q));
+ if(f==='cal')show=show.filter(t=>t.stato==='attivo');
+ if(f==='art')show=show.filter(t=>Object.keys(t.art||{}).length);
+ if(f==='stag')show=show.filter(t=>t.dal&&t.al);
+ $('thCount').textContent=list.length+' temi';
+ $('thGrid').innerHTML=show.slice(0,120).map(t=>{const pal=t.palette||[];
+  const nArt=Object.keys(t.art||{}).length;
+  return `<div class="mit" style="padding:0;cursor:pointer" data-thopen="${esc(t.id)}">
+   <div style="height:56px;${t.bg&&window.INGLY_ART?`background-image:${window.INGLY_ART.css(t.bg,pal,t.id)};background-size:cover;background-position:center`:`background:linear-gradient(120deg,${esc(pal[0]||'#111')},${esc(pal[1]||'#222')})`};position:relative">
+    <span style="position:absolute;right:8px;bottom:-9px;width:20px;height:20px;border-radius:50%;border:2px solid var(--card);background:${esc(pal[2]||'#888')}"></span>
+    ${t.stato==='attivo'?'<span class="tag st" style="position:absolute;top:6px;left:6px">IN CALENDARIO</span>':''}</div>
+   <div style="padding:9px 10px 11px">
+    <b style="font-size:13.2px">${esc(t.n.it)}</b>
+    <div class="meta" style="padding:0;margin-top:2px">${esc(t.mood)}</div>
+    <div style="margin-top:6px;display:flex;gap:5px;flex-wrap:wrap">
+     ${t.dal?`<span class="chip">${esc(t.dal)}→${esc(t.al)}</span>`:''}
+     <span class="chip ${nArt?'ok':''}">${nArt} artwork</span></div></div></div>`}).join('')
+  ||'<span class="hint">Nessun tema con questi filtri.</span>';
+ document.querySelectorAll('[data-thopen]').forEach(el=>el.onclick=()=>editTheme(el.dataset.thopen))}
+['thQ'].forEach(id=>$(id).oninput=renderThemes);
+$('thFilter').onchange=renderThemes;
+
+function editTheme(id){const t=S.C.THEMES.temi.find(x=>x.id===id);if(!t)return;
+ const cats=S.CATS||[];
+ modal(`<h3>🎨 ${esc(t.n.it)} <span class="chip">${esc(t.id)}</span></h3>
+  <div style="height:8px;border-radius:4px;background:linear-gradient(90deg,${(t.palette||[]).map(esc).join(',')});margin:8px 0 12px"></div>
+  <div class="row c2"><div><label>Nome (IT)</label><input type="text" id="th_it" value="${esc(t.n.it)}"></div>
+   <div><label>Name (EN)</label><input type="text" id="th_en" value="${esc(t.n.en)}"></div></div>
+  <div class="row c3"><div><label>Dal (MM-GG)</label><input type="text" id="th_dal" value="${esc(t.dal||'')}" placeholder="12-01"></div>
+   <div><label>Al (MM-GG)</label><input type="text" id="th_al" value="${esc(t.al||'')}" placeholder="12-27"></div>
+   <div><label>Priorità</label><input type="number" id="th_pr" value="${t.prio||0}"></div></div>
+  <label>Mood</label><input type="text" id="th_mood" value="${esc(t.mood||'')}">
+  <label>Elementi visivi (in inglese: è la parte che cambia nel prompt)</label><textarea id="th_el">${esc(t.elementi||'')}</textarea>
+  <div class="row c2"><div><label>Luce</label><input type="text" id="th_lig" value="${esc(t.lighting||'')}"></div>
+   <div><label>Palette (3 hex, virgola)</label><input type="text" id="th_pal" value="${esc((t.palette||[]).join(','))}"></div></div>
+  <hr class="hr">
+  <h3 style="font-size:13.5px">🎨 Stile di sfondo generato <span class="chip laser">nessun upload, 2 KB</span></h3>
+  <div class="hint">Sfondo vettoriale costruito sui colori del tema: si applica a <b>tutte</b> le categorie con un click.
+   Se per una categoria carichi una foto, quella ha la precedenza.</div>
+  <div id="th_bgs" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px;margin:10px 0"></div>
+  <hr class="hr">
+  <h3 style="font-size:13.5px">🖼 Artwork per categoria <span class="chip">${Object.keys(t.art||{}).length}/${cats.length}</span></h3>
+  <div class="hint">Carica lo sfondo generato per ogni categoria. Formato consigliato 16:9.</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px;margin-top:9px;max-height:34vh;overflow-y:auto">
+   ${cats.map(c=>{const a=(t.art||{})[c.id];return `<div class="mit" style="padding:0">
+     <div style="height:58px;background:#0d1122">${a?`<img src="${esc(imgPreviewSrc(a))}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.opacity=.15">`:''}</div>
+     <div style="padding:6px 8px 8px"><div style="font-size:11.6px;font-weight:600">${esc(c.n.it)}</div>
+      <div style="display:flex;gap:4px;margin-top:5px;flex-wrap:wrap">
+       <button class="btn sm" data-thart="${esc(c.id)}">📷</button>
+       <button class="btn sm" data-thpr="${esc(c.id)}">📋 prompt</button>
+       ${a?`<button class="btn sm err" data-thdel="${esc(c.id)}">✕</button>`:''}</div></div></div>`}).join('')}
+  </div>
+  <hr class="hr"><div style="display:flex;gap:8px;flex-wrap:wrap">
+   <button class="btn pri" id="th_save">✔ Salva</button>
+   <button class="btn ok" id="th_plan">${t.stato==='attivo'?'✓ In calendario':'📅 Metti in calendario'}</button>
+   <button class="btn" id="th_use">⚡ Usa ora</button>
+   <button class="btn" id="th_prompt">📋 Prompt generale</button>
+   <button class="btn" id="th_dup">⧉ Duplica</button>
+   <button class="btn err" id="th_del">🗑 Elimina</button>
+   <button class="btn" onclick="closeModal()">Chiudi</button></div>`);
+ /* galleria degli stili di sfondo, con anteprima dal vivo */
+ (function(){const box=$('th_bgs');if(!box||!window.INGLY_ART)return;
+  const pal=t.palette||['#111827','#1E3A8A','#FACC15'];
+  box.innerHTML='<div class="mit" data-thbg="" style="cursor:pointer;padding:0;'+(!t.bg?'outline:2px solid var(--laser);outline-offset:-2px':'')+'">'
+   +'<div style="height:62px;display:grid;place-items:center;background:#0d1122;color:var(--mut);font-size:11px">nessuno</div>'
+   +'<div class="meta" style="padding:5px 7px">solo colore</div></div>'
+   +window.INGLY_ART.patterns.map(k=>`<div class="mit" data-thbg="${k}" style="cursor:pointer;padding:0;${t.bg===k?'outline:2px solid var(--laser);outline-offset:-2px':''}">
+     <div style="height:62px;background-image:${window.INGLY_ART.css(k,pal,t.id+'-'+k)};background-size:cover;background-position:center"></div>
+     <div class="meta" style="padding:5px 7px">${esc(window.INGLY_ART.label(k).it)}</div></div>`).join('');
+  box.querySelectorAll('[data-thbg]').forEach(el=>el.onclick=()=>{const v=el.dataset.thbg;
+   v?t.bg=v:delete t.bg;markDirty();editTheme(id);toast(v?'Stile «'+window.INGLY_ART.label(v).it+'» applicato a tutte le categorie':'Sfondo generato rimosso')});
+ })();
+ document.querySelectorAll('[data-thart]').forEach(b=>b.onclick=()=>{const cid=b.dataset.thart;
+  pickImage('img/theme/'+t.id+'-'+cid,path=>{t.art=t.art||{};t.art[cid]=path;markDirty();editTheme(id)},'categoria')});
+ document.querySelectorAll('[data-thdel]').forEach(b=>b.onclick=()=>{const cid=b.dataset.thdel;
+  MEDIA=MEDIA.filter(m=>m.path!==t.art[cid]);delete t.art[cid];markDirty();editTheme(id)});
+ document.querySelectorAll('[data-thpr]').forEach(b=>b.onclick=()=>showPrompt(t,b.dataset.thpr));
+ $('th_prompt').onclick=()=>showPrompt(t,'');
+ $('th_save').onclick=()=>{t.n.it=$('th_it').value;t.n.en=$('th_en').value;t.dal=MD($('th_dal').value);t.al=MD($('th_al').value);
+  t.prio=+$('th_pr').value||0;t.mood=$('th_mood').value;t.elementi=$('th_el').value;t.lighting=$('th_lig').value;
+  t.palette=$('th_pal').value.split(',').map(x=>x.trim()).filter(Boolean);t.v=(t.v||1)+1;
+  markDirty();closeModal();renderThemes();toast('Tema salvato (versione '+t.v+')')};
+ $('th_plan').onclick=()=>{if(t.stato==='attivo'){t.stato='libreria';toast('Tolto dal calendario')}
+  else{if(!t.dal||!t.al){toast('Imposta prima le date «Dal» e «Al» (formato MM-GG)');return}t.stato='attivo';toast('Messo in calendario')}
+  markDirty();closeModal();renderThemes()};
+ $('th_use').onclick=()=>{S.C.THEMES.attivo=t.id;S.C.THEMES.auto=false;markDirty();closeModal();renderThemes();
+  toast('«'+t.n.it+'» applicato a tutto il sito — pubblica per renderlo visibile')};
+ $('th_dup').onclick=()=>{const c=JSON.parse(jstr(t));c.id=t.id+'-'+Date.now().toString(36).slice(-4);
+  c.n.it+=' (copia)';c.stato='libreria';c.art={};c.v=1;S.C.THEMES.temi.push(c);markDirty();closeModal();renderThemes();toast('Duplicato')};
+ $('th_del').onclick=()=>{if(!confirm('Eliminare il tema «'+t.n.it+'»?'))return;
+  S.C.THEMES.temi=S.C.THEMES.temi.filter(x=>x.id!==t.id);
+  if(S.C.THEMES.attivo===t.id)S.C.THEMES.attivo='default';markDirty();closeModal();renderThemes()}}
+
+function showPrompt(t,cat){const txt=buildPrompt(t,cat);
+ modal(`<h3>📋 Prompt AI — ${esc(t.n.it)}${cat?' · '+esc(cat):''}</h3>
+  <div class="hint">Copia e incolla in Midjourney, DALL·E, Firefly o Stable Diffusion. La struttura è fissa: cambiano solo <b>Theme</b> e <b>Visual Elements</b>, così tutte le immagini restano coerenti.</div>
+  <label>Prompt</label><textarea id="pr_txt" class="mono" style="min-height:250px">${esc(txt)}</textarea>
+  <label>Negative prompt</label><textarea id="pr_neg" class="mono" style="min-height:60px">${esc(NEG_PROMPT)}</textarea>
+  <hr class="hr"><button class="btn pri" id="pr_copy">📋 Copia prompt</button>
+  <button class="btn" id="pr_copyn">Copia negative</button>
+  <button class="btn" onclick="closeModal()">Chiudi</button>`);
+ const cp=(el,msg)=>{const ta=$(el);ta.select();try{document.execCommand('copy')}catch(e){}
+  if(navigator.clipboard)navigator.clipboard.writeText(ta.value).catch(()=>{});toast(msg)};
+ $('pr_copy').onclick=()=>cp('pr_txt','Prompt copiato ✔');
+ $('pr_copyn').onclick=()=>cp('pr_neg','Negative prompt copiato ✔')}
+
+$('thNew').onclick=()=>{const id='tema-'+Date.now().toString(36).slice(-5);
+ S.C.THEMES.temi.unshift({id,n:{it:'Nuovo tema',en:'New theme'},mood:'',palette:['#111827','#1E3A8A','#FACC15'],
+  lighting:'soft cinematic lighting',elementi:'',kw:[],cats:'*',dal:'',al:'',prio:5,stato:'libreria',art:{},v:1});
+ markDirty();renderThemes();editTheme(id)};
+$('thApplyNow').onclick=()=>{const a=themeActive();
+ if(!a.t)return toast('Nessun tema da applicare');
+ const n=Object.keys(a.t.art||{}).length;
+ if(!n&&!a.t.bg&&!confirm('Il tema «'+a.t.n.it+'» non ha né sfondo generato né artwork: le categorie resteranno com'+String.fromCharCode(39)+'erano. Continuare?'))return;
+ S.C.THEMES.attivo=a.t.id;markDirty();go('pub');
+ toast('Tema «'+a.t.n.it+'» pronto: premi «Pubblica tutto» per applicarlo al sito')};
+$('thExp').onclick=()=>{const a=document.createElement('a');
+ a.href=URL.createObjectURL(new Blob([JSON.stringify({_ingly_themes:1,date:new Date().toISOString(),themes:S.C.THEMES},null,1)],{type:'application/json'}));
+ a.download='ingly-temi-'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('Temi esportati')};
+$('thImpBtn').onclick=()=>$('thImp').click();
+$('thImp').onchange=async e=>{const f=e.target.files[0];if(!f)return;
+ try{const j=JSON.parse(await f.text());if(!j._ingly_themes)throw new Error('non è un file temi INGLY');
+  S.C.THEMES=j.themes;normalize();markDirty();renderThemes();toast('Temi importati: '+(S.C.THEMES.temi||[]).length)}
+ catch(err){toast('File non valido: '+err.message)}
+ e.target.value=''};
+
+/* ================== TECNOLOGIE ================== */
+function renderTech(){const T=(S.C.TECH=S.C.TECH||[]);
+ $('techList').innerHTML=T.map((t,i)=>`<div class="card"><h3>${esc(t.n||'—')} <span class="chip">${esc(t.t||'')}</span>${t.lg?'<span class="chip laser">card grande</span>':''}
+  <span class="sp"></span><button class="btn sm" data-tcm="${i},-1">↑</button><button class="btn sm" data-tcm="${i},1">↓</button><button class="btn sm err" data-tcx="${i}">🗑</button></h3>
+  <div class="row c4"><div><label>Nome</label><input type="text" value="${esc(t.n||'')}" data-tcf="${i},n"></div>
+   <div><label>Etichetta (tipo)</label><input type="text" value="${esc(t.t||'')}" data-tcf="${i},t"></div>
+   <div><label>Icona</label><button class="btn" data-tci="${i}" style="width:100%;justify-content:center">${t.icon?iconSvg(t.icon,18)+' '+esc(t.icon):'— scegli —'}</button></div>
+   <div><label>Specifiche (virgola)</label><input type="text" value="${esc((t.s||[]).join(', '))}" data-tcs="${i}"></div></div>
+  <div class="row c2"><div><label>Descrizione IT</label><textarea data-tcd="${i},it">${esc((t.d&&t.d.it)||'')}</textarea></div>
+   <div><label>Description EN</label><textarea data-tcd="${i},en">${esc((t.d&&t.d.en)||'')}</textarea></div></div>
+  <label style="display:flex;gap:7px;align-items:center;font-weight:500"><input type="checkbox" style="width:auto" data-tcl="${i}" ${t.lg?'checked':''}> Card grande in evidenza</label>
+  </div>`).join('')||'<div class="card hint">Nessuna tecnologia. Aggiungine una ↑</div>';
+ document.querySelectorAll('[data-tcf]').forEach(el=>el.oninput=()=>{const[i,f]=el.dataset.tcf.split(',');S.C.TECH[+i][f]=el.value;markDirty()});
+ document.querySelectorAll('[data-tci]').forEach(b=>b.onclick=()=>{const i=+b.dataset.tci;
+  pickIcon(S.C.TECH[i].icon,n=>{n?S.C.TECH[i].icon=n:delete S.C.TECH[i].icon;markDirty();renderTech()})});
+ document.querySelectorAll('[data-tcs]').forEach(el=>el.oninput=()=>{S.C.TECH[+el.dataset.tcs].s=el.value.split(',').map(x=>x.trim()).filter(Boolean);markDirty()});
+ document.querySelectorAll('[data-tcd]').forEach(el=>el.oninput=()=>{const[i,l]=el.dataset.tcd.split(',');const t=S.C.TECH[+i];t.d=t.d||{};t.d[l]=el.value;markDirty()});
+ document.querySelectorAll('[data-tcl]').forEach(el=>el.onchange=()=>{const t=S.C.TECH[+el.dataset.tcl];el.checked?t.lg=1:delete t.lg;markDirty()});
+ document.querySelectorAll('[data-tcm]').forEach(b=>b.onclick=()=>{const[i,d]=b.dataset.tcm.split(',').map(Number);const j=i+d;if(j<0||j>=S.C.TECH.length)return;[S.C.TECH[i],S.C.TECH[j]]=[S.C.TECH[j],S.C.TECH[i]];markDirty();renderTech()});
+ document.querySelectorAll('[data-tcx]').forEach(b=>b.onclick=()=>{if(confirm('Eliminare la tecnologia?')){S.C.TECH.splice(+b.dataset.tcx,1);markDirty();renderTech()}})}
+$('techNew').onclick=()=>{S.C.TECH.push({t:'LASER',n:'Nuova tecnologia',d:{it:'Descrizione.',en:'Description.'},s:['spec 1','spec 2']});markDirty();renderTech()};
+
+/* ================== TESTI ================== */
+function renderTexts(){const q=($('tSearch').value||'').toLowerCase();const keys=Object.keys(S.D.it||{});
+ const show=keys.filter(k=>!q||k.toLowerCase().includes(q)||String(S.D.it[k]).toLowerCase().includes(q)||String(S.D.en[k]||'').toLowerCase().includes(q));
+ $('tCount').textContent=show.length+' / '+keys.length+' testi';
+ $('tTable').innerHTML='<tr><th style="width:130px">Chiave</th><th>Italiano</th><th>English</th></tr>'+show.slice(0,300).map(k=>`<tr><td class="mono">${esc(k)}</td><td><textarea data-tk="it,${esc(k)}" style="min-height:38px">${esc(S.D.it[k])}</textarea></td><td><textarea data-tk="en,${esc(k)}" style="min-height:38px">${esc(S.D.en[k]??'')}</textarea></td></tr>`).join('');
+ document.querySelectorAll('[data-tk]').forEach(t=>t.oninput=()=>{const[l,k]=t.dataset.tk.split(/,(.+)/);S.D[l][k]=t.value;markDirty()})}
+$('tSearch').oninput=renderTexts;
+
+/* ================== FAQ & RECENSIONI ================== */
+function renderFaq(){const F=(S.C.FAQS=S.C.FAQS||[]),R=(S.C.REVIEWS=S.C.REVIEWS||[]);
+ $('faqList').innerHTML=F.map((f,i)=>`<div class="list-it" style="align-items:flex-start;flex-direction:column">
+  <div style="display:flex;gap:8px;width:100%"><b style="flex:1">${i+1}.</b><button class="btn sm err" data-fx="${i}">✕</button></div>
+  <div class="row c2" style="width:100%"><div><label>Domanda IT</label><input type="text" value="${esc(f[0].it)}" data-fq="${i},0,it"><label>Risposta IT</label><textarea data-fq="${i},1,it">${esc(f[1].it)}</textarea></div>
+  <div><label>Question EN</label><input type="text" value="${esc(f[0].en)}" data-fq="${i},0,en"><label>Answer EN</label><textarea data-fq="${i},1,en">${esc(f[1].en)}</textarea></div></div></div>`).join('');
+ /* editor recensioni: schema REALE usato dal sito (q, w, s, i, c) + stelle, data, foto, verificata */
+ $('revList').innerHTML=R.map((r,i)=>{
+  r.q=r.q||{it:'',en:''};r.s=r.s||{it:'',en:''};r.ph=Array.isArray(r.ph)?r.ph:[];
+  const st=Math.max(1,Math.min(5,+r.st||5));
+  return `<div class="card" style="margin-bottom:11px">
+  <h3><span style="display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:${esc(r.c||'var(--blue)')};font-size:12px;font-weight:800;color:#fff">${esc(r.i||'--')}</span>
+   ${esc(r.w||'(senza nome)')} <span class="chip">${'★'.repeat(st)}</span>${r.vf?'<span class="chip ok">verificata</span>':''}
+   <span class="sp"></span><button class="btn sm" data-rm="${i},-1">↑</button><button class="btn sm" data-rm="${i},1">↓</button>
+   <button class="btn sm err" data-rx="${i}">🗑</button></h3>
+  <div class="row c2"><div><label>Testo (IT)</label><textarea data-rq="${i},q,it">${esc(r.q.it)}</textarea></div>
+   <div><label>Text (EN)</label><textarea data-rq="${i},q,en">${esc(r.q.en)}</textarea></div></div>
+  <div class="row c3"><div><label>Nome cliente</label><input type="text" value="${esc(r.w||'')}" data-ra="${i},w"></div>
+   <div><label>Iniziali (cerchio)</label><input type="text" maxlength="3" value="${esc(r.i||'')}" data-ra="${i},i"></div>
+   <div><label>Colore cerchio</label><input type="text" value="${esc(r.c||'var(--blue)')}" data-ra="${i},c"></div></div>
+  <div class="row c2"><div><label>Sottotitolo (IT)</label><input type="text" value="${esc(r.s.it)}" data-rq="${i},s,it" placeholder="Matrimonio · Rimini"></div>
+   <div><label>Subtitle (EN)</label><input type="text" value="${esc(r.s.en)}" data-rq="${i},s,en"></div></div>
+  <div class="row c3"><div><label>Stelle</label><select data-rn="${i},st">${[5,4,3,2,1].map(n=>`<option value="${n}"${n===st?' selected':''}>${'★'.repeat(n)} ${n}</option>`).join('')}</select></div>
+   <div><label>Data (facoltativa)</label><input type="text" value="${esc(r.dt||'')}" data-ra="${i},dt" placeholder="Marzo 2026"></div>
+   <div><label>Cliente verificato</label><select data-rb="${i},vf"><option value="">No</option><option value="1"${r.vf?' selected':''}>Sì — mostra spunta</option></select></div></div>
+  <label>📷 Foto della recensione <span class="hint">— foto reali del lavoro consegnato: è ciò che la rende credibile</span></label>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:5px">
+   ${r.ph.map((f,k)=>`<div style="position:relative;width:74px;height:74px;border-radius:10px;overflow:hidden;border:1px solid var(--line)">
+     <img src="${esc(imgPreviewSrc(f))}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.opacity=.2">
+     <button class="btn sm err" data-rpx="${i},${k}" style="position:absolute;top:2px;right:2px;padding:0 5px">✕</button></div>`).join('')}
+   <button class="btn sm" data-rpa="${i}">➕ Aggiungi foto</button>
+   <button class="btn sm" data-rpl="${i}">🗂 Dalla libreria</button>
+  </div></div>`}).join('')||'<span class="hint">Nessuna recensione. Premi «Aggiungi».</span>';
+ document.querySelectorAll('[data-fq]').forEach(el=>el.oninput=()=>{const[i,j,l]=el.dataset.fq.split(',');S.C.FAQS[+i][+j][l]=el.value;markDirty()});
+ document.querySelectorAll('[data-fx]').forEach(b=>b.onclick=()=>{if(confirm('Eliminare la FAQ?')){S.C.FAQS.splice(+b.dataset.fx,1);markDirty();renderFaq()}});
+ document.querySelectorAll('[data-rq]').forEach(el=>el.oninput=()=>{const[i,f,l]=el.dataset.rq.split(',');
+  S.C.REVIEWS[+i][f]=S.C.REVIEWS[+i][f]||{};S.C.REVIEWS[+i][f][l]=el.value;markDirty()});
+ document.querySelectorAll('[data-ra]').forEach(el=>el.oninput=()=>{const[i,f]=el.dataset.ra.split(',');
+  const r=S.C.REVIEWS[+i];r[f]=el.value;
+  /* iniziali automatiche dal nome, se non le hai scritte tu */
+  if(f==='w'&&!r.i)r.i=el.value.split(/\s+/).map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
+  markDirty()});
+ document.querySelectorAll('[data-rn]').forEach(el=>el.onchange=()=>{const[i,f]=el.dataset.rn.split(',');
+  S.C.REVIEWS[+i][f]=+el.value;markDirty();renderFaq()});
+ document.querySelectorAll('[data-rb]').forEach(el=>el.onchange=()=>{const[i,f]=el.dataset.rb.split(',');
+  el.value?S.C.REVIEWS[+i][f]=true:delete S.C.REVIEWS[+i][f];markDirty();renderFaq()});
+ document.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{const[i,d]=b.dataset.rm.split(',').map(Number);
+  const j=i+d;if(j<0||j>=S.C.REVIEWS.length)return;
+  [S.C.REVIEWS[i],S.C.REVIEWS[j]]=[S.C.REVIEWS[j],S.C.REVIEWS[i]];markDirty();renderFaq()});
+ document.querySelectorAll('[data-rpa]').forEach(b=>b.onclick=()=>{const i=+b.dataset.rpa;
+  const r=S.C.REVIEWS[i];r.ph=r.ph||[];
+  pickImage('img/rev-'+(i+1)+'-'+(r.ph.length+1),path=>{r.ph.push(path);markDirty();renderFaq()},'portfolio')});
+ document.querySelectorAll('[data-rpl]').forEach(b=>b.onclick=()=>{const i=+b.dataset.rpl;
+  pickFromLibrary(sel=>{if(!sel.length)return;const r=S.C.REVIEWS[i];r.ph=r.ph||[];
+   sel.forEach(s=>{if(!r.ph.includes(s))r.ph.push(s)});markDirty();renderFaq()})});
+ document.querySelectorAll('[data-rpx]').forEach(b=>b.onclick=()=>{const[i,k]=b.dataset.rpx.split(',').map(Number);
+  const r=S.C.REVIEWS[i];MEDIA=MEDIA.filter(m=>m.path!==r.ph[k]);r.ph.splice(k,1);
+  if(!r.ph.length)delete r.ph;markDirty();renderFaq()});
+ document.querySelectorAll('[data-rx]').forEach(b=>b.onclick=()=>{if(confirm('Eliminare la recensione?')){S.C.REVIEWS.splice(+b.dataset.rx,1);markDirty();renderFaq()}})}
+$('fNew').onclick=()=>{S.C.FAQS.push([{it:'Nuova domanda?',en:'New question?'},{it:'Risposta.',en:'Answer.'}]);markDirty();renderFaq()};
+$('rNew').onclick=()=>{S.C.REVIEWS.push({q:{it:'"…"',en:'"…"'},w:'Nome Cognome',s:{it:'Cliente · Città',en:'Customer · City'},
+ i:'NC',c:'var(--blue)',st:5,dt:'',ph:[]});markDirty();renderFaq()};
+
+/* ================== AVANZATE (JSON validato) ================== */
+const ADV=['MAT_ART','MATN','MATERIALS','STEPS','FONTS','MOPT'];
+function renderAdv(){$('advSec').innerHTML=ADV.filter(k=>S.C[k]!==undefined).map(k=>`<option>${k}</option>`).join('');advLoad()}
+function advLoad(){const k=$('advSec').value;$('advTa').value=JSON.stringify(S.C[k],null,1);$('advMsg').textContent=''}
+$('advSec').onchange=advLoad;
+$('advSave').onclick=()=>{const k=$('advSec').value;try{const v=JSON.parse($('advTa').value);S.C[k]=v;markDirty();$('advMsg').textContent='✔ valido, applicato in bozza';$('advMsg').style.color='var(--ok)'}catch(e){$('advMsg').textContent='✖ JSON non valido: '+e.message;$('advMsg').style.color='var(--err)'}};
+
+/* ================== SEO helper ================== */
+function seoLen(){const seo=S.CONFIG.seo||{},t=seo.titolo||'',d=seo.descrizione||'';
+ $('seoLen').innerHTML=`Titolo: <b style="color:${t.length>60?'var(--warn)':'var(--ok)'}">${t.length}</b>/60 caratteri · Descrizione: <b style="color:${d.length>160?'var(--warn)':'var(--ok)'}">${d.length}</b>/160 caratteri`;
+ const dom=(seo.dominio||'').replace(/^https?:\/\//,'').replace(/\/$/,'');
+ $('seoPrev').innerHTML=`<div style="color:#9aa3c7;font-size:12.5px">${esc(dom||'dominio-non-impostato')}</div>
+  <div style="color:#8ab4f8;font-size:17px;line-height:1.3;margin:2px 0 3px">${esc(t.slice(0,60))||'<i>titolo mancante</i>'}${t.length>60?'…':''}</div>
+  <div style="color:#bdc1c6;font-size:13px;line-height:1.45">${esc(d.slice(0,160))||'<i>descrizione mancante</i>'}${d.length>160?'…':''}</div>`;
+ const pr=(S.P||[]).length;const sm=$('seoLen');if(sm)sm.innerHTML+=` · sitemap: <b>${8+pr}</b> URL alla prossima pubblicazione`}
+
+/* ================== PUBBLICA (motore atomico) ================== */
+const PIPE=[['prep','Preparazione file (JSON + legacy rigenerati + versione)'],['blob','Caricamento contenuti su GitHub'],['tree','Composizione dell\u2019albero dei file'],['commit','Creazione del commit unico'],['ref','Aggiornamento del branch'],['pages','Build di GitHub Pages'],['live','Verifica del sito online'],['done','Pubblicazione confermata']];
+function renderPipe(state){state=state||{};$('pipeSteps').innerHTML=PIPE.map(([id,t])=>{const st=state[id]||'';return `<div class="pst ${st}" id="ps_${id}">${t}${st==='run'?' <small>…</small>':''}<small id="psx_${id}"></small></div>`}).join('');
+ const idx=PIPE.findIndex(([id])=>state[id]==='run'||state[id]==='fail');const done=PIPE.filter(([id])=>state[id]==='done').length;
+ const total=PIPE.length;const frac=(idx<0?done:idx+0.5)/total;$('beam').style.height=Math.min(100,frac*100)+'%'}
+function renderPub(){
+ setTimeout(()=>{const box=$('pubCheck');if(!box)return;const v=validaBozza();
+  box.innerHTML=v.err.length
+   ? `<div class="card" style="border-color:var(--err)"><h3 style="color:var(--err)">⛔ ${v.err.length} errori bloccanti</h3>
+      <ul style="margin:0 0 0 18px;line-height:1.7;font-size:13.4px">${v.err.slice(0,8).map(e=>'<li>'+esc(e)+'</li>').join('')}</ul></div>`
+   : v.warn.length
+   ? `<div class="card" style="border-color:var(--warn)"><h3 style="color:var(--warn)">⚠️ ${v.warn.length} avvisi (non bloccanti)</h3>
+      <ul style="margin:0 0 0 18px;line-height:1.7;font-size:13.4px">${v.warn.slice(0,6).map(e=>'<li>'+esc(e)+'</li>').join('')}</ul></div>`
+   : `<div class="card" style="border-color:var(--ok)"><h3 style="color:var(--ok)">✅ Controlli superati — i dati sono validi</h3></div>`},0);const ch=changedFiles();const items=[];
+ ch.forEach(f=>items.push((MISSING.includes(f)?'🆕':'✎')+' <span class="mono">data/'+f+'.json</span>'+(MISSING.includes(f)?' <span class="chip warn">nuovo — mancava nel repository</span>':'')));
+ MEDIA.forEach(m=>items.push('🖼 <span class="mono">'+esc(m.path)+'</span> ('+Math.round(m.size/1024)+' KB)'));
+ DELETES.forEach(p=>items.push('🗑 <span class="mono">'+esc(p)+'</span> <span class="chip err">eliminazione</span>'));
+ if(ch.length)items.push('⚙ <span class="mono">data/*.js</span> rigenerati automaticamente + <span class="mono">version.json</span> + sitemap');
+ $('pubList').innerHTML=items.length?items.map(i=>'<div>'+i+'</div>').join(''):'Nessuna modifica in attesa.';
+ $('pubChip').textContent=pending()+' file';$('pubGo').disabled=!pending();
+ if(!$('pipeSteps').innerHTML)renderPipe();refreshSync()}
+$('pubReload').onclick=async()=>{if(pending()&&!confirm('Scartare TUTTE le modifiche in bozza e ricaricare dal repository?'))return;
+ MEDIA=[];BOOTED=false;refreshSync();await loadAll();renderPub();go(VIEW);toast('Dati ricaricati da '+LOADED_FROM)};
+$('pubGo').onclick=async()=>{
+ /* prima la validità dei dati: ha senso saperlo anche prima di configurare il token */
+ const v=validaBozza();
+ if(v.err.length){
+  modal(`<h3 style="color:var(--err)">⛔ Pubblicazione bloccata</h3>
+   <div class="hint">Questi problemi farebbero crollare o degradare il sito. Correggili e riprova.</div>
+   <ul style="margin:12px 0 0 18px;line-height:1.7;font-size:13.4px">${v.err.slice(0,12).map(e=>'<li>'+esc(e)+'</li>').join('')}</ul>
+   ${v.err.length>12?`<div class="hint">…e altri ${v.err.length-12}.</div>`:''}
+   <hr class="hr"><button class="btn" onclick="closeModal()">Ho capito</button>`);
+  toast('Pubblicazione bloccata: '+v.err.length+' errori da correggere');
+  return;
+ }
+ if(v.warn.length&&!confirm('Ci sono '+v.warn.length+' avvisi non bloccanti:\n\n· '+v.warn.slice(0,6).join('\n· ')+
+   (v.warn.length>6?'\n· …e altri '+(v.warn.length-6):'')+'\n\nPubblicare comunque?'))return;
+ if(!token())return toast('Configura prima il token in Impostazioni');
+ const btn=$('pubGo');btn.disabled=true;const state={};const step=(id,st,x)=>{state[id]=st;renderPipe(state);if(x)setTimeout(()=>{const e=$('psx_'+id);if(e)e.textContent=' — '+x},0)};
+ const fail=(id,msg)=>{step(id,'fail');$('pubOut').innerHTML='<span style="color:var(--err)">✖ '+esc(msg)+'</span><br>Il sito online NON è stato toccato: nessun commit parziale è possibile con questo motore.';btn.disabled=false};
+ try{
+  /* preflight: verifica token e permessi PRIMA di toccare qualsiasi cosa */
+  step('prep','run');
+  try{const r=await gh('');if(!(r.permissions&&r.permissions.push))return fail('prep','Il token legge '+r.full_name+' ma NON può scrivere: serve Contents → Read and write per questo repository.')}
+  catch(pe){return fail('prep',ghErrHint(pe))}
+  const ch=changedFiles();const files={};
+  ch.forEach(f=>files['data/'+f+'.json']={text:JSON.stringify(S[KEY[f]],null,1)});
+  const v=Date.now();files['data/version.json']={text:JSON.stringify({v,updated:new Date().toISOString()})};
+  if(ch.length){const leg=genLegacy();for(const p in leg)files[p]={text:leg[p]}}
+  if(ch.length&&S.CONFIG.seo&&S.CONFIG.seo.dominio){
+   const dom=S.CONFIG.seo.dominio.replace(/\/$/,'');const day=new Date().toISOString().slice(0,10);
+   const urls=[['/','1.0','weekly']];
+   ['shop','digital','business','portfolio','about','faq','quote'].forEach(p=>urls.push(['/#/'+p,'0.8','weekly']));
+   (S.P||[]).filter(p=>!p.hidden).forEach(p=>urls.push(['/#/product?id='+p.id,'0.6','monthly']));
+   files['sitemap.xml']={text:'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    +urls.map(([u,pr,cf])=>' <url><loc>'+dom+u+'</loc><lastmod>'+day+'</lastmod><changefreq>'+cf+'</changefreq><priority>'+pr+'</priority></url>').join('\n')
+    +'\n</urlset>\n'};
+   files['robots.txt']={text:'User-agent: *\nAllow: /\nDisallow: /admin.html\n\nSitemap: '+dom+'/sitemap.xml\n'}}
+  MEDIA.forEach(m=>files[m.path]={b64:m.b64});
+  const dels=DELETES.slice();
+  step('prep','done',Object.keys(files).length+' file'+(dels.length?' + '+dels.length+' eliminazioni':''));
+  /* refs */
+  step('blob','run');
+  const ref=await gh(`/git/ref/heads/${SET.branch}`);const head=ref.object.sha;
+  const headC=await gh(`/git/commits/${head}`);
+  const entries=[];const paths=Object.keys(files);
+  for(let i=0;i<paths.length;i++){const p=paths[i];const f=files[p];
+   const blob=await gh('/git/blobs',{method:'POST',body:JSON.stringify(f.text!==undefined?{content:f.text,encoding:'utf-8'}:{content:f.b64,encoding:'base64'})});
+   entries.push({path:p,mode:'100644',type:'blob',sha:blob.sha});
+   $('psx_blob').textContent=' — '+(i+1)+'/'+paths.length}
+  dels.forEach(p=>entries.push({path:p,mode:'100644',type:'blob',sha:null}));
+  step('blob','done',paths.length+' blob'+(dels.length?' · '+dels.length+' rimozioni':''));
+  step('tree','run');
+  const tree=await gh('/git/trees',{method:'POST',body:JSON.stringify({base_tree:headC.tree.sha,tree:entries})});
+  step('tree','done');
+  step('commit','run');
+  const msg=($('pubMsg').value.trim()||'Aggiornamento contenuti')+' [admin 2.0]';
+  const commit=await gh('/git/commits',{method:'POST',body:JSON.stringify({message:msg,tree:tree.sha,parents:[head]})});
+  step('commit','done',commit.sha.slice(0,7));
+  step('ref','run');
+  await gh(`/git/refs/heads/${SET.branch}`,{method:'PATCH',body:JSON.stringify({sha:commit.sha,force:false})});
+  step('ref','done');
+  /* stato pulito */
+  MISSING=[];
+  dels.forEach(p=>{const n=p.replace(/^img\//,'');REPO_IMG=(REPO_IMG||[]).filter(x=>x!==n);delete REPO_META[n]});
+  DELETES=[];SEL=new Set();
+  FILES.forEach(f=>SNAP[f]=jstr(S[KEY[f]]));
+  MEDIA.forEach(m=>{REPO_IMG=REPO_IMG||[];const n=m.path.replace(/^img\//,'');if(!REPO_IMG.includes(n))REPO_IMG.push(n)});
+  MEDIA=[];$('pubMsg').value='';renderPub();
+  /* === DA QUI IN POI IL LAVORO È SALVO: il commit esiste su GitHub === */
+  LAST_V=v;
+  const okLine='<span style="color:var(--ok)">✔ Pubblicato su GitHub.</span> Commit <span class="mono">'+commit.sha.slice(0,7)+'</span> · versione <span class="mono">'+v+'</span> · <a href="'+LIVE()+'?v='+v+'" target="_blank" rel="noopener">apri il sito ↗</a>';
+  $('pubOut').innerHTML=okLine+'<br>Ora controllo la messa online (puoi anche chiudere: il commit è già salvo).';
+  toast('Pubblicato ✔ — controllo la messa online');
+  step('pages','run');
+  const diag=await pagesDiag();
+  if(diag.err){step('pages','fail');$('pubOut').innerHTML=okLine+'<br><span style="color:var(--err)">✖ La build di GitHub Pages è fallita: '+esc(diag.err.msg)+'</span>';btn.disabled=false;return}
+  step('pages','done',diag.note);
+  step('live','run');
+  LAST_SHA=commit.sha;
+  const res=await verifyDeploy(commit.sha,v,i=>{$('psx_live').textContent=' — tentativo '+i});
+  if(res.ok){step('live','done',res.how==='build'?'confermato da GitHub Pages':'sito aggiornato');step('done','done');
+   $('pubOut').innerHTML=okLine+'<br><span style="color:var(--ok)">✔ Deploy confermato: '+(res.how==='build'?'GitHub Pages ha pubblicato esattamente questo commit.':'il sito online mostra la nuova versione.')+'</span>'
+    +(res.how==='build'?'<br><span class="hint">Se nel browser vedi ancora la pagina vecchia è solo la tua cache: apri il sito e premi Ctrl+F5 una volta.</span>':'');
+   toast('Pubblicato e verificato ✔')}
+  else if(res.err){step('live','fail');
+   $('pubOut').innerHTML=okLine+'<br><span style="color:var(--err)">✖ GitHub Pages ha rifiutato la build: '+esc(res.err)+'</span>'}
+  else{step('live','done','non ancora confermato');step('done','done');
+   $('pubOut').innerHTML=okLine+'<br><span style="color:var(--warn)">⚠ Deploy non ancora confermato.</span> Il commit <b>è salvo</b>: Pages a volte impiega qualche minuto.'
+    +(diag.warn?'<br><span style="color:var(--warn)">Possibile causa: '+esc(diag.warn)+'</span>':'')
+    +'<br>Premi «Verifica ora il sito online» tra un paio di minuti.';
+   toast('Commit salvo ✔ — messa online ancora in corso')}
+  refreshSync();
+ }catch(e){const running=PIPE.find(([id])=>state[id]==='run');fail(running?running[0]:'prep',ghErrHint(e))}
+ btn.disabled=false};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+let LAST_V=0,LAST_SHA='';
+/* Verifica in due modi, il primo che risponde vince:
+   (a) AUTORITATIVO: GitHub Pages dichiara di aver deployato ESATTAMENTE il nostro commit
+   (b) live: il sito espone la nuova versione (può arrivare dopo per cache CDN) */
+async function verifyDeploy(sha,v,onTick){
+ let liveSeen=false,buildSeen=false;
+ for(let i=1;i<=22;i++){
+  try{const b=await gh('/pages/builds/latest');
+   if(b&&b.commit===sha){
+    if(b.status==='errored')return{ok:false,err:(b.error&&b.error.message)||'build fallita'};
+    if(b.status==='built')buildSeen=true;
+   }}catch(e){}
+  try{const r=await fetch(LIVE()+'data/version.json?cb='+Date.now()+'_'+i,{cache:'no-store'});
+   if(r.ok){const j=await r.json();if(j&&j.v>=v)liveSeen=true}}catch(e){}
+  if(liveSeen)return{ok:true,how:'live'};
+  if(buildSeen)return{ok:true,how:'build'};
+  if(onTick)onTick(i);
+  await sleep(i<6?5000:9000);
+ }
+ return{ok:false}}
+async function pagesDiag(){const out={note:'',warn:'',err:null};
+ try{const p=await gh('/pages');
+  const srcB=p.source&&p.source.branch,srcP=p.source&&p.source.path;
+  out.note=(p.build_type==='workflow'?'sorgente: GitHub Actions':'sorgente: '+srcB+srcP)+' · '+p.status;
+  if(p.build_type==='workflow')out.warn='GitHub Pages pubblica tramite GitHub Actions, non direttamente dal branch: il commit va online solo quando il workflow finisce. Consigliato: Settings → Pages → Source = «Deploy from a branch» → '+SET.branch+' / (root).';
+  else if(srcB&&srcB!==SET.branch)out.warn='Pages pubblica il branch «'+srcB+'» ma l Admin scrive su «'+SET.branch+'»: allinea i due valori.';
+  else if(srcP&&srcP!=='/')out.warn='Pages pubblica la cartella «'+srcP+'» invece della radice: imposta Settings → Pages → folder = / (root).';
+  try{const b=await gh('/pages/builds/latest');if(b&&b.status==='errored')out.err={msg:(b.error&&b.error.message)||'errore sconosciuto'};if(b)out.note+=' · build '+b.status}catch(e){}
+ }catch(e){out.note='stato non leggibile';
+  if(String(e).includes(' 404 '))out.warn='GitHub Pages non risulta attivo su questo repository: attivalo in Settings → Pages → Source = Deploy from a branch → '+SET.branch+' / (root).';
+  else out.warn='per leggere lo stato di Pages aggiungi al token il permesso Pages → Read (facoltativo).'}
+ return out}
+$('pubVerify').onclick=async()=>{const b=$('pubVerify');b.disabled=true;const lbl=b.textContent;b.textContent='verifica in corso…';
+ try{
+  if(LAST_SHA&&token()){try{const bl=await gh('/pages/builds/latest');
+   if(bl&&bl.commit===LAST_SHA&&bl.status==='built'){
+    $('pubOut').innerHTML='<span style="color:var(--ok)">✔ GitHub Pages conferma: il tuo ultimo commit ('+LAST_SHA.slice(0,7)+') è pubblicato.</span><br><span class="hint">Se vedi la pagina vecchia nel browser, premi Ctrl+F5 una volta.</span> <a href="'+LIVE()+'?v='+Date.now()+'" target="_blank" rel="noopener">apri il sito ↗</a>';
+    const st={};PIPE.forEach(([id])=>st[id]='done');renderPipe(st);toast('Deploy confermato da GitHub Pages ✔');b.disabled=false;b.textContent=lbl;return}}catch(e){}}
+  const r=await fetch(LIVE()+'data/version.json?cb='+Date.now(),{cache:'no-store'});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  const j=await r.json();const ok=LAST_V?j.v>=LAST_V:true;
+  $('pubOut').innerHTML=(ok?'<span style="color:var(--ok)">✔ Il sito online è aggiornato.</span>':'<span style="color:var(--warn)">⚠ Il sito mostra ancora una versione precedente.</span>')
+   +' Versione online: <span class="mono">'+j.v+'</span> ('+new Date(j.v).toLocaleString('it-IT')+')'+(LAST_V?' · attesa: <span class="mono">'+LAST_V+'</span>':'')
+   +' · <a href="'+LIVE()+'?v='+j.v+'" target="_blank" rel="noopener">apri il sito ↗</a>';
+  if(ok){const st={};PIPE.forEach(([id])=>st[id]='done');renderPipe(st)}
+  toast(ok?'Sito online aggiornato ✔':'Non ancora aggiornato — riprova tra un minuto')}
+ catch(e){$('pubOut').innerHTML='<span style="color:var(--err)">✖ Non riesco a leggere '+esc(LIVE())+'data/version.json — '+esc(e.message||e)+'</span>';toast('Sito non raggiungibile')}
+ b.disabled=false;b.textContent=lbl};
+$('pubDiag').onclick=async()=>{$('pubOut').innerHTML='Diagnosi in corso…';const d=await pagesDiag();
+ $('pubOut').innerHTML='<b>GitHub Pages</b>: '+esc(d.note)+(d.warn?'<br><span style="color:var(--warn)">⚠ '+esc(d.warn)+'</span>':'<br><span style="color:var(--ok)">✔ Configurazione corretta.</span>')};
+
+/* ================== CRONOLOGIA & ROLLBACK ================== */
+async function renderHist(){$('histList').textContent='Caricamento…';
+ try{const cs=await gh(`/commits?sha=${SET.branch}&per_page=15`);
+  $('histList').innerHTML=cs.map(c=>`<div class="list-it"><span class="mono" style="color:var(--laser)">${c.sha.slice(0,7)}</span><span style="flex:1">${esc(c.commit.message.split('\n')[0])}<br><small class="hint">${new Date(c.commit.committer.date).toLocaleString('it-IT')} · ${esc(c.commit.author.name)}</small></span><button class="btn sm" data-rb="${c.sha}">⤺ Ripristina</button></div>`).join('');
+  document.querySelectorAll('[data-rb]').forEach(b=>b.onclick=()=>rollback(b.dataset.rb))}
+ catch(e){$('histList').textContent=ghErrHint(e)}}
+$('histRefresh').onclick=renderHist;
+async function rollback(sha){if(!confirm('Caricare i dati del commit '+sha.slice(0,7)+' come bozza?\n(Nulla viene pubblicato finché non premi tu «Pubblica».)'))return;
+ try{toast('Recupero dati dal commit…');
+  const res=await Promise.all(FILES.map(f=>gh(`/contents/data/${f}.json?ref=${sha}`,{headers:{Accept:'application/vnd.github.raw+json'}}).catch(()=>null)));
+  let n=0;FILES.forEach((f,i)=>{if(res[i]){if(f==='content')S.C=res[i];else S[KEY[f]]=res[i];n++}});
+  markDirty();go('pub');toast(n+' file ripristinati in bozza dal commit '+sha.slice(0,7))}
+ catch(e){toast(ghErrHint(e))}}
+
+/* ================== HEALTH CENTER ================== */
+$('hRun').onclick=async()=>{const out=[];const log=(cls,agent,msg)=>{out.push(`<div class="${cls}"><b>[${agent}]</b> ${msg}</div>`);$('hLog').innerHTML=out.join('')};
+ $('hLog').innerHTML='Esecuzione…';out.length=0;
+ /* Agente Dati */
+ const ids=(S.P||[]).map(p=>p.id);const dup=ids.filter((x,i)=>ids.indexOf(x)!==i);
+ dup.length?log('err','Dati','ID prodotto duplicati: '+[...new Set(dup)].join(', ')):log('ok','Dati','Nessun ID duplicato tra '+ids.length+' prodotti');
+ const badCat=(S.P||[]).filter(p=>!(S.CATS||[]).some(c=>c.id===p.cat));
+ badCat.length?log('err','Dati','Prodotti con categoria inesistente: '+badCat.map(p=>'#'+p.id).join(', ')):log('ok','Dati','Tutti i prodotti puntano a categorie esistenti');
+ const badSub=(S.P||[]).filter(p=>{const c=(S.CATS||[]).find(c=>c.id===p.cat);return c&&(p.sub<1||p.sub>c.sub.length)});
+ badSub.length?log('warn','Dati','Sottocategoria fuori intervallo: '+badSub.map(p=>'#'+p.id).join(', ')):log('ok','Dati','Sottocategorie coerenti');
+ const hf=(S.CONFIG.heroFeatured||[]);const badHf=hf.filter(id=>!ids.includes(id));
+ badHf.length?log('err','Dati','La Hero mostra prodotti inesistenti: '+badHf.join(', ')):log('ok','Dati','Prodotti in evidenza validi ('+hf.join(', ')+')');
+ const missEn=Object.keys(S.D.it||{}).filter(k=>S.D.en[k]===undefined);
+ missEn.length?log('warn','Dati',missEn.length+' testi senza traduzione EN: '+missEn.slice(0,6).join(', ')+(missEn.length>6?'…':'')):log('ok','Dati','Traduzioni EN complete');
+ for(const f of FILES){try{JSON.parse(jstr(S[KEY[f]]))}catch(e){log('err','Dati',f+'.json non serializzabile: '+e.message)}}
+ log('ok','Dati','Tutti i JSON sono validi e serializzabili');
+ MISSING.length?log('err','Dati','File dati mancanti nel repository: '+MISSING.join(', ')+' — pubblicando verranno creati'):null;
+ /* Agente Sync */
+ const nc=changedFiles().length;nc?log('warn','Sync',nc+' file modificati non ancora pubblicati (bozza)'):log('ok','Sync','Bozza allineata: nessuna modifica in sospeso');
+ /* Agente Deploy */
+ if(!token())log('warn','Deploy','Token non configurato: salto i controlli GitHub');
+ else{try{const r=await gh('');r.permissions&&r.permissions.push?log('ok','Deploy','Token valido con permesso di scrittura su '+r.full_name):log('err','Deploy','Il token legge ma NON può scrivere: serve Contents → Read and write');
+   try{const p=await gh('/pages');log('ok','Deploy','GitHub Pages: '+p.status+' → '+p.html_url)}catch(e){log('warn','Deploy','Stato Pages non leggibile (aggiungi permesso Pages → Read al token, facoltativo)')}
+  }catch(e){log('err','Deploy',ghErrHint(e))}}
+ if(token()){const d=await pagesDiag();d.warn?log('warn','Deploy','Pages — '+d.warn):log('ok','Deploy','Pages — '+d.note)}
+ /* Agente Media + Live */
+ try{const r=await fetch(LIVE()+'data/version.json?t='+Date.now(),{cache:'no-store'});
+  if(r.ok){const j=await r.json();log('ok','Live','Sito online raggiungibile · versione pubblicata: '+j.v+' ('+new Date(j.v).toLocaleString('it-IT')+')')}
+  else log('err','Live','Il sito online non espone version.json (HTTP '+r.status+')')}catch(e){log('err','Live','Sito online non raggiungibile: '+LIVE())}
+ if(REPO_IMG===null){try{await scanRepo()}catch(e){}}
+ if(REPO_IMG){const ref=referencedPaths();
+  const missing=(S.P||[]).filter(p=>!p.img&&!REPO_IMG.includes(p.id+'.webp')&&!hasStaged('img/'+p.id+'.webp'));
+  missing.length?log('warn','Media',missing.length+' prodotti senza foto: '+missing.slice(0,8).map(p=>'#'+p.id).join(', ')+(missing.length>8?'…':'')):log('ok','Media','Ogni prodotto ha la sua foto');
+  const orph=REPO_IMG.filter(n=>!ref.has('img/'+n));
+  orph.length?log('warn','Media','Immagini orfane in img/: '+orph.slice(0,8).join(', ')+(orph.length>8?'…':'')):log('ok','Media','Nessuna immagine orfana nel repository')}
+ /* Agente SEO */
+ const t=(S.CONFIG.seo&&S.CONFIG.seo.titolo)||'',d=(S.CONFIG.seo&&S.CONFIG.seo.descrizione)||'';
+ (t.length>10&&t.length<=65)?log('ok','SEO','Titolo: '+t.length+' caratteri'):log('warn','SEO','Titolo di '+t.length+' caratteri (consigliato 10–60)');
+ (d.length>50&&d.length<=165)?log('ok','SEO','Descrizione: '+d.length+' caratteri'):log('warn','SEO','Descrizione di '+d.length+' caratteri (consigliato 50–160)');
+ log('ok','Health','Controlli completati '+new Date().toLocaleTimeString('it-IT'))};
+
+/* ================== BACKUP ================== */
+$('bkExp').onclick=async()=>{
+ const withImgs=confirm('Includere anche le IMMAGINI nel backup?\n\n'+
+   '• SÌ  = backup completo: reimportandolo ritrovi tutto, foto comprese (file più grande, richiede il token).\n'+
+   '• NO = solo i testi e le impostazioni (file piccolo, le immagini restano nel repository).');
+ const payload={_ingly_backup:3,date:new Date().toISOString(),images:{}};
+ FILES.forEach(f=>payload[f]=S[KEY[f]]);
+ if(withImgs){
+  if(!token()&&LOADED_FROM.indexOf('GitHub')<0){toast('Per includere le immagini serve il collegamento a GitHub o il token');}
+  const btn=$('bkExp');const old=btn.textContent;btn.disabled=true;
+  try{
+   // 1) immagini già in coda (non ancora pubblicate)
+   MEDIA.forEach(m=>{if(m.b64)payload.images[m.path]=m.b64});
+   // 2) immagini nel repository
+   let list=REPO_IMG;
+   if(!list){try{const ls=await gh(`/contents/img?ref=${SET.branch}`);list=ls.filter(x=>x.type==='file').map(x=>x.name)}catch(e){list=[]}}
+   let done=0;
+   for(const n of (list||[])){const path='img/'+n;if(payload.images[path])continue;
+    btn.textContent='⬇ immagini… '+(++done);
+    try{const blob=await gh(`/contents/${path}?ref=${SET.branch}`);
+     if(blob&&blob.content)payload.images[path]=blob.content.replace(/\n/g,'')}
+    catch(e){console.warn('backup: salto '+path,e)}}
+  }finally{$('bkExp').disabled=false;$('bkExp').textContent=old}
+ }
+ const n=Object.keys(payload.images).length;
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(payload)],{type:'application/json'}));
+ a.download='ingly-backup-'+new Date().toISOString().slice(0,10)+(n?'-completo':'')+'.json';a.click();
+ toast('Backup esportato'+(n?' con '+n+' immagini':' (solo dati)'))};
+$('bkImpBtn').onclick=()=>$('bkImp').click();
+$('bkImp').onchange=async e=>{const f=e.target.files[0];if(!f)return;
+ try{const j=JSON.parse(await f.text());
+  if(!j._ingly_backup)throw new Error('non è un backup INGLY (manca la firma del file)');
+  const got=[],kept=[];
+  FILES.forEach(k=>{if(j[k]!==undefined){
+   if(k==='content'){
+    /* MERGE, non sostituzione: un backup vecchio non deve cancellare temi, icone,
+       varianti o punti focali aggiunti dopo l'esportazione */
+    const cur=S.C||{};const inc=j[k]||{};
+    for(const key of Object.keys(cur))if(inc[key]===undefined){inc[key]=cur[key];kept.push(key)}
+    S.C=inc;
+   }else S[KEY[k]]=j[k];
+   got.push(k)}});
+  if(!got.length)throw new Error('il file non contiene dati riconoscibili');
+  normalize();
+  if(kept.length)toast('Sezioni non presenti nel backup mantenute dalla versione attuale: '+kept.join(', '));
+  /* forza TUTTI i file come modificati: così la pubblicazione riscrive davvero tutto */
+  FILES.forEach(k=>SNAP[k]='"__IMPORTATO__"');
+  MEDIA=[];DELETES=[];SEL=new Set();
+  /* RIPRISTINO IMMAGINI: se il backup le contiene, rientrano nel commit e tornano davvero online.
+     È la correzione del bug: prima il backup salvava solo i riferimenti, non i file. */
+  let nImg=0;
+  if(j.images&&typeof j.images==='object'){
+   for(const path of Object.keys(j.images)){const b64=j.images[path];if(!b64)continue;
+    let blob;try{const bin=atob(b64);const arr=new Uint8Array(bin.length);
+     for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+     blob=new Blob([arr],{type:path.endsWith('.svg')?'image/svg+xml':'image/webp'})}catch(e){continue}
+    MEDIA.push({path,b64,url:URL.createObjectURL(blob),size:b64.length*0.75|0,w:0,h:0,hash:'',variant:isVariant(path)});
+    nImg++}
+  }
+  markDirty();bindAll();go('pub');
+  toast('Backup importato ('+got.length+' file'+(nImg?', '+nImg+' immagini':'')+') — premi «Pubblica tutto» per applicarlo al sito');
+  $('pubMsg').value='Ripristino da backup del '+(j.date?String(j.date).slice(0,10):'—');
+ }catch(err){toast('Backup non valido: '+err.message)}
+ e.target.value=''};
+
+/* ================== IMPOSTAZIONI ================== */
+function renderSet(){$('sOwner').value=SET.owner;$('sRepo').value=SET.repo;$('sBranch').value=SET.branch;$('sRemember').checked=SET.remember;$('sTok').value=token();
+ $('loadDiag').innerHTML=loadDiagHtml()||'Nessun caricamento eseguito.';
+ $('setInfo').innerHTML=`${AUTODETECTED?'<span class="chip ok">owner e repository rilevati automaticamente dall\u2019indirizzo</span><br>':''}Sito online: <b><a href="${LIVE()}" target="_blank" rel="noopener">${LIVE()}</a></b><br>Admin: <b class="mono">${LIVE()}admin.html</b><br>Dati caricati da: <b>${esc(LOADED_FROM||'—')}</b>`;
+ ['sOwner','sRepo','sBranch'].forEach(id=>$(id).oninput=()=>{SET.owner=$('sOwner').value.trim();SET.repo=$('sRepo').value.trim();SET.branch=$('sBranch').value.trim()||'main';saveSet()});
+ $('sRemember').onchange=()=>{const t=token();localStorage.removeItem('ingly2_tok');sessionStorage.removeItem('ingly2_tok');SET.remember=$('sRemember').checked;saveSet();if(t)setToken(t)};
+ $('sTok').oninput=()=>setToken($('sTok').value.trim())}
+$('sReload').onclick=async()=>{if(pending()&&!confirm('Ci sono modifiche in bozza: ricaricando andranno perse. Continuare?'))return;MEDIA=[];BOOTED=false;refreshSync();const ok=await loadAll();renderSet();if(ok)toast('Dati caricati da '+LOADED_FROM)};
+$('sTest').onclick=async()=>{const o=$('sTestOut');o.textContent='verifica…';
+ try{const r=await gh('');if(!(r.permissions&&r.permissions.push))throw new Error('il token legge ma non scrive: aggiungi Contents → Read and write');
+  o.innerHTML='<span style="color:var(--ok)">✔ Connesso a '+esc(r.full_name)+' con permesso di scrittura</span>'}
+ catch(e){o.innerHTML='<span style="color:var(--err)">✖ '+esc(ghErrHint(e))+'</span>'}};
+
+/* ================== AVVIO ================== */
+(async()=>{renderPipe();const ok=await loadAll();if(ok){go('dash');if(token())scanRepo().catch(()=>{})}else go('set')})();
+</script>
+</body>
+</html>

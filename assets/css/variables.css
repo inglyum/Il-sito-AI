@@ -1,0 +1,72 @@
+:root{--radius:20px;--radius-lg:28px;--ease:cubic-bezier(.16,1,.3,1);--fb:'Inter',system-ui,sans-serif}
+
+/* — TEMA IMMERSIVO (vince sul precedente) — */
+:root{
+  --paper:#0a0d18; --white:#12162a; --ink:#eef1fb; --graphite:#141830; --ink-soft:#9aa3c7;
+  --gray:#171c33; --line:rgba(140,160,220,.16);
+  --blue:#3b7de0; --blue-hi:#5a95f0; --laser:#f5d94e; --spark:#ff8a3c;
+  --fd:'Exo 2',sans-serif;
+  --shadow-soft:0 10px 40px rgba(0,0,0,.45); --shadow-lift:0 24px 60px rgba(0,0,0,.55);
+  /* Scala di elevazione (4 livelli) — solo profondità strutturale.
+     I bagliori colorati (laser/blu) restano effetti a parte, non elevazione. */
+  --elev-1:0 2px 8px rgba(0,0,0,.16);
+  --elev-2:var(--shadow-soft);
+  --elev-3:0 18px 40px rgba(0,0,0,.28);
+  --elev-4:var(--shadow-lift);
+  /* Scala tipografica (progressione coerente, ancorata alle dimensioni già in uso) */
+  --fs-xs:11px; --fs-sm:12.5px; --fs-base:14px; --fs-md:16px;
+  --fs-lg:18px; --fs-xl:20px; --fs-2xl:25px; --fs-3xl:28px;
+}
+
+/* ===== 3.3 Scala tipografica (rapporto 1.25 — major third) =====
+   Fonte unica per le dimensioni del testo: usare queste variabili invece di valori sciolti. */
+:root{
+  --fs-2xs: .6875rem;   /* 11px  — etichette, chip */
+  --fs-xs:  .78125rem;  /* 12.5px — didascalie, meta */
+  --fs-sm:  .875rem;    /* 14px  — testo secondario */
+  --fs-md:  1rem;       /* 16px  — corpo */
+  --fs-lg:  1.25rem;    /* 20px  — sottotitoli */
+  --fs-xl:  1.5625rem;  /* 25px  — titoli di card */
+  --fs-2xl: clamp(1.65rem, 3vw, 1.953rem);
+  --fs-3xl: clamp(2rem, 4.2vw, 2.441rem);
+  --fs-4xl: clamp(2.4rem, 6vw, 3.815rem);
+  /* ritmo verticale coerente */
+  --lh-tight: 1.15;
+  --lh-snug:  1.3;
+  --lh-base:  1.6;
+  --ls-caps: .14em;
+}
+
+/* ===== MODALITÀ CHIARA =====
+   Si attiva con <html data-mode="light">. Ridefinisce SOLO le variabili di colore:
+   nessun componente va riscritto, ed è per questo che l'intero sito cambia in una riga. */
+:root[data-mode="light"]{
+  --paper:#f7f8fb; --white:#ffffff; --ink:#111827; --graphite:#eef1f7; --ink-soft:#5a6480;
+  --gray:#f0f2f8; --line:rgba(17,24,39,.13);
+  --blue:#1e56c4; --blue-hi:#2f7bff; --laser:#c9a227; --spark:#e2701c;
+  --shadow-soft:0 8px 28px rgba(17,24,39,.09);
+  --shadow-lift:0 22px 52px rgba(17,24,39,.14);
+  --elev-1:0 1px 3px rgba(17,24,39,.07);
+  --elev-2:var(--shadow-soft);
+  --elev-3:0 14px 32px rgba(17,24,39,.11);
+  --elev-4:var(--shadow-lift);
+  color-scheme:light;
+}
+:root[data-mode="dark"]{ color-scheme:dark; --glass-dark:rgba(10,13,24,.75);
+  --bg-deep:#070a14; --card-glass:rgba(17,21,39,.72); --card-solid:#141830 }
+:root[data-mode="light"]{
+  --glass-dark:rgba(255,255,255,.86);
+  --bg-deep:#eef1f7; --card-glass:#ffffff; --card-solid:#ffffff;
+}
+:root[data-mode="light"] .mcard{ border-color:rgba(17,24,39,.12); color:#111827 }
+:root[data-mode="light"] .mcard h3,:root[data-mode="light"] .mcard p{ color:inherit }
+:root[data-mode="light"] .fcard{ border-color:rgba(17,24,39,.14);
+  box-shadow:0 24px 60px rgba(17,24,39,.10) }
+:root[data-mode="light"] .topbar,:root[data-mode="light"] footer{ border-color:rgba(17,24,39,.1) }
+:root[data-mode="light"] .bcard--light h3{ color:#111827 }
+:root[data-mode="light"] .sugg button:hover,:root[data-mode="light"] .sugg button.on{ background:rgba(17,24,39,.06) }
+:root[data-mode="light"] *::-webkit-scrollbar-thumb{ background:rgba(17,24,39,.2);background-clip:content-box }
+:root[data-mode="light"]{ --glass-dark:rgba(255,255,255,.86) }
+:root[data-mode="light"] .ptag,:root[data-mode="light"] .gtile .lbl,
+:root[data-mode="light"] .pp-main .bstamp,:root[data-mode="light"] .wish{ color:#111827 }
+:root[data-mode="light"] .wish svg{ stroke:#111827 }

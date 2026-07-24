@@ -1,0 +1,3444 @@
+{
+ "MAT_ART": {
+  "Legno": {
+   "bg": "linear-gradient(140deg,#e8d5b0,#c9a876)",
+   "sw": "#c9a876"
+  },
+  "Plexiglass": {
+   "bg": "linear-gradient(140deg,#dbe9ff,#aac6f5)",
+   "sw": "#aac6f5"
+  },
+  "Metallo": {
+   "bg": "linear-gradient(140deg,#4a4a55,#23232c)",
+   "sw": "#3a3a44"
+  },
+  "Pelle": {
+   "bg": "linear-gradient(140deg,#b9825a,#8a5a38)",
+   "sw": "#9a6a45"
+  },
+  "Vetro": {
+   "bg": "linear-gradient(140deg,#eef7f7,#cfe6e8)",
+   "sw": "#cfe6e8"
+  },
+  "Bamboo": {
+   "bg": "linear-gradient(140deg,#e9dfc0,#cdbd8a)",
+   "sw": "#cdbd8a"
+  },
+  "MDF": {
+   "bg": "linear-gradient(140deg,#d9c9b2,#b8a284)",
+   "sw": "#b8a284"
+  },
+  "PLA": {
+   "bg": "linear-gradient(140deg,#eefaf1,#bfe8cd)",
+   "sw": "#bfe8cd"
+  },
+  "File": {
+   "bg": "linear-gradient(140deg,#f4f0ff,#d9ccf5)",
+   "sw": "#d9ccf5"
+  }
+ },
+ "MATN": {
+  "Legno": {
+   "it": "Legno",
+   "en": "Wood"
+  },
+  "Plexiglass": {
+   "it": "Plexiglass",
+   "en": "Plexiglass"
+  },
+  "Metallo": {
+   "it": "Metallo",
+   "en": "Metal"
+  },
+  "Pelle": {
+   "it": "Pelle",
+   "en": "Leather"
+  },
+  "Vetro": {
+   "it": "Vetro",
+   "en": "Glass"
+  },
+  "Bamboo": {
+   "it": "Bamboo",
+   "en": "Bamboo"
+  },
+  "MDF": {
+   "it": "MDF",
+   "en": "MDF"
+  },
+  "PLA": {
+   "it": "PLA/PETG",
+   "en": "PLA/PETG"
+  },
+  "File": {
+   "it": "File digitale",
+   "en": "Digital file"
+  }
+ },
+ "DIG": [
+  {
+   "id": 101,
+   "n": {
+    "it": "Bundle 50 File SVG — Casa",
+    "en": "50 SVG Bundle — Home"
+   },
+   "f": [
+    "SVG",
+    "PDF"
+   ],
+   "price": 19,
+   "icon": "🏠"
+  },
+  {
+   "id": 102,
+   "n": {
+    "it": "Template Targhe DXF ×30",
+    "en": "Plaque Templates DXF ×30"
+   },
+   "f": [
+    "DXF",
+    "SVG"
+   ],
+   "price": 24,
+   "icon": "🪧"
+  },
+  {
+   "id": 103,
+   "n": {
+    "it": "File 3D STL — Decor Pack",
+    "en": "3D STL Files — Decor Pack"
+   },
+   "f": [
+    "STL"
+   ],
+   "price": 29,
+   "icon": "🧊"
+  },
+  {
+   "id": 104,
+   "n": {
+    "it": "Template Segnaposto Nozze",
+    "en": "Wedding Place Card Templates"
+   },
+   "f": [
+    "SVG",
+    "DXF",
+    "AI"
+   ],
+   "price": 15,
+   "icon": "💍"
+  },
+  {
+   "id": 105,
+   "n": {
+    "it": "Progetto Laser Premium — Lampada",
+    "en": "Premium Laser Project — Lamp"
+   },
+   "f": [
+    "SVG",
+    "DXF",
+    "LBRN"
+   ],
+   "price": 39,
+   "icon": "💡"
+  },
+  {
+   "id": 106,
+   "n": {
+    "it": "Bundle Makers CO₂/F2/MOPA",
+    "en": "Makers Bundle CO₂/F2/MOPA"
+   },
+   "f": [
+    "SVG",
+    "DXF",
+    "STL",
+    "LBRN"
+   ],
+   "price": 59,
+   "icon": "🧰"
+  }
+ ],
+ "TECH": [
+  {
+   "t": "CO₂ · 100W",
+   "n": "Laser CO₂",
+   "d": {
+    "it": "Legno, plexiglass, pelle, vetro e MDF. Taglia fino a 20 mm, incide dettagli fotografici.",
+    "en": "Wood, plexiglass, leather, glass and MDF. Cuts up to 20 mm, engraves photographic detail."
+   },
+   "s": [
+    "1300×900 mm",
+    "0,025 mm"
+   ],
+   "lg": 1,
+   "icon": "laser"
+  },
+  {
+   "t": "Fiber · F2",
+   "n": "Fiber Laser F2",
+   "d": {
+    "it": "Marcatura permanente e tattile su acciaio, alluminio, titanio e ottone.",
+    "en": "Permanent, tactile marking on steel, aluminium, titanium and brass."
+   },
+   "s": [
+    "Deep engraving",
+    "Traceability"
+   ],
+   "lg": 1,
+   "icon": "laser"
+  },
+  {
+   "t": "MOPA",
+   "n": "Laser MOPA",
+   "d": {
+    "it": "Marcature a colori su acciaio e anodizzato, massimo controllo dell’impulso.",
+    "en": "Color marking on steel and anodized surfaces, full pulse control."
+   },
+   "s": [
+    "Color marking"
+   ],
+   "icon": "laser"
+  },
+  {
+   "t": "DTF · Textile",
+   "n": "Stampa DTF",
+   "d": {
+    "it": "Transfer vividi e resistenti per abbigliamento, da 1 pezzo alle divise complete.",
+    "en": "Vivid, durable transfers for apparel, from 1 piece to full uniform runs."
+   },
+   "s": [
+    "Ogni tessuto"
+   ],
+   "icon": "dtf"
+  },
+  {
+   "t": "UV · Flatbed",
+   "n": "Stampa UV",
+   "d": {
+    "it": "Stampa full color con bianco e lucido, direttamente su quasi ogni oggetto.",
+    "en": "Full-color print with white & gloss layers, directly on almost any object."
+   },
+   "s": [
+    "2880 dpi"
+   ],
+   "icon": "uv"
+  },
+  {
+   "t": "FDM / Resina",
+   "n": "Stampa 3D",
+   "d": {
+    "it": "Prototipi, nomi 3D e oggetti di design in PLA/PETG, rifiniti a mano.",
+    "en": "Prototypes, 3D names and design objects in PLA/PETG, hand finished."
+   },
+   "s": [
+    "0,05 mm layer"
+   ],
+   "icon": "3d"
+  }
+ ],
+ "MATERIALS": [
+  [
+   "Legno",
+   "Wood",
+   "#e8d5b0,#c9a876",
+   {
+    "it": "Rovere, noce, faggio",
+    "en": "Oak, walnut, beech"
+   }
+  ],
+  [
+   "Plexiglass",
+   "Plexiglass",
+   "#dbe9ff,#aac6f5",
+   {
+    "it": "Colato, colorato, specchiato",
+    "en": "Cast, colored, mirrored"
+   }
+  ],
+  [
+   "Metallo",
+   "Metal",
+   "#4a4a55,#23232c",
+   {
+    "it": "Acciaio, alluminio, titanio",
+    "en": "Steel, aluminium, titanium"
+   }
+  ],
+  [
+   "Pelle",
+   "Leather",
+   "#b9825a,#8a5a38",
+   {
+    "it": "Vera pelle e similpelle",
+    "en": "Genuine & vegan leather"
+   }
+  ],
+  [
+   "Vetro",
+   "Glass",
+   "#eef7f7,#cfe6e8",
+   {
+    "it": "Bicchieri, bottiglie, lastre",
+    "en": "Glasses, bottles, sheets"
+   }
+  ],
+  [
+   "Bamboo",
+   "Bamboo",
+   "#e9dfc0,#cdbd8a",
+   {
+    "it": "Ecologico e resistente",
+    "en": "Eco-friendly & durable"
+   }
+  ],
+  [
+   "MDF",
+   "MDF",
+   "#d9c9b2,#b8a284",
+   {
+    "it": "Ideale per taglio e verniciatura",
+    "en": "Ideal for cutting & painting"
+   }
+  ],
+  [
+   "PLA/PETG",
+   "PLA/PETG",
+   "#eefaf1,#bfe8cd",
+   {
+    "it": "Stampa 3D, mille colori",
+    "en": "3D printing, endless colors"
+   }
+  ]
+ ],
+ "STEPS": [
+  {
+   "it": [
+    "Progetto",
+    "Invia la tua idea, logo o foto — o costruiscila nel configuratore. Prepariamo il file per il raggio."
+   ],
+   "en": [
+    "Design",
+    "Send your idea, logo or photo — or build it in the customizer. We prep the file for the beam."
+   ]
+  },
+  {
+   "it": [
+    "Materiale",
+    "Scegli tra otto materiali certificati, controllati pezzo per pezzo."
+   ],
+   "en": [
+    "Material",
+    "Choose from eight certified materials, checked piece by piece."
+   ]
+  },
+  {
+   "it": [
+    "Laser & stampa",
+    "CO₂, F2, MOPA, UV o DTF — la tecnologia giusta per la tua superficie."
+   ],
+   "en": [
+    "Laser & print",
+    "CO₂, F2, MOPA, UV or DTF — the right technology for your surface."
+   ]
+  },
+  {
+   "it": [
+    "Finitura & spedizione",
+    "Rifinito a mano, controllato e spedito. La maggior parte parte entro 3 giorni."
+   ],
+   "en": [
+    "Finish & ship",
+    "Hand finished, quality checked and shipped. Most pieces ship within 3 days."
+   ]
+  }
+ ],
+ "REVIEWS": [
+  {
+   "q": {
+    "it": "\"60 taglieri incisi per le aperture dei nostri ristoranti. Precisione irreale — ogni logo identico, consegna in anticipo.\"",
+    "en": "\"60 engraved boards for our restaurant openings. Unreal precision — every logo identical, delivered early.\""
+   },
+   "w": "Marco R.",
+   "s": {
+    "it": "Gruppo ristorazione · Bologna",
+    "en": "Restaurant group · Bologna"
+   },
+   "c": "var(--blue)",
+   "i": "MR"
+  },
+  {
+   "q": {
+    "it": "\"Le bomboniere hanno fatto piangere mezza sala. I cuori in ardesia con la nostra data erano oltre ogni aspettativa.\"",
+    "en": "\"The favors made half the room cry. The slate hearts with our date were beyond expectations.\""
+   },
+   "w": "Giulia C.",
+   "s": {
+    "it": "Matrimonio · Rimini",
+    "en": "Wedding · Rimini"
+   },
+   "c": "#8f6ad1",
+   "i": "GC"
+  },
+  {
+   "q": {
+    "it": "\"500 card in acciaio marcate F2 per il team vendite. La finitura tattile ferma le persone. Ora cliente fisso.\"",
+    "en": "\"500 F2-marked steel cards for our sales team. The tactile finish stops people. Repeat client now.\""
+   },
+   "w": "Luca T.",
+   "s": {
+    "it": "Azienda tech · Milano",
+    "en": "Tech company · Milano"
+   },
+   "c": "#2c8a5b",
+   "i": "LT"
+  }
+ ],
+ "BIZ": [
+  [
+   "🏷️",
+   {
+    "it": "Targhe professionali",
+    "en": "Professional plaques"
+   },
+   {
+    "it": "Studi, uffici e attività: targhe in plexi, legno e metallo con posa inclusa.",
+    "en": "Offices and businesses: plexi, wood and metal plaques."
+   }
+  ],
+  [
+   "🎁",
+   {
+    "it": "Gadget aziendali",
+    "en": "Corporate gadgets"
+   },
+   {
+    "it": "Penne, borracce, portachiavi e kit onboarding con il tuo logo.",
+    "en": "Pens, bottles, keychains and onboarding kits with your logo."
+   }
+  ],
+  [
+   "📱",
+   {
+    "it": "QR menu & branding",
+    "en": "QR menus & branding"
+   },
+   {
+    "it": "Menu QR in plexi/legno e branding coordinato per locali.",
+    "en": "Plexi/wood QR menus and coordinated branding."
+   }
+  ],
+  [
+   "🏭",
+   {
+    "it": "Produzione conto terzi",
+    "en": "Third-party production"
+   },
+   {
+    "it": "La tua produzione sui nostri laser: capacità, qualità, riservatezza.",
+    "en": "Your production on our lasers: capacity, quality, confidentiality."
+   }
+  ],
+  [
+   "⚙️",
+   {
+    "it": "Incisioni industriali",
+    "en": "Industrial engraving"
+   },
+   {
+    "it": "Marcature tecniche, serial, QR e tracciabilità su metallo.",
+    "en": "Technical marking, serials, QR and traceability on metal."
+   }
+  ],
+  [
+   "🧪",
+   {
+    "it": "Prototipazione laser",
+    "en": "Laser prototyping"
+   },
+   {
+    "it": "Dal file al prototipo in 48h, iterazioni rapide.",
+    "en": "From file to prototype in 48h, fast iterations."
+   }
+  ]
+ ],
+ "FAQS": [
+  [
+   {
+    "it": "Quanto dura la produzione?",
+    "en": "How long does production take?"
+   },
+   {
+    "it": "La maggior parte dei pezzi personalizzati viene incisa e spedita entro 3 giorni lavorativi. Gli ordini B2B ricevono un piano di produzione con date garantite.",
+    "en": "Most personalized pieces are engraved and shipped within 3 working days. B2B orders get a production plan with guaranteed dates."
+   }
+  ],
+  [
+   {
+    "it": "Posso caricare il mio logo o una foto?",
+    "en": "Can I upload my own logo or photo?"
+   },
+   {
+    "it": "Sì — SVG, PDF, AI, PNG o JPG. Ottimizziamo ogni file per il materiale scelto e inviamo una prova grafica prima di incidere.",
+    "en": "Yes — SVG, PDF, AI, PNG or JPG. We optimize every file and send a digital proof before engraving."
+   }
+  ],
+  [
+   {
+    "it": "Quali materiali lavorate?",
+    "en": "Which materials do you work with?"
+   },
+   {
+    "it": "Legno, plexiglass, metallo (acciaio, alluminio, titanio), pelle, vetro, bamboo, MDF e PLA/PETG per il 3D.",
+    "en": "Wood, plexiglass, metal (steel, aluminium, titanium), leather, glass, bamboo, MDF and PLA/PETG for 3D."
+   }
+  ],
+  [
+   {
+    "it": "Incidete oggetti portati da me?",
+    "en": "Do you engrave my own objects?"
+   },
+   {
+    "it": "Sì, è il nostro servizio Custom su Richiesta: portaci l’oggetto (o spediscilo) e lo personalizziamo dopo un test di compatibilità.",
+    "en": "Yes — our Custom on Request service: bring or ship your object and we personalize it after a compatibility test."
+   }
+  ],
+  [
+   {
+    "it": "Gestite ordini aziendali e bulk?",
+    "en": "Do you handle corporate and bulk orders?"
+   },
+   {
+    "it": "Da 50 a 50.000 pezzi, con prezzi a quantità, setup logo incluso e referente dedicato.",
+    "en": "From 50 to 50,000 pieces, with quantity pricing, free logo setup and a dedicated contact."
+   }
+  ],
+  [
+   {
+    "it": "Come funzionano i file digitali?",
+    "en": "How do digital files work?"
+   },
+   {
+    "it": "Download istantaneo dopo l’acquisto, licenza commerciale inclusa. Formati per CO₂, F2, MOPA e stampa 3D.",
+    "en": "Instant download after purchase, commercial license included. Formats for CO₂, F2, MOPA and 3D printing."
+   }
+  ],
+  [
+   {
+    "it": "Spedite fuori dall’Italia?",
+    "en": "Do you ship outside Italy?"
+   },
+   {
+    "it": "In tutta la UE in 2–5 giorni lavorativi con corriere tracciato. Extra-UE su richiesta per ordini business.",
+    "en": "Across the EU in 2–5 working days, tracked. Worldwide on request for business orders."
+   }
+  ]
+ ],
+ "PORT": [
+  [
+   "🪵",
+   {
+    "it": "Menu board in rovere",
+    "en": "Oak menu boards"
+   },
+   "#e8d5b0,#c9a876"
+  ],
+  [
+   "🏆",
+   {
+    "it": "Premio in vetro — Nova Tech",
+    "en": "Glass award — Nova Tech"
+   },
+   "#eef7f7,#cfe6e8"
+  ],
+  [
+   "💍",
+   {
+    "it": "Allestimento nozze",
+    "en": "Wedding signage"
+   },
+   "#f4f0ff,#d9ccf5"
+  ],
+  [
+   "🐾",
+   {
+    "it": "Medagliette in acciaio",
+    "en": "Steel pet tags"
+   },
+   "#4a4a55,#23232c"
+  ],
+  [
+   "💡",
+   {
+    "it": "Plexi retroilluminato",
+    "en": "Edge-lit acrylic"
+   },
+   "#dbe9ff,#aac6f5"
+  ],
+  [
+   "🎂",
+   {
+    "it": "Cake topper su misura",
+    "en": "Custom cake toppers"
+   },
+   "#fdf1f3,#f5c8d2"
+  ],
+  [
+   "🔑",
+   {
+    "it": "Portachiavi in pelle",
+    "en": "Leather keychains"
+   },
+   "#b9825a,#8a5a38"
+  ],
+  [
+   "🎄",
+   {
+    "it": "Run natalizia ×400",
+    "en": "Christmas run ×400"
+   },
+   "#fdeaea,#f0bcbc"
+  ],
+  [
+   "⚙️",
+   {
+    "it": "Marcatura industriale F2",
+    "en": "F2 industrial marking"
+   },
+   "#33313f,#211f2e"
+  ],
+  [
+   "👶",
+   {
+    "it": "Targhe nascita",
+    "en": "Birth plaques"
+   },
+   "#eefaf1,#bfe8cd"
+  ],
+  [
+   "🎓",
+   {
+    "it": "Targhe laurea",
+    "en": "Graduation plaques"
+   },
+   "#fff8e0,#f8e69a"
+  ],
+  [
+   "🌙",
+   {
+    "it": "Lampade 3D",
+    "en": "3D lamps"
+   },
+   "#f4f0ff,#e3daf8"
+  ]
+ ],
+ "FONTS": [
+  {
+   "n": "Grotesk",
+   "css": "'Space Grotesk',sans-serif"
+  },
+  {
+   "n": "Script",
+   "css": "'Caveat',cursive"
+  },
+  {
+   "n": "Serif",
+   "css": "'Playfair Display',serif"
+  }
+ ],
+ "MOPT": [
+  {
+   "k": "Legno",
+   "mod": 0
+  },
+  {
+   "k": "Plexiglass",
+   "mod": 4
+  },
+  {
+   "k": "Bamboo",
+   "mod": 3
+  },
+  {
+   "k": "Pelle",
+   "mod": 5
+  },
+  {
+   "k": "Metallo",
+   "mod": 9
+  }
+ ],
+ "THEMES": {
+  "attivo": "default",
+  "auto": true,
+  "temi": [
+   {
+    "id": "default",
+    "n": {
+     "it": "Default INGLY",
+     "en": "INGLY Default"
+    },
+    "mood": "sobrio, artigianale, premium",
+    "palette": [
+     "#111827",
+     "#1E3A8A",
+     "#FACC15"
+    ],
+    "lighting": "soft cinematic key light from the right, warm rim light",
+    "elementi": "laser-engraved wooden panel, acrylic sheets, brass details, fine wood dust in the light beam",
+    "kw": [
+     "premium",
+     "craft",
+     "laser"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 1,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "laser"
+   },
+   {
+    "id": "spring",
+    "n": {
+     "it": "Primavera",
+     "en": "Spring"
+    },
+    "mood": "fresco, luminoso, rinascita",
+    "palette": [
+     "#111827",
+     "#2F7BFF",
+     "#A7E8B0"
+    ],
+    "lighting": "soft morning light, gentle haze",
+    "elementi": "engraved wooden botanical panels, fresh green leaves, small blossoms, light acrylic petals",
+    "kw": [
+     "primavera",
+     "fiori"
+    ],
+    "cats": "*",
+    "dal": "03-01",
+    "al": "05-31",
+    "prio": 6,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "mesh"
+   },
+   {
+    "id": "summer",
+    "n": {
+     "it": "Estate",
+     "en": "Summer"
+    },
+    "mood": "solare, mediterraneo, vacanza",
+    "palette": [
+     "#0D1B2A",
+     "#2F7BFF",
+     "#FFD166"
+    ],
+    "lighting": "bright golden hour, long warm shadows",
+    "elementi": "engraved wooden beach signs, acrylic waves, straw textures, citrus tones, sun glares",
+    "kw": [
+     "estate",
+     "mare"
+    ],
+    "cats": "*",
+    "dal": "06-01",
+    "al": "08-31",
+    "prio": 6,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "rays"
+   },
+   {
+    "id": "autumn",
+    "n": {
+     "it": "Autunno",
+     "en": "Autumn"
+    },
+    "mood": "caldo, avvolgente, materico",
+    "palette": [
+     "#111827",
+     "#8A4B2A",
+     "#E0A458"
+    ],
+    "lighting": "low warm sunlight, dusty golden atmosphere",
+    "elementi": "engraved oak panels, dry leaves, amber acrylic, warm cognac leather, soft smoke",
+    "kw": [
+     "autunno",
+     "foglie"
+    ],
+    "cats": "*",
+    "dal": "09-01",
+    "al": "11-30",
+    "prio": 6,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "waves"
+   },
+   {
+    "id": "winter",
+    "n": {
+     "it": "Inverno",
+     "en": "Winter"
+    },
+    "mood": "nitido, elegante, silenzioso",
+    "palette": [
+     "#0B1220",
+     "#3B6FD4",
+     "#E6EEF8"
+    ],
+    "lighting": "cold blue light with a single warm accent",
+    "elementi": "frosted acrylic panels, engraved snow crystals, pale birch wood, icy reflections",
+    "kw": [
+     "inverno",
+     "neve"
+    ],
+    "cats": "*",
+    "dal": "12-01",
+    "al": "02-28",
+    "prio": 6,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "snow"
+   },
+   {
+    "id": "christmas",
+    "n": {
+     "it": "Natale",
+     "en": "Christmas"
+    },
+    "mood": "festivo, caldo, prezioso",
+    "palette": [
+     "#0B1A2E",
+     "#C8A24A",
+     "#F5F0E6"
+    ],
+    "lighting": "warm candlelight glow, soft bokeh of string lights",
+    "elementi": "engraved wooden ornaments, pine branches, brass baubles, red ribbon, warm fairy lights",
+    "kw": [
+     "natale",
+     "regali"
+    ],
+    "cats": "*",
+    "dal": "11-20",
+    "al": "12-27",
+    "prio": 20,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "bokeh"
+   },
+   {
+    "id": "newyear",
+    "n": {
+     "it": "Capodanno",
+     "en": "New Year"
+    },
+    "mood": "scintillante, celebrativo",
+    "palette": [
+     "#0B1220",
+     "#111827",
+     "#FFD700"
+    ],
+    "lighting": "sparkling highlights, dark background with golden flares",
+    "elementi": "engraved gold numerals, champagne glass silhouettes, confetti in acrylic, fireworks bokeh",
+    "kw": [
+     "capodanno",
+     "festa"
+    ],
+    "cats": "*",
+    "dal": "12-27",
+    "al": "01-07",
+    "prio": 18,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "particles"
+   },
+   {
+    "id": "epifania",
+    "n": {
+     "it": "Epifania",
+     "en": "Epiphany"
+    },
+    "mood": "giocoso, tradizionale",
+    "palette": [
+     "#111827",
+     "#6B2737",
+     "#F0C808"
+    ],
+    "lighting": "warm hearth light",
+    "elementi": "engraved stocking shapes, sweets, coal-black acrylic pieces, small wooden toys",
+    "kw": [
+     "befana"
+    ],
+    "cats": "*",
+    "dal": "01-01",
+    "al": "01-06",
+    "prio": 12,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "bokeh"
+   },
+   {
+    "id": "valentine",
+    "n": {
+     "it": "San Valentino",
+     "en": "Valentine"
+    },
+    "mood": "romantico, intimo, caldo",
+    "palette": [
+     "#1A0B14",
+     "#C2185B",
+     "#F8C8DC"
+    ],
+    "lighting": "soft rosy light, warm shallow depth",
+    "elementi": "engraved heart panels, rose petals, blush acrylic, thin gold lettering plates, candle glow",
+    "kw": [
+     "amore",
+     "coppia"
+    ],
+    "cats": "*",
+    "dal": "01-25",
+    "al": "02-15",
+    "prio": 18,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "mesh"
+   },
+   {
+    "id": "carnevale",
+    "n": {
+     "it": "Carnevale",
+     "en": "Carnival"
+    },
+    "mood": "allegro, teatrale",
+    "palette": [
+     "#111827",
+     "#7B2FBF",
+     "#FFC857"
+    ],
+    "lighting": "colourful theatrical lights",
+    "elementi": "engraved venetian masks, confetti, streamers, glossy acrylic in bright colours",
+    "kw": [
+     "carnevale",
+     "maschere"
+    ],
+    "cats": "*",
+    "dal": "02-01",
+    "al": "02-28",
+    "prio": 10,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "confetti"
+   },
+   {
+    "id": "easter",
+    "n": {
+     "it": "Pasqua",
+     "en": "Easter"
+    },
+    "mood": "delicato, primaverile",
+    "palette": [
+     "#111827",
+     "#5B8C5A",
+     "#F2E8CF"
+    ],
+    "lighting": "soft diffused spring light",
+    "elementi": "engraved egg shapes, pastel acrylic, olive branches, small wooden bunnies, spring flowers",
+    "kw": [
+     "pasqua",
+     "uova"
+    ],
+    "cats": "*",
+    "dal": "03-10",
+    "al": "04-20",
+    "prio": 16,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "mesh"
+   },
+   {
+    "id": "mothersday",
+    "n": {
+     "it": "Festa della Mamma",
+     "en": "Mother's Day"
+    },
+    "mood": "affettuoso, elegante",
+    "palette": [
+     "#1A1020",
+     "#B5838D",
+     "#FFCDB2"
+    ],
+    "lighting": "soft warm light, gentle glow",
+    "elementi": "engraved family portrait plaque, delicate flowers, pink acrylic hearts, ribbon",
+    "kw": [
+     "mamma",
+     "regalo"
+    ],
+    "cats": "*",
+    "dal": "04-25",
+    "al": "05-14",
+    "prio": 15,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "mesh"
+   },
+   {
+    "id": "fathersday",
+    "n": {
+     "it": "Festa del Papà",
+     "en": "Father's Day"
+    },
+    "mood": "solido, artigianale",
+    "palette": [
+     "#111827",
+     "#3A5A40",
+     "#C9A227"
+    ],
+    "lighting": "directional workshop light",
+    "elementi": "engraved leather tag, dark walnut wood, brass tools, whisky glass silhouette",
+    "kw": [
+     "papa",
+     "regalo"
+    ],
+    "cats": "*",
+    "dal": "03-10",
+    "al": "03-19",
+    "prio": 15,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "topo"
+   },
+   {
+    "id": "halloween",
+    "n": {
+     "it": "Halloween",
+     "en": "Halloween"
+    },
+    "mood": "misterioso, giocoso, scuro",
+    "palette": [
+     "#0A0A0F",
+     "#FF7518",
+     "#5B2C6F"
+    ],
+    "lighting": "dramatic low key with orange rim light",
+    "elementi": "engraved pumpkin panels, bats, spider web patterns, glowing orange acrylic, mist",
+    "kw": [
+     "halloween",
+     "zucca"
+    ],
+    "cats": "*",
+    "dal": "10-10",
+    "al": "11-02",
+    "prio": 18,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "beams"
+   },
+   {
+    "id": "ognissanti",
+    "n": {
+     "it": "Ognissanti",
+     "en": "All Saints"
+    },
+    "mood": "sobrio, rispettoso",
+    "palette": [
+     "#111827",
+     "#4A4E69",
+     "#E9ECEF"
+    ],
+    "lighting": "soft cold light, calm atmosphere",
+    "elementi": "engraved memorial plaque, chrysanthemum silhouettes, matte stone texture, candle",
+    "kw": [
+     "ricordo",
+     "targhe"
+    ],
+    "cats": "*",
+    "dal": "10-28",
+    "al": "11-03",
+    "prio": 9,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "arcs"
+   },
+   {
+    "id": "blackfriday",
+    "n": {
+     "it": "Black Friday",
+     "en": "Black Friday"
+    },
+    "mood": "audace, contrastato",
+    "palette": [
+     "#000000",
+     "#111827",
+     "#FACC15"
+    ],
+    "lighting": "hard spotlight on black background",
+    "elementi": "matte black acrylic, engraved percentage badges, sharp yellow accents, minimal props",
+    "kw": [
+     "sconti",
+     "promo"
+    ],
+    "cats": "*",
+    "dal": "11-15",
+    "al": "12-01",
+    "prio": 22,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "beams"
+   },
+   {
+    "id": "backtoschool",
+    "n": {
+     "it": "Back to School",
+     "en": "Back to School"
+    },
+    "mood": "ordinato, colorato, fresco",
+    "palette": [
+     "#111827",
+     "#2F7BFF",
+     "#FF9F1C"
+    ],
+    "lighting": "clean bright light, crisp shadows",
+    "elementi": "engraved wooden pencils, notebooks, colourful acrylic name tags, geometric shapes",
+    "kw": [
+     "scuola",
+     "bambini"
+    ],
+    "cats": "*",
+    "dal": "08-15",
+    "al": "09-30",
+    "prio": 14,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "grid"
+   },
+   {
+    "id": "ferragosto",
+    "n": {
+     "it": "Ferragosto",
+     "en": "Mid-August"
+    },
+    "mood": "solare, spensierato",
+    "palette": [
+     "#0D1B2A",
+     "#00A6A6",
+     "#FFD166"
+    ],
+    "lighting": "harsh summer sun, deep blue sky",
+    "elementi": "engraved beach tags, sun umbrellas, turquoise acrylic waves, straw texture",
+    "kw": [
+     "estate",
+     "mare"
+    ],
+    "cats": "*",
+    "dal": "08-05",
+    "al": "08-20",
+    "prio": 10,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "waves"
+   },
+   {
+    "id": "saldi",
+    "n": {
+     "it": "Saldi",
+     "en": "Sale Season"
+    },
+    "mood": "dinamico, commerciale",
+    "palette": [
+     "#111827",
+     "#D62828",
+     "#FACC15"
+    ],
+    "lighting": "high contrast studio light",
+    "elementi": "engraved sale tags, red acrylic badges, dynamic diagonal composition",
+    "kw": [
+     "saldi",
+     "promo"
+    ],
+    "cats": "*",
+    "dal": "01-05",
+    "al": "02-05",
+    "prio": 12,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "beams"
+   },
+   {
+    "id": "wedding",
+    "n": {
+     "it": "Matrimonio",
+     "en": "Wedding"
+    },
+    "mood": "raffinato, romantico, luminoso",
+    "palette": [
+     "#1B1B1F",
+     "#C9B037",
+     "#F7F3EE"
+    ],
+    "lighting": "soft diffused light, airy highlights",
+    "elementi": "engraved wedding signage, white acrylic, gold leaf details, eucalyptus, lace texture",
+    "kw": [
+     "nozze",
+     "sposi"
+    ],
+    "cats": "*",
+    "dal": "04-01",
+    "al": "09-30",
+    "prio": 12,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "bokeh"
+   },
+   {
+    "id": "baby",
+    "n": {
+     "it": "Nascita",
+     "en": "Baby"
+    },
+    "mood": "tenero, morbido",
+    "palette": [
+     "#141A2B",
+     "#8ECAE6",
+     "#FFE5D9"
+    ],
+    "lighting": "very soft light, low contrast",
+    "elementi": "engraved baby name cloud, pastel acrylic stars, soft birch wood, tiny wooden animals",
+    "kw": [
+     "nascita",
+     "bambini"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 8,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "mesh"
+   },
+   {
+    "id": "battesimo",
+    "n": {
+     "it": "Battesimo",
+     "en": "Christening"
+    },
+    "mood": "delicato, luminoso",
+    "palette": [
+     "#141A2B",
+     "#A8DADC",
+     "#F1FAEE"
+    ],
+    "lighting": "soft heavenly light",
+    "elementi": "engraved christening plaque, white acrylic, small cross detail, satin ribbon",
+    "kw": [
+     "battesimo"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 7,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "mesh"
+   },
+   {
+    "id": "comunione",
+    "n": {
+     "it": "Comunione",
+     "en": "Communion"
+    },
+    "mood": "sobrio, luminoso",
+    "palette": [
+     "#111827",
+     "#457B9D",
+     "#F1FAEE"
+    ],
+    "lighting": "gentle daylight",
+    "elementi": "engraved bomboniera tags, white wood, olive branch, thin gold lettering",
+    "kw": [
+     "comunione",
+     "bomboniere"
+    ],
+    "cats": "*",
+    "dal": "04-01",
+    "al": "06-30",
+    "prio": 9,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "arcs"
+   },
+   {
+    "id": "graduation",
+    "n": {
+     "it": "Laurea",
+     "en": "Graduation"
+    },
+    "mood": "celebrativo, orgoglioso",
+    "palette": [
+     "#0B1220",
+     "#8B0000",
+     "#C9A227"
+    ],
+    "lighting": "warm spotlight, confetti bokeh",
+    "elementi": "engraved graduation plaque, laurel wreath, dark red acrylic, gold tassel",
+    "kw": [
+     "laurea",
+     "festa"
+    ],
+    "cats": "*",
+    "dal": "06-15",
+    "al": "11-15",
+    "prio": 12,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "rays"
+   },
+   {
+    "id": "birthday",
+    "n": {
+     "it": "Compleanno",
+     "en": "Birthday"
+    },
+    "mood": "allegro, colorato",
+    "palette": [
+     "#111827",
+     "#F94144",
+     "#F9C74F"
+    ],
+    "lighting": "festive warm light, party bokeh",
+    "elementi": "engraved cake topper, balloons, colourful acrylic numbers, confetti",
+    "kw": [
+     "compleanno",
+     "festa"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 8,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "confetti"
+   },
+   {
+    "id": "anniversary",
+    "n": {
+     "it": "Anniversario",
+     "en": "Anniversary"
+    },
+    "mood": "elegante, intimo",
+    "palette": [
+     "#111827",
+     "#7F5539",
+     "#E6CCB2"
+    ],
+    "lighting": "warm candle light, soft vignette",
+    "elementi": "engraved anniversary plaque, two glasses, aged wood, thin brass frame",
+    "kw": [
+     "anniversario"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 7,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "bokeh"
+   },
+   {
+    "id": "pensione",
+    "n": {
+     "it": "Pensionamento",
+     "en": "Retirement"
+    },
+    "mood": "caloroso, riconoscente",
+    "palette": [
+     "#111827",
+     "#3A5A40",
+     "#DAD7CD"
+    ],
+    "lighting": "warm afternoon light",
+    "elementi": "engraved commemorative plaque, walnut wood, brass plate, small trophy",
+    "kw": [
+     "pensione",
+     "targhe"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 6,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "arcs"
+   },
+   {
+    "id": "inaugurazione",
+    "n": {
+     "it": "Inaugurazione",
+     "en": "Grand Opening"
+    },
+    "mood": "professionale, celebrativo",
+    "palette": [
+     "#111827",
+     "#1E3A8A",
+     "#FACC15"
+    ],
+    "lighting": "bright clean light with golden accents",
+    "elementi": "engraved opening plaque, ribbon, brushed metal, elegant signage",
+    "kw": [
+     "aziende",
+     "targhe"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 7,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "rays"
+   },
+   {
+    "id": "luxury",
+    "n": {
+     "it": "Luxury",
+     "en": "Luxury"
+    },
+    "mood": "sontuoso, prezioso",
+    "palette": [
+     "#0B0B0F",
+     "#1B1B22",
+     "#C9A227"
+    ],
+    "lighting": "dramatic rim light on dark velvet",
+    "elementi": "engraved black acrylic, brushed gold, marble slab, silk texture",
+    "kw": [
+     "lusso",
+     "oro"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "marble"
+   },
+   {
+    "id": "minimal",
+    "n": {
+     "it": "Minimal",
+     "en": "Minimal"
+    },
+    "mood": "pulito, essenziale",
+    "palette": [
+     "#111827",
+     "#E6E8EC",
+     "#2F7BFF"
+    ],
+    "lighting": "flat even light, almost no shadow",
+    "elementi": "single engraved wooden panel, geometric shapes, wide negative space",
+    "kw": [
+     "minimal",
+     "pulito"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "grid"
+   },
+   {
+    "id": "black",
+    "n": {
+     "it": "Black Edition",
+     "en": "Black Edition"
+    },
+    "mood": "severo, contemporaneo",
+    "palette": [
+     "#000000",
+     "#0D0D0D",
+     "#FFFFFF"
+    ],
+    "lighting": "single hard light, deep blacks",
+    "elementi": "matte black acrylic, engraved monogram, carbon texture, sharp edges",
+    "kw": [
+     "nero",
+     "contrasto"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "grid"
+   },
+   {
+    "id": "gold",
+    "n": {
+     "it": "Gold Edition",
+     "en": "Gold Edition"
+    },
+    "mood": "prezioso, caldo",
+    "palette": [
+     "#0B0B0F",
+     "#3A2E12",
+     "#FFD700"
+    ],
+    "lighting": "warm golden reflections",
+    "elementi": "gold-leaf engraved panel, brass details, dark walnut, glowing edges",
+    "kw": [
+     "oro",
+     "premium"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "rays"
+   },
+   {
+    "id": "marble",
+    "n": {
+     "it": "Marmo",
+     "en": "Marble"
+    },
+    "mood": "nobile, italiano",
+    "palette": [
+     "#101418",
+     "#E8E4DC",
+     "#B08D57"
+    ],
+    "lighting": "soft museum light",
+    "elementi": "carrara marble slab, engraved brass inlay, thin veining, stone dust",
+    "kw": [
+     "marmo",
+     "italia"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "marble"
+   },
+   {
+    "id": "neon",
+    "n": {
+     "it": "Neon",
+     "en": "Neon"
+    },
+    "mood": "urbano, elettrico",
+    "palette": [
+     "#08080F",
+     "#FF2E88",
+     "#00E5FF"
+    ],
+    "lighting": "neon glow, wet reflections",
+    "elementi": "edge-lit acrylic, neon tubing, dark reflective surface, magenta and cyan haze",
+    "kw": [
+     "neon",
+     "glow"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "beams"
+   },
+   {
+    "id": "retro",
+    "n": {
+     "it": "Retro 70s",
+     "en": "Retro 70s"
+    },
+    "mood": "nostalgico, caldo",
+    "palette": [
+     "#1A120B",
+     "#C1440E",
+     "#E9C46A"
+    ],
+    "lighting": "warm tungsten light, film grain",
+    "elementi": "engraved retro lettering, walnut, burnt orange acrylic, vinyl textures",
+    "kw": [
+     "retro",
+     "vintage"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "arcs"
+   },
+   {
+    "id": "vintage",
+    "n": {
+     "it": "Vintage",
+     "en": "Vintage"
+    },
+    "mood": "vissuto, artigianale",
+    "palette": [
+     "#1B1712",
+     "#6F4E37",
+     "#D9C2A3"
+    ],
+    "lighting": "soft sepia light",
+    "elementi": "aged wood, engraved vintage labels, kraft paper, brass stamps",
+    "kw": [
+     "vintage",
+     "carta"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "topo"
+   },
+   {
+    "id": "industrial",
+    "n": {
+     "it": "Industrial",
+     "en": "Industrial"
+    },
+    "mood": "tecnico, grezzo",
+    "palette": [
+     "#0F1113",
+     "#2B2F33",
+     "#E07A26"
+    ],
+    "lighting": "cold workshop light with sparks",
+    "elementi": "raw steel plate, engraved rivets, concrete, orange safety accents",
+    "kw": [
+     "industriale",
+     "metallo"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "grid"
+   },
+   {
+    "id": "scandi",
+    "n": {
+     "it": "Scandinavo",
+     "en": "Scandinavian"
+    },
+    "mood": "chiaro, sereno",
+    "palette": [
+     "#151A20",
+     "#EDEAE4",
+     "#9CAF88"
+    ],
+    "lighting": "soft nordic daylight",
+    "elementi": "pale birch wood, engraved simple shapes, wool texture, muted sage",
+    "kw": [
+     "nordico",
+     "legno"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "mesh"
+   },
+   {
+    "id": "japandi",
+    "n": {
+     "it": "Japandi",
+     "en": "Japandi"
+    },
+    "mood": "calmo, equilibrato",
+    "palette": [
+     "#14161A",
+     "#D8CFC2",
+     "#6B705C"
+    ],
+    "lighting": "soft directional light, deep calm shadows",
+    "elementi": "engraved light oak, paper screen texture, ceramic, single branch",
+    "kw": [
+     "japandi",
+     "zen"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "arcs"
+   },
+   {
+    "id": "artdeco",
+    "n": {
+     "it": "Art Déco",
+     "en": "Art Deco"
+    },
+    "mood": "geometrico, sfarzoso",
+    "palette": [
+     "#0B1220",
+     "#123C69",
+     "#D4AF37"
+    ],
+    "lighting": "symmetric theatrical light",
+    "elementi": "engraved geometric fan patterns, gold inlay, black lacquer, symmetry",
+    "kw": [
+     "deco",
+     "geometrico"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "arcs"
+   },
+   {
+    "id": "bauhaus",
+    "n": {
+     "it": "Bauhaus",
+     "en": "Bauhaus"
+    },
+    "mood": "primario, razionale",
+    "palette": [
+     "#111827",
+     "#D62828",
+     "#2F7BFF"
+    ],
+    "lighting": "flat graphic light",
+    "elementi": "engraved primary shapes, circle square triangle, matte acrylic blocks",
+    "kw": [
+     "bauhaus",
+     "grafico"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "grid"
+   },
+   {
+    "id": "botanical",
+    "n": {
+     "it": "Botanico",
+     "en": "Botanical"
+    },
+    "mood": "naturale, fresco",
+    "palette": [
+     "#111C15",
+     "#2D6A4F",
+     "#B7E4C7"
+    ],
+    "lighting": "dappled leaf light",
+    "elementi": "engraved botanical illustrations, real leaves, green acrylic, moss texture",
+    "kw": [
+     "botanico",
+     "verde"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "topo"
+   },
+   {
+    "id": "terrazzo",
+    "n": {
+     "it": "Terrazzo",
+     "en": "Terrazzo"
+    },
+    "mood": "giocoso, italiano",
+    "palette": [
+     "#141821",
+     "#F2E9E4",
+     "#E29578"
+    ],
+    "lighting": "even bright light",
+    "elementi": "terrazzo slab, engraved rounded shapes, pastel chips, soft edges",
+    "kw": [
+     "terrazzo",
+     "pastello"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "particles"
+   },
+   {
+    "id": "mono",
+    "n": {
+     "it": "Monocromatico",
+     "en": "Monochrome"
+    },
+    "mood": "grafico, netto",
+    "palette": [
+     "#0E0E0E",
+     "#7A7A7A",
+     "#FFFFFF"
+    ],
+    "lighting": "single hard source, strong shadow",
+    "elementi": "engraved white acrylic on black, pure greyscale, high contrast lines",
+    "kw": [
+     "bianco",
+     "nero"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "grid"
+   },
+   {
+    "id": "pastel",
+    "n": {
+     "it": "Pastello",
+     "en": "Pastel"
+    },
+    "mood": "dolce, leggero",
+    "palette": [
+     "#1B1B2A",
+     "#FFD6E0",
+     "#BDE0FE"
+    ],
+    "lighting": "soft flat light",
+    "elementi": "pastel acrylic sheets, engraved rounded typography, candy textures",
+    "kw": [
+     "pastello",
+     "dolce"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "mesh"
+   },
+   {
+    "id": "cyber",
+    "n": {
+     "it": "Cyberpunk",
+     "en": "Cyberpunk"
+    },
+    "mood": "futuristico, intenso",
+    "palette": [
+     "#06070D",
+     "#7B2FBF",
+     "#00F5D4"
+    ],
+    "lighting": "volumetric neon fog",
+    "elementi": "engraved circuit patterns, holographic acrylic, violet haze, tech grid",
+    "kw": [
+     "cyber",
+     "futuro"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "circuit"
+   },
+   {
+    "id": "holo",
+    "n": {
+     "it": "Holographic",
+     "en": "Holographic"
+    },
+    "mood": "iridescente, moderno",
+    "palette": [
+     "#0A0A12",
+     "#8E9AFF",
+     "#FF9CEE"
+    ],
+    "lighting": "iridescent reflections",
+    "elementi": "holographic film, engraved acrylic, prism light, soft rainbow sheen",
+    "kw": [
+     "olografico",
+     "iridescente"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "mesh"
+   },
+   {
+    "id": "concrete",
+    "n": {
+     "it": "Cemento",
+     "en": "Concrete"
+    },
+    "mood": "urbano, essenziale",
+    "palette": [
+     "#131518",
+     "#6C757D",
+     "#ADB5BD"
+    ],
+    "lighting": "grey diffused light",
+    "elementi": "raw concrete slab, engraved minimal marks, steel edge, dust",
+    "kw": [
+     "cemento",
+     "urbano"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "grid"
+   },
+   {
+    "id": "madeinitaly",
+    "n": {
+     "it": "Made in Italy",
+     "en": "Made in Italy"
+    },
+    "mood": "identitario, caldo, autentico",
+    "palette": [
+     "#0B1220",
+     "#008C45",
+     "#CD212A"
+    ],
+    "lighting": "warm mediterranean light, soft golden atmosphere",
+    "elementi": "engraved italian flag ribbon, fine craftsmanship details, marble and walnut",
+    "kw": [
+     "italia",
+     "collezione"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 5,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "waves"
+   },
+   {
+    "id": "sicily",
+    "n": {
+     "it": "Sicily Collection",
+     "en": "Sicily Collection"
+    },
+    "mood": "identitario, caldo, autentico",
+    "palette": [
+     "#101820",
+     "#F4A261",
+     "#2A9D8F"
+    ],
+    "lighting": "warm mediterranean light, soft golden atmosphere",
+    "elementi": "engraved sicilian majolica patterns, citrus, ceramic tiles, warm terracotta",
+    "kw": [
+     "italia",
+     "collezione"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 5,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "rays"
+   },
+   {
+    "id": "amalfi",
+    "n": {
+     "it": "Amalfi",
+     "en": "Amalfi"
+    },
+    "mood": "identitario, caldo, autentico",
+    "palette": [
+     "#0D1B2A",
+     "#00A6A6",
+     "#FFD166"
+    ],
+    "lighting": "warm mediterranean light, soft golden atmosphere",
+    "elementi": "engraved lemon motifs, mediterranean blue acrylic, whitewashed texture",
+    "kw": [
+     "italia",
+     "collezione"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 5,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "waves"
+   },
+   {
+    "id": "dolomiti",
+    "n": {
+     "it": "Dolomiti",
+     "en": "Dolomites"
+    },
+    "mood": "identitario, caldo, autentico",
+    "palette": [
+     "#0F1620",
+     "#4A6FA5",
+     "#E8E9EB"
+    ],
+    "lighting": "warm mediterranean light, soft golden atmosphere",
+    "elementi": "engraved mountain contours, pale spruce wood, cold stone, snow dust",
+    "kw": [
+     "italia",
+     "collezione"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 5,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "topo"
+   },
+   {
+    "id": "venezia",
+    "n": {
+     "it": "Venezia",
+     "en": "Venice"
+    },
+    "mood": "identitario, caldo, autentico",
+    "palette": [
+     "#0B1220",
+     "#8B0000",
+     "#C9A227"
+    ],
+    "lighting": "warm mediterranean light, soft golden atmosphere",
+    "elementi": "engraved venetian masks and arches, deep red velvet, gold leaf",
+    "kw": [
+     "italia",
+     "collezione"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 5,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "arcs"
+   },
+   {
+    "id": "firenze",
+    "n": {
+     "it": "Firenze",
+     "en": "Florence"
+    },
+    "mood": "identitario, caldo, autentico",
+    "palette": [
+     "#141210",
+     "#7B4B2A",
+     "#D4AF37"
+    ],
+    "lighting": "warm mediterranean light, soft golden atmosphere",
+    "elementi": "engraved renaissance ornaments, tuscan leather, gold tooling",
+    "kw": [
+     "italia",
+     "collezione"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 5,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "marble"
+   },
+   {
+    "id": "milano",
+    "n": {
+     "it": "Milano Design",
+     "en": "Milan Design"
+    },
+    "mood": "identitario, caldo, autentico",
+    "palette": [
+     "#111827",
+     "#2B2D42",
+     "#EF233C"
+    ],
+    "lighting": "warm mediterranean light, soft golden atmosphere",
+    "elementi": "engraved geometric design objects, matte surfaces, editorial composition",
+    "kw": [
+     "italia",
+     "collezione"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 5,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "grid"
+   },
+   {
+    "id": "mediterraneo",
+    "n": {
+     "it": "Mediterraneo",
+     "en": "Mediterranean"
+    },
+    "mood": "identitario, caldo, autentico",
+    "palette": [
+     "#0D1B2A",
+     "#1D7874",
+     "#F2E9E4"
+    ],
+    "lighting": "warm mediterranean light, soft golden atmosphere",
+    "elementi": "engraved wave patterns, olive wood, sea glass, white plaster",
+    "kw": [
+     "italia",
+     "collezione"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 5,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "waves"
+   },
+   {
+    "id": "toscana",
+    "n": {
+     "it": "Toscana",
+     "en": "Tuscany"
+    },
+    "mood": "identitario, caldo, autentico",
+    "palette": [
+     "#161310",
+     "#8A5A44",
+     "#D9C2A3"
+    ],
+    "lighting": "warm mediterranean light, soft golden atmosphere",
+    "elementi": "engraved cypress silhouettes, warm terracotta, aged oak, golden fields",
+    "kw": [
+     "italia",
+     "collezione"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 5,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "topo"
+   },
+   {
+    "id": "kids",
+    "n": {
+     "it": "Bambini",
+     "en": "Kids"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#141A2B",
+     "#4CC9F0",
+     "#FFD166"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved cartoon shapes, colourful acrylic, rounded wooden toys",
+    "kw": [
+     "bambini"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "confetti"
+   },
+   {
+    "id": "gaming",
+    "n": {
+     "it": "Gaming",
+     "en": "Gaming"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#07080F",
+     "#7B2FBF",
+     "#00F5D4"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved controller silhouettes, RGB edge-lit acrylic, dark tech grid",
+    "kw": [
+     "gaming"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "circuit"
+   },
+   {
+    "id": "sports",
+    "n": {
+     "it": "Sport",
+     "en": "Sports"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#0E1116",
+     "#1E3A8A",
+     "#F77F00"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved trophy and medal shapes, brushed metal, dynamic diagonals",
+    "kw": [
+     "sport"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "beams"
+   },
+   {
+    "id": "music",
+    "n": {
+     "it": "Musica",
+     "en": "Music"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#0B0B12",
+     "#5A189A",
+     "#FFB703"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved sound waves, vinyl record, guitar silhouette, brass",
+    "kw": [
+     "musica"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "waves"
+   },
+   {
+    "id": "travel",
+    "n": {
+     "it": "Viaggi",
+     "en": "Travel"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#0D1B2A",
+     "#2A9D8F",
+     "#E9C46A"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved world map, vintage suitcase, compass, kraft tags",
+    "kw": [
+     "viaggi"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "topo"
+   },
+   {
+    "id": "camping",
+    "n": {
+     "it": "Camping",
+     "en": "Camping"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#111C15",
+     "#40916C",
+     "#E9C46A"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved pine trees, campfire glow, canvas texture, enamel mug",
+    "kw": [
+     "outdoor"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "topo"
+   },
+   {
+    "id": "pet",
+    "n": {
+     "it": "Pet Lovers",
+     "en": "Pet Lovers"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#141A2B",
+     "#E07A5F",
+     "#F2CC8F"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved pet portrait plaque, paw shapes, collar tags, soft blanket",
+    "kw": [
+     "animali"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "particles"
+   },
+   {
+    "id": "business",
+    "n": {
+     "it": "Business",
+     "en": "Business"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#0B1220",
+     "#1E3A8A",
+     "#C9C9C9"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved corporate plaque, brushed steel, minimal desk objects",
+    "kw": [
+     "aziende"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "grid"
+   },
+   {
+    "id": "corporate",
+    "n": {
+     "it": "Corporate Gift",
+     "en": "Corporate Gift"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#0F1113",
+     "#22333B",
+     "#C9A227"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved gift box, embossed logo plate, premium packaging, ribbon",
+    "kw": [
+     "aziende"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "arcs"
+   },
+   {
+    "id": "wellness",
+    "n": {
+     "it": "Wellness",
+     "en": "Wellness"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#121A18",
+     "#588157",
+     "#DAD7CD"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved zen shapes, bamboo, stone stack, soft linen",
+    "kw": [
+     "benessere"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "mesh"
+   },
+   {
+    "id": "foodie",
+    "n": {
+     "it": "Foodie",
+     "en": "Foodie"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#171310",
+     "#8A4B2A",
+     "#E0A458"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved cutting board, olive oil bottle, herbs, rustic linen",
+    "kw": [
+     "cucina"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "marble"
+   },
+   {
+    "id": "book",
+    "n": {
+     "it": "Lettura",
+     "en": "Bookworm"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#141210",
+     "#6F4E37",
+     "#D9C2A3"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved bookmark, stacked books, reading lamp glow, paper texture",
+    "kw": [
+     "libri"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "topo"
+   },
+   {
+    "id": "cinema",
+    "n": {
+     "it": "Cinema",
+     "en": "Cinema"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#08080D",
+     "#22223B",
+     "#F2CC8F"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved film reel, clapperboard, spotlight beam, dark curtain",
+    "kw": [
+     "cinema"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "beams"
+   },
+   {
+    "id": "photo",
+    "n": {
+     "it": "Fotografia",
+     "en": "Photography"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#0D0F12",
+     "#343A40",
+     "#E9ECEF"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved camera silhouette, aperture blades, film strips, matte black",
+    "kw": [
+     "foto"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "grid"
+   },
+   {
+    "id": "moto",
+    "n": {
+     "it": "Motori",
+     "en": "Motors"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#0E1013",
+     "#2B2F33",
+     "#E07A26"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved engine parts, carbon texture, chrome accents, sparks",
+    "kw": [
+     "motori"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "beams"
+   },
+   {
+    "id": "nautica",
+    "n": {
+     "it": "Nautica",
+     "en": "Nautical"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#0B1A2E",
+     "#14567B",
+     "#E8E9EB"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved anchor and rope, teak deck, brass fittings, navy rope",
+    "kw": [
+     "mare"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "waves"
+   },
+   {
+    "id": "golf",
+    "n": {
+     "it": "Golf",
+     "en": "Golf"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#101A14",
+     "#386641",
+     "#DDA15E"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved golf motifs, green felt, leather grip, brass tee",
+    "kw": [
+     "golf"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "topo"
+   },
+   {
+    "id": "yoga",
+    "n": {
+     "it": "Yoga",
+     "en": "Yoga"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#161A20",
+     "#7F5539",
+     "#E6CCB2"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved mandala, cork texture, soft neutral fabric, candle",
+    "kw": [
+     "yoga"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "arcs"
+   },
+   {
+    "id": "tech",
+    "n": {
+     "it": "Tech",
+     "en": "Tech"
+    },
+    "mood": "mirato, riconoscibile",
+    "palette": [
+     "#0A0C10",
+     "#1E3A8A",
+     "#00E5FF"
+    ],
+    "lighting": "focused product light, clean premium atmosphere",
+    "elementi": "engraved circuit lines, anodised aluminium, blue edge light",
+    "kw": [
+     "tecnologia"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "circuit"
+   },
+   {
+    "id": "woodcraft",
+    "n": {
+     "it": "Legno Naturale",
+     "en": "Wood Craft"
+    },
+    "mood": "materico, tattile",
+    "palette": [
+     "#161310",
+     "#8A5A44",
+     "#D9C2A3"
+    ],
+    "lighting": "raking light to reveal texture and engraving depth",
+    "elementi": "engraved oak and walnut panels, wood shavings, warm grain detail",
+    "kw": [
+     "materiali"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "topo"
+   },
+   {
+    "id": "acrylicglow",
+    "n": {
+     "it": "Acrilico Luminoso",
+     "en": "Acrylic Glow"
+    },
+    "mood": "materico, tattile",
+    "palette": [
+     "#08090F",
+     "#2F7BFF",
+     "#00E5FF"
+    ],
+    "lighting": "raking light to reveal texture and engraving depth",
+    "elementi": "edge-lit acrylic sheets, engraved lines glowing, layered transparency",
+    "kw": [
+     "materiali"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "beams"
+   },
+   {
+    "id": "metal",
+    "n": {
+     "it": "Metallo",
+     "en": "Metal Precision"
+    },
+    "mood": "materico, tattile",
+    "palette": [
+     "#0E1013",
+     "#495057",
+     "#C9C9C9"
+    ],
+    "lighting": "raking light to reveal texture and engraving depth",
+    "elementi": "laser-marked steel and aluminium, brushed finish, precise engraving",
+    "kw": [
+     "materiali"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "grid"
+   },
+   {
+    "id": "leather",
+    "n": {
+     "it": "Pelle",
+     "en": "Leather"
+    },
+    "mood": "materico, tattile",
+    "palette": [
+     "#171210",
+     "#6F4E37",
+     "#C9A227"
+    ],
+    "lighting": "raking light to reveal texture and engraving depth",
+    "elementi": "engraved leather tags, waxed thread, brass rivets, warm hide texture",
+    "kw": [
+     "materiali"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "marble"
+   },
+   {
+    "id": "glass",
+    "n": {
+     "it": "Vetro",
+     "en": "Glass"
+    },
+    "mood": "materico, tattile",
+    "palette": [
+     "#0B1220",
+     "#4A6FA5",
+     "#E8F1F8"
+    ],
+    "lighting": "raking light to reveal texture and engraving depth",
+    "elementi": "engraved glass surfaces, refractions, crystal highlights, cold clarity",
+    "kw": [
+     "materiali"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "arcs"
+   },
+   {
+    "id": "paper",
+    "n": {
+     "it": "Carta",
+     "en": "Paper Craft"
+    },
+    "mood": "materico, tattile",
+    "palette": [
+     "#15161A",
+     "#D9C2A3",
+     "#F2E9E4"
+    ],
+    "lighting": "raking light to reveal texture and engraving depth",
+    "elementi": "laser-cut paper layers, delicate shadows, embossed textures",
+    "kw": [
+     "materiali"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "topo"
+   },
+   {
+    "id": "fabric",
+    "n": {
+     "it": "Tessuto",
+     "en": "Fabric"
+    },
+    "mood": "materico, tattile",
+    "palette": [
+     "#141618",
+     "#3A5A40",
+     "#DAD7CD"
+    ],
+    "lighting": "raking light to reveal texture and engraving depth",
+    "elementi": "DTF printed fabric, folded textile, thread detail, soft matte light",
+    "kw": [
+     "materiali"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "waves"
+   },
+   {
+    "id": "superhero",
+    "n": {
+     "it": "Supereroi",
+     "en": "Superhero"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#0B1220",
+     "#D62828",
+     "#2F7BFF"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved comic panels, bold halftone dots, dynamic diagonal energy",
+    "kw": [
+     "bambini"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "beams"
+   },
+   {
+    "id": "unicorn",
+    "n": {
+     "it": "Unicorni",
+     "en": "Unicorn"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#1A1426",
+     "#B983FF",
+     "#FFC8DD"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved unicorn silhouette, pastel iridescent acrylic, soft glitter",
+    "kw": [
+     "bambini"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "mesh"
+   },
+   {
+    "id": "space",
+    "n": {
+     "it": "Spazio",
+     "en": "Space"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#05060D",
+     "#3A0CA3",
+     "#4CC9F0"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved planets and rockets, star field, deep blue glow",
+    "kw": [
+     "bambini"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "particles"
+   },
+   {
+    "id": "dino",
+    "n": {
+     "it": "Dinosauri",
+     "en": "Dinosaurs"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#131A14",
+     "#40916C",
+     "#E9C46A"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved dinosaur silhouettes, fossil texture, jungle leaves",
+    "kw": [
+     "bambini"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "topo"
+   },
+   {
+    "id": "safari",
+    "n": {
+     "it": "Safari",
+     "en": "Safari"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#171410",
+     "#7F5539",
+     "#E9C46A"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved animal silhouettes, savannah grass, warm dust light",
+    "kw": [
+     "animali"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "topo"
+   },
+   {
+    "id": "floral",
+    "n": {
+     "it": "Floreale",
+     "en": "Floral"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#141A16",
+     "#6A994E",
+     "#F2CC8F"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved floral wreath, dried flowers, linen, soft petals",
+    "kw": [
+     "casa"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "mesh"
+   },
+   {
+    "id": "geometric",
+    "n": {
+     "it": "Geometrico",
+     "en": "Geometric"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#111827",
+     "#2F7BFF",
+     "#FACC15"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved geometric grid, layered acrylic shapes, precise angles",
+    "kw": [
+     "casa"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "grid"
+   },
+   {
+    "id": "celestial",
+    "n": {
+     "it": "Celeste",
+     "en": "Celestial"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#080B16",
+     "#3A0CA3",
+     "#FFD166"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved moon phases and constellations, dark sky, gold stars",
+    "kw": [
+     "casa"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "particles"
+   },
+   {
+    "id": "coffee",
+    "n": {
+     "it": "Caffè",
+     "en": "Coffee"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#171210",
+     "#6F4E37",
+     "#D9A05B"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved coffee cup, beans, burlap sack, warm steam",
+    "kw": [
+     "cucina"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "marble"
+   },
+   {
+    "id": "wine",
+    "n": {
+     "it": "Vino",
+     "en": "Wine"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#150F12",
+     "#6B2737",
+     "#C9A227"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved wine box, cork, dark glass bottle, vine leaves",
+    "kw": [
+     "cucina"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "marble"
+   },
+   {
+    "id": "bakery",
+    "n": {
+     "it": "Pasticceria",
+     "en": "Bakery"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#1A1512",
+     "#B5651D",
+     "#F2E9E4"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved cake topper, flour dust, pastel icing, marble slab",
+    "kw": [
+     "eventi"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "confetti"
+   },
+   {
+    "id": "garden",
+    "n": {
+     "it": "Giardino",
+     "en": "Garden"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#111C15",
+     "#2D6A4F",
+     "#DDA15E"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved plant markers, terracotta pots, soil, green leaves",
+    "kw": [
+     "casa"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "topo"
+   },
+   {
+    "id": "office",
+    "n": {
+     "it": "Ufficio",
+     "en": "Office"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#0F1216",
+     "#22333B",
+     "#C9C9C9"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved desk nameplate, matte accessories, clean workspace",
+    "kw": [
+     "b2b"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "grid"
+   },
+   {
+    "id": "school",
+    "n": {
+     "it": "Scuola",
+     "en": "School"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#111827",
+     "#2F7BFF",
+     "#FF9F1C"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved rulers and pencils, notebook grid, colourful tags",
+    "kw": [
+     "bambini"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "grid"
+   },
+   {
+    "id": "graduationgold",
+    "n": {
+     "it": "Laurea Gold",
+     "en": "Graduation Gold"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#0B0B0F",
+     "#8B0000",
+     "#FFD700"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved laurel and gold foil, dark velvet, celebratory sparkle",
+    "kw": [
+     "eventi"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "rays"
+   },
+   {
+    "id": "minimalwhite",
+    "n": {
+     "it": "Bianco Minimal",
+     "en": "Minimal White"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#F7F7F5",
+     "#E6E8EC",
+     "#111827"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "white engraved acrylic on white, subtle shadows, ultra clean",
+    "kw": [
+     "casa"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "grid"
+   },
+   {
+    "id": "darkwood",
+    "n": {
+     "it": "Legno Scuro",
+     "en": "Dark Wood"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#0F0D0B",
+     "#3E2C23",
+     "#C9A227"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved dark walnut, deep grain, brass inlay, low warm light",
+    "kw": [
+     "casa"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "topo"
+   },
+   {
+    "id": "festalaurea",
+    "n": {
+     "it": "Festa",
+     "en": "Party"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#111827",
+     "#7B2FBF",
+     "#FFC857"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved party props, balloons, confetti, festive bokeh",
+    "kw": [
+     "eventi"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "confetti"
+   },
+   {
+    "id": "memorial",
+    "n": {
+     "it": "Memoria",
+     "en": "Memorial"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#111827",
+     "#4A4E69",
+     "#E9ECEF"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved memorial plaque, soft stone, single candle, calm light",
+    "kw": [
+     "casa"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "arcs"
+   },
+   {
+    "id": "easterpastel",
+    "n": {
+     "it": "Pasqua Pastello",
+     "en": "Easter Pastel"
+    },
+    "mood": "tematico, riconoscibile",
+    "palette": [
+     "#1A1B2A",
+     "#BDE0FE",
+     "#FFD6E0"
+    ],
+    "lighting": "soft cinematic light with a warm accent",
+    "elementi": "engraved pastel eggs, soft ribbons, spring blossoms",
+    "kw": [
+     "eventi"
+    ],
+    "cats": "*",
+    "dal": "",
+    "al": "",
+    "prio": 4,
+    "stato": "libreria",
+    "art": {},
+    "v": 1,
+    "bg": "mesh"
+   }
+  ]
+ },
+ "PROMO": {
+  "attivo": false,
+  "id": "promo-1",
+  "dal": "",
+  "al": "",
+  "testo": {
+   "it": "Spedizione gratuita sopra €79 · Prova grafica inclusa",
+   "en": "Free shipping over €79 · Free proof included"
+  },
+  "cta": {
+   "it": "Scopri il catalogo",
+   "en": "Browse the catalogue"
+  },
+  "link": "#/shop",
+  "colori": "#1E3A8A,#111827"
+ },
+ "SPONSORS": {
+  "attivo": true,
+  "titolo": {
+   "it": "Partner & Sponsor",
+   "en": "Partners & Sponsors"
+  },
+  "sottotitolo": {
+   "it": "Aziende e artigiani con cui lavoriamo ogni giorno.",
+   "en": "Businesses and makers we work with every day."
+  },
+  "grigio": false,
+  "lista": [],
+  "cta": {
+   "it": "Vuoi comparire qui? Scrivici.",
+   "en": "Want to appear here? Get in touch."
+  },
+  "ctaLink": "#/contatti"
+ },
+ "GALSPEED": 96
+}

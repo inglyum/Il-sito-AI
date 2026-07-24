@@ -1,0 +1,32 @@
+# "AI Agents" lato repository: QA + Sync agent.
+# Ad ogni push valida i dati e verifica che i file legacy siano allineati ai JSON.
+name: QA Agent — valida dati e sincronizzazione
+on:
+  push:
+  pull_request:
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Installa dipendenze di test
+        run: npm install --no-audit --no-fund
+      - name: Valida prodotti, categorie e riferimenti
+        run: node scripts/validate-data.mjs
+      - name: Test di regressione CSS e srcset
+        run: node tests/test-css.mjs
+      - name: Controlla riferimenti immagini nei dati
+        run: |
+          node -e '
+          const fs=require("fs");
+          const P=JSON.parse(fs.readFileSync("data/products.json"));
+          const C=JSON.parse(fs.readFileSync("data/content.json"));
+          let warn=0;
+          const check=p=>{if(p&&!fs.existsSync(p)){console.log("⚠ riferimento immagine mancante:",p);warn++}};
+          P.forEach(p=>{if(p.img)check(p.img);(p.gallery||[]).forEach(check)});
+          (C.PORT||[]).forEach(t=>check(t[3]));
+          console.log(warn?warn+" avvisi immagini (non bloccanti)":"✔ riferimenti immagini ok");
+          '

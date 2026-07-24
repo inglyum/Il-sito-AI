@@ -1,0 +1,117 @@
+/* ============ LAYOUT, NAV, HERO ============ */
+/* ---------- utilities ---------- */
+.wrap{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,48px)}.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--fd);font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase}.eyebrow::before{content:'';width:26px;height:2px;border-radius:2px}
+.h2{font-size:clamp(2.2rem,5vw,3.6rem);margin:18px 0 14px}
+.sub{color:var(--ink-soft);max-width:560px;font-size:1.06rem}
+.sec{padding:clamp(90px,11vw,160px) 0}.dark{background:var(--ink);color:var(--paper)}
+.dark .sub,.dark .eyebrow{color:#a5a2b8}
+.hl{position:relative;white-space:nowrap}
+.hl::after{content:'';position:absolute;left:-2%;bottom:.06em;width:104%;height:.16em;background:var(--laser);z-index:-1;border-radius:3px;transform:scaleX(0);transform-origin:left;transition:transform 1s var(--ease) .5s}
+.in .hl::after,.hl.on::after{transform:scaleX(1)}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(44px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--fd);font-weight:600;font-size:15px;padding:16px 30px;border-radius:100px;transition:transform .5s var(--ease),box-shadow .5s var(--ease),background .3s;position:relative;will-change:transform}
+.btn-primary{background:var(--ink);color:var(--paper)}/* .btn-primary:hover → interamente nel tema (pages.css) */.btn-ghost{border:1.5px solid var(--line)}/* .btn-ghost:hover → interamente nel tema (pages.css) */.btn-blue{background:var(--blue);color:#fff}
+.btn-blue:hover{background:var(--blue-hi);box-shadow:0 16px 40px rgba(43,123,255,.35)}
+.btn .arr{transition:transform .4s var(--ease)}
+.btn:hover .arr{transform:translateX(5px)}
+
+/* laser beam divider */
+.beam{position:relative;height:2px;background:linear-gradient(90deg,transparent,var(--laser) 30%,var(--blue) 70%,transparent);border-radius:2px;overflow:visible}
+.beam::after{content:'';position:absolute;top:50%;left:0;width:9px;height:9px;border-radius:50%;background:var(--laser);box-shadow:0 0 14px 4px rgba(244,223,87,.8);transform:translate(-50%,-50%);animation:beamdot 5s var(--ease) infinite}
+
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:90;transition:background .4s,box-shadow .4s,backdrop-filter .4s;padding:14px 0}.nav.scrolled{backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--fd);font-weight:700;font-size:19px;letter-spacing:.02em}.brand img{width:44px;height:44px;transition:transform .8s var(--ease)}
+.brand:hover img{transform:rotate(180deg)}
+.brand small{display:block;font-size:9px;letter-spacing:.3em;color:var(--ink-soft);font-weight:600}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nav-links a{font-size:14.5px;font-weight:500;padding:9px 15px;border-radius:100px;transition:background .3s;position:relative}/* .nav-links a:hover,.nav-links a.active → interamente nel tema (pages.css) */
+.nav-links a.active::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:14px;height:2px;background:var(--laser);border-radius:2px}
+.nav-acts{display:flex;gap:6px;align-items:center}
+.icon-btn{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;transition:background .3s,transform .3s;position:relative}.icon-btn:hover{transform:translateY(-2px)}
+.icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.badge{position:absolute;top:2px;right:0;min-width:17px;height:17px;border-radius:9px;background:var(--blue);color:#fff;font-size:10.5px;font-weight:700;display:grid;place-items:center;padding:0 4px;transform:scale(0);transition:transform .4s var(--ease)}
+.badge.on{transform:scale(1)}
+.burger{display:none}
+@media(max-width:920px){.nav-links{display:none}.burger{display:grid}}.mobile-menu{position:fixed;inset:0;color:var(--paper);z-index:100;display:flex;flex-direction:column;justify-content:center;padding:0 32px;clip-path:circle(0 at calc(100% - 60px) 40px);transition:clip-path .8s var(--ease);visibility:hidden}
+.mobile-menu.open{clip-path:circle(150% at calc(100% - 60px) 40px);visibility:visible}
+.mobile-menu a{font-family:var(--fd);font-size:clamp(2rem,9vw,3rem);font-weight:700;padding:10px 0;opacity:0;transform:translateY(20px);transition:.6s var(--ease)}
+.mobile-menu.open a{opacity:1;transform:none}
+.mobile-menu .mclose{position:absolute;top:20px;right:24px;font-size:15px;font-family:var(--fd);letter-spacing:.2em;opacity:1;transform:none}
+
+/* scroll progress */
+.progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--laser));z-index:99;width:0;border-radius:0 3px 3px 0}
+
+/* cursor glow */
+.glow{position:fixed;width:340px;height:340px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(54,118,201,.10),transparent 65%);transform:translate(-50%,-50%);transition:opacity .4s}
+@media(hover:none){.glow{display:none}}
+
+/* ---------- pages ---------- */
+.page{display:none}
+.page.active{display:block;animation:pagein .7s var(--ease)}
+
+
+/* ---------- hero ---------- */
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;padding-top:120px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;pointer-events:none}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;animation:drift 14s ease-in-out infinite alternate}.blob.b1{width:520px;height:520px;top:-140px;right:-80px}.blob.b2{width:420px;height:420px;bottom:-120px;left:-100px;animation-delay:-6s}.grid-lines{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse 90% 70% at 50% 40%,black 20%,transparent 75%)}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:center;position:relative;z-index:2}
+.hero-tag{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.6);backdrop-filter:blur(12px);border:1px solid var(--line);padding:9px 18px;border-radius:100px;font-size:13px;font-weight:600;font-family:var(--fd);letter-spacing:.06em}
+.hero-tag .dot{width:8px;height:8px;border-radius:50%;background:var(--laser);box-shadow:0 0 10px 2px rgba(244,223,87,.9);animation:pulse 1.6s infinite}
+
+.hero h1{font-size:clamp(3rem,7.4vw,6.6rem);margin:26px 0 22px;letter-spacing:-.035em}
+.hero h1 .w{display:inline-block;overflow:hidden;vertical-align:bottom}
+.hero h1 .w span{display:inline-block;transform:translateY(112%);animation:wordup 1s var(--ease) forwards}
+
+.laserword{position:relative;color:var(--blue)}
+.laserword i{font-style:normal;background:linear-gradient(90deg,var(--ink) 50%,transparent 50%) ;-webkit-background-clip:text}
+.engrave{position:relative;display:inline-block}
+.engrave::before{content:'';position:absolute;top:-6%;bottom:-6%;left:0;width:2px;background:var(--laser);box-shadow:0 0 16px 3px rgba(244,223,87,.95),0 0 40px 8px rgba(54,118,201,.4);animation:sweep 2.2s var(--ease) 1s forwards;opacity:0}
+
+.engrave .fill{position:absolute;inset:0;color:var(--blue);clip-path:inset(0 100% 0 0);animation:fillin 2.2s var(--ease) 1s forwards}
+
+.hero-ctas{display:flex;gap:14px;margin-top:36px;flex-wrap:wrap}
+.hero-meta{display:flex;gap:34px;margin-top:52px;flex-wrap:wrap}
+.hm{font-family:var(--fd)}
+.hm b{font-size:1.5rem;font-weight:700;display:block}
+.hm span{font-size:12.5px;color:var(--ink-soft);letter-spacing:.05em}
+/* floating product cards */
+.hero-visual{position:relative;height:560px}.fcard{position:absolute;backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.7);border-radius:var(--radius);padding:16px;width:230px;animation:floaty 7s ease-in-out infinite;transition:transform .6s var(--ease)}
+.fcard:hover{transform:scale(1.05) rotate(0deg)!important;z-index:5}
+.fcard .ph{height:140px;border-radius:14px;margin-bottom:12px;position:relative;overflow:hidden}
+.fcard h4{font-size:15px;margin-bottom:2px}.fcard p{font-size:12.5px}
+.fcard .pr{font-family:var(--fd);font-weight:700;color:var(--blue);font-size:15px;margin-top:6px}.fc1{transform:rotate(-5deg);z-index:3}.fc2{transform:rotate(4deg);animation-delay:-2.5s;z-index:2}.fc3{transform:rotate(-2deg);animation-delay:-5s}/* .hero-ring rimosso: sostituito dalla moneta 3D (.coin-scene) */.scroll-cue{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.3em;text-transform:uppercase;font-family:var(--fd);display:flex;flex-direction:column;align-items:center;gap:8px}.scroll-cue::after{content:'';width:1.5px;height:44px;animation:cue 1.8s ease infinite}
+
+@media(max-width:920px){.hero-grid{grid-template-columns:1fr}.hero-visual{height:420px;margin-top:10px}.fcard{width:190px}.fcard .ph{height:110px}}
+
+/* marquee */
+.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;overflow:hidden;background:var(--white)}
+.mq-track{display:flex;gap:56px;width:max-content;animation:mq 30s linear infinite}
+.marquee:hover .mq-track{animation-play-state:paused}
+.mq-track span{font-family:var(--fd);font-weight:600;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);display:flex;align-items:center;gap:56px;white-space:nowrap}
+.mq-track span::after{content:'✦';color:var(--laser);text-shadow:0 0 8px rgba(244,223,87,.8)}
+
+
+
+/* ---------- utility (Fase 3: sostituiscono gli stili inline strutturali) ---------- */
+.pt-0{padding-top:0}.pt-20{padding-top:20px}.pt-30{padding-top:30px}.pt-70{padding-top:70px}
+.pb-40{padding-bottom:40px}.pb-60{padding-bottom:60px}.pb-70{padding-bottom:70px}
+.h2--tight{margin-bottom:0}
+.eyebrow--c{justify-content:center}
+.btn--block{width:100%;justify-content:center}
+.dly1{transition-delay:.1s}.dly15{transition-delay:.15s}.dly2{transition-delay:.2s}.dly25{transition-delay:.25s}
+.dly3{transition-delay:.3s}.dly35{transition-delay:.35s}.dly4{transition-delay:.4s}.dly45{transition-delay:.45s}
+
+/* RETE DI SICUREZZA: se per qualsiasi motivo l'osservatore non parte (JS in errore,
+   IntersectionObserver assente, elemento fuori dai contenitori attesi), dopo 3s il contenuto
+   deve comunque essere leggibile. Mai lasciare una sezione invisibile per sempre. */
+@media (scripting: none){ .reveal{opacity:1;transform:none} }
+html.reveal-failsafe .reveal{opacity:1;transform:none}
