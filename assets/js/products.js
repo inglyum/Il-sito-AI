@@ -216,7 +216,18 @@ export function renderPP(){
     ? `<table class="sz-tab"><caption>${T('szH')||'Misure e dettagli'}</caption><tbody>`
       + cur.misure.map(r=>`<tr><th scope="row">${r[0]}</th><td>${r[1]}</td></tr>`).join('')
       + `</tbody></table>` : '';
-  $('ppEmbed').innerHTML=cur.embed?`<h5 style="font-family:var(--fd);font-style:italic;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin:18px 0 10px">${T('embedH')}</h5><iframe src="${cur.embed}" loading="lazy" title="Configuratore" style="width:100%;height:440px;border:1px solid var(--line);border-radius:20px;background:#fff"></iframe>`:'';
+  /* Configuratore: URL embed manuale ha priorità; altrimenti configuratore INGLY automatico */
+  const cfgBase = 'configurator.html';
+  const cfgParams = new URLSearchParams({
+    mat:   cur.mat || 'Legno',
+    name:  cur.n[L] || '',
+    wa:    (CONFIG.whatsappFab&&CONFIG.whatsappFab.numero)||'393296904627',
+    mode:  cur.cat==='digitale'?'cut':'laser',
+  });
+  const cfgUrl = cur.embed || `${cfgBase}?${cfgParams}`;
+  const cfgLabel = cur.embed ? (T('embedH')||'Configuratore') : (L==='it'?'✨ Personalizza dal vivo':'✨ Live configurator');
+  $('ppEmbed').innerHTML=`<h5 style="font-family:var(--fd);font-style:italic;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin:24px 0 10px">${cfgLabel}</h5>
+  <iframe src="${cfgUrl}" loading="lazy" title="Configuratore personalizzazione" allow="clipboard-write" style="width:100%;height:480px;border:1px solid var(--line);border-radius:20px;background:var(--bg-deep)"></iframe>`;
   renderDisc();price();
   /* 🔗 correlati: prima quelli scelti a mano dall'Admin, poi riempimento automatico */
   const manual=(cur.rel||[]).map(id=>P.find(x=>x.id===id)).filter(Boolean);

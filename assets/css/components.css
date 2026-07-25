@@ -717,3 +717,16 @@ html.theme-anim, html.theme-anim *{ transition:background-color .35s ease, borde
 /* tessera portfolio che apre un progetto completo */
 .gtile--proj{cursor:pointer}
 .proj-hint{display:block;font-size:var(--fs-2xs);color:var(--laser);margin-top:2px;opacity:.9}
+
+/* ---------- Configuratore iframe ---------- */
+#ppEmbed iframe{
+  width:100%;
+  height:480px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:var(--bg-deep);
+  display:block;
+  transition:height .3s ease;
+}
+@media(max-width:820px){#ppEmbed iframe{height:620px}}
+@media(max-width:480px){#ppEmbed iframe{height:720px;border-radius:14px}}

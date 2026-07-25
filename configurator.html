@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="it" data-mode="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Configuratore INGLY DESIGN</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d1020;--bg2:#13162a;--card:#1a1e35;--line:#2a2f4e;
+  --ink:#eae8f5;--ink2:#9098c0;--accent:#6c63ff;--laser:#ff4e4e;
+  --uv:#c026d3;--ok:#22c55e;--radius:14px;
+  --dur:240ms;--ease:cubic-bezier(.4,0,.2,1);
+}
+[data-mode=light]{--bg:#f4f5fb;--bg2:#eaecf6;--card:#fff;--line:#d4d8f0;--ink:#141830;--ink2:#555b80}
+body{font-family:"Inter","Helvetica Neue",sans-serif;font-size:14px;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+h3{font-family:"Exo 2","Arial Black",sans-serif;font-size:13px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink2);margin-bottom:10px}
+
+/* ---- LAYOUT ---- */
+.cfg-wrap{display:grid;grid-template-columns:1fr 320px;gap:0;flex:1;height:100vh;overflow:hidden}
+@media(max-width:780px){.cfg-wrap{grid-template-columns:1fr;height:auto;overflow:auto}}
+
+/* ---- CANVAS AREA ---- */
+.cfg-canvas-area{background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:20px}
+.cfg-toolbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+.cfg-toolbar button{background:var(--card);border:1.5px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;transition:var(--dur)}
+.cfg-toolbar button.active,.cfg-toolbar button:hover{border-color:var(--accent);color:var(--accent)}
+canvas{border-radius:var(--radius);max-width:100%;max-height:calc(100vh - 160px);display:block}
+
+/* ---- PANNELLO DX ---- */
+.cfg-panel{background:var(--card);border-left:1px solid var(--line);overflow-y:auto;padding:0}
+.cfg-panel-inner{padding:16px 18px 24px}
+
+/* ---- SEZIONI ---- */
+.sec{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.sec:last-child{border-bottom:none}
+
+/* ---- INPUT TESTO ---- */
+input[type=text]{width:100%;background:var(--bg2);border:1.5px solid var(--line);border-radius:9px;padding:9px 12px;color:var(--ink);font-size:14px;outline:none;transition:var(--dur);margin-bottom:8px}
+input[type=text]:focus{border-color:var(--accent)}
+input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
+label.small{font-size:11.5px;color:var(--ink2);display:block;margin-bottom:4px}
+
+/* ---- GRIGLIE DI SCELTA ---- */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px}
+.opt{background:var(--bg2);border:1.5px solid var(--line);border-radius:9px;padding:7px 10px;font-size:12px;color:var(--ink2);cursor:pointer;text-align:center;transition:var(--dur);user-select:none}
+.opt:hover{border-color:var(--accent);color:var(--ink)}
+.opt.active{border-color:var(--accent);background:rgba(108,99,255,.12);color:var(--ink)}
+.opt .opt-icon{font-size:18px;display:block;margin-bottom:3px}
+.opt .opt-label{font-size:10.5px;line-height:1.3}
+
+/* ---- MATERIALI ---- */
+.mat-swatch{width:24px;height:24px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle;border:2px solid transparent;flex-shrink:0}
+.mat-opt{display:flex;align-items:center;padding:8px 10px;cursor:pointer;border-radius:9px;border:1.5px solid var(--line);background:var(--bg2);margin-bottom:6px;transition:var(--dur)}
+.mat-opt:hover,.mat-opt.active{border-color:var(--accent);background:rgba(108,99,255,.09)}
+.mat-opt .mat-name{font-size:12.5px;color:var(--ink)}
+
+/* ---- ALLINEAMENTO ---- */
+.align-row{display:flex;gap:6px}
+.align-btn{flex:1;background:var(--bg2);border:1.5px solid var(--line);border-radius:8px;padding:7px;cursor:pointer;text-align:center;transition:var(--dur);font-size:16px}
+.align-btn.active,.align-btn:hover{border-color:var(--accent);background:rgba(108,99,255,.12)}
+
+/* ---- TOGGLE ---- */
+.tog-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.tog{position:relative;width:38px;height:22px;cursor:pointer}
+.tog input{opacity:0;width:0;height:0}
+.tog-sl{position:absolute;inset:0;background:var(--line);border-radius:11px;transition:var(--dur)}
+.tog input:checked+.tog-sl{background:var(--accent)}
+.tog-sl::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3px;left:3px;transition:var(--dur)}
+.tog input:checked+.tog-sl::after{left:19px}
+
+/* ---- LOGO UPLOAD ---- */
+.upload-area{border:2px dashed var(--line);border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:var(--dur)}
+.upload-area:hover{border-color:var(--accent)}
+.upload-area .ic{font-size:24px;margin-bottom:4px}
+.upload-area .hint{font-size:11px;color:var(--ink2)}
+#logoPreview{max-width:100%;max-height:60px;border-radius:7px;margin-top:8px;display:none}
+
+/* ---- CTA ---- */
+.cta-row{display:flex;gap:8px;flex-direction:column;margin-top:16px}
+.btn{border:none;border-radius:10px;padding:11px 18px;font-size:13.5px;font-weight:600;cursor:pointer;transition:var(--dur);display:flex;align-items:center;justify-content:center;gap:7px}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#5650e0;transform:translateY(-1px)}
+.btn-wa{background:#25d366;color:#fff}
+.btn-wa:hover{background:#1da851;transform:translateY(-1px)}
+.btn-dl{background:var(--bg2);color:var(--ink);border:1.5px solid var(--line)}
+.btn-dl:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ---- HEADER PANNELLO ---- */
+.cfg-header{padding:14px 18px 12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.cfg-header .logo-txt{font-family:"Exo 2",sans-serif;font-weight:800;font-size:16px;letter-spacing:.04em}
+.cfg-header .logo-txt span{color:var(--accent)}
+.mode-badge{font-size:11px;background:rgba(108,99,255,.15);color:var(--accent);border-radius:6px;padding:3px 8px;font-weight:600;margin-left:auto}
+
+/* ---- RANGE LABEL ---- */
+.range-row{display:flex;align-items:center;gap:10px}
+.range-row input{flex:1}
+.range-val{font-size:13px;font-weight:700;color:var(--accent);min-width:32px;text-align:right}
+</style>
+</head>
+<body>
+
+<div class="cfg-wrap">
+
+  <!-- ===== AREA CANVAS ===== -->
+  <div class="cfg-canvas-area">
+    <div class="cfg-toolbar" id="shapeToolbar"></div>
+    <canvas id="cfgCanvas" width="560" height="400"></canvas>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="btn btn-dl" id="btnDownload">⬇ Scarica preview</button>
+    </div>
+  </div>
+
+  <!-- ===== PANNELLO CONTROLLI ===== -->
+  <div class="cfg-panel">
+    <div class="cfg-header">
+      <div class="logo-txt">INGLY<span>.</span></div>
+      <div class="mode-badge" id="modeBadge">Configuratore</div>
+    </div>
+    <div class="cfg-panel-inner">
+
+      <!-- MODALITÀ -->
+      <div class="sec">
+        <h3>Tecnica di lavorazione</h3>
+        <div class="grid3" id="modeGrid"></div>
+      </div>
+
+      <!-- MATERIALE -->
+      <div class="sec">
+        <h3>Materiale</h3>
+        <div id="matList"></div>
+      </div>
+
+      <!-- TESTO PERSONALIZZATO -->
+      <div class="sec">
+        <h3>Testo personalizzato</h3>
+        <label class="small">Riga principale</label>
+        <input type="text" id="line1" placeholder="Es. Marco &amp; Sofia" maxlength="30">
+        <label class="small">Seconda riga (opzionale)</label>
+        <input type="text" id="line2" placeholder="Es. 14 Febbraio 2026" maxlength="30">
+        <label class="small">Terza riga (opzionale)</label>
+        <input type="text" id="line3" placeholder="Es. Con amore" maxlength="30">
+
+        <label class="small" style="margin-top:10px">Dimensione testo</label>
+        <div class="range-row">
+          <input type="range" id="fontSize" min="18" max="90" value="52">
+          <span class="range-val" id="fontSizeVal">52</span>
+        </div>
+
+        <label class="small" style="margin-top:10px">Allineamento</label>
+        <div class="align-row" id="alignRow">
+          <button class="align-btn active" data-align="left">⬛ Sin</button>
+          <button class="align-btn" data-align="center">⬛ Cen</button>
+          <button class="align-btn" data-align="right">⬛ Des</button>
+        </div>
+      </div>
+
+      <!-- FONT -->
+      <div class="sec">
+        <h3>Stile carattere</h3>
+        <div class="grid2" id="fontGrid"></div>
+      </div>
+
+      <!-- LOGO -->
+      <div class="sec">
+        <h3>Logo / Immagine</h3>
+        <div class="upload-area" id="uploadArea">
+          <input type="file" id="logoFile" accept="image/*,image/svg+xml" style="display:none">
+          <div class="ic">🖼</div>
+          <div style="font-size:13px;color:var(--ink)">Trascina o clicca per caricare</div>
+          <div class="hint">PNG, SVG, JPG — max 2 MB</div>
+          <img id="logoPreview">
+        </div>
+        <button class="btn btn-dl" id="btnRemoveLogo" style="width:100%;margin-top:8px;display:none">✕ Rimuovi logo</button>
+      </div>
+
+      <!-- OPZIONI -->
+      <div class="sec">
+        <h3>Opzioni</h3>
+        <div class="tog-row">
+          <span>Bordo decorativo</span>
+          <label class="tog"><input type="checkbox" id="togBorder" checked><span class="tog-sl"></span></label>
+        </div>
+        <div class="tog-row">
+          <span>Foro portachiavi</span>
+          <label class="tog"><input type="checkbox" id="togHole"><span class="tog-sl"></span></label>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-row">
+        <button class="btn btn-wa" id="btnWhatsApp">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.12 1.524 5.855L0 24l6.272-1.497A11.93 11.93 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0m0 21.818a9.818 9.818 0 0 1-5.028-1.384l-.36-.215-3.733.89.941-3.618-.235-.373A9.78 9.78 0 0 1 2.182 12c0-5.422 4.396-9.818 9.818-9.818 5.421 0 9.818 4.396 9.818 9.818 0 5.421-4.397 9.818-9.818 9.818"/></svg>
+          Richiedi su WhatsApp
+        </button>
+        <button class="btn btn-primary" id="btnQuote">
+          📋 Richiedi preventivo
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="assets/js/configurator.js"></script>
+<script>
+(function(){
+'use strict';
+
+/* ---- Leggi parametri dall'URL (passati dall'iframe parent) ---- */
+const params = new URLSearchParams(location.search);
+const initMat   = params.get('mat')   || 'Legno';
+const initShape = params.get('shape') || 'rect';
+const initMode  = params.get('mode')  || 'laser';
+const productName = params.get('name') || '';
+const waNumber    = params.get('wa')   || '393296904627';
+
+/* ---- Inizializza canvas ---- */
+const canvas = document.getElementById('cfgCanvas');
+
+function resizeCanvas(){
+  const area = canvas.parentElement;
+  const maxW  = area.clientWidth  - 40;
+  const maxH  = window.innerHeight - 160;
+  const ratio = 560/400;
+  let w = Math.min(maxW, 560);
+  let h = w / ratio;
+  if(h > maxH){ h = maxH; w = h * ratio; }
+  canvas.width  = Math.round(w);
+  canvas.height = Math.round(h);
+}
+resizeCanvas();
+window.addEventListener('resize', ()=>{ resizeCanvas(); });
+
+INGLY_CFG.init('cfgCanvas', {mat: initMat}, {shape: initShape, mode: initMode});
+
+/* ---- Helper: rendi attiva una griglia ---- */
+function activateGrid(container, value, key){
+  container.querySelectorAll('.opt,.mat-opt').forEach(el=>{
+    el.classList.toggle('active', el.dataset.val===value);
+  });
+  INGLY_CFG.set(key, value);
+}
+
+/* ---- FORME (toolbar sopra canvas) ---- */
+const shapeBar = document.getElementById('shapeToolbar');
+Object.entries(INGLY_CFG.SHAPES).forEach(([id, sh])=>{
+  const b = document.createElement('button');
+  b.textContent = sh.label;
+  b.dataset.shape = id;
+  if(id===initShape) b.classList.add('active');
+  b.onclick = ()=>{
+    shapeBar.querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    INGLY_CFG.set('shape', id);
+  };
+  shapeBar.appendChild(b);
+});
+
+/* ---- MODALITÀ ---- */
+const modeGrid = document.getElementById('modeGrid');
+INGLY_CFG.MODES.forEach(m=>{
+  const el = document.createElement('div');
+  el.className = 'opt' + (m.id===initMode?' active':'');
+  el.dataset.val = m.id;
+  el.innerHTML = `<span class="opt-icon">${m.icon}</span><span class="opt-label">${m.label}</span>`;
+  el.onclick = ()=>{ activateGrid(modeGrid, m.id, 'mode'); updateModeBadge(); };
+  modeGrid.appendChild(el);
+});
+
+function updateModeBadge(){
+  const m = INGLY_CFG.MODES.find(x=>x.id===INGLY_CFG.get('mode'))||INGLY_CFG.MODES[0];
+  document.getElementById('modeBadge').textContent = m.icon+' '+m.label;
+}
+updateModeBadge();
+
+/* ---- MATERIALI ---- */
+const matList = document.getElementById('matList');
+Object.entries(INGLY_CFG.MATERIALS).forEach(([id, mat])=>{
+  const el = document.createElement('div');
+  el.className = 'mat-opt' + (id===initMat?' active':'');
+  el.dataset.val = id;
+  const swatch = `<span class="mat-swatch" style="background:linear-gradient(135deg,${mat.bg},${mat.bg2||mat.bg})"></span>`;
+  el.innerHTML = `${swatch}<span class="mat-name">${mat.label}</span>`;
+  el.onclick = ()=>{ activateGrid(matList, id, 'mat'); };
+  matList.appendChild(el);
+});
+
+/* ---- TESTO ---- */
+['line1','line2','line3'].forEach(id=>{
+  const el = document.getElementById(id);
+  // Prepopola line1 col nome prodotto se passato
+  if(id==='line1' && productName) el.placeholder = productName;
+  el.addEventListener('input', ()=> INGLY_CFG.set(id, el.value));
+});
+
+/* ---- DIMENSIONE FONT ---- */
+const fsRange = document.getElementById('fontSize');
+const fsVal   = document.getElementById('fontSizeVal');
+fsRange.addEventListener('input', ()=>{
+  fsVal.textContent = fsRange.value;
+  INGLY_CFG.set('size', +fsRange.value);
+});
+
+/* ---- ALLINEAMENTO ---- */
+document.getElementById('alignRow').querySelectorAll('.align-btn').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('.align-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    INGLY_CFG.set('align', btn.dataset.align);
+  };
+});
+
+/* ---- FONT ---- */
+const fontGrid = document.getElementById('fontGrid');
+INGLY_CFG.FONTS.forEach(f=>{
+  const el = document.createElement('div');
+  el.className = 'opt' + (f.id==='script'?' active':'');
+  el.dataset.val = f.id;
+  el.style.fontFamily = f.css;
+  el.innerHTML = `<span class="opt-icon" style="font-family:${f.css}">Aa</span><span class="opt-label">${f.label}</span>`;
+  el.onclick = ()=>{ activateGrid(fontGrid, f.id, 'font'); };
+  fontGrid.appendChild(el);
+});
+
+/* ---- LOGO UPLOAD ---- */
+const uploadArea  = document.getElementById('uploadArea');
+const logoFile    = document.getElementById('logoFile');
+const logoPreview = document.getElementById('logoPreview');
+const btnRemove   = document.getElementById('btnRemoveLogo');
+
+uploadArea.addEventListener('click', ()=> logoFile.click());
+uploadArea.addEventListener('dragover', e=>{ e.preventDefault(); uploadArea.style.borderColor='var(--accent)'; });
+uploadArea.addEventListener('dragleave', ()=> uploadArea.style.borderColor='' );
+uploadArea.addEventListener('drop', e=>{ e.preventDefault(); uploadArea.style.borderColor=''; handleFile(e.dataTransfer.files[0]); });
+logoFile.addEventListener('change', ()=> handleFile(logoFile.files[0]));
+
+function handleFile(file){
+  if(!file||file.size>2*1024*1024) return;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    logoPreview.src = e.target.result;
+    logoPreview.style.display = 'block';
+    btnRemove.style.display = '';
+    INGLY_CFG.set('logo', e.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+btnRemove.onclick = ()=>{
+  logoPreview.style.display='none';
+  logoPreview.src='';
+  btnRemove.style.display='none';
+  logoFile.value='';
+  INGLY_CFG.set('logo', null);
+};
+
+/* ---- TOGGLE OPZIONI ---- */
+document.getElementById('togBorder').addEventListener('change', e=> INGLY_CFG.set('showBorder', e.target.checked));
+document.getElementById('togHole').addEventListener('change', e=> INGLY_CFG.set('showHole', e.target.checked));
+
+/* ---- DOWNLOAD ---- */
+document.getElementById('btnDownload').onclick = ()=>{
+  const url  = INGLY_CFG.getDataURL('image/png');
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'anteprima-ingly.png';
+  a.click();
+};
+
+/* ---- WHATSAPP ---- */
+document.getElementById('btnWhatsApp').onclick = ()=>{
+  const l1 = document.getElementById('line1').value.trim();
+  const l2 = document.getElementById('line2').value.trim();
+  const mat = INGLY_CFG.get('mat');
+  const mode = INGLY_CFG.MODES.find(m=>m.id===INGLY_CFG.get('mode'))||INGLY_CFG.MODES[0];
+  const shape = INGLY_CFG.SHAPES[INGLY_CFG.get('shape')]||INGLY_CFG.SHAPES.rect;
+  let msg = 'Ciao INGLY! Voglio personalizzare questo prodotto:\n\n';
+  if(productName) msg += '📦 Prodotto: '+productName+'\n';
+  msg += '🧱 Materiale: '+mat+'\n';
+  msg += '⚙️ Lavorazione: '+mode.label+'\n';
+  msg += '📐 Forma: '+shape.label+'\n';
+  if(l1) msg += '✏️ Testo: "'+l1+(l2?' / '+l2:'')+'"\n';
+  msg += '\nHo configurato l\'anteprima sul vostro sito. Potete confermare disponibilità e prezzo?';
+  window.open('https://wa.me/'+waNumber+'?text='+encodeURIComponent(msg), '_blank');
+};
+
+/* ---- PREVENTIVO ---- */
+document.getElementById('btnQuote').onclick = ()=>{
+  // Comunica con il parent se dentro iframe
+  try{
+    window.parent.postMessage({type:'ingly-quote', cfg: INGLY_CFG.getAll()}, '*');
+  }catch(e){}
+  // Fallback: naviga al form preventivo
+  window.top.location.hash = '/quote';
+};
+
+/* ---- Sync tema con parent ---- */
+try{
+  const pm = window.parent.document.documentElement.getAttribute('data-mode');
+  if(pm) document.documentElement.setAttribute('data-mode', pm);
+}catch(e){}
+window.addEventListener('message', e=>{
+  if(e.data&&e.data.type==='ingly-mode') document.documentElement.setAttribute('data-mode', e.data.mode);
+});
+
+})();
+</script>
+</body>
+</html>
