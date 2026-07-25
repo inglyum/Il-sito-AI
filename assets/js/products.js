@@ -75,13 +75,18 @@ export function renderCats(){
 }
 
 /* ---- card prodotto ---- */
+function stockBadge(x){
+  if(x.stock===undefined||x.stock===null)return '';
+  if(x.stock===0)return `<span class="ptag" style="background:#dc2626;top:auto;bottom:8px">${L==='it'?'Esaurito':'Sold out'}</span>`;
+  if(x.stock<=3)return `<span class="ptag y" style="top:auto;bottom:8px">${L==='it'?'Ultimi '+x.stock:'Only '+x.stock+' left'}</span>`;
+  return '';}
 function card(x){const a=matArt(x.mat);
   return `<article class="pcard reveal in" data-action="open-product" data-id="${x.id}">
     <div class="pimg" style="background:${a.bg}">
       ${x.tag?`<span class="ptag ${x.tag==='Limited'?'y':x.tag==='B2B'?'b':''}">${x.tag}</span>`:''}
       <button class="wish ${wish.has(x.id)?'on':''}" aria-label="Wishlist" data-action="wish" data-id="${x.id}"><svg viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 2-3.2 2-5a5 5 0 0 0-9-3 5 5 0 0 0-9 3c0 1.8.5 3.5 2 5l7 7z"/></svg></button>
-      <div class="art">${x.icon}</div>${imgTag(x)}
-      <button class="qadd" data-action="quick-add" data-id="${x.id}">+ ${eur(x.price)}</button>
+      <div class="art">${x.icon}</div>${imgTag(x)}${stockBadge(x)}
+      ${x.stock===0?'':`<button class="qadd" data-action="quick-add" data-id="${x.id}">+ ${eur(x.price)}</button>`}
     </div>
     <div class="pbody"><span class="mat">${MATN[x.mat][L]} · ${CATS.find(c=>c.id===x.cat).n[L]}</span><h3>${x.n[L]}</h3>
     <div class="prow"><span class="price">${eur(x.price)}</span><span class="stars">★★★★★ <span>(${x.rev})</span></span></div></div></article>`}
@@ -242,12 +247,17 @@ function renderDisc(){const u=unit(),rows=[[1,9,1],[10,19,.95],[20,49,.9],[50,'�
 export function addFromPP(){addToCart(cur.id,sel.qty,MATN[cur.mat][L],'',unit()*disc(sel.qty))}
 
 /* ---- digitale ---- */
-export function renderDigital(){$('digGrid').innerHTML=DIG.map(d=>`<div class="dcard reveal in">
+export function renderDigital(){$('digGrid').innerHTML=DIG.map(d=>{
+  const stripeUrl=(CONFIG.stripeLinks||{})[d.id];
+  const buyBtn=stripeUrl
+    ?`<a class="btn btn-blue" href="${stripeUrl}" target="_blank" rel="noopener" style="padding:10px 20px;font-size:13.5px;text-decoration:none">💳 ${T('buy')}</a>`
+    :`<button class="btn btn-blue" style="padding:10px 20px;font-size:13.5px" data-action="dig-add" data-id="${d.id}">⬇ ${T('buy')}</button>`;
+  return `<div class="dcard reveal in">
   <div style="height:110px;border-radius:14px;background:${MAT_ART.File.bg};display:grid;place-items:center;font-size:42px">${d.icon}</div>
   <h3 style="font-size:17px;margin-top:14px">${d.n[L]}</h3>
   <div class="fmt">${d.f.map(f=>`<i>${f}</i>`).join('')}</div>
   <span class="lic">${T('lic')}</span>
-  <div class="dl"><span class="price">${eur(d.price)}</span><button class="btn btn-blue" style="padding:10px 20px;font-size:13.5px" data-action="dig-add" data-id="${d.id}">⬇ ${T('buy')}</button></div></div>`).join('')}
+  <div class="dl"><span class="price">${eur(d.price)}</span>${buyBtn}</div></div>`}).join('')}
 export function addDigital(id){const d=DIG.find(x=>x.id===+id);cart.push({dig:d,q:1,u:d.price});renderCart();saveCart();toast(T('added'));openCart()}
 
 /* ---- carrello ---- */

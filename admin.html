@@ -516,6 +516,13 @@ tr.rowc{cursor:pointer}tr.rowc:hover td{background:rgba(140,160,220,.05)}
     <div class="card"><h3>🧭 Diagnosi caricamento dati</h3><div class="kv" id="loadDiag">—</div>
       <div style="margin-top:10px"><button class="btn" id="sReload">↺ Riprova a caricare i dati</button></div></div>
     <div class="card"><h3>ℹ️ Sito</h3><div class="kv" id="setInfo"></div></div>
+    <div class="card"><h3>📧 Brevo Newsletter (facoltativo)</h3>
+      <div class="row c2">
+        <div><label>API Key Brevo</label><input type="password" data-b="CONFIG.brevo.apiKey" placeholder="xkeysib-…"></div>
+        <div><label>ID Lista contatti</label><input type="text" data-b="CONFIG.brevo.listId" placeholder="es. 3"></div>
+      </div>
+      <div class="hint" style="margin-top:8px">Ottieni la chiave su <b>app.brevo.com → Impostazioni → API Keys</b>. Il piano gratuito include 300 email/giorno. L'ID lista si trova in <b>Contatti → Liste</b>. Quando configurato, la newsletter usa Brevo invece di Formspree.</div>
+    </div>
     <div class="card"><h3>🤖 Claude AI (facoltativo)</h3>
       <label>API Key Anthropic (generazione automatica descrizioni e meta SEO)</label>
       <input type="password" id="sClaudeKey" placeholder="sk-ant-…">
@@ -780,6 +787,8 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
   </div>
   <div class="row c2"><div><label>Codice SKU (facoltativo)</label><input type="text" id="ep_sku" value="${esc(p.sku||'')}" placeholder="INGLY-${p.id}"></div>
    <div><label>Valutazione media (1–5, per le stelle su Google)</label><input type="number" id="ep_rating" min="1" max="5" step="0.1" value="${esc(p.rating||'')}" placeholder="4.9"></div></div>
+  <div class="row c2"><div><label>📦 Disponibilità (stock) — lascia vuoto = illimitata</label><input type="number" id="ep_stock" min="0" value="${p.stock!==undefined&&p.stock!==null?p.stock:''}" placeholder="es. 5 → badge «Ultimi 5»; 0 → Esaurito"></div>
+   <div><label>💳 Stripe Payment Link (solo prodotti digitali)</label><input type="url" id="ep_stripe" value="${esc((CONFIG.stripeLinks||{})[p.id]||'')}" placeholder="https://buy.stripe.com/…"></div></div>
   <label>📐 Tabella misure — una riga per voce, formato <span class="mono">Etichetta | Valore</span></label>
   <textarea id="ep_sizes" class="mono" style="min-height:78px" placeholder="Dimensioni | 30 × 20 cm&#10;Spessore | 5 mm&#10;Peso | 250 g">${esc((p.misure||[]).map(r=>r[0]+' | '+r[1]).join('\n'))}</textarea>
   <label>🔗 Prodotti correlati scelti a mano</label>
@@ -831,6 +840,8 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
   if(dit||den)p.desc={it:dit,en:den||dit};else delete p.desc;
   const sku=$('ep_sku').value.trim();sku?p.sku=sku:delete p.sku;
   const rat=parseFloat($('ep_rating').value);(rat>=1&&rat<=5)?p.rating=rat:delete p.rating;
+  const stk=$('ep_stock').value.trim();stk!==''?(p.stock=+stk):delete p.stock;
+  const strp=$('ep_stripe').value.trim();if(strp){S.CONFIG.stripeLinks=S.CONFIG.stripeLinks||{};S.CONFIG.stripeLinks[p.id]=strp}else if(S.CONFIG.stripeLinks)delete S.CONFIG.stripeLinks[p.id];
   const vid=$('ep_video').value.trim();vid?p.video=vid:delete p.video;
   const pos=$('ep_poster').value.trim();pos?p.poster=pos:delete p.poster;
   const sz=$('ep_sizes').value.split('\n').map(r=>r.split('|').map(s=>s.trim())).filter(r=>r[0]&&r[1]);

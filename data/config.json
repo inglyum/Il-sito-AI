@@ -42,6 +42,11 @@
   "formspreePreventivo": "",
   "formspreeNewsletter": ""
  },
+ "stripeLinks": {},
+ "brevo": {
+  "listId": "",
+  "apiKey": ""
+ },
  "whatsappFab": {
   "attivo": true,
   "numero": "393296904627",

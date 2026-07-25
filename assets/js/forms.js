@@ -30,9 +30,26 @@ async function send(form, key, okMsg){
   if(btn){ btn.disabled=false; btn.textContent=label }
 }
 
+async function sendBrevo(email){
+  const b=CONFIG.brevo||{};
+  if(!b.apiKey||!b.listId) return false;
+  try{
+    const r=await fetch('https://api.brevo.com/v3/contacts',{method:'POST',
+      headers:{'Content-Type':'application/json','api-key':b.apiKey},
+      body:JSON.stringify({email,listIds:[+b.listId],updateEnabled:true})});
+    return r.ok||r.status===204;
+  }catch(e){return false}
+}
+
 export function initForms(){
-  document.querySelectorAll('form.nform').forEach(f=>f.addEventListener('submit',e=>{
-    e.preventDefault(); send(f,'formspreeNewsletter',T('nlOk'));
+  document.querySelectorAll('form.nform').forEach(f=>f.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const email=(f.querySelector('[type=email]')||{}).value||'';
+    if(email&&CONFIG.brevo&&CONFIG.brevo.apiKey){
+      const ok=await sendBrevo(email);
+      if(ok){toast(T('nlOk'));f.reset();return}
+    }
+    send(f,'formspreeNewsletter',T('nlOk'));
   }));
   const q=document.querySelector('form.quote-form');
   if(q) q.addEventListener('submit',e=>{
