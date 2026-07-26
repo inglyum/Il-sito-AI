@@ -323,12 +323,83 @@ function initDelegation(){
   });
 }
 
+/* ===== BACKGROUND PICKER ===== */
+function initBgPicker(){
+  const ART=window.INGLY_ART; if(!ART) return;
+  const panel=document.getElementById('bgPicker'); if(!panel) return;
+  const btn=document.getElementById('bgPickerBtn'); if(!btn) return;
+  const grid=document.getElementById('bgPickerGrid'); if(!grid) return;
+
+  /* carica / salva preferenza sfondo */
+  let saved; try{ saved=JSON.parse(localStorage.getItem('ingly_bg')||'null') }catch(e){}
+  const THEME=()=>(window.INGLY&&window.INGLY.THEMES&&window.INGLY.THEMES.temi||[]);
+
+  function bgPalette(){
+    const th=prod.activeTheme();
+    if(th&&th.palette) return th.palette;
+    return ['#0a0d18','#1E3A8A','#FACC15'];
+  }
+
+  function applyBg(key,persist){
+    const pal=bgPalette();
+    const uri=ART.css(key,pal,key);
+    document.documentElement.style.setProperty('--site-bg',uri);
+    document.querySelectorAll('.hero-section,.hero-bg-art').forEach(el=>{
+      el.style.setProperty('--art-bg',uri);
+    });
+    if(persist) try{ localStorage.setItem('ingly_bg',JSON.stringify(key)) }catch(e){}
+    /* mark attivo */
+    grid.querySelectorAll('.bp-thumb').forEach(t=>t.classList.toggle('active',t.dataset.bg===key));
+  }
+
+  function clearBg(){
+    document.documentElement.style.removeProperty('--site-bg');
+    document.querySelectorAll('.hero-section,.hero-bg-art').forEach(el=>el.style.removeProperty('--art-bg'));
+    try{ localStorage.removeItem('ingly_bg') }catch(e){}
+    grid.querySelectorAll('.bp-thumb').forEach(t=>t.classList.remove('active'));
+  }
+
+  /* costruisce la griglia di anteprime */
+  const pal=bgPalette();
+  const keys=ART.patterns;
+  const labels={aurora:'Aurora',laser:'Laser',grid:'Griglia',bokeh:'Bokeh',waves:'Onde',topo:'Topo',rays:'Raggi',
+    particles:'Part.',marble:'Marmo',circuit:'Circuit',snow:'Neve',confetti:'Party',mesh:'Mesh',
+    arcs:'Archi',beams:'Fasci',neon:'Neon',diamond:'Diamanti',holo:'Holo',laserBurst:'Burst',aurora2:'Aurora+'};
+  grid.innerHTML=`<button class="bp-thumb bp-none" data-bg="" title="Predefinito">
+    <span class="bp-icon">✕</span><span class="bp-lbl">Default</span>
+  </button>`+keys.map(k=>{
+    const uri=ART.dataUri(k,pal,k);
+    return `<button class="bp-thumb" data-bg="${k}" title="${labels[k]||k}" style="background-image:url('${uri}')">
+      <span class="bp-lbl">${labels[k]||k}</span>
+    </button>`;
+  }).join('');
+
+  /* eventi */
+  grid.addEventListener('click',e=>{
+    const th=e.target.closest('.bp-thumb'); if(!th) return;
+    if(th.dataset.bg==='') clearBg();
+    else applyBg(th.dataset.bg,true);
+    panel.classList.remove('open');
+  });
+  btn.addEventListener('click',e=>{
+    e.stopPropagation();
+    panel.classList.toggle('open');
+  });
+  document.addEventListener('click',e=>{
+    if(!panel.contains(e.target)&&e.target!==btn) panel.classList.remove('open');
+  });
+
+  /* ripristina sfondo salvato */
+  if(saved) applyBg(saved,false);
+}
+
 /* ---- avvio ---- */
 $('mq').innerHTML+=$('mq').innerHTML;
 applyConfig();renderSocials();initHeroVideo();
 initSeo();
 initNav();initAnimations();initLazy();initForms();prod.initShopControls();initDelegation();
 applyI18n();prod.readFiltersFromURL();renderAll();bindLightbox();bindSuggest();bindMode();
+initBgPicker();
 /* rete di sicurezza: nessuna sezione può restare invisibile per un errore di animazione */
 setTimeout(()=>{
   const stuck=[...document.querySelectorAll('.reveal')].filter(el=>{

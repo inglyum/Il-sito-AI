@@ -121,6 +121,69 @@
       let o = ''; const a = P(p, 2, '#FACC15');
       for (let i = 0; i < 6; i++) { const x = W * (.35 + i * .13), w = 40 + r() * 120;
         o += `<path d="M${x | 0} -50 L${(x + w) | 0} -50 L${(x + w - 220) | 0} ${H + 50} L${(x - 220) | 0} ${H + 50}Z" fill="${a}" opacity="${(.04 + r() * .07).toFixed(3)}" filter="url(#b2)"/>` }
+      return o } },
+
+    neon: { n: { it: 'Neon City', en: 'Neon City' }, d: (p, r) => {
+      const a = P(p, 2, '#FACC15'), b = P(p, 1, '#1E3A8A');
+      let o = `<filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`;
+      /* griglia orizzontale prospettica */
+      for(let i=0;i<12;i++){const y=H*.55+i*32; o+=`<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="${b}" stroke-width="${.8+i*.06}" opacity="${(.6-i*.04).toFixed(2)}"/>`}
+      /* linee verticali verso punto di fuga */
+      for(let i=0;i<14;i++){const t=i/13,x=t*W; o+=`<line x1="${W/2}" y1="${H*.38}" x2="${x|0}" y2="${H}" stroke="${b}" stroke-width=".9" opacity=".45"/>`}
+      /* neon lines */
+      for(let i=0;i<5;i++){const y=H*(.12+r()*.3),x0=(r()*W)|0,x1=(r()*W)|0;
+        o+=`<line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="${r()>.5?a:b}" stroke-width="${1.2+r()*2.4}" opacity="${(.55+r()*.3).toFixed(2)}" filter="url(#glow)"/>`}
+      /* glow blob centrale */
+      o+=`<ellipse cx="${W*.5}" cy="${H*.38}" rx="280" ry="160" fill="${b}" opacity=".35" filter="url(#b)"/>`;
+      o+=`<ellipse cx="${W*.5}" cy="${H*.38}" rx="80" ry="40" fill="${a}" opacity=".22" filter="url(#b)"/>`;
+      return o } },
+
+    diamond: { n: { it: 'Diamanti', en: 'Diamonds' }, d: (p, r) => {
+      const a = P(p, 2, '#FACC15'), b = P(p, 1, '#1E3A8A'); let o='';
+      const sz=80;
+      for(let row=0;row<H/sz+1;row++) for(let col=0;col<W/sz+1;col++){
+        const cx=col*sz+(row%2?sz/2:0), cy=row*sz;
+        if(r()>.55) continue;
+        o+=`<polygon points="${cx},${cy-sz*.46} ${cx+sz*.46},${cy} ${cx},${cy+sz*.46} ${cx-sz*.46},${cy}" fill="none" stroke="${r()>.5?a:b}" stroke-width="${.5+r()*.8}" opacity="${(.12+r()*.22).toFixed(2)}"/>`;
+      }
+      o+=`<ellipse cx="${W*.3}" cy="${H*.4}" rx="340" ry="230" fill="${a}" opacity=".12" filter="url(#b)"/>`;
+      return o } },
+
+    holo: { n: { it: 'Olografico', en: 'Holographic' }, d: (p, r) => {
+      const a = P(p, 2, '#FACC15'), b = P(p, 1, '#1E3A8A'), c3='#9b59b6';
+      let o=`<defs><linearGradient id="hg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}" stop-opacity=".7"/><stop offset=".5" stop-color="${b}" stop-opacity=".5"/><stop offset="1" stop-color="${c3}" stop-opacity=".6"/></linearGradient>
+<linearGradient id="hg2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c3}" stop-opacity=".5"/><stop offset="1" stop-color="${a}" stop-opacity=".4"/></linearGradient></defs>`;
+      /* bande diagonali prismatiche */
+      for(let i=0;i<8;i++){const x=W*(.08+i*.12), w=W*.07+r()*W*.05;
+        o+=`<path d="M${x|0} -20 L${(x+w)|0} -20 L${(x+w-H*.4)|0} ${H+20} L${(x-H*.4)|0} ${H+20}Z" fill="url(#hg${i%2+1})" opacity="${(.06+r()*.10).toFixed(2)}"/>`}
+      /* glare centrale */
+      o+=`<ellipse cx="${W*.5}" cy="${H*.35}" rx="500" ry="250" fill="url(#hg1)" opacity=".18" filter="url(#b)"/>`;
+      o+=`<ellipse cx="${W*.8}" cy="${H*.7}" rx="300" ry="200" fill="url(#hg2)" opacity=".15" filter="url(#b)"/>`;
+      return o } },
+
+    laserBurst: { n: { it: 'Esplosione laser', en: 'Laser burst' }, d: (p, r) => {
+      const a = P(p, 2, '#FACC15'); let o='';
+      const ox=W*.18, oy=H*.5;
+      /* raggi dal centro */
+      for(let i=0;i<24;i++){const ang=i/24*Math.PI*2, L=200+r()*900, w=.6+r()*2.5;
+        const ex=ox+Math.cos(ang)*L, ey=oy+Math.sin(ang)*L;
+        o+=`<line x1="${ox|0}" y1="${oy|0}" x2="${ex|0}" y2="${ey|0}" stroke="${a}" stroke-width="${w.toFixed(1)}" opacity="${(.08+r()*.22).toFixed(2)}" stroke-linecap="round"/>`}
+      /* nucleo luminoso */
+      o+=`<circle cx="${ox|0}" cy="${oy|0}" r="60" fill="${a}" opacity=".18" filter="url(#b)"/>`;
+      o+=`<circle cx="${ox|0}" cy="${oy|0}" r="16" fill="${a}" opacity=".55"/>`;
+      /* particelle sparse */
+      for(let i=0;i<30;i++) o+=`<circle cx="${(r()*W)|0}" cy="${(r()*H)|0}" r="${(.8+r()*2.5).toFixed(1)}" fill="${a}" opacity="${(.15+r()*.4).toFixed(2)}"/>`;
+      return o } },
+
+    aurora2: { n: { it: 'Aurora boreale', en: 'Northern lights' }, d: (p, r) => {
+      const cols=[P(p,2,'#FACC15'),P(p,1,'#1E3A8A'),'#06b6d4','#8b5cf6']; let o='';
+      /* strisce curve ondulate */
+      for(let i=0;i<7;i++){
+        const y0=H*(.1+i*.12), amp=60+r()*120, col=cols[i%cols.length];
+        const cp1x=W*.25, cp1y=y0-amp, cp2x=W*.75, cp2y=y0+amp;
+        o+=`<path d="M0 ${y0|0} C ${cp1x} ${cp1y|0}, ${cp2x} ${cp2y|0}, ${W} ${(y0+amp*.3)|0}" stroke="${col}" stroke-width="${4+r()*8}" fill="none" opacity="${(.12+r()*.18).toFixed(2)}" filter="url(#b2)" stroke-linecap="round"/>`}
+      /* alone diffuso */
+      o+=`<ellipse cx="${W*.5}" cy="${H*.3}" rx="700" ry="260" fill="${cols[2]}" opacity=".06" filter="url(#b)"/>`;
       return o } }
   };
 

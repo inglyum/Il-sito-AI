@@ -38,35 +38,119 @@
 }
 
 /* ===== MODALITÀ CHIARA =====
-   Si attiva con <html data-mode="light">. Ridefinisce SOLO le variabili di colore:
-   nessun componente va riscritto, ed è per questo che l'intero sito cambia in una riga. */
+   Si attiva con <html data-mode="light">. Palette premium: carta naturale + oro caldo.
+   Nessun componente va riscritto — solo variabili. */
 :root[data-mode="light"]{
-  --paper:#f7f8fb; --white:#ffffff; --ink:#111827; --graphite:#eef1f7; --ink-soft:#5a6480;
-  --gray:#f0f2f8; --line:rgba(17,24,39,.13);
-  --blue:#1e56c4; --blue-hi:#2f7bff; --laser:#c9a227; --spark:#e2701c;
-  --shadow-soft:0 8px 28px rgba(17,24,39,.09);
-  --shadow-lift:0 22px 52px rgba(17,24,39,.14);
-  --elev-1:0 1px 3px rgba(17,24,39,.07);
-  --elev-2:var(--shadow-soft);
-  --elev-3:0 14px 32px rgba(17,24,39,.11);
+  /* Superficie */
+  --paper:#f5f3ef; --white:#ffffff; --graphite:#ede9e2;
+  --gray:#ede9e2;
+  /* Testo */
+  --ink:#1a1410; --ink-soft:#6b6255;
+  /* Bordi e linee */
+  --line:rgba(26,20,16,.12);
+  /* Accenti brand */
+  --blue:#1a4fb5; --blue-hi:#2563eb; --laser:#b8860b; --spark:#d4530a;
+  /* Ombre più calde e morbide */
+  --shadow-soft:0 6px 24px rgba(26,20,16,.08);
+  --shadow-lift:0 18px 48px rgba(26,20,16,.13);
+  --elev-1:0 1px 4px rgba(26,20,16,.06),0 2px 8px rgba(26,20,16,.04);
+  --elev-2:0 4px 16px rgba(26,20,16,.08),0 8px 24px rgba(26,20,16,.05);
+  --elev-3:0 8px 28px rgba(26,20,16,.10),0 16px 40px rgba(26,20,16,.06);
   --elev-4:var(--shadow-lift);
   color-scheme:light;
 }
-:root[data-mode="dark"]{ color-scheme:dark; --glass-dark:rgba(10,13,24,.75);
-  --bg-deep:#070a14; --card-glass:rgba(17,21,39,.72); --card-solid:#141830 }
-:root[data-mode="light"]{
-  --glass-dark:rgba(255,255,255,.86);
-  --bg-deep:#eef1f7; --card-glass:#ffffff; --card-solid:#ffffff;
+:root[data-mode="dark"]{
+  color-scheme:dark;
+  --glass-dark:rgba(10,13,24,.75);
+  --bg-deep:#070a14;
+  --card-glass:rgba(17,21,39,.72);
+  --card-solid:#141830;
 }
-:root[data-mode="light"] .mcard{ border-color:rgba(17,24,39,.12); color:#111827 }
-:root[data-mode="light"] .mcard h3,:root[data-mode="light"] .mcard p{ color:inherit }
-:root[data-mode="light"] .fcard{ border-color:rgba(17,24,39,.14);
-  box-shadow:0 24px 60px rgba(17,24,39,.10) }
-:root[data-mode="light"] .topbar,:root[data-mode="light"] footer{ border-color:rgba(17,24,39,.1) }
-:root[data-mode="light"] .bcard--light h3{ color:#111827 }
-:root[data-mode="light"] .sugg button:hover,:root[data-mode="light"] .sugg button.on{ background:rgba(17,24,39,.06) }
-:root[data-mode="light"] *::-webkit-scrollbar-thumb{ background:rgba(17,24,39,.2);background-clip:content-box }
-:root[data-mode="light"]{ --glass-dark:rgba(255,255,255,.86) }
-:root[data-mode="light"] .ptag,:root[data-mode="light"] .gtile .lbl,
-:root[data-mode="light"] .pp-main .bstamp,:root[data-mode="light"] .wish{ color:#111827 }
-:root[data-mode="light"] .wish svg{ stroke:#111827 }
+:root[data-mode="light"]{
+  --glass-dark:rgba(255,255,251,.90);
+  --bg-deep:#ede9e2;
+  --card-glass:rgba(255,255,255,.92);
+  --card-solid:#ffffff;
+}
+
+/* ---- componenti in luce ---- */
+:root[data-mode="light"] .topbar{
+  background:rgba(245,243,239,.88);
+  border-color:rgba(26,20,16,.09);
+  backdrop-filter:blur(18px);
+}
+:root[data-mode="light"] footer{
+  background:#ede9e2;
+  border-color:rgba(26,20,16,.10);
+}
+:root[data-mode="light"] .mcard{
+  background:#fff;
+  border-color:rgba(26,20,16,.10);
+  box-shadow:var(--elev-2);
+  color:#1a1410;
+}
+:root[data-mode="light"] .mcard h3,
+:root[data-mode="light"] .mcard p{ color:inherit }
+:root[data-mode="light"] .fcard{
+  background:#fff;
+  border-color:rgba(26,20,16,.10);
+  box-shadow:var(--elev-3);
+}
+:root[data-mode="light"] .pcard{
+  background:#fff;
+  box-shadow:var(--elev-2);
+}
+:root[data-mode="light"] .pcard:hover{
+  box-shadow:var(--elev-4);
+}
+:root[data-mode="light"] .bcard{
+  box-shadow:var(--elev-2);
+}
+:root[data-mode="light"] .sugg button:hover,
+:root[data-mode="light"] .sugg button.on{
+  background:rgba(26,20,16,.07);
+  color:#1a1410;
+}
+/* scroll */
+:root[data-mode="light"] *::-webkit-scrollbar-thumb{
+  background:rgba(26,20,16,.18);
+  background-clip:content-box;
+}
+/* etichette e badge */
+:root[data-mode="light"] .ptag,
+:root[data-mode="light"] .gtile .lbl,
+:root[data-mode="light"] .pp-main .bstamp,
+:root[data-mode="light"] .wish{ color:#1a1410 }
+:root[data-mode="light"] .wish svg{ stroke:#1a1410 }
+:root[data-mode="light"] .bcard--light h3{ color:#1a1410 }
+/* input e form */
+:root[data-mode="light"] input,
+:root[data-mode="light"] select,
+:root[data-mode="light"] textarea{
+  background:#fff;
+  border-color:rgba(26,20,16,.18);
+  color:#1a1410;
+}
+:root[data-mode="light"] input::placeholder,
+:root[data-mode="light"] textarea::placeholder{ color:#a09585 }
+/* nav links */
+:root[data-mode="light"] .nav-link{ color:#1a1410 }
+:root[data-mode="light"] .nav-link.active{ color:var(--laser) }
+/* hero */
+:root[data-mode="light"] .hero-section{ background:#ede9e2 }
+/* section alternata */
+:root[data-mode="light"] .alt-bg{ background:#ede9e2 }
+/* tag prodotto */
+:root[data-mode="light"] .tag-badge{
+  background:rgba(184,134,11,.12);
+  color:#7a5800;
+  border-color:rgba(184,134,11,.25);
+}
+/* bottoni secondari */
+:root[data-mode="light"] .btn-ghost{
+  border-color:rgba(26,20,16,.20);
+  color:#1a1410;
+}
+:root[data-mode="light"] .btn-ghost:hover{
+  background:rgba(26,20,16,.06);
+}

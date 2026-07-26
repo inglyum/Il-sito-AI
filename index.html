@@ -106,6 +106,19 @@
     <div style="display:flex;gap:14px;align-items:center">
       <div class="socials" id="soc1"></div>
       <button class="mode-btn" id="modeBtn" type="button" aria-label="Cambia tema" title="Chiaro / scuro"><svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.6 8.6 0 0 1 9.5 3.5a8.7 8.7 0 1 0 11 11Z"/></svg><svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.5 5.5l1.6 1.6M16.9 16.9l1.6 1.6M18.5 5.5l-1.6 1.6M7.1 16.9l-1.6 1.6"/></svg></button>
+      <!-- Background picker -->
+      <div class="bg-picker-wrap">
+        <button class="bg-picker-btn" id="bgPickerBtn" type="button" aria-label="Scegli sfondo" title="Scegli sfondo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12a9 9 0 0 1 9-9M21 12a9 9 0 0 1-9 9"/><path d="M12 3c1.7 2.4 2.8 5.1 2.8 9S13.7 18.6 12 21M12 3c-1.7 2.4-2.8 5.1-2.8 9s1.1 6.6 2.8 9"/></svg>
+        </button>
+        <div class="bg-picker-panel" id="bgPicker" role="dialog" aria-label="Seleziona sfondo animato">
+          <div class="bp-header">
+            <span>✦ Sfondo</span>
+            <button class="bp-close" onclick="document.getElementById('bgPicker').classList.remove('open')" aria-label="Chiudi">✕</button>
+          </div>
+          <div class="bp-grid" id="bgPickerGrid"></div>
+        </div>
+      </div>
         <div class="lang"><button id="langIT" class="on" data-action="lang" data-l="it">IT</button><button id="langEN" data-action="lang" data-l="en">EN</button></div>
     </div>
   </div>

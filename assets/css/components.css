@@ -718,15 +718,93 @@ html.theme-anim, html.theme-anim *{ transition:background-color .35s ease, borde
 .gtile--proj{cursor:pointer}
 .proj-hint{display:block;font-size:var(--fs-2xs);color:var(--laser);margin-top:2px;opacity:.9}
 
-/* ---------- Configuratore iframe ---------- */
-#ppEmbed iframe{
-  width:100%;
-  height:480px;
-  border:1px solid var(--line);
-  border-radius:20px;
-  background:var(--bg-deep);
-  display:block;
-  transition:height .3s ease;
-}
+#ppEmbed iframe{width:100%;height:480px;border:1px solid var(--line);border-radius:20px;display:block}
 @media(max-width:820px){#ppEmbed iframe{height:620px}}
 @media(max-width:480px){#ppEmbed iframe{height:720px;border-radius:14px}}
+
+/* ===== BACKGROUND PICKER ===== */
+.bg-picker-wrap{position:relative}
+.bg-picker-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:32px;height:32px;border-radius:50%;
+  background:transparent;border:1.5px solid var(--line);
+  color:var(--ink-soft);cursor:pointer;
+  transition:border-color .2s ease,color .2s ease,transform .2s ease;
+}
+.bg-picker-btn svg{width:16px;height:16px}
+.bg-picker-btn:hover{border-color:var(--laser);color:var(--laser);transform:rotate(30deg)}
+
+.bg-picker-panel{
+  position:absolute;top:calc(100% + 10px);right:0;
+  width:320px;
+  background:var(--card-glass,rgba(17,21,39,.92));
+  backdrop-filter:blur(20px);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-lift);
+  overflow:hidden;
+  opacity:0;pointer-events:none;
+  transform:translateY(12px) scale(.97);
+  transition:opacity .22s ease,transform .22s ease;
+  z-index:1200;
+}
+.bg-picker-panel.open{
+  opacity:1;pointer-events:auto;transform:none;
+  animation:pickerIn .22s ease;
+}
+.bp-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px 10px;
+  font-family:var(--fd);font-size:var(--fs-xs);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-soft);
+  border-bottom:1px solid var(--line);
+}
+.bp-close{
+  background:none;border:none;color:var(--ink-soft);cursor:pointer;
+  font-size:14px;padding:2px 6px;border-radius:6px;
+  transition:background .15s;
+}
+.bp-close:hover{background:var(--line);color:var(--ink)}
+
+.bp-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+  padding:12px;max-height:340px;overflow-y:auto;
+}
+.bp-thumb{
+  position:relative;aspect-ratio:16/10;border-radius:10px;
+  border:2px solid transparent;
+  background-size:cover;background-position:center;
+  cursor:pointer;overflow:hidden;
+  transition:border-color .18s,transform .18s;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  padding-bottom:4px;
+}
+.bp-thumb:hover{transform:scale(1.06);border-color:var(--laser)}
+.bp-thumb.active{border-color:var(--laser);box-shadow:0 0 0 3px rgba(245,217,78,.25)}
+.bp-none{background:var(--white);border-color:var(--line);justify-content:center}
+.bp-icon{font-size:18px;color:var(--ink-soft)}
+.bp-lbl{
+  font-size:9px;font-family:var(--fd);letter-spacing:.08em;text-transform:uppercase;
+  color:#fff;background:rgba(0,0,0,.55);padding:2px 5px;border-radius:4px;
+  line-height:1.3;white-space:nowrap;
+}
+.bp-none .bp-lbl{color:var(--ink-soft);background:none}
+
+/* responsivo */
+@media(max-width:480px){
+  .bg-picker-panel{width:290px;right:-60px}
+  .bp-grid{grid-template-columns:repeat(3,1fr)}
+}
+
+/* ===== HERO background-art overlay ===== */
+.hero-bg-art{background-image:var(--art-bg,none);background-size:cover;background-position:center}
+html{background-color:var(--paper)}
+body{background-color:var(--paper)}
+
+/* ===== LIGHT MODE — superfici e dettagli ===== */
+:root[data-mode="light"] .topbar{background:rgba(245,243,239,.88);backdrop-filter:blur(18px)}
+:root[data-mode="light"] .nav a,:root[data-mode="light"] .nav-link{color:#1a1410}
+:root[data-mode="light"] .cta-band{background:#ede9e2;color:#1a1410}
+:root[data-mode="light"] .section-label{color:#b8860b}
+:root[data-mode="light"] .bg-picker-panel{background:rgba(255,255,251,.94)}
+:root[data-mode="light"] .bp-lbl{background:rgba(0,0,0,.35)}
