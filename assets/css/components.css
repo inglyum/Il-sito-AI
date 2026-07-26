@@ -915,3 +915,34 @@ body{background-color:var(--paper)}
 :root[data-mode="light"] #glow-orb.hot {
   background: radial-gradient(circle, rgba(184,134,11,.16) 0%, rgba(212,83,10,.07) 45%, transparent 72%);
 }
+
+/* ===== WISHLIST DRAWER ===== */
+.drawer--wish{right:0;left:auto}
+.wish-item{display:flex;gap:14px;align-items:flex-start}
+.wish-item .di-img{width:70px;height:70px;border-radius:10px;overflow:hidden;flex-shrink:0;background:var(--bg-card)}
+.wish-item .di-img img{width:100%;height:100%;object-fit:cover}
+.wish-item .di-body{flex:1;min-width:0}
+.wish-item .di-name{font-size:14px;font-weight:600;line-height:1.35;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wish-item .di-price{font-size:13px;color:var(--accent);font-weight:700;margin-bottom:8px}
+.wish-pts{font-size:13px;color:var(--ink-soft);padding:8px 0 12px;border-top:1px solid var(--line);text-align:center}
+
+/* ===== PROMO POPUP ===== */
+.promo-pop-ov{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
+.promo-pop{background:var(--bg-card);border:1px solid var(--line);border-radius:20px;padding:40px 36px;max-width:420px;width:100%;position:relative;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.promo-pop-x{position:absolute;top:14px;right:14px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--ink-soft);line-height:1;padding:4px 8px}
+.promo-pop-x:hover{color:var(--ink)}
+.promo-pop-emoji{font-size:52px;margin-bottom:16px}
+.promo-pop-title{font-size:22px;font-weight:700;margin:0 0 10px}
+.promo-pop-sub{font-size:15px;color:var(--ink-soft);margin:0 0 18px}
+.promo-pop-code{background:var(--bg-deep);border:1.5px dashed var(--accent);border-radius:10px;padding:10px 16px;margin-bottom:20px;font-size:14px}
+.pop-code{font-family:var(--fd);font-size:17px;letter-spacing:.05em;color:var(--accent)}
+:root[data-mode="light"] .promo-pop{background:#fffef9}
+:root[data-mode="light"] .promo-pop-code{background:#f3f0e8}
+
+/* ===== LOYALTY TOAST ===== */
+.loyalty-toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:var(--bg-card);border:1px solid var(--line);border-radius:12px;padding:12px 20px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 30px rgba(0,0,0,.3);z-index:8000;white-space:nowrap;animation:slideUp .4s ease}
+.loyalty-icon{font-size:22px}
+.loyalty-body{display:flex;flex-direction:column;gap:2px}
+.loyalty-body b{font-size:14px;font-weight:700;color:var(--accent)}
+.loyalty-body span{font-size:12px;color:var(--ink-soft)}
+@keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}

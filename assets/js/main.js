@@ -9,6 +9,7 @@ import * as prod from './products.js';
 import { renderUrg, initForms } from './forms.js';
 import { initLazy } from './lazyload.js';
 import { initSeo, updateSeo } from './seo.js';
+import * as wish from './wishlist.js';
 
 /* ---- config → DOM ---- */
 function initHeroVideo(){
@@ -291,7 +292,14 @@ const actions={
   'go':el=>go(el.dataset.arg),
   'go-shop':el=>goShop(el.dataset.arg),
   'open-product':el=>prod.openProduct(+el.dataset.id),
-  'wish':(el,e)=>{e.stopPropagation();prod.toggleWish(+el.dataset.id,el)},
+  'wish':(el,e)=>{e.stopPropagation();wish.toggleWishItem(+el.dataset.id,el)},
+  'open-wish':()=>wish.openWish(),
+  'close-wish':()=>wish.closeWish(),
+  'wish-share':()=>wish.shareWish(),
+  'wish-to-cart':()=>wish.wishToCart(),
+  'wish-add-cart':(el,e)=>{e.stopPropagation();prod.addToCart(el.dataset.id);toast(T('ppAdd'));wish.closeWish()},
+  'wish-rm':(el,e)=>{e.stopPropagation();wish.toggleWishItem(+el.dataset.id,el)},
+  'close-promo-pop':()=>wish.closePromoPopup(),
   'quick-add':(el,e)=>{e.stopPropagation();prod.addToCart(el.dataset.id)},
   'open-cart':()=>prod.openCart(),
   'close-cart':()=>prod.closeCart(),
@@ -405,6 +413,9 @@ initSeo();
 initNav();initAnimations();initLazy();initForms();prod.initShopControls();initDelegation();
 applyI18n();prod.readFiltersFromURL();renderAll();bindLightbox();bindSuggest();bindMode();
 initBgPicker();
+wish.initWish();
+wish.initPromoPopup();
+window._wish = wish;
 /* rete di sicurezza: nessuna sezione può restare invisibile per un errore di animazione */
 setTimeout(()=>{
   const stuck=[...document.querySelectorAll('.reveal')].filter(el=>{

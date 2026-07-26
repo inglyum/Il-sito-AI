@@ -75,10 +75,13 @@
 <script>(function(){try{var m=localStorage.getItem("ingly_mode");if(!m)m=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-mode",m)}catch(e){}})();</script>
 <!-- Preload critical assets -->
 <link rel="preload" as="image" href="assets/images/og-image.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="assets/images/hero.webp" fetchpriority="high" type="image/webp">
+<link rel="preload" as="fetch" href="data/products.json" crossorigin>
 <link rel="modulepreload" href="assets/js/app.js">
 <link rel="modulepreload" href="assets/js/data-loader.js">
 <link rel="modulepreload" href="assets/js/main.js">
 <link rel="modulepreload" href="assets/js/products.js">
+<link rel="modulepreload" href="assets/js/wishlist.js">
 
 <script src="assets/js/artwork.js"></script>
 <link rel="stylesheet" href="assets/css/reset.css">
@@ -125,7 +128,7 @@
       <a href="#/quote" data-nav="quote"><i class="navic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="1.5"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></i> <span data-i18n="nQuote">Preventivo</span></a>
     </nav>
     <div class="nav-acts">
-      <button class="icon-btn" aria-label="Wishlist" data-action="go" data-arg="shop"><svg viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 2-3.2 2-5a5 5 0 0 0-9-3 5 5 0 0 0-9 3c0 1.8.5 3.5 2 5l7 7z"/></svg><span class="badge" id="wishBadge">0</span></button>
+      <button class="icon-btn" aria-label="Wishlist" data-action="open-wish"><svg viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 2-3.2 2-5a5 5 0 0 0-9-3 5 5 0 0 0-9 3c0 1.8.5 3.5 2 5l7 7z"/></svg><span class="badge" id="wishBadge">0</span></button>
       <button class="icon-btn" aria-label="Cart" data-action="open-cart"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2 2h3l3.2 13.4a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L23 7H6"/></svg><span class="badge" id="cartBadge">0</span></button>
       <button class="icon-btn burger" aria-label="Menu" data-action="menu-open"><svg viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h12"/></svg></button>
     </div>
@@ -520,6 +523,47 @@
     <div class="dr-note"><span data-i18n="crtN">Spedizione gratuita sopra €79 · Prova grafica inclusa</span></div>
   </div>
 </aside>
+
+<!-- Wishlist drawer -->
+<div class="overlay" id="overlayWish" data-action="close-wish"></div>
+<aside class="drawer drawer--wish" id="wishDrawer" aria-label="Wishlist" role="dialog" aria-modal="true" hidden>
+  <div class="dr-head">
+    <div>
+      <h3>❤ Wishlist</h3>
+      <span class="dr-count" id="wishCount"></span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="btn btn-ghost" id="wishShareBtn" data-action="wish-share" style="font-size:12px;padding:4px 10px">🔗 Condividi</button>
+      <button class="icon-btn" data-action="close-wish" aria-label="Chiudi"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+  </div>
+  <div class="dr-items" id="wishItems"></div>
+  <div class="dr-foot" id="wishFoot" style="display:none">
+    <div class="wish-pts" id="wishPts"></div>
+    <button class="btn btn-primary btn--block" data-action="wish-to-cart">🛒 Aggiungi tutto al carrello</button>
+  </div>
+</aside>
+
+<!-- Exit-intent / promo popup -->
+<div class="promo-pop-ov" id="promoPopOv" hidden>
+  <div class="promo-pop" id="promoPop" role="dialog" aria-modal="true" aria-labelledby="promoPopTitle">
+    <button class="promo-pop-x" id="promoPopX" aria-label="Chiudi">✕</button>
+    <div class="promo-pop-emoji" id="promoPopEmoji">🎁</div>
+    <h2 class="promo-pop-title" id="promoPopTitle"></h2>
+    <p class="promo-pop-sub" id="promoPopSub"></p>
+    <div class="promo-pop-code" id="promoPopCode" hidden></div>
+    <button class="btn btn-primary magnetic" id="promoPopCta" data-action="close-promo-pop"></button>
+  </div>
+</div>
+
+<!-- Loyalty points toast -->
+<div class="loyalty-toast" id="loyaltyToast" hidden>
+  <span class="loyalty-icon">⭐</span>
+  <div class="loyalty-body">
+    <b id="loyaltyToastTitle"></b>
+    <span id="loyaltyToastSub"></span>
+  </div>
+</div>
 
 <div id="promoBar"></div>
 <a id="waFab" class="wa-fab" href="#" target="_blank" rel="noopener" style="display:none" aria-label="WhatsApp">

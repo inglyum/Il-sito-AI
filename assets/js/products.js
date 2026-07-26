@@ -506,6 +506,12 @@ export function checkoutWhatsApp(){
   msg+='\n'+(L==='it'?'Totale stimato':'Estimated total')+': *'+eur(total)+'*';
   msg+='\n\n'+(L==='it'?'📍 Confermate il preventivo definitivo con prova grafica prima della produzione.':'📍 We\'ll confirm the final quote with a graphic proof before production.');
   window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank');
+  /* premia l'utente con punti fedeltà */
+  const pts = Math.floor(total);
+  try{
+    const w = window._wish;
+    if(w && w.addPoints) w.addPoints(pts);
+  }catch(e){}
 }
 
 export function checkoutEmail(){

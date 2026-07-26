@@ -89,9 +89,16 @@ export function updateSeo(page, L, T, product){
       "aggregateRating":product.rev?{"@type":"AggregateRating","ratingValue":String(product.rating||4.9),
         "reviewCount":product.rev,"bestRating":"5","worstRating":"1"}:undefined,
       "offers":{"@type":"Offer","price":product.price,"priceCurrency":"EUR",
-        "availability":"https://schema.org/InStock","url":url,"itemCondition":"https://schema.org/NewCondition",
+        "availability":product.hidden?"https://schema.org/OutOfStock":"https://schema.org/InStock",
+        "url":url,"itemCondition":"https://schema.org/NewCondition",
         "priceValidUntil":new Date(Date.now()+31536000000).toISOString().slice(0,10),
-        "seller":{"@type":"Organization","name":S.azienda||"INGLY DESIGN"}}
+        "seller":{"@type":"Organization","name":S.azienda||"INGLY DESIGN"},
+        "hasMerchantReturnPolicy":{"@type":"MerchantReturnPolicy","applicableCountry":"IT",
+          "returnPolicyCategory":"https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays":14,"returnMethod":"https://schema.org/ReturnByMail",
+          "returnFees":"https://schema.org/FreeReturn"},
+        "shippingDetails":{"@type":"OfferShippingDetails","shippingRate":{"@type":"MonetaryAmount","value":"0","currency":"EUR"},
+          "doesNotShip":false,"deliveryTime":{"@type":"ShippingDeliveryTime","businessDays":{"@type":"QuantitativeValue","minValue":3,"maxValue":7}}}}
     });
     /* briciole di pane: Home › Categoria › Prodotto */
     const crumbs=[{"@type":"ListItem","position":1,"name":"Home","item":base()+'/'}];
@@ -101,6 +108,20 @@ export function updateSeo(page, L, T, product){
   } else {
     ['ld-product','ld-crumbs'].forEach(id=>{const s=document.getElementById(id);if(s)s.remove()});
   }
+
+  /* ItemList per pagina shop — aiuta Google a mostrare prodotti direttamente nei risultati */
+  if(page==='shop'){
+    const prods=(window.INGLY.P||[]).filter(p=>!p.hidden).slice(0,50);
+    jsonld('ld-list',{"@context":"https://schema.org","@type":"ItemList",
+      "name":(S.azienda||'INGLY DESIGN')+' — Catalogo',
+      "numberOfItems":prods.length,
+      "itemListElement":prods.map((p,i)=>({
+        "@type":"ListItem","position":i+1,
+        "url":base()+'/#/product?id='+p.id,
+        "name":p.n[L]
+      }))
+    });
+  } else { const s=document.getElementById('ld-list'); if(s) s.remove(); }
 
   /* FAQ strutturate: compaiono come domande espandibili nei risultati Google */
   const faqs=(window.INGLY.FAQS||[]);
