@@ -160,7 +160,7 @@
  ],
  "TECH": [
   {
-   "t": "CO₂ · 80W",
+   "t": "CO₂ · 100W",
    "n": "Laser CO₂",
    "d": {
     "it": "Legno, plexiglass, pelle, vetro e MDF. Taglia fino a 20 mm, incide dettagli fotografici.",
@@ -184,6 +184,7 @@
     "Deep engraving",
     "Traceability"
    ],
+   "lg": 1,
    "icon": "laser"
   },
   {
@@ -232,8 +233,7 @@
    "s": [
     "0,05 mm layer"
    ],
-   "icon": "3d",
-   "lg": 1
+   "icon": "3d"
   }
  ],
  "MATERIALS": [
@@ -540,70 +540,134 @@
   [
    "🪵",
    {
-    "it": "Cornice Masello Mappa stratificata legno",
+    "it": "Esclusiva Mappa Topografica a 5 Strati in Legno Pregiato",
     "en": "Oak menu boards"
    },
    "#e8d5b0,#c9a876",
    "img/port-1.webp",
-   "https://www.instagram.com/p/DWbGDTLgi14/?img_index=1"
+   "https://www.instagram.com/p/DWbGDTLgi14/?img_index=1",
+   {
+    "foto": [
+     "img/proj-1-1.webp",
+     "img/proj-1-2.webp",
+     "img/proj-1-3.webp"
+    ],
+    "dopo": "img/proj-1-dopo.webp",
+    "social": "https://www.instagram.com/p/DWbGDTLgi14/?img_index=1"
+   }
   ],
   [
    "🏆",
    {
-    "it": "Nuvola Nome personalizzato",
+    "it": "Premio in vetro — Nova Tech",
     "en": "Glass award — Nova Tech"
    },
-   "#eef7f7,#cfe6e8",
-   "img/port-2.webp"
+   "#eef7f7,#cfe6e8"
   ],
   [
-   "✨",
+   "💍",
    {
-    "it": "c875201411abec95",
-    "en": "c875201411abec95"
+    "it": "Allestimento nozze",
+    "en": "Wedding signage"
    },
-   "#e8d5b0,#c9a876",
-   "img/port-3.webp",
-   ""
+   "#f4f0ff,#d9ccf5"
   ],
   [
-   "✨",
+   "🐾",
    {
-    "it": "7df818c93cf242189cf538720b920d7f",
-    "en": "7df818c93cf242189cf538720b920d7f"
+    "it": "Medagliette in acciaio",
+    "en": "Steel pet tags"
    },
-   "#eef7f7,#cfe6e8",
-   "img/port-4.webp",
-   ""
+   "#4a4a55,#23232c"
+  ],
+  [
+   "💡",
+   {
+    "it": "Plexi retroilluminato",
+    "en": "Edge-lit acrylic"
+   },
+   "#dbe9ff,#aac6f5"
+  ],
+  [
+   "🎂",
+   {
+    "it": "Cake topper su misura",
+    "en": "Custom cake toppers"
+   },
+   "#fdf1f3,#f5c8d2"
+  ],
+  [
+   "🔑",
+   {
+    "it": "Portachiavi in pelle",
+    "en": "Leather keychains"
+   },
+   "#b9825a,#8a5a38"
+  ],
+  [
+   "🎄",
+   {
+    "it": "Run natalizia ×400",
+    "en": "Christmas run ×400"
+   },
+   "#fdeaea,#f0bcbc"
+  ],
+  [
+   "⚙️",
+   {
+    "it": "Marcatura industriale F2",
+    "en": "F2 industrial marking"
+   },
+   "#33313f,#211f2e"
+  ],
+  [
+   "👶",
+   {
+    "it": "Targhe nascita",
+    "en": "Birth plaques"
+   },
+   "#eefaf1,#bfe8cd"
+  ],
+  [
+   "🎓",
+   {
+    "it": "Targhe laurea",
+    "en": "Graduation plaques"
+   },
+   "#fff8e0,#f8e69a"
+  ],
+  [
+   "🌙",
+   {
+    "it": "Lampade 3D",
+    "en": "3D lamps"
+   },
+   "#f4f0ff,#e3daf8"
   ],
   [
    "✨",
    {
-    "it": "7e6ef4a6 7e77 4268 8c66 86b38b6bcd1e",
-    "en": "7e6ef4a6 7e77 4268 8c66 86b38b6bcd1e"
+    "it": "Nuovo lavoro",
+    "en": "New work"
+   },
+   "#e8d5b0,#c9a876"
+  ],
+  [
+   "✨",
+   {
+    "it": "Nuovo lavoro",
+    "en": "New work"
+   },
+   "#e8d5b0,#c9a876"
+  ],
+  [
+   "✨",
+   {
+    "it": "2",
+    "en": "2"
    },
    "#f4f0ff,#d9ccf5",
-   "img/port-5.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "20260228 160056",
-    "en": "20260228 160056"
-   },
-   "#ffeede,#f6cfa8",
-   "img/port-6.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "20260228 160104",
-    "en": "20260228 160104"
-   },
-   "#e3f0e8,#bcd9c6",
-   "img/port-7.webp",
+   "img/port-2.webp",
    ""
   ],
   [
@@ -612,8 +676,8 @@
     "it": "2c237644 4895 4304 9f34 3b0e077b7c05",
     "en": "2c237644 4895 4304 9f34 3b0e077b7c05"
    },
-   "#fde8ef,#f3c3d3",
-   "img/port-8.webp",
+   "#ffeede,#f6cfa8",
+   "img/port-3.webp",
    ""
   ],
   [
@@ -622,8 +686,28 @@
     "it": "3",
     "en": "3"
    },
+   "#e3f0e8,#bcd9c6",
+   "img/port-4.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "3dbff510 1ed6 4802 98e6 54b54412279b",
+    "en": "3dbff510 1ed6 4802 98e6 54b54412279b"
+   },
+   "#fde8ef,#f3c3d3",
+   "img/port-5.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "4",
+    "en": "4"
+   },
    "#e8d5b0,#c9a876",
-   "img/port-9.webp",
+   "img/port-6.webp",
    ""
   ],
   [
@@ -633,7 +717,7 @@
     "en": "5"
    },
    "#eef7f7,#cfe6e8",
-   "img/port-10.webp",
+   "img/port-7.webp",
    ""
   ],
   [
@@ -643,7 +727,7 @@
     "en": "6fc08ffd7f8fb6b637dd54492851a47c"
    },
    "#f4f0ff,#d9ccf5",
-   "img/port-11.webp",
+   "img/port-8.webp",
    ""
   ],
   [
@@ -653,7 +737,7 @@
     "en": "14"
    },
    "#ffeede,#f6cfa8",
-   "img/port-12.webp",
+   "img/port-9.webp",
    ""
   ],
   [
@@ -663,7 +747,7 @@
     "en": "22e7c748ef1fcbdd"
    },
    "#e3f0e8,#bcd9c6",
-   "img/port-13.webp",
+   "img/port-10.webp",
    ""
   ],
   [
@@ -673,7 +757,17 @@
     "en": "37e9de61 d21c 4f42 8b29 2ca5d0af58f9"
    },
    "#fde8ef,#f3c3d3",
-   "img/port-14.webp",
+   "img/port-11.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "45ec5863 7b58 41fc 8fd0 edf86cca44c0",
+    "en": "45ec5863 7b58 41fc 8fd0 edf86cca44c0"
+   },
+   "#e8d5b0,#c9a876",
+   "img/port-12.webp",
    ""
   ],
   [
@@ -682,38 +776,18 @@
     "it": "494d525c 5304 4e2b b542 11daf035e597",
     "en": "494d525c 5304 4e2b b542 11daf035e597"
    },
-   "#e8d5b0,#c9a876",
-   "img/port-15.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "667a4666 b93a 404b a079 ea11af18edcc",
-    "en": "667a4666 b93a 404b a079 ea11af18edcc"
-   },
    "#eef7f7,#cfe6e8",
-   "img/port-16.webp",
+   "img/port-13.webp",
    ""
   ],
   [
    "✨",
    {
-    "it": "691d772c e6b8 44c1 a6b5 db08b8de0925",
-    "en": "691d772c e6b8 44c1 a6b5 db08b8de0925"
+    "it": "6314c838 7653 43ff b369 e57f4e87a4ff",
+    "en": "6314c838 7653 43ff b369 e57f4e87a4ff"
    },
    "#f4f0ff,#d9ccf5",
-   "img/port-17.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "3646b403 fa3e 4601 89a0 57340340c726",
-    "en": "3646b403 fa3e 4601 89a0 57340340c726"
-   },
-   "#ffeede,#f6cfa8",
-   "img/port-18.webp",
+   "img/port-14.webp",
    ""
   ],
   [
@@ -722,18 +796,8 @@
     "it": "Ac922a3315eed4e8ea14782bfc5c249d9P",
     "en": "Ac922a3315eed4e8ea14782bfc5c249d9P"
    },
-   "#e3f0e8,#bcd9c6",
-   "img/port-19.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "ac3459417c8f18173592ab455bd31bf1",
-    "en": "ac3459417c8f18173592ab455bd31bf1"
-   },
-   "#fde8ef,#f3c3d3",
-   "img/port-20.webp",
+   "#ffeede,#f6cfa8",
+   "img/port-15.webp",
    ""
   ],
   [
@@ -742,8 +806,18 @@
     "it": "adfb8827 2f71 4d0e 898c 7e5c17257a3c",
     "en": "adfb8827 2f71 4d0e 898c 7e5c17257a3c"
    },
-   "#e8d5b0,#c9a876",
-   "img/port-21.webp",
+   "#e3f0e8,#bcd9c6",
+   "img/port-16.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "ae73acd02fd939b51a6e8c6ab673a4ea",
+    "en": "ae73acd02fd939b51a6e8c6ab673a4ea"
+   },
+   "#fde8ef,#f3c3d3",
+   "img/port-17.webp",
    ""
   ],
   [
@@ -752,8 +826,8 @@
     "it": "baaa",
     "en": "baaa"
    },
-   "#eef7f7,#cfe6e8",
-   "img/port-22.webp",
+   "#e8d5b0,#c9a876",
+   "img/port-18.webp",
    ""
   ],
   [
@@ -762,8 +836,8 @@
     "it": "bba3a7d8b9aca0645ab146fe2d84fe7e",
     "en": "bba3a7d8b9aca0645ab146fe2d84fe7e"
    },
-   "#f4f0ff,#d9ccf5",
-   "img/port-23.webp",
+   "#eef7f7,#cfe6e8",
+   "img/port-19.webp",
    ""
   ],
   [
@@ -772,28 +846,28 @@
     "it": "cdc8da5c da0f99 7d2950e4cc5c4cddb8ce8f0c9293ba79 mv2",
     "en": "cdc8da5c da0f99 7d2950e4cc5c4cddb8ce8f0c9293ba79 mv2"
    },
-   "#ffeede,#f6cfa8",
-   "img/port-24.webp",
+   "#f4f0ff,#d9ccf5",
+   "img/port-20.webp",
    ""
   ],
   [
    "✨",
    {
-    "it": "ChatGPT Image 12 lug 2026, 21 48 40",
-    "en": "ChatGPT Image 12 lug 2026, 21 48 40"
+    "it": "dwdadad",
+    "en": "dwdadad"
+   },
+   "#ffeede,#f6cfa8",
+   "img/port-21.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "eedd",
+    "en": "eedd"
    },
    "#e3f0e8,#bcd9c6",
-   "img/port-25.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "ChatGPT Image 12 lug 2026, 22 03 00",
-    "en": "ChatGPT Image 12 lug 2026, 22 03 00"
-   },
-   "#fde8ef,#f3c3d3",
-   "img/port-26.webp",
+   "img/port-22.webp",
    ""
   ],
   [
@@ -802,18 +876,8 @@
     "it": "Gemini Generated Image  (32)",
     "en": "Gemini Generated Image  (32)"
    },
-   "#e8d5b0,#c9a876",
-   "img/port-27.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "Gemini Generated Image  (34)",
-    "en": "Gemini Generated Image  (34)"
-   },
-   "#eef7f7,#cfe6e8",
-   "img/port-28.webp",
+   "#fde8ef,#f3c3d3",
+   "img/port-23.webp",
    ""
   ],
   [
@@ -822,8 +886,48 @@
     "it": "Gemini Generated Image ntbwnsntbwnsntbw",
     "en": "Gemini Generated Image ntbwnsntbwnsntbw"
    },
+   "#e8d5b0,#c9a876",
+   "img/port-24.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "Gemini Generated Image xt4yt5xt4yt5xt4y",
+    "en": "Gemini Generated Image xt4yt5xt4yt5xt4y"
+   },
+   "#eef7f7,#cfe6e8",
+   "img/port-25.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "il 1588xN.7573918200 c2h5",
+    "en": "il 1588xN.7573918200 c2h5"
+   },
    "#f4f0ff,#d9ccf5",
-   "img/port-29.webp",
+   "img/port-26.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "il 1588xN.7749506656 8k7s",
+    "en": "il 1588xN.7749506656 8k7s"
+   },
+   "#ffeede,#f6cfa8",
+   "img/port-27.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "inisione",
+    "en": "inisione"
+   },
+   "#e3f0e8,#bcd9c6",
+   "img/port-28.webp",
    ""
   ],
   [
@@ -832,8 +936,8 @@
     "it": "ironman clean minimal",
     "en": "ironman clean minimal"
    },
-   "#ffeede,#f6cfa8",
-   "img/port-30.webp",
+   "#fde8ef,#f3c3d3",
+   "img/port-29.webp",
    ""
   ],
   [
@@ -842,28 +946,18 @@
     "it": "Plant stand E0021299 file cdr and dxf free vector download for laser cut",
     "en": "Plant stand E0021299 file cdr and dxf free vector download for laser cut"
    },
-   "#e3f0e8,#bcd9c6",
-   "img/port-31.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "unnamed (28)",
-    "en": "unnamed (28)"
-   },
-   "#fde8ef,#f3c3d3",
-   "img/port-32.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 02 19 at 18.04.28",
-    "en": "WhatsApp Image 2026 02 19 at 18.04.28"
-   },
    "#e8d5b0,#c9a876",
-   "img/port-33.webp",
+   "img/port-30.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "WhatsApp Image 2026 02 19 at 18.04.31 (1)",
+    "en": "WhatsApp Image 2026 02 19 at 18.04.31 (1)"
+   },
+   "#eef7f7,#cfe6e8",
+   "img/port-31.webp",
    ""
   ],
   [
@@ -872,8 +966,8 @@
     "it": "WhatsApp Image 2026 02 19 at 18.04.31",
     "en": "WhatsApp Image 2026 02 19 at 18.04.31"
    },
-   "#eef7f7,#cfe6e8",
-   "img/port-34.webp",
+   "#f4f0ff,#d9ccf5",
+   "img/port-32.webp",
    ""
   ],
   [
@@ -882,28 +976,8 @@
     "it": "WhatsApp Image 2026 02 19 at 18.04.33",
     "en": "WhatsApp Image 2026 02 19 at 18.04.33"
    },
-   "#f4f0ff,#d9ccf5",
-   "img/port-35.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 02 19 at 18.04.35 (1)",
-    "en": "WhatsApp Image 2026 02 19 at 18.04.35 (1)"
-   },
    "#ffeede,#f6cfa8",
-   "img/port-36.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 02 19 at 18.04.44 (1)",
-    "en": "WhatsApp Image 2026 02 19 at 18.04.44 (1)"
-   },
-   "#e3f0e8,#bcd9c6",
-   "img/port-37.webp",
+   "img/port-33.webp",
    ""
   ],
   [
@@ -912,18 +986,38 @@
     "it": "WhatsApp Image 2026 02 19 at 18.11.59",
     "en": "WhatsApp Image 2026 02 19 at 18.11.59"
    },
-   "#fde8ef,#f3c3d3",
-   "img/port-38.webp",
+   "#e3f0e8,#bcd9c6",
+   "img/port-34.webp",
    ""
   ],
   [
    "✨",
    {
-    "it": "WhatsApp Image 2026 03 07 at 23.19.49 (3)",
-    "en": "WhatsApp Image 2026 03 07 at 23.19.49 (3)"
+    "it": "WhatsApp Image 2026 03 07 at 23.19.47",
+    "en": "WhatsApp Image 2026 03 07 at 23.19.47"
+   },
+   "#fde8ef,#f3c3d3",
+   "img/port-35.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "WhatsApp Image 2026 03 07 at 23.19.48",
+    "en": "WhatsApp Image 2026 03 07 at 23.19.48"
    },
    "#e8d5b0,#c9a876",
-   "img/port-39.webp",
+   "img/port-36.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "WhatsApp Image 2026 03 07 at 23.19.50 (2)",
+    "en": "WhatsApp Image 2026 03 07 at 23.19.50 (2)"
+   },
+   "#eef7f7,#cfe6e8",
+   "img/port-37.webp",
    ""
   ],
   [
@@ -932,8 +1026,8 @@
     "it": "WhatsApp Image 2026 03 07 at 23.19.50 (4)",
     "en": "WhatsApp Image 2026 03 07 at 23.19.50 (4)"
    },
-   "#eef7f7,#cfe6e8",
-   "img/port-40.webp",
+   "#f4f0ff,#d9ccf5",
+   "img/port-38.webp",
    ""
   ],
   [
@@ -942,8 +1036,38 @@
     "it": "WhatsApp Image 2026 03 07 at 23.19.51",
     "en": "WhatsApp Image 2026 03 07 at 23.19.51"
    },
-   "#f4f0ff,#d9ccf5",
+   "#ffeede,#f6cfa8",
+   "img/port-39.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "WhatsApp Image 2026 03 08 at 00.13.20   Copia",
+    "en": "WhatsApp Image 2026 03 08 at 00.13.20   Copia"
+   },
+   "#e3f0e8,#bcd9c6",
+   "img/port-40.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "WhatsApp Image 2026 03 28 at 18.12.40",
+    "en": "WhatsApp Image 2026 03 28 at 18.12.40"
+   },
+   "#fde8ef,#f3c3d3",
    "img/port-41.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "WhatsApp Image 2026 03 29 at 10.42.18",
+    "en": "WhatsApp Image 2026 03 29 at 10.42.18"
+   },
+   "#e8d5b0,#c9a876",
+   "img/port-42.webp",
    ""
   ],
   [
@@ -952,8 +1076,8 @@
     "it": "WhatsApp Image 2026 04 16 at 17.41.34 (2)",
     "en": "WhatsApp Image 2026 04 16 at 17.41.34 (2)"
    },
-   "#ffeede,#f6cfa8",
-   "img/port-42.webp",
+   "#eef7f7,#cfe6e8",
+   "img/port-43.webp",
    ""
   ],
   [
@@ -962,17 +1086,7 @@
     "it": "WhatsApp Image 2026 05 30 at 20.24.49",
     "en": "WhatsApp Image 2026 05 30 at 20.24.49"
    },
-   "#e3f0e8,#bcd9c6",
-   "img/port-43.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "wolverine clean minimal",
-    "en": "wolverine clean minimal"
-   },
-   "#fde8ef,#f3c3d3",
+   "#f4f0ff,#d9ccf5",
    "img/port-44.webp",
    ""
   ]
@@ -1042,7 +1156,8 @@
     "prio": 1,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "laser"
    },
    {
     "id": "spring",
@@ -1068,7 +1183,8 @@
     "prio": 6,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "mesh"
    },
    {
     "id": "summer",
@@ -1094,7 +1210,8 @@
     "prio": 6,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "rays"
    },
    {
     "id": "autumn",
@@ -1120,7 +1237,8 @@
     "prio": 6,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "waves"
    },
    {
     "id": "winter",
@@ -1146,7 +1264,8 @@
     "prio": 6,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "snow"
    },
    {
     "id": "christmas",
@@ -1172,7 +1291,8 @@
     "prio": 20,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "bokeh"
    },
    {
     "id": "newyear",
@@ -1198,7 +1318,8 @@
     "prio": 18,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "particles"
    },
    {
     "id": "epifania",
@@ -1223,7 +1344,8 @@
     "prio": 12,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "bokeh"
    },
    {
     "id": "valentine",
@@ -1249,7 +1371,8 @@
     "prio": 18,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "mesh"
    },
    {
     "id": "carnevale",
@@ -1275,7 +1398,8 @@
     "prio": 10,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "confetti"
    },
    {
     "id": "easter",
@@ -1301,7 +1425,8 @@
     "prio": 16,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "mesh"
    },
    {
     "id": "mothersday",
@@ -1327,7 +1452,8 @@
     "prio": 15,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "mesh"
    },
    {
     "id": "fathersday",
@@ -1353,7 +1479,8 @@
     "prio": 15,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "topo"
    },
    {
     "id": "halloween",
@@ -1379,7 +1506,8 @@
     "prio": 18,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "beams"
    },
    {
     "id": "ognissanti",
@@ -1405,7 +1533,8 @@
     "prio": 9,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "arcs"
    },
    {
     "id": "blackfriday",
@@ -1431,7 +1560,8 @@
     "prio": 22,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "beams"
    },
    {
     "id": "backtoschool",
@@ -1457,7 +1587,8 @@
     "prio": 14,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "grid"
    },
    {
     "id": "ferragosto",
@@ -1483,7 +1614,8 @@
     "prio": 10,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "waves"
    },
    {
     "id": "saldi",
@@ -1509,7 +1641,8 @@
     "prio": 12,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "beams"
    },
    {
     "id": "wedding",
@@ -1535,7 +1668,8 @@
     "prio": 12,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "bokeh"
    },
    {
     "id": "baby",
@@ -1561,7 +1695,8 @@
     "prio": 8,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "mesh"
    },
    {
     "id": "battesimo",
@@ -1586,7 +1721,8 @@
     "prio": 7,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "mesh"
    },
    {
     "id": "comunione",
@@ -1612,7 +1748,8 @@
     "prio": 9,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "arcs"
    },
    {
     "id": "graduation",
@@ -1638,7 +1775,8 @@
     "prio": 12,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "rays"
    },
    {
     "id": "birthday",
@@ -1664,7 +1802,8 @@
     "prio": 8,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "confetti"
    },
    {
     "id": "anniversary",
@@ -1689,7 +1828,8 @@
     "prio": 7,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "bokeh"
    },
    {
     "id": "pensione",
@@ -1715,7 +1855,8 @@
     "prio": 6,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "arcs"
    },
    {
     "id": "inaugurazione",
@@ -1741,7 +1882,8 @@
     "prio": 7,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "rays"
    },
    {
     "id": "luxury",
@@ -1767,7 +1909,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "marble"
    },
    {
     "id": "minimal",
@@ -1793,7 +1936,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "grid"
    },
    {
     "id": "black",
@@ -1819,7 +1963,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "grid"
    },
    {
     "id": "gold",
@@ -1845,7 +1990,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "rays"
    },
    {
     "id": "marble",
@@ -1871,7 +2017,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "marble"
    },
    {
     "id": "neon",
@@ -1897,7 +2044,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "beams"
    },
    {
     "id": "retro",
@@ -1923,7 +2071,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "arcs"
    },
    {
     "id": "vintage",
@@ -1949,7 +2098,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "topo"
    },
    {
     "id": "industrial",
@@ -1975,7 +2125,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "grid"
    },
    {
     "id": "scandi",
@@ -2001,7 +2152,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "mesh"
    },
    {
     "id": "japandi",
@@ -2027,7 +2179,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "arcs"
    },
    {
     "id": "artdeco",
@@ -2053,7 +2206,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "arcs"
    },
    {
     "id": "bauhaus",
@@ -2079,7 +2233,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "grid"
    },
    {
     "id": "botanical",
@@ -2105,7 +2260,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "topo"
    },
    {
     "id": "terrazzo",
@@ -2131,7 +2287,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "particles"
    },
    {
     "id": "mono",
@@ -2157,7 +2314,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "grid"
    },
    {
     "id": "pastel",
@@ -2183,7 +2341,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "mesh"
    },
    {
     "id": "cyber",
@@ -2209,7 +2368,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "circuit"
    },
    {
     "id": "holo",
@@ -2235,7 +2395,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "mesh"
    },
    {
     "id": "concrete",
@@ -2261,7 +2422,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "grid"
    },
    {
     "id": "madeinitaly",
@@ -2287,7 +2449,8 @@
     "prio": 5,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "waves"
    },
    {
     "id": "sicily",
@@ -2313,7 +2476,8 @@
     "prio": 5,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "rays"
    },
    {
     "id": "amalfi",
@@ -2339,7 +2503,8 @@
     "prio": 5,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "waves"
    },
    {
     "id": "dolomiti",
@@ -2365,7 +2530,8 @@
     "prio": 5,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "topo"
    },
    {
     "id": "venezia",
@@ -2391,7 +2557,8 @@
     "prio": 5,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "arcs"
    },
    {
     "id": "firenze",
@@ -2417,7 +2584,8 @@
     "prio": 5,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "marble"
    },
    {
     "id": "milano",
@@ -2443,7 +2611,8 @@
     "prio": 5,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "grid"
    },
    {
     "id": "mediterraneo",
@@ -2469,7 +2638,8 @@
     "prio": 5,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "waves"
    },
    {
     "id": "toscana",
@@ -2495,7 +2665,8 @@
     "prio": 5,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "topo"
    },
    {
     "id": "kids",
@@ -2520,7 +2691,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "confetti"
    },
    {
     "id": "gaming",
@@ -2545,7 +2717,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "circuit"
    },
    {
     "id": "sports",
@@ -2570,7 +2743,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "beams"
    },
    {
     "id": "music",
@@ -2595,7 +2769,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "waves"
    },
    {
     "id": "travel",
@@ -2620,7 +2795,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "topo"
    },
    {
     "id": "camping",
@@ -2645,7 +2821,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "topo"
    },
    {
     "id": "pet",
@@ -2670,7 +2847,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "particles"
    },
    {
     "id": "business",
@@ -2695,7 +2873,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "grid"
    },
    {
     "id": "corporate",
@@ -2720,7 +2899,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "arcs"
    },
    {
     "id": "wellness",
@@ -2745,7 +2925,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "mesh"
    },
    {
     "id": "foodie",
@@ -2770,7 +2951,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "marble"
    },
    {
     "id": "book",
@@ -2795,7 +2977,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "topo"
    },
    {
     "id": "cinema",
@@ -2820,7 +3003,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "beams"
    },
    {
     "id": "photo",
@@ -2845,7 +3029,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "grid"
    },
    {
     "id": "moto",
@@ -2870,7 +3055,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "beams"
    },
    {
     "id": "nautica",
@@ -2895,7 +3081,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "waves"
    },
    {
     "id": "golf",
@@ -2920,7 +3107,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "topo"
    },
    {
     "id": "yoga",
@@ -2945,7 +3133,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "arcs"
    },
    {
     "id": "tech",
@@ -2970,7 +3159,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "circuit"
    },
    {
     "id": "woodcraft",
@@ -2995,7 +3185,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "topo"
    },
    {
     "id": "acrylicglow",
@@ -3020,7 +3211,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "beams"
    },
    {
     "id": "metal",
@@ -3045,7 +3237,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "grid"
    },
    {
     "id": "leather",
@@ -3070,7 +3263,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "marble"
    },
    {
     "id": "glass",
@@ -3095,7 +3289,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "arcs"
    },
    {
     "id": "paper",
@@ -3120,7 +3315,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "topo"
    },
    {
     "id": "fabric",
@@ -3145,7 +3341,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "waves"
    },
    {
     "id": "superhero",
@@ -3170,7 +3367,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "beams"
    },
    {
     "id": "unicorn",
@@ -3195,7 +3393,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "mesh"
    },
    {
     "id": "space",
@@ -3220,7 +3419,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "particles"
    },
    {
     "id": "dino",
@@ -3245,7 +3445,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "topo"
    },
    {
     "id": "safari",
@@ -3270,7 +3471,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "topo"
    },
    {
     "id": "floral",
@@ -3295,7 +3497,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "mesh"
    },
    {
     "id": "geometric",
@@ -3320,7 +3523,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "grid"
    },
    {
     "id": "celestial",
@@ -3345,7 +3549,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "particles"
    },
    {
     "id": "coffee",
@@ -3370,7 +3575,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "marble"
    },
    {
     "id": "wine",
@@ -3395,7 +3601,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "marble"
    },
    {
     "id": "bakery",
@@ -3420,7 +3627,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "confetti"
    },
    {
     "id": "garden",
@@ -3445,7 +3653,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "topo"
    },
    {
     "id": "office",
@@ -3470,7 +3679,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "grid"
    },
    {
     "id": "school",
@@ -3495,7 +3705,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "grid"
    },
    {
     "id": "graduationgold",
@@ -3520,7 +3731,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "rays"
    },
    {
     "id": "minimalwhite",
@@ -3545,7 +3757,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "grid"
    },
    {
     "id": "darkwood",
@@ -3570,7 +3783,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "topo"
    },
    {
     "id": "festalaurea",
@@ -3595,7 +3809,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "confetti"
    },
    {
     "id": "memorial",
@@ -3620,7 +3835,8 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "arcs"
    },
    {
     "id": "easterpastel",
@@ -3645,11 +3861,92 @@
     "prio": 4,
     "stato": "libreria",
     "art": {},
-    "v": 1
+    "v": 1,
+    "bg": "mesh"
    }
   ]
  },
+ "PROMO": {
+  "attivo": false,
+  "id": "promo-1",
+  "dal": "",
+  "al": "",
+  "testo": {
+   "it": "Spedizione gratuita sopra €79 · Prova grafica inclusa",
+   "en": "Free shipping over €79 · Free proof included"
+  },
+  "cta": {
+   "it": "Scopri il catalogo",
+   "en": "Browse the catalogue"
+  },
+  "link": "#/shop",
+  "colori": "#1E3A8A,#111827"
+ },
+ "SPONSORS": {
+  "attivo": true,
+  "grigio": false,
+  "titolo": {
+   "it": "Partner & Sponsor",
+   "en": "Partners & Sponsors"
+  },
+  "sottotitolo": {
+   "it": "Aziende e artigiani con cui lavoriamo ogni giorno.",
+   "en": "Businesses and makers we work with every day."
+  },
+  "cta": {
+   "it": "Vuoi comparire qui? Scrivici.",
+   "en": "Want to appear here? Get in touch."
+  },
+  "ctaLink": "#/contatti",
+  "lista": [
+   {
+    "nome": "Spatola Impresa Edile",
+    "link": "https://www.instagram.com/spatola_costruzioni/",
+    "livello": "",
+    "desc": {
+     "it": "",
+     "en": ""
+    },
+    "logo": "img/sponsor-1.svg"
+   },
+   {
+    "nome": "Titinciu Elettro utensili",
+    "link": "https://www.titinciu.it/",
+    "livello": "",
+    "desc": {
+     "it": "",
+     "en": ""
+    },
+    "logo": "img/sponsor-2.webp"
+   }
+  ]
+ },
+ "GALSPEED": 96,
  "MV": {
+  "img/1-g3.webp": [
+   400,
+   800
+  ],
+  "img/1-g4.webp": [
+   400,
+   800
+  ],
+  "img/proj-1-1.webp": [
+   400,
+   800
+  ],
+  "img/proj-1-2.webp": [
+   400,
+   800
+  ],
+  "img/proj-1-3.webp": [
+   400,
+   800
+  ],
+  "img/sponsor-2.webp": [
+   400,
+   800
+  ],
   "img/1.webp": [
    400,
    800
@@ -3666,23 +3963,15 @@
    400,
    800
   ],
-  "img/port-1.webp": [
-   400,
-   800
-  ],
-  "img/2.webp": [
-   400,
-   800
-  ],
-  "img/4.webp": [
-   400,
-   800
-  ],
-  "img/port-2.webp": [
-   400,
-   800
-  ],
   "img/cat-animali.webp": [
+   400,
+   800
+  ],
+  "img/cat-accessori.webp": [
+   400,
+   800
+  ],
+  "img/cat-b2b.webp": [
    400,
    800
   ],
@@ -3694,10 +3983,19 @@
    400,
    800
   ],
-  "img/sponsor-1.webp": [
-   400
+  "img/cat-digitale.webp": [
+   400,
+   800
   ],
-  "img/cat-b2b.webp": [
+  "img/cat-custom.webp": [
+   400,
+   800
+  ],
+  "img/cat-materiali.webp": [
+   400,
+   800
+  ],
+  "img/cat-tecnologie.webp": [
    400,
    800
   ],
@@ -3705,15 +4003,23 @@
    400,
    800
   ],
-  "img/17.webp": [
+  "img/2.webp": [
    400,
    800
   ],
-  "img/6.webp": [
+  "img/7.webp": [
    400,
    800
   ],
-  "img/sponsor-3.webp": [
+  "img/port-1.webp": [
+   400,
+   800
+  ],
+  "img/proj-1-dopo.webp": [
+   400,
+   800
+  ],
+  "img/port-2.webp": [
    400,
    800
   ],
@@ -3726,7 +4032,8 @@
    800
   ],
   "img/port-5.webp": [
-   400
+   400,
+   800
   ],
   "img/port-6.webp": [
    400,
@@ -3737,8 +4044,7 @@
    800
   ],
   "img/port-8.webp": [
-   400,
-   800
+   400
   ],
   "img/port-9.webp": [
    400,
@@ -3749,7 +4055,8 @@
    800
   ],
   "img/port-11.webp": [
-   400
+   400,
+   800
   ],
   "img/port-12.webp": [
    400,
@@ -3768,7 +4075,8 @@
    800
   ],
   "img/port-16.webp": [
-   400
+   400,
+   800
   ],
   "img/port-17.webp": [
    400,
@@ -3815,18 +4123,19 @@
    800
   ],
   "img/port-28.webp": [
-   400
+   400,
+   800
   ],
   "img/port-29.webp": [
    400,
    800
   ],
   "img/port-30.webp": [
-   400,
-   800
+   400
   ],
   "img/port-31.webp": [
-   400
+   400,
+   800
   ],
   "img/port-32.webp": [
    400,
@@ -3861,8 +4170,7 @@
    800
   ],
   "img/port-40.webp": [
-   400,
-   800
+   400
   ],
   "img/port-41.webp": [
    400,
@@ -3879,73 +4187,35 @@
   "img/port-44.webp": [
    400,
    800
+  ],
+  "img/8.webp": [
+   400,
+   800
+  ],
+  "img/20.webp": [
+   400,
+   800
+  ],
+  "img/20-g1.webp": [
+   400,
+   800
+  ],
+  "img/20-g2.webp": [
+   400,
+   800
+  ],
+  "img/20-g3.webp": [
+   400,
+   800
+  ],
+  "img/20-g4.webp": [
+   400,
+   800
+  ],
+  "img/20-g5.webp": [
+   400,
+   800
   ]
  },
- "PROMO": {
-  "attivo": true,
-  "id": "promo-1",
-  "dal": "",
-  "al": "",
-  "testo": {
-   "it": "Spedizione gratuita sopra €79 · Prova grafica inclusa",
-   "en": "Free shipping over €79 · Free proof included"
-  },
-  "cta": {
-   "it": "Scopri il catalogo",
-   "en": "Browse the catalogue"
-  },
-  "link": "#/shop",
-  "colori": "#1E3A8A,#111827"
- },
- "FOCAL": {},
- "SPONSORS": {
-  "attivo": true,
-  "grigio": false,
-  "titolo": {
-   "it": "Partner & Sponsor",
-   "en": "Partners & Sponsors"
-  },
-  "sottotitolo": {
-   "it": "Aziende e artigiani con cui lavoriamo ogni giorno.",
-   "en": "Businesses and makers we work with every day."
-  },
-  "cta": {
-   "it": "Vuoi comparire qui? Scrivici.",
-   "en": "Want to appear here? Get in touch."
-  },
-  "ctaLink": "#/contatti",
-  "lista": [
-   {
-    "nome": "Lumos di Pietro Accetta",
-    "link": "https://www.facebook.com/profile.php?id=61571904102246",
-    "livello": "",
-    "desc": {
-     "it": "",
-     "en": ""
-    },
-    "logo": "img/sponsor-1.webp"
-   },
-   {
-    "nome": "Intravaia Termoelettrica",
-    "link": "https://www.facebook.com/profile.php?id=61560889084063",
-    "livello": "",
-    "desc": {
-     "it": "",
-     "en": ""
-    },
-    "logo": "img/sponsor-2.svg"
-   },
-   {
-    "nome": "Spatola ",
-    "link": "https://www.instagram.com/spatola_costruzioni/",
-    "livello": "",
-    "desc": {
-     "it": " Impresa edile Specialisti in ristrutturazioni complete Qualità, precisione e rispetto dei tempi 🔑 Servizio chiavi in mano",
-     "en": ""
-    },
-    "logo": "img/sponsor-3.svg"
-   }
-  ]
- },
- "GALSPEED": 96
+ "FOCAL": {}
 }

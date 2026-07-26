@@ -1,8 +1,8 @@
 [
  {
   "id": 1,
-  "cat": "casa",
-  "sub": 1,
+  "cat": "bambini",
+  "sub": 2,
   "n": {
    "it": "Insegna  con nome Personalizzato Huntrix  Rumi",
    "en": "Custom House Plaque"
@@ -15,18 +15,26 @@
    "best"
   ],
   "tag": "Best",
-  "prod": 3
+  "prod": 3,
+  "gallery": [
+   "img/1-g3.webp",
+   "img/1-g4.webp"
+  ],
+  "desc": {
+   "it": "Design Esclusivo: Grafica personalizzata con il nome \"Huntrix\" e personaggio 3D integrato per un effetto tridimensionale unico.\n\n​Versatilità: Ideale come elemento di sfondo per i tuoi video e streaming sui social, decorazione per uffici creativi o come idea regalo esclusiva.\n\n​Artigianato 100% Italiano: Progettato e creato con cura artigianale nel nostro laboratorio.",
+   "en": "Design Esclusivo: Grafica personalizzata con il nome \"Huntrix\" e personaggio 3D integrato per un effetto tridimensionale unico.\n\n​Versatilità: Ideale come elemento di sfondo per i tuoi video e streaming sui social, decorazione per uffici creativi o come idea regalo esclusiva.\n\n​Artigianato 100% Italiano: Progettato e creato con cura artigianale nel nostro laboratorio."
+  }
  },
  {
   "id": 2,
-  "cat": "bambini",
+  "cat": "casa",
   "sub": 4,
   "n": {
-   "it": "Nuvola con Orsetto Nome Personalizzato",
+   "it": "Lampada da Parete \"Luna\" 3D ",
    "en": "Plexi Name Decor"
   },
-  "mat": "Legno",
-  "price": 69.99,
+  "mat": "PLA",
+  "price": 79.99,
   "icon": "🔤",
   "rev": 104,
   "coll": [
@@ -46,10 +54,7 @@
   "price": 59,
   "icon": "🖼️",
   "rev": 141,
-  "prod": 5,
-  "gallery": [
-   "img/3-g1.webp"
-  ]
+  "prod": 5
  },
  {
   "id": 4,
@@ -59,8 +64,8 @@
    "it": "Lampada LED Personalizzata",
    "en": "Custom LED Lamp"
   },
-  "mat": "Legno",
-  "price": 79.99,
+  "mat": "Plexiglass",
+  "price": 49,
   "icon": "💡",
   "rev": 178,
   "coll": [
@@ -132,7 +137,6 @@
   "price": 38,
   "icon": "💍",
   "rev": 46,
-  "coll": [],
   "prod": 5
  },
  {
@@ -317,17 +321,24 @@
   "cat": "accessori",
   "sub": 1,
   "n": {
-   "it": "Portachiavi Metallo F2",
-   "en": "F2 Metal Keychain"
+   "it": "Supereroi Chibi collection",
+   "en": "Supereroi Chibi collection"
   },
   "mat": "Metallo",
-  "price": 14,
+  "price": 34.99,
   "icon": "🔑",
   "rev": 210,
   "coll": [
    "best"
   ],
-  "prod": 3
+  "prod": 3,
+  "gallery": [
+   "img/20-g1.webp",
+   "img/20-g2.webp",
+   "img/20-g3.webp",
+   "img/20-g4.webp",
+   "img/20-g5.webp"
+  ]
  },
  {
   "id": 21,

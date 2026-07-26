@@ -137,7 +137,11 @@
   "ldr": "Precisione in caricamento",
   "from": "da",
   "formsOff": "⚠ Modulo non ancora collegato — scrivici su WhatsApp o via email",
-  "formsErr": "Invio non riuscito — riprova o scrivici su WhatsApp"
+  "formsErr": "Invio non riuscito — riprova o scrivici su WhatsApp",
+  "sortNw": "Novità",
+  "szH": "Misure e dettagli",
+  "zoomHint": "Clicca per ingrandire",
+  "suggT": "Suggerimenti"
  },
  "en": {
   "topline": "✦ Free shipping in Italy over €79 · Digital proof included",
@@ -277,6 +281,10 @@
   "ldr": "Precision loading",
   "from": "from",
   "formsOff": "⚠ Form not connected yet — reach us on WhatsApp or by email",
-  "formsErr": "Sending failed — try again or write us on WhatsApp"
+  "formsErr": "Sending failed — try again or write us on WhatsApp",
+  "sortNw": "Newest",
+  "szH": "Size & details",
+  "zoomHint": "Click to zoom",
+  "suggT": "Suggestions"
  }
 }

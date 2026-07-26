@@ -162,7 +162,10 @@
     "en": "Covers"
    }
   ],
-  "icon": "accessori"
+  "icon": "accessori",
+  "img": "img/cat-accessori.webp",
+  "big": "",
+  "bg": ""
  },
  {
   "id": "b2b",
@@ -326,7 +329,9 @@
   ],
   "bg": "linear-gradient(150deg,#f4f0ff,#e3daf8)",
   "go": "digital",
-  "icon": "digitale"
+  "icon": "digitale",
+  "img": "img/cat-digitale.webp",
+  "big": ""
  },
  {
   "id": "custom",
@@ -344,7 +349,9 @@
   "darkc": 1,
   "go": "quote",
   "w": 1,
-  "icon": "custom"
+  "icon": "custom",
+  "img": "img/cat-custom.webp",
+  "big": ""
  },
  {
   "id": "materiali",
@@ -359,7 +366,10 @@
   },
   "sub": [],
   "go": "about",
-  "icon": "materiali"
+  "icon": "materiali",
+  "img": "img/cat-materiali.webp",
+  "big": "",
+  "bg": ""
  },
  {
   "id": "tecnologie",
@@ -374,7 +384,10 @@
   },
   "sub": [],
   "go": "about",
-  "icon": "tecnologie"
+  "icon": "tecnologie",
+  "img": "img/cat-tecnologie.webp",
+  "big": "",
+  "bg": ""
  },
  {
   "id": "limited",
