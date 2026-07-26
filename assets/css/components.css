@@ -809,54 +809,32 @@ body{background-color:var(--paper)}
 :root[data-mode="light"] .bg-picker-panel{background:rgba(255,255,251,.94)}
 :root[data-mode="light"] .bp-lbl{background:rgba(0,0,0,.35)}
 
-/* ===== LASER CURSOR ===== */
-html.laser-cursor,html.laser-cursor * { cursor: none !important; }
-
-#lc-dot {
+/* ===== GLOW ORB CURSOR =====
+   Orb luminoso che segue il mouse con lerp. NON nasconde il cursore nativo.
+   pointer-events:none garantisce zero interferenza con selezione e click. */
+#glow-orb {
   position: fixed;
   top: 0; left: 0;
-  width: 6px; height: 6px;
-  background: var(--laser, #f5d94e);
+  width: 120px; height: 120px;
+  margin: -60px 0 0 -60px;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 9000;
   opacity: 0;
-  transform: translate(0,0);
   will-change: transform;
-  margin: -3px 0 0 -3px;
-  box-shadow: 0 0 8px 2px rgba(245,217,78,.7), 0 0 20px 4px rgba(245,217,78,.3);
-  transition: opacity .15s, background .2s, box-shadow .2s;
+  background: radial-gradient(circle, rgba(59,125,224,.18) 0%, rgba(59,125,224,.06) 50%, transparent 72%);
+  transition: opacity .4s ease, background .35s ease;
+  mix-blend-mode: screen;
 }
-#lc-dot.active {
-  background: #fff;
-  box-shadow: 0 0 12px 4px rgba(245,217,78,.9), 0 0 30px 8px rgba(245,217,78,.4);
+#glow-orb.hot {
+  background: radial-gradient(circle, rgba(245,217,78,.22) 0%, rgba(255,138,60,.10) 45%, transparent 72%);
+  width: 160px; height: 160px;
+  margin: -80px 0 0 -80px;
 }
-
-#lc-ring {
-  position: fixed;
-  top: 0; left: 0;
-  width: 32px; height: 32px;
-  border: 1.5px solid rgba(245,217,78,.55);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  opacity: 0;
-  transform: translate(0,0);
-  will-change: transform;
-  margin: -16px 0 0 -16px;
-  transition: opacity .15s, width .2s ease, height .2s ease, margin .2s ease, border-color .2s;
+:root[data-mode="light"] #glow-orb {
+  background: radial-gradient(circle, rgba(27,79,181,.12) 0%, rgba(27,79,181,.04) 50%, transparent 72%);
+  mix-blend-mode: multiply;
 }
-#lc-ring.active {
-  width: 48px; height: 48px;
-  margin: -24px 0 0 -24px;
-  border-color: rgba(245,217,78,.85);
-}
-
-/* light mode: cursore più scuro */
-:root[data-mode="light"] #lc-dot {
-  background: var(--laser, #c9a227);
-  box-shadow: 0 0 8px 2px rgba(201,162,39,.6), 0 0 20px 4px rgba(201,162,39,.25);
-}
-:root[data-mode="light"] #lc-ring {
-  border-color: rgba(201,162,39,.5);
+:root[data-mode="light"] #glow-orb.hot {
+  background: radial-gradient(circle, rgba(184,134,11,.16) 0%, rgba(212,83,10,.07) 45%, transparent 72%);
 }

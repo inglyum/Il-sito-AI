@@ -28,51 +28,47 @@ export function observeAll(){
   });
 }
 
-/* ===== LASER CURSOR =====
-   Cursore personalizzato: punto dorato + anello che segue con ritardo + trail di particelle.
-   Attivo solo su dispositivi con hover (desktop). Rispetta prefers-reduced-motion. */
+/* ===== GLOW CURSOR =====
+   Orb luminoso che segue il cursore con lerp — NON nasconde il cursore nativo.
+   Puramente decorativo, non interferisce con selezione testo o click.
+   Attivo solo su desktop con hover. Rispetta prefers-reduced-motion. */
 function initLaserCursor(){
   if(!window.matchMedia) return;
   if(matchMedia('(hover:none)').matches) return;
   if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  if(document.getElementById('glow-orb')) return;
 
-  /* inject DOM se non esiste già */
-  if(document.getElementById('lc-dot')) return;
-  const dot=Object.assign(document.createElement('div'),{id:'lc-dot'});
-  const ring=Object.assign(document.createElement('div'),{id:'lc-ring'});
-  document.body.append(dot,ring);
+  const orb=Object.assign(document.createElement('div'),{id:'glow-orb'});
+  document.body.appendChild(orb);
 
-  /* nasconde il cursore nativo sull'intera pagina */
-  document.documentElement.classList.add('laser-cursor');
-
-  let mx=0,my=0,rx=0,ry=0,visible=false;
+  let tx=0,ty=0,cx=0,cy=0,visible=false,hovered=false;
 
   document.addEventListener('mousemove',e=>{
-    mx=e.clientX;my=e.clientY;
-    if(!visible){dot.style.opacity='1';ring.style.opacity='1';visible=true}
-    dot.style.transform=`translate(${mx}px,${my}px)`;
+    tx=e.clientX;ty=e.clientY;
+    if(!visible){orb.style.opacity='1';visible=true}
   },{passive:true});
 
-  document.addEventListener('mouseleave',()=>{dot.style.opacity='0';ring.style.opacity='0';visible=false});
+  document.addEventListener('mouseleave',()=>{orb.style.opacity='0';visible=false});
 
-  /* ring segue con lerp */
-  (function loop(){
-    rx+=(mx-rx)*.14;ry+=(my-ry)*.14;
-    ring.style.transform=`translate(${rx}px,${ry}px)`;
-    requestAnimationFrame(loop);
-  })();
-
-  /* ring si espande su elementi interattivi */
+  /* cambia colore su elementi interattivi */
   document.addEventListener('mouseover',e=>{
-    if(e.target.closest('a,button,[data-action],.pcard,.bcard,.mcard')){
-      ring.classList.add('active');dot.classList.add('active');
+    if(e.target.closest('a,button,[data-action],.pcard,.bcard,.mcard,.dcard')){
+      orb.classList.add('hot');hovered=true;
     }
   },{passive:true});
   document.addEventListener('mouseout',e=>{
-    if(e.target.closest('a,button,[data-action],.pcard,.bcard,.mcard')){
-      ring.classList.remove('active');dot.classList.remove('active');
+    if(e.target.closest('a,button,[data-action],.pcard,.bcard,.mcard,.dcard')){
+      orb.classList.remove('hot');hovered=false;
     }
   },{passive:true});
+
+  /* lerp fluido — velocità diversa in base allo stato */
+  (function loop(){
+    const k=hovered?.11:.07;
+    cx+=(tx-cx)*k;cy+=(ty-cy)*k;
+    orb.style.transform=`translate(${cx}px,${cy}px)`;
+    requestAnimationFrame(loop);
+  })();
 }
 
 export function initAnimations(){
