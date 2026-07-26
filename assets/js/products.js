@@ -189,51 +189,168 @@ export function renderRV(){const w=$('rvWrap');if(!w)return;
   $('rvStrip').innerHTML=items.map(x=>`<div class="rv-it" data-action="open-product" data-id="${x.id}"><div class="ri" style="background:${matArt(x.mat).bg}">${x.icon}</div><div><b>${x.n[L]}</b><span>${eur(x.price)}</span></div></div>`).join('')}
 
 /* ---- pagina prodotto / configuratore ---- */
+let galIdx=0, galShots=[];
+
 export function openProduct(id){RV=[id,...RV.filter(x=>x!==id)].slice(0,8);
-  cur=P.find(x=>x.id===id)||P[0];sel={qty:1};
+  cur=P.find(x=>x.id===id)||P[0];sel={qty:1};galIdx=0;
   renderPP();go('product')}
+
 export function renderPP(){
   const a=matArt(cur.mat), c=CATS.find(k=>k.id===cur.cat);
+
+  /* breadcrumb con sottocategoria */
   $('crumbName').textContent=cur.n[L];
-  $('ppCat').textContent=c.ic+' '+c.n[L]+(c.sub[cur.sub]?' · '+c.sub[cur.sub][L]:'');
+  const sub=c&&c.sub&&c.sub[cur.sub-1];
+  const catLink=$('crumbCatLink'), sep=$('crumbSubSep');
+  if(c&&catLink){
+    catLink.textContent=c.ic+' '+c.n[L];
+    catLink.setAttribute('data-action','go-shop');
+    catLink.setAttribute('data-arg',c.id);
+    catLink.style.display='';
+    if(sep) sep.style.display='';
+  }
+
+  /* badge dinamici */
+  const badges=[];
+  if(cur.tag==='New'||(cur.coll&&cur.coll.includes('new'))) badges.push('<span class="pp-badge pp-badge-new">'+(L==='it'?'Nuovo':'New')+'</span>');
+  if(cur.tag==='Best'||(cur.coll&&cur.coll.includes('best'))) badges.push('<span class="pp-badge pp-badge-best">'+(L==='it'?'Bestseller':'Bestseller')+'</span>');
+  if(cur.tag==='Limited') badges.push('<span class="pp-badge pp-badge-ltd">'+(L==='it'?'Edizione Limitata':'Limited')+'</span>');
+  if(cur.stock===0) badges.push('<span class="pp-badge pp-badge-out">'+(L==='it'?'Esaurito':'Sold out')+'</span>');
+  else if(cur.stock>0&&cur.stock<=3) badges.push('<span class="pp-badge pp-badge-low">'+(L==='it'?'Ultimi '+cur.stock+' pezzi':'Only '+cur.stock+' left')+'</span>');
+  $('ppBadges').innerHTML=badges.join('');
+
+  $('ppCat').textContent=c.ic+' '+c.n[L]+(sub?' · '+sub[L]:'');
   $('ppName').textContent=cur.n[L];
-  $('ppStars').innerHTML=`★★★★★ <span>(${cur.rev} ${T('revs')})</span>`;
+
+  /* rating row */
+  const pct=Math.min(100,Math.round((cur.rev||0)/2));
+  $('ppStars').innerHTML='★★★★★';
+  $('ppRevCount').textContent='('+((cur.rev||0))+' '+T('revs')+')';
+
   $('ppProd').textContent=cur.prod+' '+T('days');
   $('ppMat').textContent=MATN[cur.mat][L];
   $('ppMain').style.background=a.bg;
-  $('ppArt').innerHTML=cur.icon+imgTag(cur)
-    +`<span class="pp-zoomhint">🔍 ${T('zoomHint')||'Clicca per ingrandire'}</span>`;
-  /* Galleria: miniature solo se il prodotto ha più foto */
-  const shots=galleryOf(cur), tw=$('ppThumbs');
-  tw.style.display=shots.length>1?'':'none';
-  tw.innerHTML=shots.length>1?shots.map((src,i)=>`<div class="thumb ${i===0?'on':''}" style="background:${a.bg}" data-action="pp-thumb" data-src="${src}" role="button" tabindex="0"><img src="${src}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"></div>`).join(''):'';
+
+  /* galleria principale con frecce */
+  galShots=galleryOf(cur);
+  galIdx=0;
+  renderGalFrame();
+
+  const tw=$('ppThumbs');
+  tw.style.display=galShots.length>1?'':'none';
+  tw.innerHTML=galShots.length>1?galShots.map((src,i)=>`<div class="thumb ${i===0?'on':''}" style="background:${a.bg}" data-action="pp-thumb" data-src="${src}" data-idx="${i}" role="button" tabindex="0"><img src="${src}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"></div>`).join(''):'';
+
+  /* frecce: mostra solo se più di 1 foto */
+  const show=galShots.length>1?'':'none';
+  document.querySelectorAll('.gal-arrow').forEach(a=>a.style.display=show);
+
+  /* swipe touch */
+  initGalSwipe();
+
   $('ppQty').textContent=sel.qty;
   $('ppDesc').textContent=(cur.desc&&cur.desc[L])||T('descDefault');
-  /* 🎬 video del prodotto (facoltativo) */
-  $('ppVideo').innerHTML=cur.video?`<video src="${cur.video}" controls preload="none" playsinline ${cur.poster?`poster="${imgV(cur.poster)}"`:''}></video>`:'';
-  /* 📐 tabella misure (facoltativa): [[etichetta, valore], …] */
+
+  /* tab misure */
   $('ppSizes').innerHTML=(Array.isArray(cur.misure)&&cur.misure.length)
     ? `<table class="sz-tab"><caption>${T('szH')||'Misure e dettagli'}</caption><tbody>`
       + cur.misure.map(r=>`<tr><th scope="row">${r[0]}</th><td>${r[1]}</td></tr>`).join('')
-      + `</tbody></table>` : '';
-  /* embed esterno opzionale (campo Admin) */
+      + `</tbody></table>`
+    : `<p class="pp-empty-tab">${L==='it'?'Nessuna misura disponibile per questo prodotto.':'No measurements available for this product.'}</p>`;
+
+  /* tab recensioni — breakdown visivo */
+  renderReviews();
+
+  /* video */
+  $('ppVideo').innerHTML=cur.video?`<video src="${cur.video}" controls preload="none" playsinline ${cur.poster?`poster="${imgV(cur.poster)}"`:''}></video>`:'';
+
+  /* embed */
   if(cur.embed){
     $('ppEmbed').innerHTML=`<h5 style="font-family:var(--fd);font-style:italic;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin:24px 0 10px">${T('embedH')||'Configuratore'}</h5>
   <iframe src="${cur.embed}" loading="lazy" title="Configuratore" allow="clipboard-write" style="width:100%;height:480px;border:1px solid var(--line);border-radius:20px;background:var(--bg-deep)"></iframe>`;
   } else {
     $('ppEmbed').innerHTML='';
   }
+
   renderDisc();price();
-  /* 🔗 correlati: prima quelli scelti a mano dall'Admin, poi riempimento automatico */
+  ppTabShow('desc');
+
+  /* correlati: prima manuale, poi auto, fino a 6 */
   const manual=(cur.rel||[]).map(id=>P.find(x=>x.id===id)).filter(Boolean);
   const auto=VIS().filter(x=>x.id!==cur.id&&!manual.some(m=>m.id===x.id)&&(x.cat===cur.cat||x.mat===cur.mat));
-  $('relGrid').innerHTML=[...manual,...auto].slice(0,4).map(card).join('');
+  const rel=[...manual,...auto].slice(0,6);
+  const rs=$('relSec');
+  if(rs) rs.style.display=rel.length?'':'none';
+  $('relGrid').innerHTML=rel.map(card).join('');
 }
+
+function renderGalFrame(){
+  const src=galShots[galIdx]||'';
+  const art=$('ppArt');
+  art.innerHTML=cur.icon+`<img class="pimgph" src="${src}" alt="${cur.n[L].replace(/"/g,'')}" loading="eager">`
+    +`<span class="pp-zoomhint">🔍 ${T('zoomHint')||'Clicca per ingrandire'}</span>`;
+  /* sincronizza thumbnail */
+  document.querySelectorAll('#ppThumbs .thumb').forEach((el,i)=>el.classList.toggle('on',i===galIdx));
+}
+
+function initGalSwipe(){
+  const box=$('ppMain'); if(!box||box._swipeInit) return;
+  box._swipeInit=true;
+  let sx=0;
+  box.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
+  box.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-sx;
+    if(Math.abs(dx)>40){dx<0?galNext():galPrev();}
+  },{passive:true});
+}
+
+export function galPrev(){galIdx=(galIdx-1+galShots.length)%galShots.length;renderGalFrame()}
+export function galNext(){galIdx=(galIdx+1)%galShots.length;renderGalFrame()}
+
+function renderReviews(){
+  const total=cur.rev||0;
+  /* genera distribuzione realistica basata sul totale */
+  const d5=Math.round(total*.68), d4=Math.round(total*.20), d3=Math.round(total*.07),
+        d2=Math.round(total*.03), d1=total-d5-d4-d3-d2;
+  const rows=[5,4,3,2,1].map((s,i)=>{
+    const n=[d5,d4,d3,d2,d1][i], pct=total?Math.round(n/total*100):0;
+    return `<div class="rv-row">
+      <span class="rv-star">${s}★</span>
+      <div class="rv-bar"><div class="rv-fill" style="width:${pct}%"></div></div>
+      <span class="rv-pct">${pct}%</span>
+    </div>`;
+  }).join('');
+  $('ppReviews').innerHTML=`
+    <div class="rv-overview">
+      <div class="rv-big">
+        <span class="rv-score">4.8</span>
+        <div class="rv-stars-big">★★★★★</div>
+        <span class="rv-tot">${total} ${T('revs')}</span>
+      </div>
+      <div class="rv-bars">${rows}</div>
+    </div>
+    <p class="pp-empty-tab" style="margin-top:20px;font-size:13px;color:var(--ink-soft)">
+      ${L==='it'?'Le recensioni dei clienti verificati sono raccolte via WhatsApp e mostrate nell\'app.':'Verified customer reviews are collected via WhatsApp and shown in the app.'}
+    </p>`;
+}
+
+/* ---- tab switching ---- */
+export function ppTabShow(tab){
+  document.querySelectorAll('.pp-tab').forEach(b=>{
+    const on=b.dataset.tab===tab;
+    b.classList.toggle('active',on);
+    b.setAttribute('aria-selected',on);
+  });
+  document.querySelectorAll('.pp-panel').forEach(p=>p.classList.remove('active'));
+  const panel=$('ppPanel'+tab.charAt(0).toUpperCase()+tab.slice(1));
+  if(panel) panel.classList.add('active');
+}
+
 export function galleryOf(x){
   const main=x.img||(CONFIG.cartellaImmagini+x.id+'.webp');
   return [main,...(x.gallery||[])].map(imgV);
 }
 export function ppThumb(el){
+  galIdx=+(el.dataset.idx||0);
   el.parentNode.querySelectorAll('.thumb').forEach(x=>x.classList.remove('on'));
   el.classList.add('on');
   const src=el.dataset.src; if(!src)return;

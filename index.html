@@ -292,19 +292,34 @@
 <!-- PRODUCT -->
 <section class="page" id="page-product">
   <div class="wrap pp">
-    <div class="crumb"><a href="#/home" data-nav="home">Home</a> / <a href="#/shop" data-nav="shop">Shop</a> / <span id="crumbName"></span></div>
+    <nav class="crumb" aria-label="Percorso">
+      <a href="#/home" data-nav="home">Home</a>
+      <span aria-hidden="true">/</span>
+      <a href="#/shop" data-nav="shop">Shop</a>
+      <span aria-hidden="true" id="crumbSubSep" style="display:none">/</span>
+      <a href="#/shop" id="crumbCatLink" style="display:none"></a>
+      <span aria-hidden="true">/</span>
+      <span id="crumbName"></span>
+    </nav>
     <div class="pp-grid">
       <div class="pp-gallery">
-        <div class="pp-main" id="ppMain"><div class="art" id="ppArt"></div></div>
+        <div class="pp-main" id="ppMain">
+          <div class="art" id="ppArt"></div>
+          <button class="gal-arrow gal-prev" data-action="pp-gal-prev" aria-label="Immagine precedente">‹</button>
+          <button class="gal-arrow gal-next" data-action="pp-gal-next" aria-label="Immagine successiva">›</button>
+        </div>
         <div class="thumbs" id="ppThumbs"></div>
         <div id="ppVideo"></div>
         <div id="ppEmbed"></div>
       </div>
       <div class="pp-info">
+        <div class="pp-badges" id="ppBadges"></div>
         <span class="eyebrow" id="ppCat"></span>
         <h2 class="pp-title" id="ppName"></h2>
-        <div class="stars" id="ppStars"></div>
-        <p class="ppdesc" id="ppDesc"></p>
+        <div class="pp-rating-row">
+          <div class="stars" id="ppStars"></div>
+          <span class="pp-rev-count" id="ppRevCount"></span>
+        </div>
         <div class="pp-price"><span id="ppPrice"></span> <small id="ppUnit"></small></div>
         <div class="meta-strip">
           <div>⚡ <span data-i18n="ppProdL">Produzione:</span> <b id="ppProd"></b></div>
@@ -317,13 +332,27 @@
           <button class="btn btn-primary addbtn magnetic" data-action="pp-add"><span data-i18n="ppAdd">Aggiungi</span> — <span id="ppTotal"></span></button>
         </div>
         <div class="disc-table" id="discTable"></div>
-        <div id="ppSizes"></div>
+        <!-- Tabs -->
+        <div class="pp-tabs" role="tablist">
+          <button class="pp-tab active" data-action="pp-tab" data-tab="desc" role="tab" aria-selected="true" data-i18n="tabDesc">Descrizione</button>
+          <button class="pp-tab" data-action="pp-tab" data-tab="mis" role="tab" aria-selected="false" data-i18n="tabMis">Misure</button>
+          <button class="pp-tab" data-action="pp-tab" data-tab="rev" role="tab" aria-selected="false" data-i18n="tabRev">Recensioni</button>
+        </div>
+        <div class="pp-panel active" id="ppPanelDesc" role="tabpanel">
+          <p class="ppdesc" id="ppDesc"></p>
+        </div>
+        <div class="pp-panel" id="ppPanelMis" role="tabpanel">
+          <div id="ppSizes"></div>
+        </div>
+        <div class="pp-panel" id="ppPanelRev" role="tabpanel">
+          <div id="ppReviews"></div>
+        </div>
       </div>
     </div>
-    <div class="sec pb-40">
+    <div class="sec pb-40" id="relSec">
       <span class="eyebrow" data-i18n="relEye">Abbinamenti</span>
       <h2 class="h2" style="font-size:clamp(1.8rem,3.4vw,2.6rem)" data-i18n="relH2">Stanno bene insieme</h2>
-      <div class="pgrid" id="relGrid"></div>
+      <div class="pgrid pgrid-6" id="relGrid"></div>
     </div>
   </div>
 </section>
