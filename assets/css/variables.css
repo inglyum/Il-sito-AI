@@ -247,6 +247,10 @@
   border-left-color:rgba(26,20,16,.10);
   box-shadow:-20px 0 60px rgba(26,20,16,.12);
 }
+:root[data-mode="light"] .dr-ship-bar{background:rgba(59,125,224,.06);border-bottom-color:rgba(59,125,224,.15)}
+:root[data-mode="light"] .dr-coupon-input{background:#f4f6fa;border-color:rgba(26,20,16,.15);color:#141830}
+:root[data-mode="light"] .dr-foot{background:#fff}
+:root[data-mode="light"] .di-rm:hover{color:#dc2626}
 
 /* Toast */
 :root[data-mode="light"] .toast{

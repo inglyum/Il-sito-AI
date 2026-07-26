@@ -316,6 +316,8 @@ const actions={
   'fake-upload':el=>{el.classList.toggle('done');el.textContent=el.classList.contains('done')?('✓ '+(el.dataset.done||'file')):el.dataset.t},
   'toast-soon':()=>toast(T('soon')),
   'checkout-wa':()=>prod.checkoutWhatsApp(),
+  'checkout-email':()=>prod.checkoutEmail(),
+  'apply-coupon':()=>prod.applyCoupon(),
   'search':()=>{go('shop');setTimeout(()=>$('q').focus(),400)},
   'quote-scroll':()=>{const q=document.querySelector('.quote-form');if(q)q.scrollIntoView({behavior:'smooth'})}
 };

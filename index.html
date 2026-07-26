@@ -483,13 +483,41 @@
 </footer>
 
 <div class="overlay" id="overlay" data-action="close-cart"></div>
-<aside class="drawer" id="drawer" aria-label="Cart">
-  <div class="dr-head"><h3 data-i18n="crtH">Il tuo carrello</h3><button class="icon-btn" data-action="close-cart" aria-label="Chiudi"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+<aside class="drawer" id="drawer" aria-label="Cart" role="dialog" aria-modal="true">
+  <div class="dr-head">
+    <div>
+      <h3 data-i18n="crtH">Il tuo carrello</h3>
+      <span class="dr-count" id="drCount"></span>
+    </div>
+    <button class="icon-btn" data-action="close-cart" aria-label="Chiudi"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  </div>
+  <!-- barra avanzamento spedizione gratuita -->
+  <div class="dr-ship-bar" id="drShipBar">
+    <div class="dr-ship-track"><div class="dr-ship-fill" id="drShipFill"></div></div>
+    <p class="dr-ship-msg" id="drShipMsg"></p>
+  </div>
   <div class="dr-items" id="drItems"></div>
   <div class="dr-foot">
-    <div class="dr-total"><span data-i18n="crtT">Totale</span><span id="drTotal">€0,00</span></div>
-    <button class="btn btn-primary magnetic btn--block" data-action="checkout-wa" id="checkoutBtn">Ordina su WhatsApp <span class="arr">→</span></button>
-    <div class="dr-note" data-i18n="crtN">Spedizione gratuita sopra €79 · Prova grafica inclusa</div>
+    <!-- coupon -->
+    <div class="dr-coupon" id="drCouponWrap">
+      <input class="dr-coupon-input" id="drCouponInput" type="text" placeholder="Codice sconto" autocomplete="off" maxlength="20">
+      <button class="btn" style="padding:0 16px;font-size:13px" data-action="apply-coupon">Applica</button>
+    </div>
+    <div class="dr-coupon-msg" id="drCouponMsg"></div>
+    <!-- totali -->
+    <div class="dr-subtotal"><span data-i18n="crtSub">Subtotale</span><span id="drSubtotal">€0,00</span></div>
+    <div class="dr-discount-row" id="drDiscountRow" style="display:none">
+      <span id="drCouponLabel">Sconto</span><span id="drDiscountVal" style="color:var(--laser)"></span>
+    </div>
+    <div class="dr-total-row"><span data-i18n="crtT">Totale</span><span id="drTotal">€0,00</span></div>
+    <button class="btn btn-primary magnetic btn--block" data-action="checkout-wa" id="checkoutBtn">
+      <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;flex-shrink:0"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1s-.5-.1-.7.2-.8 1-.9 1.1-.3.2-.6.1a8.2 8.2 0 0 1-2.4-1.5 9 9 0 0 1-1.7-2.1c-.2-.3 0-.5.1-.6l.5-.6.3-.5v-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4a3.2 3.2 0 0 0-1 2.4 5.6 5.6 0 0 0 1.2 3 12.7 12.7 0 0 0 4.9 4.3c.7.3 1.2.5 1.6.6a3.9 3.9 0 0 0 1.8.1 2.9 2.9 0 0 0 1.9-1.4 2.4 2.4 0 0 0 .2-1.3c-.1-.1-.3-.2-.6-.4zM12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2z"/></svg>
+      <span data-i18n="crtWa">Ordina su WhatsApp</span>
+    </button>
+    <button class="btn btn-ghost btn--block" data-action="checkout-email" style="margin-top:8px;font-size:13.5px">
+      ✉ <span data-i18n="crtEmail">Richiedi preventivo via email</span>
+    </button>
+    <div class="dr-note"><span data-i18n="crtN">Spedizione gratuita sopra €79 · Prova grafica inclusa</span></div>
   </div>
 </aside>
 

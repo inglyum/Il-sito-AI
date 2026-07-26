@@ -384,34 +384,140 @@ export function renderDigital(){$('digGrid').innerHTML=DIG.map(d=>{
 export function addDigital(id){const d=DIG.find(x=>x.id===+id);cart.push({dig:d,q:1,u:d.price});renderCart();saveCart();toast(T('added'));openCart()}
 
 /* ---- carrello ---- */
+const FREE_SHIP=79; /* soglia spedizione gratuita */
+const COUPONS={'INGLY10':{pct:.10,label:'−10%'},'INGLY15':{pct:.15,label:'−15%'},'LASER20':{pct:.20,label:'−20% Laser'}};
+let activeCoupon=null;
+
 function saveCart(){try{localStorage.setItem('ingly_cart',JSON.stringify(cart.map(i=>i.dig?{dig:i.dig.id,q:i.q,u:i.u}:{id:i.p.id,q:i.q,mat:i.mat,txt:i.txt,u:i.u})))}catch(e){}}
 function loadCart(){try{const c=localStorage.getItem('ingly_cart');if(!c)return;JSON.parse(c).forEach(i=>{if(i.dig){const d=DIG.find(x=>x.id===i.dig);if(d)cart.push({dig:d,q:i.q,u:i.u})}else{const p=P.find(x=>x.id===i.id);if(p)cart.push({p,q:i.q,mat:i.mat,txt:i.txt,u:i.u})}})}catch(e){}}
 function saveWish(){try{localStorage.setItem('ingly_wish',JSON.stringify([...wish]))}catch(e){}}
 function loadWish(){try{const w=localStorage.getItem('ingly_wish');if(w)wish=new Set(JSON.parse(w))}catch(e){}}
-export function addToCart(id,q=1,mat,txt,u){const x=P.find(k=>k.id===+id);cart.push({p:x,q,mat:mat||MATN[x.mat][L],txt:txt||'',u:u??x.price});renderCart();saveCart();toast(T('added'));openCart()}
+
+export function addToCart(id,q=1,mat,txt,u){
+  const x=P.find(k=>k.id===+id); if(!x) return;
+  /* aggrega se già nel carrello con stesso materiale */
+  const ex=cart.find(i=>!i.dig&&i.p.id===x.id&&i.mat===(mat||MATN[x.mat][L]));
+  if(ex){ ex.q+=q; } else { cart.push({p:x,q,mat:mat||MATN[x.mat][L],txt:txt||'',u:u??x.price}); }
+  renderCart();saveCart();toast(T('added'));openCart();
+}
 export function rmCart(i){cart.splice(+i,1);renderCart();saveCart()}
 export function cQty(i,d){i=+i;cart[i].q=Math.max(1,cart[i].q+ +d);renderCart();saveCart()}
-export function renderCart(){const n=cart.reduce((s,i)=>s+i.q,0),b=$('cartBadge');b.textContent=n;b.classList.toggle('on',n>0);
-  $('drItems').innerHTML=cart.length?cart.map((i,x)=>{const nm=i.dig?i.dig.n[L]:i.p.n[L],ic=i.dig?i.dig.icon:i.p.icon,bg=i.dig?MAT_ART.File.bg:matArt(i.p.mat).bg,meta=i.dig?i.dig.f.join(' · '):i.mat+(i.txt?' · “'+i.txt+'”':'');
-  return `<div class="ditem"><div class="di-img" style="background:${bg}">${ic}</div><div style="flex:1"><h4>${nm}</h4><div class="di-meta">${meta}</div>
-  <div style="display:flex;align-items:center;gap:8px">${i.dig?'':`<div class="qty"><button data-action="cart-qty" data-i="${x}" data-d="-1" aria-label="−">−</button><b>${i.q}</b><button data-action="cart-qty" data-i="${x}" data-d="1" aria-label="+">+</button></div>`}<button style="font-size:12px;color:var(--ink-soft);text-decoration:underline" data-action="cart-rm" data-i="${x}">${T('rm')}</button></div></div>
-  <div class="di-price">${eur(i.u*i.q)}</div></div>`}).join(''):`<div class="dr-empty"><div class="ill"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/><path d="M9.5 11v3M14.5 11v3" opacity=".5"/></svg></div><b style="font-family:var(--fd);font-size:19px;color:var(--ink)">${T('crtE')}</b><p style="font-size:14px;margin-top:6px">${T('crtE2')}</p></div>`;
-  $('drTotal').textContent=eur(cart.reduce((s,i)=>s+i.u*i.q,0))}
-export function openCart(){$('drawer').classList.add('open');$('overlay').classList.add('open')}
+
+export function applyCoupon(){
+  const code=($('drCouponInput').value||'').trim().toUpperCase();
+  const msg=$('drCouponMsg');
+  const cp=COUPONS[code];
+  if(cp){ activeCoupon={...cp,code}; msg.textContent='✓ '+cp.label+' applicato!'; msg.className='dr-coupon-msg ok'; }
+  else { activeCoupon=null; msg.textContent=L==='it'?'Codice non valido.':'Invalid code.'; msg.className='dr-coupon-msg err'; }
+  renderCart();
+}
+
+export function renderCart(){
+  const n=cart.reduce((s,i)=>s+i.q,0);
+  const b=$('cartBadge'); b.textContent=n; b.classList.toggle('on',n>0);
+  const dc=$('drCount'); if(dc) dc.textContent=n?n+(L==='it'?' articoli':' items'):'';
+
+  /* items */
+  $('drItems').innerHTML=cart.length
+    ? cart.map((i,x)=>{
+        const nm=i.dig?i.dig.n[L]:i.p.n[L];
+        const ic=i.dig?i.dig.icon:i.p.icon;
+        const bg=i.dig?MAT_ART.File.bg:matArt(i.p.mat).bg;
+        const meta=i.dig?i.dig.f.join(' · '):i.mat+(i.txt?' · “'+i.txt+'”':'');
+        const unitPrice=eur(i.u);
+        return `<div class=”ditem”>
+          <div class=”di-img” style=”background:${bg}”>${ic}</div>
+          <div style=”flex:1;min-width:0”>
+            <h4>${nm}</h4>
+            <div class=”di-meta”>${meta}</div>
+            <div class=”di-actions”>
+              ${i.dig?'':`<div class=”qty”><button data-action=”cart-qty” data-i=”${x}” data-d=”-1” aria-label=”−”>−</button><b>${i.q}</b><button data-action=”cart-qty” data-i=”${x}” data-d=”1” aria-label=”+”>+</button></div>`}
+              <button class=”di-rm” data-action=”cart-rm” data-i=”${x}”>${T('rm')}</button>
+            </div>
+          </div>
+          <div class=”di-price-col”>
+            <span class=”di-price”>${eur(i.u*i.q)}</span>
+            ${i.q>1?`<span class=”di-unit”>${unitPrice} cad.</span>`:''}
+          </div>
+        </div>`;
+      }).join('')
+    : `<div class=”dr-empty”>
+        <div class=”ill”><svg viewBox=”0 0 24 24”><path d=”M6 7h12l-1 13H7z”/><path d=”M9 7a3 3 0 0 1 6 0”/><path d=”M9.5 11v3M14.5 11v3” opacity=”.5”/></svg></div>
+        <b>${T('crtE')}</b><p>${T('crtE2')}</p>
+        <button class=”btn btn-primary” style=”margin-top:16px” data-action=”go” data-arg=”shop”>${L==='it'?'Vai allo shop':'Go to shop'}</button>
+      </div>`;
+
+  /* barra spedizione gratuita */
+  const sub=cart.reduce((s,i)=>s+i.u*i.q,0);
+  const bar=$('drShipBar'), fill=$('drShipFill'), msg=$('drShipMsg');
+  if(bar){
+    if(!cart.length){ bar.style.display='none'; }
+    else if(sub>=FREE_SHIP){
+      bar.style.display='';
+      fill.style.width='100%';
+      msg.textContent=L==='it'?'🎉 Spedizione gratuita inclusa!':'🎉 Free shipping included!';
+      msg.className='dr-ship-msg ok';
+    } else {
+      bar.style.display='';
+      const pct=Math.min(100,Math.round(sub/FREE_SHIP*100));
+      fill.style.width=pct+'%';
+      const manca=eur(FREE_SHIP-sub);
+      msg.textContent=(L==='it'?`Aggiungi ancora ${manca} per la spedizione gratuita`:`Add ${manca} more for free shipping`);
+      msg.className='dr-ship-msg';
+    }
+  }
+
+  /* totali con coupon */
+  const discountAmt=activeCoupon?Math.round(sub*activeCoupon.pct*100)/100:0;
+  const total=sub-discountAmt;
+  const subEl=$('drSubtotal'); if(subEl) subEl.textContent=eur(sub);
+  const dr=$('drDiscountRow');
+  if(dr){
+    dr.style.display=activeCoupon?'flex':'none';
+    const lbl=$('drCouponLabel'); if(lbl) lbl.textContent=activeCoupon?activeCoupon.label:'Sconto';
+    const dv=$('drDiscountVal'); if(dv) dv.textContent='−'+eur(discountAmt);
+  }
+  $('drTotal').textContent=eur(total);
+}
+
+export function openCart(){
+  $('drawer').classList.add('open');$('overlay').classList.add('open');
+  $('drawer').focus();
+}
 export function closeCart(){$('drawer').classList.remove('open');$('overlay').classList.remove('open')}
+
 export function checkoutWhatsApp(){
   if(!cart.length){ toast(T('crtE')); return }
   const num=(CONFIG.whatsapp||'').replace(/\D/g,'');
-  if(!num){ toast('Numero WhatsApp non configurato'); return }
-  let msg = (L==='it'?'Ciao INGLY! Vorrei ordinare:':'Hi INGLY! I would like to order:')+'\n';
+  if(!num){ toast('Numero WhatsApp non configurato in admin'); return }
+  const sub=cart.reduce((s,i)=>s+i.u*i.q,0);
+  const discountAmt=activeCoupon?Math.round(sub*activeCoupon.pct*100)/100:0;
+  const total=sub-discountAmt;
+  const ship=sub>=FREE_SHIP?(L==='it'?'Spedizione: GRATUITA':'Shipping: FREE'):(L==='it'?'Spedizione: da concordare':'Shipping: to be agreed');
+  let msg=(L==='it'?'👋 Ciao INGLY Design! Vorrei ordinare:':'👋 Hi INGLY Design! I would like to order:')+'\n\n';
   cart.forEach(i=>{
     const nm=i.dig?i.dig.n[L]:i.p.n[L];
-    const meta=i.dig?'':(i.mat?' ('+i.mat+')':'');
-    msg += `\n• ${i.q}× ${nm}${meta} — ${eur(i.u*i.q)}`;
+    const meta=i.dig?'':(i.mat?' ['+i.mat+']':'')+(i.txt?' “'+i.txt+'”':'');
+    const sku=(!i.dig&&i.p.sku)?` (${i.p.sku})`:'';
+    msg+=`• ${i.q}× ${nm}${meta}${sku} — ${eur(i.u*i.q)}\n`;
   });
-  const tot=cart.reduce((s,i)=>s+i.u*i.q,0);
-  msg += '\n\n'+(L==='it'?'Totale indicativo':'Estimated total')+': '+eur(tot);
+  msg+='\n'+ship;
+  if(activeCoupon) msg+=`\n${L==='it'?'Codice sconto':'Discount code'}: ${activeCoupon.code} (${activeCoupon.label})`;
+  msg+='\n'+(L==='it'?'Totale stimato':'Estimated total')+': *'+eur(total)+'*';
+  msg+='\n\n'+(L==='it'?'📍 Confermate il preventivo definitivo con prova grafica prima della produzione.':'📍 We\'ll confirm the final quote with a graphic proof before production.');
   window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+export function checkoutEmail(){
+  if(!cart.length){ toast(T('crtE')); return }
+  /* porta alla pagina preventivo con prodotti pre-compilati nel campo note */
+  const summary=cart.map(i=>`${i.q}× ${i.dig?i.dig.n[L]:i.p.n[L]}`).join(', ');
+  go('quote');
+  setTimeout(()=>{
+    const note=document.getElementById('qNote');
+    if(note&&!note.value) note.value=(L==='it'?'Prodotti carrello: ':'Cart items: ')+summary;
+  },400);
+  closeCart();
 }
 
 /* ---- controlli statici dello shop ---- */
