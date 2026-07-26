@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>INGLY Admin 2.0</title>
+<title>INGLY Admin 3.0</title>
 <meta name="robots" content="noindex">
 <style>
 :root{--bg:#0a0d18;--panel:#0b0e1c;--card:#12162a;--card2:#171c36;--ink:#eef1fb;--soft:#9aa3c7;--mut:#5c6389;--line:rgba(140,160,220,.18);--blue:#3b7de0;--laser:#f5d94e;--ok:#3ecf8e;--warn:#ff8a3c;--err:#ff5d5d;--r:14px;--mono:ui-monospace,'Cascadia Code',Menlo,Consolas,monospace}
@@ -116,15 +116,44 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
 .emoji-in{width:64px!important;text-align:center;font-size:18px}
 .footbar{position:fixed;left:0;bottom:0;width:232px;padding:10px;background:var(--panel);border-top:1px solid var(--line);border-right:1px solid var(--line);font-size:11px;color:var(--mut);z-index:31}
 @media(max-width:900px){.footbar{display:none}}
+/* ===== Sidebar collapse (desktop) ===== */
+.shell.collapsed .side{width:56px;flex-basis:56px}
+.shell.collapsed .side .brand b,.shell.collapsed .side .brand span,.shell.collapsed .side .navlabel,.shell.collapsed .nit span.t{display:none}
+.shell.collapsed .side .brand{justify-content:center;padding:4px 0 14px}
+.shell.collapsed .footbar{width:56px}
+.shell.collapsed #sideToggle{left:56px}
+.shell,.side{transition:width .22s ease,flex-basis .22s ease}
+#sideToggle{position:fixed;top:50%;left:232px;transform:translateY(-50%);width:18px;height:48px;background:var(--panel);border:1px solid var(--line);border-left:none;border-radius:0 8px 8px 0;cursor:pointer;z-index:32;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--mut);transition:left .22s ease}
+#sideToggle:hover{background:var(--card);color:var(--ink)}
+@media(max-width:900px){#sideToggle{display:none}.shell.collapsed .side{width:64px;flex-basis:64px}.shell.collapsed .footbar{width:64px}}
+/* ===== KPI cards migliorate ===== */
+.dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
+.dcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;position:relative;overflow:hidden}
+.dcard::before{content:'';position:absolute;inset:0;background:var(--dcard-accent,transparent);opacity:.07;pointer-events:none}
+.dcard b{display:block;font-size:28px;font-style:italic;color:var(--laser);line-height:1.15;letter-spacing:-.02em}
+.dcard span{font-size:12px;color:var(--soft)}
+.dcard .dcard-trend{position:absolute;top:12px;right:14px;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:99px}
+.dcard.w b{color:var(--warn)}.dcard.g b{color:var(--ok)}.dcard.b b{color:var(--blue)}
+.dcard.w{--dcard-accent:var(--warn)}.dcard.g{--dcard-accent:var(--ok)}.dcard.b{--dcard-accent:var(--blue)}
+/* ===== Bulk editor ===== */
+.bulk-bar{display:none;position:sticky;top:56px;z-index:25;background:var(--card2);border:1px solid var(--laser);border-radius:11px;padding:9px 14px;margin-bottom:10px;align-items:center;gap:10px;flex-wrap:wrap}
+.bulk-bar.on{display:flex}
+.bulk-bar b{color:var(--laser)}
+/* ===== Sfondo picker (in admin) ===== */
+.bg-swatch{width:52px;height:52px;border-radius:10px;border:2px solid transparent;cursor:pointer;transition:.15s;position:relative}
+.bg-swatch.on{border-color:var(--laser);box-shadow:0 0 0 3px rgba(245,217,78,.25)}
+.bg-swatch.on::after{content:'✓';position:absolute;inset:0;display:grid;place-items:center;font-size:18px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.bg-preview{width:100%;height:140px;border-radius:12px;border:1px solid var(--line);margin-top:12px;background:#0a0d18;transition:background .4s}
 </style>
 </head>
 <body>
 <script src="assets/js/artwork.js"></script>
-<div class="shell">
+<div class="shell" id="shell">
 <aside class="side">
-  <div class="brand"><img src="assets/images/logo.png" onerror="this.style.display='none'" alt=""><div><b>INGLY</b><span>Admin 2.0</span></div></div>
+  <div class="brand"><img src="assets/images/logo.png" onerror="this.style.display='none'" alt=""><div><b>INGLY</b><span>Admin 3.0</span></div></div>
   <div id="nav"></div>
 </aside>
+<button id="sideToggle" title="Comprimi/espandi sidebar">‹</button>
 <div class="footbar">Fonte di verità: <span class="mono">data/*.json</span> · commit atomici</div>
 <div class="main">
   <div class="top">
@@ -162,6 +191,19 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
       <span id="pCount" class="hint" style="align-self:center;white-space:nowrap"></span>
       <button class="btn" id="pBatchAi" title="Genera descrizioni AI per tutti i prodotti senza descrizione">✨ Batch AI</button>
       <button class="btn pri" id="pNew">➕ Nuovo prodotto</button>
+    </div>
+    <div class="bulk-bar" id="bulkBar">
+      <b id="bulkCount">0 selezionati</b>
+      <select id="bulkAction" style="width:auto;background:var(--card);border:1px solid var(--line);padding:4px 8px;border-radius:8px;color:var(--ink)">
+        <option value="">Azione batch…</option>
+        <option value="hide">Nascondi selezionati</option>
+        <option value="show">Rendi visibili</option>
+        <option value="hero">Aggiungi a In evidenza</option>
+        <option value="unhero">Rimuovi da In evidenza</option>
+        <option value="del">Elimina selezionati</option>
+      </select>
+      <button class="btn sm ok" id="bulkRun">Esegui</button>
+      <button class="btn sm" id="bulkDesel" style="margin-left:auto">Deseleziona</button>
     </div>
     <div class="card" style="padding:8px 12px;overflow-x:auto"><table id="pTable" style="min-width:700px"></table></div>
     <!-- Batch AI modal (invisibile di default) -->
@@ -238,6 +280,27 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
       <button class="btn sm" id="mSelAll">Seleziona tutte le visibili</button>
     </div>
     <div class="mgrid" id="mGrid"></div></div>
+  </section>
+
+  <!-- ============ SFONDO SITO ============ -->
+  <section class="view" id="v-bg">
+    <div class="card">
+      <h3>🎨 Sfondo del sito</h3>
+      <p class="hint" style="margin-bottom:16px">Scegli lo sfondo predefinito che i visitatori vedono. La modifica è immediata e salvata localmente finché non pubblichi.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center" id="bgSwatches"></div>
+      <div class="bg-preview" id="bgPreview"></div>
+      <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn pri" id="bgSave">💾 Salva in configurazione</button>
+        <span class="hint" id="bgSaveHint"></span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>🖌 Sfondo personalizzato</h3>
+      <div class="row c2">
+        <div><label>Codice CSS personalizzato (background)</label><input type="text" id="bgCustomInput" placeholder="es. linear-gradient(135deg,#0a0d18,#1e1b4b)"></div>
+        <div style="align-self:end"><button class="btn" id="bgCustomApply">Applica</button></div>
+      </div>
+    </div>
   </section>
 
   <!-- ============ PORTFOLIO ============ -->
@@ -746,7 +809,7 @@ function syncSocialLinks(){if(!Array.isArray(S.SOCIALS))return;const map={instag
 const NAV=[['Panoramica',[['dash','📊','Dashboard']]],
  ['Catalogo',[['prod','📦','Prodotti'],['cats','🗂','Categorie'],['dig','💾','Digitali']]],
  ['Contenuti',[['media','🖼','Media Library'],['port','🏆','Portfolio'],['biz','🏢','Sezione Business'],['sponsor','🤝','Sponsor & Partner'],['themes','🎨','Temi stagionali'],['tech','🔥','Tecnologie'],['hero','🎯','Home & Hero'],['texts','✍️','Testi IT/EN'],['faq','❓','FAQ & Recensioni'],['adv','🧩','Avanzate']]],
- ['Configurazione',[['contacts','📞','Contatti & Social'],['seo','🔎','SEO'],['set','⚙️','Impostazioni']]],
+ ['Configurazione',[['contacts','📞','Contatti & Social'],['seo','🔎','SEO'],['bg','🎨','Sfondo Sito'],['set','⚙️','Impostazioni']]],
  ['Sistema',[['pub','🚀','Pubblica & Deploy'],['hist','🕘','Cronologia'],['health','🩺','Health Center'],['backup','💾','Backup']]]];
 const TITLES={};let VIEW='dash';
 $('nav').innerHTML=NAV.map(([g,items])=>`<div class="navlabel">${g}</div>`+items.map(([id,ic,t])=>{TITLES[id]=t;return `<button class="nit" data-go="${id}"><span>${ic}</span><span class="t">${t}</span>${id==='pub'?'<span class="bdg" id="navPubN"></span>':''}</button>`}).join('')).join('');
@@ -755,7 +818,7 @@ function go(v){
  VIEW=v;document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
  document.querySelectorAll('.nit').forEach(x=>x.classList.toggle('on',x.dataset.go===v));
  $('vtitle').textContent=TITLES[v]||'';
- const R={dash:renderDash,prod:renderProd,cats:renderCats,dig:renderDig,media:renderMedia,port:()=>{renderPort();bindAll()},biz:renderBiz,sponsor:renderSponsor,themes:renderThemes,tech:renderTech,hero:renderHero,texts:renderTexts,faq:renderFaq,adv:renderAdv,contacts:bindAll,seo:()=>{bindAll();seoLen()},pub:renderPub,hist:renderHist,set:renderSet,health:()=>{},backup:()=>{}};
+ const R={dash:renderDash,prod:renderProd,cats:renderCats,dig:renderDig,media:renderMedia,port:()=>{renderPort();bindAll()},biz:renderBiz,sponsor:renderSponsor,themes:renderThemes,tech:renderTech,hero:renderHero,texts:renderTexts,faq:renderFaq,adv:renderAdv,contacts:bindAll,seo:()=>{bindAll();seoLen()},bg:renderBg,pub:renderPub,hist:renderHist,set:renderSet,health:()=>{},backup:()=>{}};
  if(R[v])R[v]();window.scrollTo(0,0)}
 document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(g.dataset.go)});
 $('goPub').onclick=()=>go('pub');
@@ -770,19 +833,132 @@ $('goPrev').onclick=()=>{
   else toast('Anteprima aperta: vedi le modifiche NON ancora pubblicate');
  }catch(e){toast('Anteprima non disponibile: '+(e.message||e))}};
 
+/* ===== SIDEBAR TOGGLE ===== */
+(function(){
+ const btn=$('sideToggle'),shell=$('shell');
+ const saved=localStorage.getItem('ingly_sidebar_collapsed');
+ if(saved==='1'){shell.classList.add('collapsed');btn.textContent='›'}
+ btn.onclick=()=>{
+  const c=shell.classList.toggle('collapsed');
+  btn.textContent=c?'›':'‹';
+  localStorage.setItem('ingly_sidebar_collapsed',c?'1':'0');
+ };
+})();
+
 /* ================== DASHBOARD ================== */
-function renderDash(){const P=S.P||[],dig=(S.C&&S.C.DIG)||[],port=(S.C&&S.C.PORT)||[];
+function renderDash(){
+ const P=S.P||[],dig=(S.C&&S.C.DIG)||[],port=(S.C&&S.C.PORT)||[];
+ const vis=P.filter(p=>!p.hidden).length;
  const noPhoto=P.filter(p=>!p.img&&!hasStaged('img/'+p.id+'.webp')&&!(REPO_IMG||[]).includes(p.id+'.webp')).length;
+ const noDesc=P.filter(p=>!p.desc||!p.desc.it||!p.desc.it.trim()).length;
+ const heroN=(S.CONFIG&&S.CONFIG.heroFeatured&&S.CONFIG.heroFeatured.length)||0;
+ const revTot=P.reduce((s,p)=>s+(p.rev||0),0);
+ const pend=pending();
  $('dashCards').innerHTML=[
-  ['Prodotti',P.length,''],['Categorie',(S.CATS||[]).length,''],['Digitali',dig.length,''],
-  ['Portfolio',port.length,''],['Senza foto'+((REPO_IMG?'':' *')),noPhoto,noPhoto?'w':'g'],['In bozza',pending(),pending()?'w':'g']
- ].map(([t,v,c])=>`<div class="dcard ${c}"><b>${v}</b><span>${t}</span></div>`).join('');
- const h=[];h.push(`<div>Repository: <b class="mono">${esc(SET.owner)}/${esc(SET.repo)}</b> · branch <b class="mono">${esc(SET.branch)}</b></div>`);
- h.push(`<div class="${token()?'ok':'warn'}">${token()?'Token configurato':'Token mancante — vai in Impostazioni per pubblicare con un click'}</div>`);
- h.push(`<div class="${LOADED_FROM==='GitHub'?'ok':'warn'}">Dati caricati da: ${esc(LOADED_FROM||'—')}${LOADED_FROM==='GitHub'?'':' (consiglio: configura il token per leggere sempre dal repository)'}</div>`);
- if(!REPO_IMG)h.push('<div class="warn">Foto: esegui «Scansiona repository» nella Media Library per il conteggio esatto</div>');
- $('dashHealth').innerHTML=h.join('')}
+  {t:'Prodotti attivi',v:vis,tot:P.length,c:'b'},
+  {t:'Senza foto',v:noPhoto,c:noPhoto?'w':'g'},
+  {t:'Senza descrizione',v:noDesc,c:noDesc?'w':'g'},
+  {t:'In evidenza (hero)',v:heroN,c:''},
+  {t:'Digitali',v:dig.length,c:''},
+  {t:'Portfolio',v:port.length,c:''},
+  {t:'Recensioni totali',v:revTot.toLocaleString('it-IT'),c:'g'},
+  {t:'In bozza',v:pend,c:pend?'w':'g'},
+ ].map(({t,v,tot,c})=>`<div class="dcard ${c}"><b>${v}${tot?'<small style="font-size:14px;color:var(--soft)"> / '+tot+'</small>':''}</b><span>${t}</span></div>`).join('');
+
+ /* azioni rapide */
+ const acts=[
+  ['➕ Nuovo prodotto','prod'],['🖼 Carica foto','media'],
+  ['🎨 Sfondo sito','bg'],['🎯 Home & Hero','hero'],
+  ['📊 Pubblica','pub'],['🕘 Cronologia','hist'],
+ ];
+ $('dashCards').insertAdjacentHTML('afterend',`<div class="card" style="margin-bottom:16px"><h3>⚡ Azioni rapide</h3><div style="display:flex;gap:8px;flex-wrap:wrap">${acts.map(([l,g])=>`<button class="btn" data-go="${g}">${l}</button>`).join('')}</div></div>`);
+
+ const h=[];
+ h.push(`<div>Repository: <b class="mono">${esc(SET.owner)}/${esc(SET.repo)}</b> · branch <b class="mono">${esc(SET.branch)}</b></div>`);
+ h.push(`<div class="${token()?'ok':'warn'}">${token()?'✔ Token configurato':'⚠ Token mancante — vai in Impostazioni per pubblicare con un click'}</div>`);
+ h.push(`<div class="${LOADED_FROM==='GitHub'?'ok':'warn'}">Dati caricati da: ${esc(LOADED_FROM||'—')}</div>`);
+ if(!REPO_IMG)h.push('<div class="warn">⚠ Foto: esegui «Scansiona repository» nella Media Library per il conteggio esatto</div>');
+ if(noPhoto>0)h.push(`<div class="warn">⚠ ${noPhoto} prodott${noPhoto===1?'o':'i'} senz${noPhoto===1?'a':'e'} foto — <button class="btn sm" data-go="prod" onclick="setTimeout(()=>{ const s=document.getElementById('pStatusF');if(s){s.value='nofoto';renderProd()} },100)">Vedi →</button></div>`);
+ $('dashHealth').innerHTML=h.join('');
+}
 function hasStaged(path){return MEDIA.some(m=>m.path===path)}
+
+/* ================== BULK EDITOR PRODOTTI ================== */
+let BULK_SEL=new Set();
+function bulkToggle(id,on){on?BULK_SEL.add(+id):BULK_SEL.delete(+id);updateBulkBar()}
+function updateBulkBar(){
+ const n=BULK_SEL.size, bar=$('bulkBar'), cnt=$('bulkCount');
+ bar.classList.toggle('on',n>0);
+ if(cnt) cnt.textContent=n+' selezionat'+(n===1?'o':'i');
+ /* aggiorna checkbox nella tabella */
+ document.querySelectorAll('.psel-cb').forEach(cb=>{cb.checked=BULK_SEL.has(+cb.dataset.id)});
+}
+function runBulk(){
+ const action=($('bulkAction')||{}).value||''; if(!action||!BULK_SEL.size) return;
+ if(action==='del'&&!confirm('Eliminare '+BULK_SEL.size+' prodotti? Operazione irreversibile.')) return;
+ BULK_SEL.forEach(id=>{
+  const idx=(S.P||[]).findIndex(p=>p.id===id); if(idx===-1) return;
+  if(action==='hide') S.P[idx].hidden=true;
+  else if(action==='show') S.P[idx].hidden=false;
+  else if(action==='hero'){if(!S.CONFIG.heroFeatured)S.CONFIG.heroFeatured=[];if(!S.CONFIG.heroFeatured.includes(id))S.CONFIG.heroFeatured.push(id);}
+  else if(action==='unhero'){S.CONFIG.heroFeatured=(S.CONFIG.heroFeatured||[]).filter(x=>x!==id);}
+  else if(action==='del') S.P.splice(idx,1);
+ });
+ BULK_SEL.clear();markDirty();renderProd();toast(action==='del'?'Prodotti eliminati':'Prodotti aggiornati');
+}
+(function(){
+ const rb=$('bulkRun'),ds=$('bulkDesel');
+ if(rb) rb.onclick=runBulk;
+ if(ds) ds.onclick=()=>{BULK_SEL.clear();updateBulkBar();renderProd()};
+})();
+
+/* ================== SFONDO SITO ================== */
+const BG_PRESETS=[
+ {k:'default',label:'Default',bg:'radial-gradient(ellipse at 50% 0%,#131a33,#0a0d18)'},
+ {k:'deep-space',label:'Deep Space',bg:'radial-gradient(ellipse at 50% 0%,#0d0a2e,#050510)'},
+ {k:'forest',label:'Foresta',bg:'radial-gradient(ellipse at 30% 20%,#0a1e0d,#050d08)'},
+ {k:'sunset',label:'Tramonto',bg:'radial-gradient(ellipse at 50% 0%,#2a0a1e,#0d0a18)'},
+ {k:'ocean',label:'Oceano',bg:'radial-gradient(ellipse at 50% 0%,#051528,#010a14)'},
+ {k:'obsidian',label:'Ossidiana',bg:'radial-gradient(ellipse at 50% 0%,#1a1a1a,#030303)'},
+ {k:'aurora',label:'Aurora',bg:'radial-gradient(ellipse at 30% 0%,#071a26,#0a0d18),radial-gradient(ellipse at 70% 100%,#1a0a24,transparent)'},
+ {k:'copper',label:'Rame',bg:'radial-gradient(ellipse at 50% 0%,#1e1006,#0d0805)'},
+];
+function renderBg(){
+ const cur=(S.CONFIG&&S.CONFIG.siteBg)||'default';
+ $('bgSwatches').innerHTML=BG_PRESETS.map(p=>`<div class="bg-swatch${p.k===cur?' on':''}" style="background:${p.bg}" title="${p.label}" data-bgk="${p.k}" data-bgv="${p.bg.replace(/"/g,"'")}"></div>`).join('');
+ applyBgPreview(cur);
+ document.querySelectorAll('.bg-swatch').forEach(sw=>{
+  sw.onclick=()=>{
+   document.querySelectorAll('.bg-swatch').forEach(x=>x.classList.remove('on'));
+   sw.classList.add('on');
+   applyBgPreview(null,sw.dataset.bgv);
+   $('bgCustomInput').value='';
+   $('bgSaveHint').textContent='';
+  };
+ });
+ const ci=$('bgCustomInput'),ca=$('bgCustomApply'),bs=$('bgSave');
+ if(ca) ca.onclick=()=>{
+  const v=ci.value.trim(); if(!v)return;
+  document.querySelectorAll('.bg-swatch').forEach(x=>x.classList.remove('on'));
+  applyBgPreview(null,v);
+ };
+ if(bs) bs.onclick=()=>{
+  const on=document.querySelector('.bg-swatch.on');
+  const val=on?on.dataset.bgk:null;
+  const custom=$('bgCustomInput').value.trim();
+  if(!S.CONFIG) S.CONFIG={};
+  if(val){ S.CONFIG.siteBg=val; } else if(custom){ S.CONFIG.siteBg='custom'; S.CONFIG.siteBgCustom=custom; }
+  else return;
+  markDirty();
+  $('bgSaveHint').textContent='✔ Salvato in bozza — pubblica per renderlo live';
+  toast('Sfondo salvato in configurazione');
+ };
+}
+function applyBgPreview(key,val){
+ const prev=$('bgPreview'); if(!prev) return;
+ if(key){const p=BG_PRESETS.find(x=>x.k===key);if(p)prev.style.background=p.bg;}
+ else if(val){prev.style.background=val;}
+}
 
 /* ================== PRODOTTI ================== */
 function catOptions(sel){return (S.CATS||[]).map(c=>`<option value="${esc(c.id)}"${c.id===sel?' selected':''}>${esc(c.ic)} ${esc(c.n.it)}</option>`).join('')}
@@ -806,6 +982,7 @@ function renderProd(){
  const pc=$('pCount');if(pc)pc.textContent=rows.length===tot?`${tot} prodotti`:`${rows.length} / ${tot}`;
  $('pTable').innerHTML=`<tr>
   <th style="width:28px" title="Trascina per riordinare">⠿</th>
+  <th style="width:28px"><input type="checkbox" id="pSelAll" title="Seleziona tutti" style="width:auto;cursor:pointer"></th>
   <th style="width:32px"></th>
   <th style="width:36px">ID</th>
   <th>Nome</th>
@@ -822,8 +999,10 @@ function renderProd(){
   const hasDesc=p.desc&&p.desc.it&&p.desc.it.trim()!=='';
   const isHero=(S.CONFIG.heroFeatured||[]).includes(p.id);
   const cat=(S.CATS||[]).find(c=>c.id===p.cat);
-  return `<tr class="rowc" data-pid="${p.id}" draggable="true">
+  const sel=BULK_SEL.has(p.id);
+  return `<tr class="rowc" data-pid="${p.id}" draggable="true"${sel?' style="background:rgba(245,217,78,.06)"':''}>
    <td style="cursor:grab;color:var(--mut);text-align:center">⠿</td>
+   <td style="text-align:center"><input type="checkbox" class="psel-cb" data-id="${p.id}" ${sel?'checked':''} style="width:auto;cursor:pointer"></td>
    <td style="font-size:18px;text-align:center">${esc(p.icon||'')}</td>
    <td class="mono" style="color:var(--soft)">${p.id}</td>
    <td><b>${esc(p.n.it)}</b>${p.hidden?'<span class="chip warn" style="margin-left:6px;font-size:10px">nascosto</span>':''}</td>
@@ -837,9 +1016,19 @@ function renderProd(){
    <td><button class="btn sm" data-edit="${p.id}" style="padding:3px 10px">✎</button></td></tr>`;
  }).join('');
 
+ /* checkbox selezione bulk */
+ const selAll=$('pSelAll');
+ if(selAll) selAll.onchange=e=>{
+  rows.forEach(p=>{e.target.checked?BULK_SEL.add(p.id):BULK_SEL.delete(p.id)});
+  updateBulkBar();renderProd();
+ };
+ $('pTable').querySelectorAll('.psel-cb').forEach(cb=>cb.onchange=e=>{
+  e.stopPropagation();bulkToggle(cb.dataset.id,cb.checked);renderProd();
+ });
+
  /* edit button */
  $('pTable').querySelectorAll('[data-edit]').forEach(b=>b.onclick=e=>{e.stopPropagation();editProd(+b.dataset.edit)});
- $('pTable').querySelectorAll('tr[data-pid]').forEach(r=>r.onclick=e=>{if(e.target.closest('button'))return;editProd(+r.dataset.pid)});
+ $('pTable').querySelectorAll('tr[data-pid]').forEach(r=>r.onclick=e=>{if(e.target.closest('button,input'))return;editProd(+r.dataset.pid)});
 
  /* quick toggle visibilità */
  $('pTable').querySelectorAll('[data-ptoggle]').forEach(b=>b.onclick=e=>{
