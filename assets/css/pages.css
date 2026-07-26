@@ -51,6 +51,20 @@ footer{background:var(--bg-deep,#070a14);border-top:1px solid rgba(140,160,220,.
 .scroll-cue{color:var(--ink-soft)}
 .scroll-cue::after{background:linear-gradient(var(--ink-soft),transparent)}
 
+/* H1 hero — gradient text animato */
+#heroH1{background:linear-gradient(110deg,#eae8f5 20%,#7aabff 48%,#f5d94e 62%,#ff8a3c 78%,#eae8f5 100%);background-size:220% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradShift 7s linear infinite}
+:root[data-mode="light"] #heroH1{background:linear-gradient(110deg,#1a1410 20%,#1d4bab 50%,#b8860b 70%,#1a1410 100%);background-size:220% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradShift 7s linear infinite}
+
+/* laser ring attorno all'hero visual */
+.hero-visual::before,.hero-visual::after{content:'';position:absolute;border-radius:50%;pointer-events:none;left:50%;top:50%;transform:translate(-50%,-50%)}
+.hero-visual::before{width:88%;aspect-ratio:1;border:1.5px dashed rgba(59,125,224,.28);animation:spinc 32s linear infinite}
+.hero-visual::after{width:108%;aspect-ratio:1;border:1px dashed rgba(245,217,78,.14);animation:spinc 55s linear infinite reverse}
+
+/* fcard glow intensificato */
+.fc1{filter:drop-shadow(0 0 20px rgba(59,125,224,.25))}
+.fc2{filter:drop-shadow(0 0 20px rgba(245,217,78,.2))}
+.fc3{filter:drop-shadow(0 0 16px rgba(255,138,60,.18))}
+
 /* coin logo (from ingly-logo-animato) */
 .coin-scene{position:absolute;inset:0;display:grid;place-items:center;transform-style:preserve-3d;perspective:1100px}
 .cring{position:absolute;border-radius:50%;pointer-events:none;left:50%;top:50%;transform:translate(-50%,-50%)}
@@ -72,12 +86,13 @@ footer{background:var(--bg-deep,#070a14);border-top:1px solid rgba(140,160,220,.
 
 
 /* cards: 3D-ready */
-.pcard,.bcard,.dcard,.rcard,.counter,.matcard{will-change:transform;transform-style:preserve-3d}
-.pcard:hover,.dcard:hover{box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 40px rgba(59,125,224,.14);border-color:rgba(90,140,230,.45)}
-.bcard:hover{box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 34px rgba(59,125,224,.12)}
-.pcard .pimg::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.22) 48%,transparent 62%);transform:translateX(-120%);transition:transform .8s var(--ease);pointer-events:none}
-.pcard:hover .pimg::after{transform:translateX(120%)}
+.pcard,.bcard,.dcard,.rcard,.counter,.matcard{will-change:transform;transform-style:preserve-3d;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.pcard:hover,.dcard:hover{box-shadow:0 28px 70px rgba(0,0,0,.65),0 0 50px rgba(59,125,224,.18);border-color:rgba(90,140,230,.55);transform:translateY(-4px)}
+.bcard:hover{box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 34px rgba(59,125,224,.12);transform:translateY(-3px)}
+.pcard .pimg::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.28) 48%,transparent 62%);transform:translateX(-120%);transition:transform .7s var(--ease);pointer-events:none}
+.pcard:hover .pimg::after{transform:translateX(130%)}
 .ptag{background:var(--glass-dark,rgba(10,13,24,.75));color:#eef1fb;backdrop-filter:blur(8px)}
+.ptag.y{animation:glowPulse 2.5s ease-in-out infinite}
 .ptag.y{background:var(--laser);color:#0a0d18}.ptag.b{background:var(--blue);color:#fff}
 .wish{background:var(--glass-dark,rgba(10,13,24,.72))}.wish svg{stroke:#eef1fb}
 .qadd{background:linear-gradient(135deg,#4a89ea,#2b5fc0);color:#fff}

@@ -56,7 +56,7 @@
 
 /* ---------- pages ---------- */
 .page{display:none}
-.page.active{display:block;animation:pagein .7s var(--ease)}
+.page.active{display:block;animation:pagein .55s cubic-bezier(.22,.8,.4,1) both}
 
 
 /* ---------- hero ---------- */

@@ -61,6 +61,7 @@ table{width:100%;border-collapse:collapse;font-size:13.3px}
 th{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--mut);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
 td{padding:7px 8px;border-bottom:1px solid rgba(140,160,220,.08);vertical-align:middle}
 tr.rowc{cursor:pointer}tr.rowc:hover td{background:rgba(140,160,220,.05)}
+tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--laser)}
 .mono{font-family:var(--mono);font-size:12px}
 .pill{font-size:11px;border-radius:6px;padding:1px 7px;background:var(--card2);border:1px solid var(--line)}
 /* dashboard */
@@ -148,13 +149,21 @@ tr.rowc{cursor:pointer}tr.rowc:hover td{background:rgba(140,160,220,.05)}
 
   <!-- ============ PRODOTTI ============ -->
   <section class="view" id="v-prod">
-    <div class="searchrow">
-      <input type="text" id="pSearch" placeholder="Cerca prodotto…">
+    <div class="searchrow" style="flex-wrap:wrap;gap:8px">
+      <input type="text" id="pSearch" placeholder="Cerca prodotto…" style="min-width:160px;flex:1">
       <select id="pCatF"></select>
+      <select id="pStatusF">
+        <option value="">Tutti i prodotti</option>
+        <option value="nofoto">Senza foto</option>
+        <option value="nodesc">Senza descrizione</option>
+        <option value="hidden">Nascosti</option>
+        <option value="hero">In evidenza</option>
+      </select>
+      <span id="pCount" class="hint" style="align-self:center;white-space:nowrap"></span>
       <button class="btn" id="pBatchAi" title="Genera descrizioni AI per tutti i prodotti senza descrizione">✨ Batch AI</button>
       <button class="btn pri" id="pNew">➕ Nuovo prodotto</button>
     </div>
-    <div class="card" style="padding:8px 12px"><table id="pTable"></table></div>
+    <div class="card" style="padding:8px 12px;overflow-x:auto"><table id="pTable" style="min-width:700px"></table></div>
     <!-- Batch AI modal (invisibile di default) -->
     <div id="batchAiBox" style="display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);align-items:center;justify-content:center">
       <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px 32px;width:min(500px,90vw);position:relative">
@@ -781,14 +790,97 @@ function subOptions(catId,sel){const c=(S.CATS||[]).find(x=>x.id===catId);return
 function prodImgSrc(p){const st=MEDIA.find(m=>m.path===(p.img||'img/'+p.id+'.webp'));if(st)return st.url;return (LOADED_FROM==='GitHub'?LIVE():'')+(p.img||'img/'+p.id+'.webp')}
 function renderProd(){
  $('pCatF').innerHTML='<option value="">Tutte le categorie</option>'+catOptions();
- const q=($('pSearch').value||'').toLowerCase(),cf=$('pCatF').value;
- const rows=(S.P||[]).filter(p=>(!cf||p.cat===cf)&&(!q||(p.n.it+' '+p.n.en+' '+p.id).toLowerCase().includes(q)));
- $('pTable').innerHTML='<tr><th></th><th>ID</th><th>Nome</th><th>Categoria</th><th>Prezzo</th><th>Materiale</th><th>Foto</th><th></th></tr>'+
-  rows.map(p=>{const hasPhoto=p.img||hasStaged('img/'+p.id+'.webp')||(REPO_IMG||[]).includes(p.id+'.webp');
-  return `<tr class="rowc" data-pid="${p.id}"><td style="font-size:17px">${esc(p.icon||'')}</td><td class="mono">${p.id}</td><td><b>${esc(p.n.it)}</b><br><small class="hint">${esc(p.n.en)}</small></td><td>${esc(p.cat)} / ${p.sub}</td><td>€${p.price}</td><td>${esc(p.mat||'')}</td><td>${hasPhoto?'<span class="chip ok">sì</span>':(REPO_IMG?'<span class="chip warn">no</span>':'<span class="chip">?</span>')}</td><td><button class="btn sm" data-edit="${p.id}">✎</button></td></tr>`}).join('');
+ const q=($('pSearch').value||'').toLowerCase();
+ const cf=$('pCatF').value;
+ const sf=($('pStatusF')||{}).value||'';
+ let rows=(S.P||[]).filter(p=>{
+  if(cf&&p.cat!==cf)return false;
+  if(q&&!(p.n.it+' '+p.n.en+' '+p.id).toLowerCase().includes(q))return false;
+  if(sf==='nofoto')return !(p.img||hasStaged('img/'+p.id+'.webp')||(REPO_IMG||[]).includes(p.id+'.webp'));
+  if(sf==='nodesc')return !p.desc||!p.desc.it||p.desc.it.trim()==='';
+  if(sf==='hidden')return !!p.hidden;
+  if(sf==='hero')return (S.CONFIG.heroFeatured||[]).includes(p.id);
+  return true;
+ });
+ const tot=S.P?S.P.length:0;
+ const pc=$('pCount');if(pc)pc.textContent=rows.length===tot?`${tot} prodotti`:`${rows.length} / ${tot}`;
+ $('pTable').innerHTML=`<tr>
+  <th style="width:28px" title="Trascina per riordinare">⠿</th>
+  <th style="width:32px"></th>
+  <th style="width:36px">ID</th>
+  <th>Nome</th>
+  <th style="width:110px">Categoria</th>
+  <th style="width:68px">Prezzo</th>
+  <th style="width:80px">Materiale</th>
+  <th style="width:44px" title="Foto">📷</th>
+  <th style="width:44px" title="Descrizione">📝</th>
+  <th style="width:44px" title="Visibile">👁</th>
+  <th style="width:44px" title="In evidenza">⭐</th>
+  <th style="width:44px"></th></tr>`+
+ rows.map(p=>{
+  const hasPhoto=p.img||hasStaged('img/'+p.id+'.webp')||(REPO_IMG||[]).includes(p.id+'.webp');
+  const hasDesc=p.desc&&p.desc.it&&p.desc.it.trim()!=='';
+  const isHero=(S.CONFIG.heroFeatured||[]).includes(p.id);
+  const cat=(S.CATS||[]).find(c=>c.id===p.cat);
+  return `<tr class="rowc" data-pid="${p.id}" draggable="true">
+   <td style="cursor:grab;color:var(--mut);text-align:center">⠿</td>
+   <td style="font-size:18px;text-align:center">${esc(p.icon||'')}</td>
+   <td class="mono" style="color:var(--soft)">${p.id}</td>
+   <td><b>${esc(p.n.it)}</b>${p.hidden?'<span class="chip warn" style="margin-left:6px;font-size:10px">nascosto</span>':''}</td>
+   <td class="hint" style="font-size:12px">${cat?esc(cat.ic)+' '+esc(cat.n.it):esc(p.cat)}</td>
+   <td style="font-weight:600">€${p.price}</td>
+   <td class="hint" style="font-size:12px">${esc(p.mat||'')}</td>
+   <td style="text-align:center">${hasPhoto?'<span style="color:var(--ok)">✔</span>':'<span style="color:var(--err)">✗</span>'}</td>
+   <td style="text-align:center">${hasDesc?'<span style="color:var(--ok)">✔</span>':'<span style="color:var(--warn)">—</span>'}</td>
+   <td style="text-align:center"><button class="btn sm" data-ptoggle="${p.id}" title="${p.hidden?'Mostra prodotto':'Nascondi prodotto'}" style="padding:2px 6px;min-width:0;font-size:14px">${p.hidden?'🚫':'✅'}</button></td>
+   <td style="text-align:center"><button class="btn sm" data-phero="${p.id}" title="${isHero?'Rimuovi da evidenza':'Metti in evidenza'}" style="padding:2px 6px;min-width:0;font-size:14px">${isHero?'⭐':'☆'}</button></td>
+   <td><button class="btn sm" data-edit="${p.id}" style="padding:3px 10px">✎</button></td></tr>`;
+ }).join('');
+
+ /* edit button */
  $('pTable').querySelectorAll('[data-edit]').forEach(b=>b.onclick=e=>{e.stopPropagation();editProd(+b.dataset.edit)});
- $('pTable').querySelectorAll('tr[data-pid]').forEach(r=>r.onclick=()=>editProd(+r.dataset.pid))}
+ $('pTable').querySelectorAll('tr[data-pid]').forEach(r=>r.onclick=e=>{if(e.target.closest('button'))return;editProd(+r.dataset.pid)});
+
+ /* quick toggle visibilità */
+ $('pTable').querySelectorAll('[data-ptoggle]').forEach(b=>b.onclick=e=>{
+  e.stopPropagation();
+  const p=(S.P||[]).find(x=>x.id===+b.dataset.ptoggle);if(!p)return;
+  p.hidden=!p.hidden;markDirty();renderProd();
+  toast(p.hidden?`#${p.id} nascosto`:`#${p.id} visibile`)});
+
+ /* quick toggle hero */
+ $('pTable').querySelectorAll('[data-phero]').forEach(b=>b.onclick=e=>{
+  e.stopPropagation();
+  const pid=+b.dataset.phero;
+  S.CONFIG.heroFeatured=S.CONFIG.heroFeatured||[];
+  const idx=S.CONFIG.heroFeatured.indexOf(pid);
+  if(idx>=0)S.CONFIG.heroFeatured.splice(idx,1);else S.CONFIG.heroFeatured.push(pid);
+  markDirty();renderProd();
+  toast(idx>=0?`#${pid} rimosso da In Evidenza`:`#${pid} aggiunto a In Evidenza`)});
+
+ /* drag & drop riordino */
+ initProdDrag();
+}
+
+function initProdDrag(){
+ const tbl=$('pTable');if(!tbl)return;
+ let dragRow=null;
+ tbl.querySelectorAll('tr[data-pid]').forEach(tr=>{
+  tr.addEventListener('dragstart',e=>{dragRow=tr;tr.classList.add('dragging');e.dataTransfer.effectAllowed='move'});
+  tr.addEventListener('dragend',()=>{dragRow=null;tbl.querySelectorAll('tr').forEach(r=>r.classList.remove('dragging','drag-over'))});
+  tr.addEventListener('dragover',e=>{e.preventDefault();if(tr===dragRow)return;tbl.querySelectorAll('tr').forEach(r=>r.classList.remove('drag-over'));tr.classList.add('drag-over')});
+  tr.addEventListener('drop',e=>{
+   e.preventDefault();tr.classList.remove('drag-over');if(!dragRow||dragRow===tr)return;
+   const fromId=+dragRow.dataset.pid,toId=+tr.dataset.pid;
+   const fi=S.P.findIndex(p=>p.id===fromId),ti=S.P.findIndex(p=>p.id===toId);
+   if(fi<0||ti<0)return;
+   const [item]=S.P.splice(fi,1);S.P.splice(ti,0,item);
+   markDirty();renderProd();toast('Ordine aggiornato')});
+ });
+}
+
 $('pSearch').oninput=renderProd;$('pCatF').onchange=renderProd;
+if($('pStatusF'))$('pStatusF').onchange=renderProd;
 $('pNew').onclick=()=>{const id=Math.max(0,...(S.P||[]).map(p=>p.id))+1;
  S.P.push({id,cat:(S.CATS[0]||{}).id||'casa',sub:1,n:{it:'Nuovo prodotto',en:'New product'},mat:'Legno',price:10,icon:'✨',rev:0,prod:3});markDirty();editProd(id)};
 function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;

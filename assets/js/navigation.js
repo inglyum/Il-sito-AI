@@ -35,7 +35,7 @@ export function show(page){
 
   if(cur && cur!==next && !reduceMotion()){
     cur.classList.add('leaving');
-    _leaveTimer=setTimeout(()=>{_leaveTimer=null; finish();},140);
+    _leaveTimer=setTimeout(()=>{_leaveTimer=null; finish();},180);
   } else {
     finish();
   }
