@@ -618,15 +618,32 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
       </div>
       <div class="hint" style="margin-top:8px">Ottieni la chiave su <b>app.brevo.com → Impostazioni → API Keys</b>. Il piano gratuito include 300 email/giorno. L'ID lista si trova in <b>Contatti → Liste</b>. Quando configurato, la newsletter usa Brevo invece di Formspree.</div>
     </div>
-    <div class="card"><h3>🤖 Claude AI (facoltativo)</h3>
-      <label>API Key Anthropic (generazione automatica descrizioni e meta SEO)</label>
-      <input type="password" id="sClaudeKey" placeholder="sk-ant-…">
-      <div style="display:flex;gap:10px;align-items:center;margin-top:8px">
-        <button class="btn" id="sSaveClaudeKey">💾 Salva (sessione)</button>
-        <button class="btn err" id="sClearClaudeKey">✕ Rimuovi</button>
-        <span class="hint" id="sClaudeStatus"></span>
+    <div class="card"><h3>🤖 AI Generativa (facoltativo)</h3>
+      <label style="margin-bottom:6px">Provider AI</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="radio" name="sAiProvider" id="sAiProvClaude" value="claude"> Claude (Anthropic) — qualità massima</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="radio" name="sAiProvider" id="sAiProvGemini" value="gemini"> Gemini Flash (Google) — piano gratuito disponibile</label>
       </div>
-      <div class="hint" style="margin-top:8px">La chiave è salvata solo nella sessione corrente del browser e non viene mai inviata al repository. Ottienila su <b>console.anthropic.com</b> → API Keys.</div>
+      <div id="sAiBlockClaude">
+        <label>API Key Anthropic</label>
+        <input type="password" id="sClaudeKey" placeholder="sk-ant-…">
+        <div style="display:flex;gap:10px;align-items:center;margin-top:8px">
+          <button class="btn" id="sSaveClaudeKey">💾 Salva (sessione)</button>
+          <button class="btn err" id="sClearClaudeKey">✕ Rimuovi</button>
+          <span class="hint" id="sClaudeStatus"></span>
+        </div>
+        <div class="hint" style="margin-top:6px">Ottienila su <b>console.anthropic.com → API Keys</b>. La chiave non viene mai inviata al repository.</div>
+      </div>
+      <div id="sAiBlockGemini" style="display:none">
+        <label>API Key Google Gemini</label>
+        <input type="password" id="sGeminiKey" placeholder="AIza…">
+        <div style="display:flex;gap:10px;align-items:center;margin-top:8px">
+          <button class="btn" id="sSaveGeminiKey">💾 Salva (sessione)</button>
+          <button class="btn err" id="sClearGeminiKey">✕ Rimuovi</button>
+          <span class="hint" id="sGeminiStatus"></span>
+        </div>
+        <div class="hint" style="margin-top:6px">Ottienila su <b>aistudio.google.com → Get API Key</b> — gratuita (15 req/min). La chiave non viene mai inviata al repository.</div>
+      </div>
     </div>
   </section>
 
@@ -1124,28 +1141,12 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
   <hr class="hr"><div style="display:flex;gap:10px;flex-wrap:wrap">
    <button class="btn pri" id="ep_save">✔ Salva</button><button class="btn" id="ep_dup">⧉ Duplica</button><button class="btn err" id="ep_del">🗑 Elimina</button><button class="btn" onclick="closeModal()">Annulla</button></div>`);
  $('ep_cat').onchange=()=>{$('ep_sub').innerHTML=subOptions($('ep_cat').value,1)};
- $('ep_reladd').onchange=()=>{const v=+$('ep_reladd').value;if(!v)return;
-  p.rel=p.rel||[];if(!p.rel.includes(v))p.rel.push(v);markDirty();editProd(id)};
- document.querySelectorAll('[data-relx]').forEach(b=>b.onclick=()=>{p.rel.splice(+b.dataset.relx,1);
-  if(!p.rel.length)delete p.rel;markDirty();editProd(id)});
- $('ep_up').onclick=()=>pickImage('img/'+p.id,path=>{if(path!=='img/'+p.id+'.webp')p.img=path;else delete p.img;markDirty();editProd(id)},'prodotto');
- $('ep_galup').onclick=()=>{const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=true;
-  inp.onchange=async()=>{const files=[...inp.files];if(!files.length)return;
-   p.gallery=p.gallery||[];toast('Elaboro '+files.length+' immagini…');let ok=0;
-   for(const f of files){try{const proc=await processImage(f);
-    let n=(p.gallery||[]).length+1;while((REPO_IMG||[]).includes(p.id+'-g'+n+'.webp')||MEDIA.some(m=>m.path==='img/'+p.id+'-g'+n+'.webp'))n++;
-    const path='img/'+p.id+'-g'+n+'.'+proc.ext;await stageWithVariants(path,proc);p.gallery.push(path);ok++;
-   }catch(e){console.warn(e)}}
-   markDirty();editProd(id);toast(ok+' immagini aggiunte alla gallery')};
-  inp.click()};
- $('ep_lib').onclick=()=>pickFromLibrary(sel=>{
-  if(!sel.length)return;p.img=sel[0];
-  if(sel.length>1){p.gallery=p.gallery||[];sel.slice(1).forEach(s=>{if(!p.gallery.includes(s))p.gallery.push(s)})}
-  markDirty();editProd(id)});
- $('ep_gal').querySelectorAll('[data-gx]').forEach(b=>b.onclick=()=>{p.gallery.splice(+b.dataset.gx,1);if(!p.gallery.length)delete p.gallery;markDirty();editProd(id)});
- $('ep_gal').querySelectorAll('[data-gm]').forEach(b=>b.onclick=()=>{const[i,d]=b.dataset.gm.split(',').map(Number);const j=i+d;if(j<0||j>=p.gallery.length)return;[p.gallery[i],p.gallery[j]]=[p.gallery[j],p.gallery[i]];markDirty();editProd(id)});
- $('ep_save').onclick=()=>{p.n.it=$('ep_nit').value;p.n.en=$('ep_nen').value;p.cat=$('ep_cat').value;p.sub=+$('ep_sub').value||1;
-  p.icon=$('ep_icon').value;p.price=+$('ep_price').value||0;p.mat=$('ep_mat').value;p.prod=+$('ep_prod').value||3;p.rev=+$('ep_rev').value||0;
+ /* Legge i campi testo correnti nella scheda SENZA chiudere il modal */
+ function gatherFields(){
+  p.n.it=$('ep_nit').value;p.n.en=$('ep_nen').value;
+  p.cat=$('ep_cat').value;p.sub=+$('ep_sub').value||1;
+  p.icon=$('ep_icon').value;p.price=+$('ep_price').value||0;
+  p.mat=$('ep_mat').value;p.prod=+$('ep_prod').value||3;p.rev=+$('ep_rev').value||0;
   const dit=$('ep_dit').value.trim(),den=$('ep_den').value.trim();
   if(dit||den)p.desc={it:dit,en:den||dit};else delete p.desc;
   const sku=$('ep_sku').value.trim();sku?p.sku=sku:delete p.sku;
@@ -1158,7 +1159,29 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
   sz.length?p.misure=sz:delete p.misure;
   const tag=$('ep_tag').value.trim();tag?p.tag=tag:delete p.tag;
   const coll=$('ep_coll').value.split(',').map(s=>s.trim()).filter(Boolean);coll.length?p.coll=coll:delete p.coll;
-  markDirty();closeModal();renderProd();toast('Prodotto salvato in bozza')};
+ }
+ $('ep_reladd').onchange=()=>{const v=+$('ep_reladd').value;if(!v)return;
+  gatherFields();p.rel=p.rel||[];if(!p.rel.includes(v))p.rel.push(v);markDirty();editProd(id)};
+ document.querySelectorAll('[data-relx]').forEach(b=>b.onclick=()=>{
+  gatherFields();p.rel.splice(+b.dataset.relx,1);
+  if(!p.rel.length)delete p.rel;markDirty();editProd(id)});
+ $('ep_up').onclick=()=>pickImage('img/'+p.id,path=>{gatherFields();if(path!=='img/'+p.id+'.webp')p.img=path;else delete p.img;markDirty();editProd(id)},'prodotto');
+ $('ep_galup').onclick=()=>{const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=true;
+  inp.onchange=async()=>{const files=[...inp.files];if(!files.length)return;
+   gatherFields();p.gallery=p.gallery||[];toast('Elaboro '+files.length+' immagini…');let ok=0;
+   for(const f of files){try{const proc=await processImage(f);
+    let n=(p.gallery||[]).length+1;while((REPO_IMG||[]).includes(p.id+'-g'+n+'.webp')||MEDIA.some(m=>m.path==='img/'+p.id+'-g'+n+'.webp'))n++;
+    const path='img/'+p.id+'-g'+n+'.'+proc.ext;await stageWithVariants(path,proc);p.gallery.push(path);ok++;
+   }catch(e){console.warn(e)}}
+   markDirty();editProd(id);toast(ok+' immagini aggiunte alla gallery')};
+  inp.click()};
+ $('ep_lib').onclick=()=>pickFromLibrary(sel=>{
+  if(!sel.length)return;gatherFields();p.img=sel[0];
+  if(sel.length>1){p.gallery=p.gallery||[];sel.slice(1).forEach(s=>{if(!p.gallery.includes(s))p.gallery.push(s)})}
+  markDirty();editProd(id)});
+ $('ep_gal').querySelectorAll('[data-gx]').forEach(b=>b.onclick=()=>{gatherFields();p.gallery.splice(+b.dataset.gx,1);if(!p.gallery.length)delete p.gallery;markDirty();editProd(id)});
+ $('ep_gal').querySelectorAll('[data-gm]').forEach(b=>b.onclick=()=>{gatherFields();const[i,d]=b.dataset.gm.split(',').map(Number);const j=i+d;if(j<0||j>=p.gallery.length)return;[p.gallery[i],p.gallery[j]]=[p.gallery[j],p.gallery[i]];markDirty();editProd(id)});
+ $('ep_save').onclick=()=>{gatherFields();markDirty();closeModal();renderProd();toast('Prodotto salvato in bozza ✔')};
  $('ep_dup').onclick=()=>{const nid=Math.max(...S.P.map(x=>x.id))+1;const c=JSON.parse(jstr(p));c.id=nid;c.n.it+=' (copia)';delete c.img;delete c.gallery;S.P.push(c);markDirty();closeModal();renderProd();toast('Duplicato come #'+nid)};
  $('ep_del').onclick=()=>{const used=(S.CONFIG.heroFeatured||[]).includes(p.id);
   if(!confirm('Eliminare «'+p.n.it+'»?'+(used?'\nATTENZIONE: è tra i prodotti in evidenza della Hero — verrà rimosso anche da lì.':'')))return;
@@ -2486,27 +2509,64 @@ $('sTest').onclick=async()=>{const o=$('sTestOut');o.textContent='verifica…';
 
 /* ================== CLAUDE AI ================== */
 function claudeKey(){return sessionStorage.getItem('ingly_claude_key')||''}
+function geminiKey(){return sessionStorage.getItem('ingly_gemini_key')||''}
+function aiProvider(){return localStorage.getItem('ingly_ai_provider')||'claude'}
+function setAiProvider(v){localStorage.setItem('ingly_ai_provider',v)}
 function setClaudeKey(k){if(k)sessionStorage.setItem('ingly_claude_key',k);else sessionStorage.removeItem('ingly_claude_key')}
 
 /* Settings panel — Claude key bindings (called inside renderSet) */
 const _origRenderSet=renderSet;
 renderSet=function(){_origRenderSet();
+ /* --- Claude --- */
  $('sClaudeKey').value=claudeKey()?'••••••••••••••••••':'';
  $('sClaudeStatus').textContent=claudeKey()?'✔ Chiave configurata (sessione)':'Non configurata';
  $('sSaveClaudeKey').onclick=()=>{const k=$('sClaudeKey').value.trim();if(!k||k.startsWith('•'))return toast('Inserisci la chiave API');setClaudeKey(k);$('sClaudeKey').value='';$('sClaudeStatus').textContent='✔ Chiave configurata (sessione)';toast('Chiave Claude salvata in sessione')};
- $('sClearClaudeKey').onclick=()=>{setClaudeKey('');$('sClaudeKey').value='';$('sClaudeStatus').textContent='Non configurata';toast('Chiave rimossa')}};
+ $('sClearClaudeKey').onclick=()=>{setClaudeKey('');$('sClaudeKey').value='';$('sClaudeStatus').textContent='Non configurata';toast('Chiave rimossa')};
+ /* --- Gemini --- */
+ $('sGeminiKey').value=geminiKey()?'••••••••••••••••••':'';
+ $('sGeminiStatus').textContent=geminiKey()?'✔ Chiave configurata (sessione)':'Non configurata';
+ $('sSaveGeminiKey').onclick=()=>{const k=$('sGeminiKey').value.trim();if(!k||k.startsWith('•'))return toast('Inserisci la chiave API Gemini');sessionStorage.setItem('ingly_gemini_key',k);$('sGeminiKey').value='';$('sGeminiStatus').textContent='✔ Chiave configurata (sessione)';toast('Chiave Gemini salvata in sessione')};
+ $('sClearGeminiKey').onclick=()=>{sessionStorage.removeItem('ingly_gemini_key');$('sGeminiKey').value='';$('sGeminiStatus').textContent='Non configurata';toast('Chiave Gemini rimossa')};
+ /* --- Provider selector --- */
+ const prov=aiProvider();
+ const rClaude=$('sAiProvClaude'),rGemini=$('sAiProvGemini');
+ if(rClaude)rClaude.checked=prov==='claude';
+ if(rGemini)rGemini.checked=prov==='gemini';
+ function updateAiBlocks(){
+  const sel=document.querySelector('input[name="sAiProvider"]:checked')?.value||'claude';
+  setAiProvider(sel);
+  $('sAiBlockClaude').style.display=sel==='claude'?'':'none';
+  $('sAiBlockGemini').style.display=sel==='gemini'?'':'none';
+ }
+ updateAiBlocks();
+ document.querySelectorAll('input[name="sAiProvider"]').forEach(r=>r.onchange=updateAiBlocks);
+};
 
-async function callClaude(systemPrompt,userPrompt){
- const key=claudeKey();if(!key)throw new Error('Configura prima la chiave API Claude in Impostazioni → Claude AI');
+/* Chiama Claude o Gemini in base al provider selezionato nelle Impostazioni */
+async function callAI(systemPrompt,userPrompt){
+ const prov=aiProvider();
+ if(prov==='gemini'){
+  const key=geminiKey();if(!key)throw new Error('Configura la chiave API Gemini in Impostazioni → AI Generativa');
+  const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(key)}`,
+   {method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({systemInstruction:{parts:[{text:systemPrompt}]},contents:[{role:'user',parts:[{text:userPrompt}]}],
+     generationConfig:{maxOutputTokens:800,temperature:0.7}})});
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||'HTTP '+r.status)}
+  const d=await r.json();return d.candidates?.[0]?.content?.parts?.[0]?.text||'';
+ }
+ /* default: Claude */
+ const key=claudeKey();if(!key)throw new Error('Configura la chiave API Claude in Impostazioni → AI Generativa');
  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
   body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:800,system:systemPrompt,messages:[{role:'user',content:userPrompt}]})});
  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||'HTTP '+r.status)}
  const d=await r.json();return d.content[0].text}
+/* alias retrocompatibile */
+const callClaude=(s,u)=>callAI(s,u);
 
 /* Product description AI generation — wired in editProd */
 async function aiGenDesc(p){
  const status=$('ep_aiStatus');if(!status)return;
- const key=claudeKey();if(!key){status.innerHTML='<span style="color:var(--warn)">Chiave AI mancante — vai in Impostazioni → Claude AI</span>';return}
+ if(aiProvider()==='gemini'?!geminiKey():!claudeKey()){status.innerHTML='<span style="color:var(--warn)">Chiave AI mancante — vai in Impostazioni → AI Generativa</span>';return}
  const cat=(S.CATS||[]).find(c=>c.id===p.cat);
  const sub=cat?.sub?.[p.sub-1]?.it||'';
  const userPrompt=`Prodotto: ${p.n.it} / ${p.n.en}\nCategoria: ${cat?.n?.it||p.cat}${sub?' · '+sub:''}\nMateriale: ${p.mat}\nPrezzo: €${p.price}\nTag: ${p.tag||'—'}\n\nGenera una descrizione professionale e persuasiva in JSON: {"it":"…","en":"…"}.\nIT: 70-100 parole, tono artigianale made-in-Italy, includi materiale e uso pratico.\nEN: traduzione fedele ma naturale. Niente parole come straordinario, meraviglioso, fantastico.`;
@@ -2523,7 +2583,7 @@ async function aiGenDesc(p){
 /* ---- Nome AI: genera IT+EN partendo da categoria+materiale ---- */
 async function aiGenName(p){
   const status=$('ep_aiStatus');if(!status)return;
-  const key=claudeKey();if(!key){status.innerHTML='<span style="color:var(--warn)">Chiave AI mancante — vai in Impostazioni → Claude AI</span>';return}
+  if(aiProvider()==='gemini'?!geminiKey():!claudeKey()){status.innerHTML='<span style="color:var(--warn)">Chiave AI mancante — vai in Impostazioni → AI Generativa</span>';return}
   const cat=(S.CATS||[]).find(c=>c.id===p.cat);
   const sub=cat?.sub?.[p.sub-1]?.it||'';
   const prompt=`Crea un nome prodotto commerciale per un articolo artigianale:\nCategoria: ${cat?.n?.it||p.cat}${sub?' · '+sub:''}\nMateriale: ${p.mat}\nPrezzo: €${p.price}\n\nRispondi SOLO in JSON: {"it":"Nome in Italiano","en":"Name in English"}.\nIT: 2-5 parole, evocativo, senza aggettivi vuoti.\nEN: traduzione naturale.`;
@@ -2550,8 +2610,7 @@ editProd=function(id){_origEditProd(id);const p=(S.P||[]).find(x=>x.id===id);if(
 async function aiGenTags(p){
   const status=$('ep_tagAiStatus'),chips=$('ep_tagChips');
   if(!status||!chips) return;
-  const key=claudeKey();
-  if(!key){status.innerHTML='<span style="color:var(--warn)">Chiave AI mancante</span>';return}
+  if(aiProvider()==='gemini'?!geminiKey():!claudeKey()){status.innerHTML='<span style="color:var(--warn)">Chiave AI mancante — vai in Impostazioni → AI Generativa</span>';return}
   const cat=(S.CATS||[]).find(c=>c.id===p.cat);
   const prompt=`Prodotto artigianale INGLY DESIGN:\nNome: ${p.n.it}\nCategoria: ${cat?.n?.it||p.cat}\nMateriale: ${p.mat}\nPrezzo: €${p.price}\n\nSuggerisci 6-8 etichette brevi in italiano, max 2 parole ciascuna, utili per un e-commerce artigianale.\nRispondi SOLO con JSON: {"tags":["Tag1","Tag2","..."]}`;
   const sys='Esperto di ecommerce artigianale. Rispondi SOLO con JSON valido.';
@@ -2581,8 +2640,7 @@ async function aiGenTags(p){
   let running=false;
   runBtn.onclick=async()=>{
     if(running) return;
-    const key=claudeKey();
-    if(!key){toast('Configura prima la chiave Claude AI in Impostazioni → Claude AI');return}
+    if(aiProvider()==='gemini'?!geminiKey():!claudeKey()){toast('Configura prima una chiave AI in Impostazioni → AI Generativa');return}
     const forceAll=$('batchAiAll').checked;
     const products=(S.P||[]).filter(p=>forceAll?true:!p.desc||!p.desc.it||p.desc.it.trim()==='');
     if(!products.length){log.innerHTML+='<div style="color:var(--ok)">✔ Tutti i prodotti hanno già una descrizione. Spunta "Rigenera" per forzare.</div>';return}
