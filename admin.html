@@ -1086,8 +1086,9 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
   </div>
   <label>Descrizione (IT)</label><textarea id="ep_dit">${esc((p.desc&&p.desc.it)||'')}</textarea>
   <label>Description (EN)</label><textarea id="ep_den">${esc((p.desc&&p.desc.en)||'')}</textarea>
-  <div style="display:flex;gap:10px;align-items:center;margin-top:4px;margin-bottom:12px">
-   <button class="btn" id="ep_aiGen">✨ Genera con AI</button>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px;margin-bottom:12px">
+   <button class="btn" id="ep_aiGen">✨ Genera descrizione AI</button>
+   <button class="btn" id="ep_aiName">✨ Genera nome AI</button>
    <span class="hint" id="ep_aiStatus"></span>
   </div>
   <div class="row c2">
@@ -2498,7 +2499,7 @@ renderSet=function(){_origRenderSet();
 async function callClaude(systemPrompt,userPrompt){
  const key=claudeKey();if(!key)throw new Error('Configura prima la chiave API Claude in Impostazioni → Claude AI');
  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-  body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:500,system:systemPrompt,messages:[{role:'user',content:userPrompt}]})});
+  body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:800,system:systemPrompt,messages:[{role:'user',content:userPrompt}]})});
  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||'HTTP '+r.status)}
  const d=await r.json();return d.content[0].text}
 
@@ -2519,10 +2520,30 @@ async function aiGenDesc(p){
  catch(e){status.innerHTML='<span style="color:var(--err)">✖ '+esc(e.message)+'</span>'}
  finally{$('ep_aiGen').disabled=false}}
 
+/* ---- Nome AI: genera IT+EN partendo da categoria+materiale ---- */
+async function aiGenName(p){
+  const status=$('ep_aiStatus');if(!status)return;
+  const key=claudeKey();if(!key){status.innerHTML='<span style="color:var(--warn)">Chiave AI mancante — vai in Impostazioni → Claude AI</span>';return}
+  const cat=(S.CATS||[]).find(c=>c.id===p.cat);
+  const sub=cat?.sub?.[p.sub-1]?.it||'';
+  const prompt=`Crea un nome prodotto commerciale per un articolo artigianale:\nCategoria: ${cat?.n?.it||p.cat}${sub?' · '+sub:''}\nMateriale: ${p.mat}\nPrezzo: €${p.price}\n\nRispondi SOLO in JSON: {"it":"Nome in Italiano","en":"Name in English"}.\nIT: 2-5 parole, evocativo, senza aggettivi vuoti.\nEN: traduzione naturale.`;
+  const sys='Copywriter per INGLY DESIGN, studio laser artigianale italiano. Solo JSON valido.';
+  status.textContent='Generazione nome…';const btn=$('ep_aiName');if(btn)btn.disabled=true;
+  try{
+    const raw=await callClaude(sys,prompt);
+    const names=JSON.parse(raw.trim().replace(/^```json\n?|\n?```$/g,''));
+    if(!names.it||!names.en)throw new Error('Risposta incompleta');
+    $('ep_nit').value=names.it;$('ep_nen').value=names.en;
+    status.innerHTML='<span style="color:var(--ok)">✔ Nome generato — controlla e salva</span>';
+  }catch(e){status.innerHTML='<span style="color:var(--err)">✖ '+esc(e.message)+'</span>'}
+  finally{if(btn)btn.disabled=false}
+}
+
 /* Wire AI button after editProd renders the modal */
 const _origEditProd=editProd;
 editProd=function(id){_origEditProd(id);const p=(S.P||[]).find(x=>x.id===id);if(!p)return;
   const btn=$('ep_aiGen');if(btn)btn.onclick=()=>aiGenDesc(p);
+  const nameBtn=$('ep_aiName');if(nameBtn)nameBtn.onclick=()=>aiGenName(p);
   const tagBtn=$('ep_tagAi');if(tagBtn)tagBtn.onclick=()=>aiGenTags(p)};
 
 /* ---- Tag AI: suggerisce 6-8 tag per il prodotto ---- */

@@ -2,12 +2,26 @@
   "name": "INGLY DESIGN",
   "short_name": "INGLY",
   "description": "Premium Custom Creations — incisione laser, stampa UV/DTF e 3D, made in Italy.",
-  "start_url": "/",
+  "start_url": "/?source=pwa",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#0a0d18",
   "theme_color": "#0a0d18",
+  "lang": "it",
+  "categories": ["shopping", "lifestyle"],
   "icons": [
-    { "src": "favicon/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "favicon/icon-512.png", "sizes": "512x512", "type": "image/png" }
-  ]
+    { "src": "favicon/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "favicon/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Catalogo", "url": "/#/shop", "description": "Sfoglia tutti i prodotti" },
+    { "name": "Preventivo", "url": "/#/quote", "description": "Richiedi un preventivo" },
+    { "name": "Portfolio", "url": "/#/portfolio", "description": "Guarda i nostri lavori" }
+  ],
+  "share_target": {
+    "action": "/#/quote",
+    "method": "GET",
+    "params": { "title": "qTitle", "text": "qNote", "url": "qUrl" }
+  }
 }

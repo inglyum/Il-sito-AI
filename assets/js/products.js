@@ -2,6 +2,7 @@
    Catalogo, shop (filtri/ricerca/ordinamento), pagina prodotto con
    configuratore e prezzo live, digitale, carrello, wishlist. */
 import { $, T, eur, imgTag, imgV, srcsetFor, focalOf, icon, toast, L } from './utils.js';
+import { refTag, onOrderPlaced } from './referral.js';
 const { MAT_ART, MATN, CATS, P, DIG, CONFIG } = window.INGLY;
 /* materiale sempre risolvibile: MAT_ART[mat] mancante faceva crollare l'intero sito */
 const matArt = m => MAT_ART[m] || MAT_ART[Object.keys(MAT_ART)[0]] || { bg:'#3a2f26,#6b543e' };
@@ -505,7 +506,9 @@ export function checkoutWhatsApp(){
   if(activeCoupon) msg+=`\n${L==='it'?'Codice sconto':'Discount code'}: ${activeCoupon.code} (${activeCoupon.label})`;
   msg+='\n'+(L==='it'?'Totale stimato':'Estimated total')+': *'+eur(total)+'*';
   msg+='\n\n'+(L==='it'?'📍 Confermate il preventivo definitivo con prova grafica prima della produzione.':'📍 We\'ll confirm the final quote with a graphic proof before production.');
+  msg+='\n'+refTag();
   window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank');
+  onOrderPlaced();
   /* premia l'utente con punti fedeltà */
   const pts = Math.floor(total);
   try{

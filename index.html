@@ -82,6 +82,7 @@
 <link rel="modulepreload" href="assets/js/main.js">
 <link rel="modulepreload" href="assets/js/products.js">
 <link rel="modulepreload" href="assets/js/wishlist.js">
+<link rel="modulepreload" href="assets/js/referral.js">
 
 <script src="assets/js/artwork.js"></script>
 <link rel="stylesheet" href="assets/css/reset.css">
@@ -583,6 +584,45 @@
   <div class="lbx-count" id="lbxCount"></div>
 </div>
 <div class="toast" id="toast"><span class="dotl"></span><span id="toastMsg"></span></div>
+
+<!-- Install PWA prompt -->
+<div class="pwa-install-bar" id="pwaBar" hidden>
+  <span>📲 Aggiungi INGLY alla schermata home</span>
+  <div class="pwa-btns">
+    <button class="btn btn-primary" id="pwaInstall" style="font-size:13px;padding:6px 16px">Installa</button>
+    <button class="btn btn-ghost" id="pwaDismiss" style="font-size:12px;padding:5px 10px">✕</button>
+  </div>
+</div>
+
+<!-- Service Worker + PWA install -->
+<script>
+(function(){
+  /* SW registration */
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',()=>{
+      navigator.serviceWorker.register('/sw.js').catch(()=>{});
+    });
+  }
+  /* Install prompt */
+  let deferredPrompt=null;
+  window.addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault(); deferredPrompt=e;
+    const bar=document.getElementById('pwaBar');
+    if(bar && !sessionStorage.getItem('ingly_pwa_x')) bar.hidden=false;
+  });
+  document.addEventListener('click',e=>{
+    if(e.target.id==='pwaInstall' && deferredPrompt){
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; document.getElementById('pwaBar').hidden=true; });
+    }
+    if(e.target.id==='pwaDismiss'){
+      document.getElementById('pwaBar').hidden=true;
+      sessionStorage.setItem('ingly_pwa_x','1');
+    }
+  });
+  window.addEventListener('appinstalled',()=>{ document.getElementById('pwaBar').hidden=true; });
+})();
+</script>
 
 <!-- Cloudflare Web Analytics — privacy-first, no cookies, GDPR compliant -->
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "INSERISCI_QUI_IL_TOKEN_CF"}'></script>

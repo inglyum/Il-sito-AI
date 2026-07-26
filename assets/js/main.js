@@ -10,6 +10,7 @@ import { renderUrg, initForms } from './forms.js';
 import { initLazy } from './lazyload.js';
 import { initSeo, updateSeo } from './seo.js';
 import * as wish from './wishlist.js';
+import { initReferral, shareRef } from './referral.js';
 
 /* ---- config → DOM ---- */
 function initHeroVideo(){
@@ -300,6 +301,7 @@ const actions={
   'wish-add-cart':(el,e)=>{e.stopPropagation();prod.addToCart(el.dataset.id);toast(T('ppAdd'));wish.closeWish()},
   'wish-rm':(el,e)=>{e.stopPropagation();wish.toggleWishItem(+el.dataset.id,el)},
   'close-promo-pop':()=>wish.closePromoPopup(),
+  'ref-share':()=>shareRef(),
   'quick-add':(el,e)=>{e.stopPropagation();prod.addToCart(el.dataset.id)},
   'open-cart':()=>prod.openCart(),
   'close-cart':()=>prod.closeCart(),
@@ -416,6 +418,7 @@ initBgPicker();
 wish.initWish();
 wish.initPromoPopup();
 window._wish = wish;
+initReferral();
 /* rete di sicurezza: nessuna sezione può restare invisibile per un errore di animazione */
 setTimeout(()=>{
   const stuck=[...document.querySelectorAll('.reveal')].filter(el=>{
