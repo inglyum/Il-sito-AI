@@ -26,8 +26,8 @@ if (P && Array.isArray(P)) {
     if (CATS && !CATS.some(c => c.id === p.cat)) errors.push(`Prodotto #${p.id}: categoria "${p.cat}" inesistente`);
     if (CATS) {
       const c = CATS.find(c => c.id === p.cat);
-      if (c && c.sub && c.sub.length && p.sub >= c.sub.length)
-        errors.push(`Prodotto #${p.id}: sottocategoria ${p.sub} fuori indice per "${p.cat}"`);
+      if (c && c.sub && c.sub.length && (p.sub < 1 || p.sub > c.sub.length))
+        errors.push(`Prodotto #${p.id}: sottocategoria ${p.sub} fuori indice per "${p.cat}" (valori validi: 1–${c.sub.length})`);
     }
     if (!p.hidden && !existsSync('img/' + p.id + '.webp') && !p.img)
       warn.push(`Prodotto #${p.id} ("${p.n && p.n.it}"): nessuna foto in img/${p.id}.webp (userà il segnaposto)`);
