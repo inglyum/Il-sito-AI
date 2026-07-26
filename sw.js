@@ -6,7 +6,7 @@
    - HTML / navigazione → Network-first con fallback offline page
    Offline page: mostrata solo se non si può caricare nessuna risorsa HTML. */
 
-const CACHE_VER   = 'ingly-v1';
+const CACHE_VER   = 'ingly-v2';
 const CACHE_ASSETS= CACHE_VER + '-assets';
 const CACHE_DATA  = CACHE_VER + '-data';
 const CACHE_IMG   = CACHE_VER + '-img';

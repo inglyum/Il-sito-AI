@@ -545,18 +545,6 @@
   </div>
 </aside>
 
-<!-- Exit-intent / promo popup -->
-<div class="promo-pop-ov" id="promoPopOv" hidden>
-  <div class="promo-pop" id="promoPop" role="dialog" aria-modal="true" aria-labelledby="promoPopTitle">
-    <button class="promo-pop-x" id="promoPopX" aria-label="Chiudi">✕</button>
-    <div class="promo-pop-emoji" id="promoPopEmoji">🎁</div>
-    <h2 class="promo-pop-title" id="promoPopTitle"></h2>
-    <p class="promo-pop-sub" id="promoPopSub"></p>
-    <div class="promo-pop-code" id="promoPopCode" hidden></div>
-    <button class="btn btn-primary magnetic" id="promoPopCta" data-action="close-promo-pop"></button>
-  </div>
-</div>
-
 <!-- Loyalty points toast -->
 <div class="loyalty-toast" id="loyaltyToast" hidden>
   <span class="loyalty-icon">⭐</span>
@@ -565,6 +553,7 @@
     <span id="loyaltyToastSub"></span>
   </div>
 </div>
+<!-- Promo popup: iniettato da JS solo quando attivo:true in admin (content.json → POPUP) -->
 
 <div id="promoBar"></div>
 <a id="waFab" class="wa-fab" href="#" target="_blank" rel="noopener" style="display:none" aria-label="WhatsApp">

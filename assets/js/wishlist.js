@@ -167,30 +167,39 @@ export function initPromoPopup(){
 }
 
 function renderPopup(cfg){
-  const ov = $('promoPopOv'); if(!ov) return;
-  const title = cfg.titolo && cfg.titolo[L] || (L==='it'?'Offerta speciale!':'Special offer!');
+  /* Crea il DOM dinamicamente — non dipende da HTML statici nell'index */
+  const title = cfg.titolo && cfg.titolo[L] || '';
   const sub   = cfg.testo  && cfg.testo[L]  || '';
   const code  = cfg.codice || '';
-  const cta   = cfg.cta    && cfg.cta[L]    || (L==='it'?'Continua a fare shopping':'Continue shopping');
-  const emoji = cfg.emoji || '🎁';
+  const cta   = cfg.cta    && cfg.cta[L]    || (L==='it'?'Continua':'OK');
+  const emoji = cfg.emoji  || '🎁';
 
-  $('promoPopEmoji').textContent = emoji;
-  $('promoPopTitle').textContent = title;
-  $('promoPopSub').textContent   = sub;
-  const codeEl = $('promoPopCode');
-  if(code && codeEl){ codeEl.hidden = false; codeEl.innerHTML = `Codice: <b class="pop-code">${code}</b> <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" id="popCopyBtn">Copia</button>`; }
-  $('promoPopCta').textContent = cta;
+  /* rimuovi eventuale popup precedente */
+  const old = document.getElementById('promoPopOv'); if(old) old.remove();
 
-  ov.hidden = false;
+  const ov = document.createElement('div');
+  ov.id = 'promoPopOv'; ov.className = 'promo-pop-ov';
+  ov.innerHTML = `
+    <div class="promo-pop" role="dialog" aria-modal="true">
+      <button class="promo-pop-x" id="promoPopX" aria-label="Chiudi">✕</button>
+      <div class="promo-pop-emoji">${emoji}</div>
+      ${title?`<h2 class="promo-pop-title">${title}</h2>`:''}
+      ${sub?`<p class="promo-pop-sub">${sub}</p>`:''}
+      ${code?`<div class="promo-pop-code">Codice: <b class="pop-code">${code}</b> <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" id="popCopyBtn">Copia</button></div>`:''}
+      <button class="btn btn-primary" id="promoPopCta" style="margin-top:8px">${cta}</button>
+    </div>`;
+  document.body.appendChild(ov);
   document.body.style.overflow = 'hidden';
 
-  /* copy button */
+  ov.addEventListener('click', e=>{
+    if(e.target===ov || e.target.id==='promoPopX' || e.target.id==='promoPopCta') closePromoPopup();
+  });
   const copyBtn = document.getElementById('popCopyBtn');
   if(copyBtn) copyBtn.addEventListener('click', ()=>{ try{ navigator.clipboard.writeText(code); toast(L==='it'?'Codice copiato!':'Code copied!'); }catch(e){} });
 }
 
 export function closePromoPopup(){
-  const ov = $('promoPopOv'); if(!ov) return;
-  ov.hidden = true;
+  const ov = document.getElementById('promoPopOv');
+  if(ov){ ov.style.opacity='0'; setTimeout(()=>ov.remove(),300); }
   document.body.style.overflow = '';
 }
