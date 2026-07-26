@@ -2,6 +2,7 @@
 
 
 *{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{font-family:var(--fb);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 h1,h2,h3,h4{font-family:var(--fd);line-height:1.05;letter-spacing:-.02em;font-weight:700}
