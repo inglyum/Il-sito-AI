@@ -28,8 +28,56 @@ export function observeAll(){
   });
 }
 
+/* ===== LASER CURSOR =====
+   Cursore personalizzato: punto dorato + anello che segue con ritardo + trail di particelle.
+   Attivo solo su dispositivi con hover (desktop). Rispetta prefers-reduced-motion. */
+function initLaserCursor(){
+  if(!window.matchMedia) return;
+  if(matchMedia('(hover:none)').matches) return;
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+
+  /* inject DOM se non esiste già */
+  if(document.getElementById('lc-dot')) return;
+  const dot=Object.assign(document.createElement('div'),{id:'lc-dot'});
+  const ring=Object.assign(document.createElement('div'),{id:'lc-ring'});
+  document.body.append(dot,ring);
+
+  /* nasconde il cursore nativo sull'intera pagina */
+  document.documentElement.classList.add('laser-cursor');
+
+  let mx=0,my=0,rx=0,ry=0,visible=false;
+
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX;my=e.clientY;
+    if(!visible){dot.style.opacity='1';ring.style.opacity='1';visible=true}
+    dot.style.transform=`translate(${mx}px,${my}px)`;
+  },{passive:true});
+
+  document.addEventListener('mouseleave',()=>{dot.style.opacity='0';ring.style.opacity='0';visible=false});
+
+  /* ring segue con lerp */
+  (function loop(){
+    rx+=(mx-rx)*.14;ry+=(my-ry)*.14;
+    ring.style.transform=`translate(${rx}px,${ry}px)`;
+    requestAnimationFrame(loop);
+  })();
+
+  /* ring si espande su elementi interattivi */
+  document.addEventListener('mouseover',e=>{
+    if(e.target.closest('a,button,[data-action],.pcard,.bcard,.mcard')){
+      ring.classList.add('active');dot.classList.add('active');
+    }
+  },{passive:true});
+  document.addEventListener('mouseout',e=>{
+    if(e.target.closest('a,button,[data-action],.pcard,.bcard,.mcard')){
+      ring.classList.remove('active');dot.classList.remove('active');
+    }
+  },{passive:true});
+}
+
 export function initAnimations(){
   initProductZoom();
+  initLaserCursor();
 
   /* barra avanzamento */
   const prog=document.getElementById('progress');

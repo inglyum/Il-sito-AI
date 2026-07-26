@@ -151,9 +151,32 @@ tr.rowc{cursor:pointer}tr.rowc:hover td{background:rgba(140,160,220,.05)}
     <div class="searchrow">
       <input type="text" id="pSearch" placeholder="Cerca prodotto…">
       <select id="pCatF"></select>
+      <button class="btn" id="pBatchAi" title="Genera descrizioni AI per tutti i prodotti senza descrizione">✨ Batch AI</button>
       <button class="btn pri" id="pNew">➕ Nuovo prodotto</button>
     </div>
     <div class="card" style="padding:8px 12px"><table id="pTable"></table></div>
+    <!-- Batch AI modal (invisibile di default) -->
+    <div id="batchAiBox" style="display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center">
+      <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px 32px;width:min(500px,90vw);position:relative">
+        <h3 style="margin-bottom:6px">✨ Batch AI — Generazione descrizioni</h3>
+        <p class="hint" id="batchAiHint">Genera descrizioni IT/EN per tutti i prodotti che non le hanno ancora.</p>
+        <div style="margin:18px 0 10px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px">
+            <span id="batchAiLabel" style="color:var(--soft)">Pronto</span>
+            <span id="batchAiCount" style="color:var(--mut);font-family:var(--mono)">0 / 0</span>
+          </div>
+          <div style="background:#0d1122;border-radius:6px;height:6px;overflow:hidden">
+            <div id="batchAiBar" style="height:100%;width:0%;background:var(--laser);border-radius:6px;transition:width .3s ease"></div>
+          </div>
+        </div>
+        <div id="batchAiLog" style="background:#060810;border:1px solid var(--line);border-radius:8px;padding:10px 12px;height:140px;overflow-y:auto;font-size:11.5px;font-family:var(--mono);color:var(--soft);margin-bottom:18px"></div>
+        <div style="display:flex;gap:10px">
+          <button class="btn pri" id="batchAiRun">▶ Avvia generazione</button>
+          <button class="btn" id="batchAiClose">Chiudi</button>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--soft);margin:0;cursor:pointer"><input type="checkbox" id="batchAiAll"> Rigenera anche quelli esistenti</label>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ============ CATEGORIE ============ -->
@@ -775,6 +798,11 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
   <div class="row c3"><div><label>Categoria</label><select id="ep_cat">${catOptions(p.cat)}</select></div><div><label>Sottocategoria</label><select id="ep_sub">${subOptions(p.cat,p.sub)}</select></div><div><label>Icona</label><input type="text" id="ep_icon" class="emoji-in" value="${esc(p.icon||'')}"></div></div>
   <div class="row c3"><div><label>Prezzo €</label><input type="number" id="ep_price" value="${p.price}" step="0.5"></div><div><label>Materiale</label><select id="ep_mat">${Object.keys(S.C.MAT_ART||{}).filter(k=>k!=='File').map(m=>`<option${m===p.mat?' selected':''}>${esc(m)}</option>`).join('')}${(S.C.MAT_ART&&S.C.MAT_ART[p.mat])?'':`<option selected>${esc(p.mat||'')}</option>`}</select></div><div><label>Giorni produzione</label><input type="number" id="ep_prod" value="${p.prod||3}"></div></div>
   <div class="row c3"><div><label>Etichetta (es. Best)</label><input type="text" id="ep_tag" value="${esc(p.tag||'')}"></div><div><label>Collezioni (virgola)</label><input type="text" id="ep_coll" value="${esc((p.coll||[]).join(','))}"></div><div><label>Recensioni (n°)</label><input type="number" id="ep_rev" value="${p.rev||0}"></div></div>
+  <div id="ep_tagAiWrap" style="margin:-2px 0 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <button class="btn sm" id="ep_tagAi">✨ Suggerisci tag AI</button>
+    <span class="hint" id="ep_tagAiStatus"></span>
+    <span id="ep_tagChips" style="display:flex;gap:5px;flex-wrap:wrap"></span>
+  </div>
   <label>Descrizione (IT)</label><textarea id="ep_dit">${esc((p.desc&&p.desc.it)||'')}</textarea>
   <label>Description (EN)</label><textarea id="ep_den">${esc((p.desc&&p.desc.en)||'')}</textarea>
   <div style="display:flex;gap:10px;align-items:center;margin-top:4px;margin-bottom:12px">
@@ -2213,7 +2241,82 @@ async function aiGenDesc(p){
 /* Wire AI button after editProd renders the modal */
 const _origEditProd=editProd;
 editProd=function(id){_origEditProd(id);const p=(S.P||[]).find(x=>x.id===id);if(!p)return;
- const btn=$('ep_aiGen');if(btn)btn.onclick=()=>aiGenDesc(p)};
+  const btn=$('ep_aiGen');if(btn)btn.onclick=()=>aiGenDesc(p);
+  const tagBtn=$('ep_tagAi');if(tagBtn)tagBtn.onclick=()=>aiGenTags(p)};
+
+/* ---- Tag AI: suggerisce 6-8 tag per il prodotto ---- */
+async function aiGenTags(p){
+  const status=$('ep_tagAiStatus'),chips=$('ep_tagChips');
+  if(!status||!chips) return;
+  const key=claudeKey();
+  if(!key){status.innerHTML='<span style="color:var(--warn)">Chiave AI mancante</span>';return}
+  const cat=(S.CATS||[]).find(c=>c.id===p.cat);
+  const prompt=`Prodotto artigianale INGLY DESIGN:\nNome: ${p.n.it}\nCategoria: ${cat?.n?.it||p.cat}\nMateriale: ${p.mat}\nPrezzo: €${p.price}\n\nSuggerisci 6-8 etichette brevi in italiano, max 2 parole ciascuna, utili per un e-commerce artigianale.\nRispondi SOLO con JSON: {"tags":["Tag1","Tag2","..."]}`;
+  const sys='Esperto di ecommerce artigianale. Rispondi SOLO con JSON valido.';
+  status.textContent='Analisi…';chips.innerHTML='';
+  const tagBtn=$('ep_tagAi');if(tagBtn)tagBtn.disabled=true;
+  try{
+    const raw=await callClaude(sys,prompt);
+    const data=JSON.parse(raw.trim().replace(/^```json\n?|\n?```$/g,''));
+    if(!Array.isArray(data.tags)||!data.tags.length) throw new Error('Risposta incompleta');
+    chips.innerHTML=data.tags.map(t=>`<button class="chip laser" style="cursor:pointer;border:none" onclick="(function(){var f=document.getElementById('ep_tag');if(f)f.value='${t.replace(/'/g,"\\'")}'})()">${esc(t)}</button>`).join('');
+    status.innerHTML='<span style="color:var(--ok)">✔ Click per applicare</span>';
+  }catch(e){status.innerHTML='<span style="color:var(--err)">✖ '+esc(e.message)+'</span>'}
+  finally{if(tagBtn)tagBtn.disabled=false}
+}
+
+/* ---- Batch AI: genera descrizioni IT+EN per tutti i prodotti ---- */
+(function(){
+  const openBtn=$('pBatchAi'),box=$('batchAiBox'),closeBtn=$('batchAiClose'),
+        runBtn=$('batchAiRun'),bar=$('batchAiBar'),label=$('batchAiLabel'),
+        count=$('batchAiCount'),log=$('batchAiLog');
+  if(!openBtn||!box) return;
+
+  openBtn.onclick=()=>{box.style.display='flex';log.innerHTML='';bar.style.width='0%';label.textContent='Pronto';count.textContent='0 / 0'};
+  closeBtn.onclick=()=>{box.style.display='none'};
+  box.addEventListener('click',e=>{if(e.target===box)box.style.display='none'});
+
+  let running=false;
+  runBtn.onclick=async()=>{
+    if(running) return;
+    const key=claudeKey();
+    if(!key){toast('Configura prima la chiave Claude AI in Impostazioni → Claude AI');return}
+    const forceAll=$('batchAiAll').checked;
+    const products=(S.P||[]).filter(p=>forceAll?true:!p.desc||!p.desc.it||p.desc.it.trim()==='');
+    if(!products.length){log.innerHTML+='<div style="color:var(--ok)">✔ Tutti i prodotti hanno già una descrizione. Spunta "Rigenera" per forzare.</div>';return}
+    running=true;runBtn.disabled=true;closeBtn.disabled=true;
+    label.textContent='Generazione in corso…';
+    let ok=0,fail=0;
+    for(let i=0;i<products.length;i++){
+      const p=products[i];
+      count.textContent=`${i+1} / ${products.length}`;
+      bar.style.width=((i+1)/products.length*100).toFixed(1)+'%';
+      const logLine=document.createElement('div');
+      logLine.textContent=`→ #${p.id} ${p.n.it}…`;
+      log.appendChild(logLine);log.scrollTop=log.scrollHeight;
+      const cat=(S.CATS||[]).find(c=>c.id===p.cat);
+      const sub=cat?.sub?.[p.sub-1]?.it||'';
+      const prompt=`Prodotto: ${p.n.it} / ${p.n.en}\nCategoria: ${cat?.n?.it||p.cat}${sub?' · '+sub:''}\nMateriale: ${p.mat}\nPrezzo: €${p.price}\n\nGenera JSON: {"it":"…","en":"…"}.\nIT: 70-100 parole, tono artigianale made-in-Italy.\nEN: traduzione naturale. No aggettivi vuoti.`;
+      const sys='Copywriter per INGLY DESIGN Cesena. Rispondi SOLO con JSON valido.';
+      try{
+        const raw=await callClaude(sys,prompt);
+        const desc=JSON.parse(raw.trim().replace(/^```json\n?|\n?```$/g,''));
+        if(!desc.it||!desc.en) throw new Error('JSON incompleto');
+        p.desc=desc;ok++;
+        logLine.innerHTML=`<span style="color:var(--ok)">✔</span> #${p.id} ${esc(p.n.it)}`;
+        markDirty();
+      }catch(e){
+        fail++;
+        logLine.innerHTML=`<span style="color:var(--err)">✖</span> #${p.id} ${esc(p.n.it)} — ${esc(e.message)}`;
+      }
+      if(i<products.length-1) await new Promise(r=>setTimeout(r,420));
+    }
+    bar.style.width='100%';
+    label.innerHTML=`<span style="color:var(--ok)">Completato: ${ok} ok${fail?' — <span style="color:var(--err)">'+fail+' errori</span>':''}</span>`;
+    runBtn.disabled=false;closeBtn.disabled=false;running=false;
+    if(ok>0){renderProd();toast(`✨ ${ok} descrizioni generate — pubblica per rendere live`)}
+  };
+})();
 
 /* SEO meta AI generation */
 $('seoAiGen').onclick=async()=>{
