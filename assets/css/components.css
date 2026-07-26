@@ -918,6 +918,7 @@ body{background-color:var(--paper)}
 
 /* ===== WISHLIST DRAWER ===== */
 .drawer--wish{right:0;left:auto}
+.drawer--wish.open{transform:translateX(0)}
 .wish-item{display:flex;gap:14px;align-items:flex-start}
 .wish-item .di-img{width:70px;height:70px;border-radius:10px;overflow:hidden;flex-shrink:0;background:var(--bg-card)}
 .wish-item .di-img img{width:100%;height:100%;object-fit:cover}

@@ -2,7 +2,7 @@
    Wishlist persistente (localStorage), link condivisibile, loyalty points,
    exit-intent popup configurabile dall'admin via content.json. */
 import { $, T, eur, imgTag, toast, L } from './utils.js';
-import { addToCart, toggleWish } from './products.js';
+import { addToCart } from './products.js';
 const { P, CONFIG } = window.INGLY;
 
 /* ===== WISHLIST ===== */
@@ -12,7 +12,6 @@ try { const w = localStorage.getItem('ingly_wish'); if (w) wish = new Set(JSON.p
 function saveWish(){ try{ localStorage.setItem('ingly_wish', JSON.stringify([...wish])) }catch(e){} }
 
 export function initWish(){
-  /* sync wish set from products.js on open */
   updateBadge();
   /* parse ?wish= from URL share link */
   try{
@@ -25,16 +24,18 @@ export function initWish(){
 export function openWish(){
   const d = $('wishDrawer'); if(!d) return;
   d.hidden = false;
-  $('overlayWish').style.display = 'block';
+  d.classList.add('open');
+  const ov = $('overlayWish'); if(ov) ov.classList.add('open');
   document.body.style.overflow = 'hidden';
   renderWishDrawer();
 }
 
 export function closeWish(){
   const d = $('wishDrawer'); if(!d) return;
-  d.hidden = true;
-  $('overlayWish').style.display = '';
-  document.body.style.overflow = '';
+  d.classList.remove('open');
+  const ov = $('overlayWish'); if(ov) ov.classList.remove('open');
+  /* nasconde dopo la transizione */
+  setTimeout(()=>{ d.hidden = true; document.body.style.overflow = ''; }, 560);
 }
 
 export function toggleWishItem(id, el){
@@ -130,15 +131,17 @@ function showLoyaltyToast(earned){
 let popShown = false;
 
 export function initPromoPopup(){
-  /* Configurazione dall'admin: window.INGLY.C.POPUP o content.json → POPUP */
-  const cfg = (window.INGLY && window.INGLY.POPUP) || {};
-  if(!cfg || cfg.attivo === false) return;
+  /* Legge configurazione da content.json → POPUP (caricato dal data-loader) */
+  const cfg = window.INGLY && window.INGLY.POPUP;
+  /* Il popup si mostra SOLO se esplicitamente attivo:true e ha un titolo */
+  if(!cfg || cfg.attivo !== true || (!cfg.titolo && !cfg.testo)) return;
 
   /* non mostrare se già visto nella sessione */
   const seenKey = 'ingly_pop_' + (cfg.id || 'default');
   if(sessionStorage.getItem(seenKey)) return;
 
-  const delay = (cfg.delay || 8) * 1000;  /* default: 8 secondi */
+  /* minimo 4 secondi di delay per non disturbare il primo caricamento */
+  const delay = Math.max((cfg.delay || 8) * 1000, 4000);
   let fired = false;
 
   function showPop(){

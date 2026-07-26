@@ -2,7 +2,7 @@
    Preventivo e newsletter: invio REALE via Formspree quando configurato
    nell'admin (Contatti → Moduli). Senza ID configurato mostrano un avviso. */
 import { $, T, toast, L } from './utils.js';
-import { fromRef, myRef, onOrderPlaced } from './referral.js';
+import { fromRef, myRef } from './referral.js';
 const { D, CONFIG } = window.INGLY;
 
 export function renderUrg(){

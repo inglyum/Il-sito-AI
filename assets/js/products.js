@@ -11,7 +11,9 @@ import { go } from './navigation.js';
 /* ---- stato ---- */
 export const F={cat:new Set(),mat:new Set(),sub:new Set()};
 const VIS = () => P.filter(x=>!x.hidden);   /* prodotti visibili sul sito */
-let cart=[], wish=new Set(), cur=P[0], sel={qty:1}, collCur='best', SORT='rel', RV=[];
+let cart=[], cur=P[0], sel={qty:1}, collCur='best', SORT='rel', RV=[];
+/* wish è in wishlist.js come source-of-truth; qui leggiamo localStorage per il render */
+const lsWish=()=>{try{return new Set(JSON.parse(localStorage.getItem('ingly_wish')||'[]'))}catch(e){return new Set()}}
 
 /* Luminanza del primo colore del gradiente → testo scuro su sfondi chiari.
    Risolve alla radice il problema dei titoli illeggibili (niente più flag manuali). */
@@ -85,16 +87,12 @@ function card(x){const a=matArt(x.mat);
   return `<article class="pcard reveal in" data-action="open-product" data-id="${x.id}">
     <div class="pimg" style="background:${a.bg}">
       ${x.tag?`<span class="ptag ${x.tag==='Limited'?'y':x.tag==='B2B'?'b':''}">${x.tag}</span>`:''}
-      <button class="wish ${wish.has(x.id)?'on':''}" aria-label="Wishlist" data-action="wish" data-id="${x.id}"><svg viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 2-3.2 2-5a5 5 0 0 0-9-3 5 5 0 0 0-9 3c0 1.8.5 3.5 2 5l7 7z"/></svg></button>
+      <button class="wish ${lsWish().has(x.id)?'on':''}" aria-label="Wishlist" data-action="wish" data-id="${x.id}"><svg viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 2-3.2 2-5a5 5 0 0 0-9-3 5 5 0 0 0-9 3c0 1.8.5 3.5 2 5l7 7z"/></svg></button>
       <div class="art">${x.icon}</div>${imgTag(x)}${stockBadge(x)}
       ${x.stock===0?'':`<button class="qadd" data-action="quick-add" data-id="${x.id}">+ ${eur(x.price)}</button>`}
     </div>
     <div class="pbody"><span class="mat">${MATN[x.mat][L]} · ${CATS.find(c=>c.id===x.cat).n[L]}</span><h3>${x.n[L]}</h3>
     <div class="prow"><span class="price">${eur(x.price)}</span><span class="stars">★★★★★ <span>(${x.rev})</span></span></div></div></article>`}
-
-export function toggleWish(id,el){wish.has(id)?wish.delete(id):wish.add(id);el.classList.toggle('on');
-  const b=$('wishBadge');b.textContent=wish.size;b.classList.toggle('on',wish.size>0);
-  saveWish();toast(wish.has(id)?T('wAdd'):T('wRm'))}
 
 export const currentProduct = () => cur;
 
@@ -391,8 +389,6 @@ let activeCoupon=null;
 
 function saveCart(){try{localStorage.setItem('ingly_cart',JSON.stringify(cart.map(i=>i.dig?{dig:i.dig.id,q:i.q,u:i.u}:{id:i.p.id,q:i.q,mat:i.mat,txt:i.txt,u:i.u})))}catch(e){}}
 function loadCart(){try{const c=localStorage.getItem('ingly_cart');if(!c)return;JSON.parse(c).forEach(i=>{if(i.dig){const d=DIG.find(x=>x.id===i.dig);if(d)cart.push({dig:d,q:i.q,u:i.u})}else{const p=P.find(x=>x.id===i.id);if(p)cart.push({p,q:i.q,mat:i.mat,txt:i.txt,u:i.u})}})}catch(e){}}
-function saveWish(){try{localStorage.setItem('ingly_wish',JSON.stringify([...wish]))}catch(e){}}
-function loadWish(){try{const w=localStorage.getItem('ingly_wish');if(w)wish=new Set(JSON.parse(w))}catch(e){}}
 
 export function addToCart(id,q=1,mat,txt,u){
   const x=P.find(k=>k.id===+id); if(!x) return;
@@ -532,7 +528,7 @@ export function checkoutEmail(){
 /* ---- controlli statici dello shop ---- */
 export function setColl(c,btn){collCur=c;document.querySelectorAll('#collTabs .tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active');renderColl()}
 export function initShopControls(){
-  loadCart();loadWish();renderCart();
+  loadCart();renderCart();
   $('q').addEventListener('input',()=>{renderShop();renderChips()});
   $('pRange').addEventListener('input',e=>{$('pv').textContent='€'+e.target.value;renderShop();renderChips()});
   $('sortSel').addEventListener('change',e=>setSort(e.target.value));
