@@ -4,11 +4,11 @@
   "cat": "casa",
   "sub": 1,
   "n": {
-   "it": "Targa Casa Personalizzata",
+   "it": "Insegna  con nome Personalizzato Huntrix  Rumi",
    "en": "Custom House Plaque"
   },
   "mat": "Legno",
-  "price": 34,
+  "price": 34.99,
   "icon": "🪧",
   "rev": 67,
   "coll": [
@@ -19,14 +19,14 @@
  },
  {
   "id": 2,
-  "cat": "casa",
-  "sub": 1,
+  "cat": "bambini",
+  "sub": 4,
   "n": {
-   "it": "Decorazione Nome Plexi",
+   "it": "Nuvola con Orsetto Nome Personalizzato",
    "en": "Plexi Name Decor"
   },
-  "mat": "Plexiglass",
-  "price": 24,
+  "mat": "Legno",
+  "price": 69.99,
   "icon": "🔤",
   "rev": 104,
   "coll": [
@@ -46,8 +46,10 @@
   "price": 59,
   "icon": "🖼️",
   "rev": 141,
-  "coll": [],
-  "prod": 5
+  "prod": 5,
+  "gallery": [
+   "img/3-g1.webp"
+  ]
  },
  {
   "id": 4,
@@ -57,8 +59,8 @@
    "it": "Lampada LED Personalizzata",
    "en": "Custom LED Lamp"
   },
-  "mat": "Plexiglass",
-  "price": 49,
+  "mat": "Legno",
+  "price": 79.99,
   "icon": "💡",
   "rev": 178,
   "coll": [
