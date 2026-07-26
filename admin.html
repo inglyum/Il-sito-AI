@@ -156,7 +156,7 @@ tr.rowc{cursor:pointer}tr.rowc:hover td{background:rgba(140,160,220,.05)}
     </div>
     <div class="card" style="padding:8px 12px"><table id="pTable"></table></div>
     <!-- Batch AI modal (invisibile di default) -->
-    <div id="batchAiBox" style="display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center">
+    <div id="batchAiBox" style="display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);align-items:center;justify-content:center">
       <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px 32px;width:min(500px,90vw);position:relative">
         <h3 style="margin-bottom:6px">✨ Batch AI — Generazione descrizioni</h3>
         <p class="hint" id="batchAiHint">Genera descrizioni IT/EN per tutti i prodotti che non le hanno ancora.</p>
@@ -2270,7 +2270,7 @@ async function aiGenTags(p){
   const openBtn=$('pBatchAi'),box=$('batchAiBox'),closeBtn=$('batchAiClose'),
         runBtn=$('batchAiRun'),bar=$('batchAiBar'),label=$('batchAiLabel'),
         count=$('batchAiCount'),log=$('batchAiLog');
-  if(!openBtn||!box) return;
+  if(!openBtn||!box||!closeBtn||!runBtn||!bar||!label||!count||!log) return;
 
   openBtn.onclick=()=>{box.style.display='flex';log.innerHTML='';bar.style.width='0%';label.textContent='Pronto';count.textContent='0 / 0'};
   closeBtn.onclick=()=>{box.style.display='none'};
