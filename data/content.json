@@ -549,8 +549,7 @@
    {
     "foto": [
      "img/proj-1-1.webp",
-     "img/proj-1-2.webp",
-     "img/proj-1-3.webp"
+     "img/proj-1-2.webp"
     ],
     "dopo": "img/proj-1-dopo.webp",
     "social": "https://www.instagram.com/p/DWbGDTLgi14/?img_index=1"
@@ -3553,6 +3552,14 @@
    800
   ],
   "img/cat-materiali.webp": [
+   400,
+   800
+  ],
+  "img/proj-1-1.webp": [
+   400,
+   800
+  ],
+  "img/proj-1-2.webp": [
    400,
    800
   ]
