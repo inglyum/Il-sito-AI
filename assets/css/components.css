@@ -79,29 +79,21 @@
   border-radius:18px;
   padding:34px 30px 30px;
   background:linear-gradient(140deg,#0d1226 0%,#111d38 100%);
-  border:1px solid rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.1);
   transition:transform .6s cubic-bezier(.22,.8,.4,1),box-shadow .6s cubic-bezier(.22,.8,.4,1),border-color .4s;
   cursor:default
 }
-.mcard::before{
-  content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;
-  background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.03),rgba(59,125,224,.18));
-  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
-  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
-  -webkit-mask-composite:xor;mask-composite:exclude;
-  pointer-events:none
-}
 .mcard::after{
   content:'';position:absolute;top:-30%;right:-20%;width:70%;height:80%;
-  border-radius:50%;
+  border-radius:50%;pointer-events:none;
   background:radial-gradient(circle,rgba(59,125,224,.14),transparent 65%);
   opacity:0;transition:opacity .6s
 }
-.mcard:hover{transform:translateY(-8px);box-shadow:0 24px 60px rgba(0,0,0,.4),0 0 0 1px rgba(59,125,224,.25)}
+.mcard:hover{transform:translateY(-8px);box-shadow:0 24px 60px rgba(0,0,0,.4);border-color:rgba(59,125,224,.35)}
 .mcard:hover::after{opacity:1}
 .mcard.m-lg{grid-column:span 3}
-.mcard-sweep{position:absolute;top:0;bottom:0;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);left:-60%;pointer-events:none;transition:none}
-.mcard:hover .mcard-sweep{animation:lightSweep .7s ease forwards}
+.mcard-sweep{position:absolute;top:0;left:-80%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.05),transparent);pointer-events:none;transform:skewX(-20deg)}
+.mcard:hover .mcard-sweep{animation:lightSweep .75s ease forwards}
 .mcard .mtype{
   font-family:var(--fd);font-size:10px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;
   color:var(--laser);display:flex;align-items:center;gap:8px;margin-bottom:16px
