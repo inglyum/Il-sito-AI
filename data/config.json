@@ -60,5 +60,17 @@
   "titolo": { "it": "Sito in manutenzione", "en": "Site under maintenance" },
   "messaggio": { "it": "Stiamo aggiornando il catalogo. Torniamo presto! Per ordini urgenti scrivici su WhatsApp.", "en": "We are updating our catalog. Back soon! For urgent orders, contact us on WhatsApp." },
   "mostraWhatsapp": true
+ },
+ "exitPopup": {
+  "attivo": true,
+  "bgImage": "",
+  "bgColor": "#131a33",
+  "titolo": { "it": "Aspetta! Un regalo per te", "en": "Wait! A gift for you" },
+  "messaggio": { "it": "Scrivici su WhatsApp e ricevi <b>10% di sconto</b> sul tuo primo ordine personalizzato. Valido 48h.", "en": "Message us on WhatsApp and get <b>10% off</b> your first custom order. Valid 48h." },
+  "btnTesto": { "it": "Ottieni il 10% di sconto", "en": "Get 10% off" },
+  "notaTesto": { "it": "Offerta per nuovi clienti · Scade tra 48h", "en": "New customers only · Expires in 48h" },
+  "emoji": "🎁",
+  "delaySecondi": 45,
+  "mostraSoloUnaVolta": true
  }
 }

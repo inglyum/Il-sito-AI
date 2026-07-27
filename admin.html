@@ -601,6 +601,58 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
 
   <!-- ============ IMPOSTAZIONI ============ -->
   <section class="view" id="v-set">
+    <!-- ===== EXIT-INTENT POPUP CARD ===== -->
+    <div class="card" style="border:2px solid rgba(37,211,102,.35)">
+      <h3>🎁 Popup Offerta (Exit-Intent)</h3>
+      <p class="hint" style="margin-bottom:14px">Appare quando il visitatore sta per lasciare il sito (mouse fuori dalla finestra su desktop, dopo N secondi su mobile). Modifica testo, sfondo e attiva/disattiva con un click.</p>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;flex-wrap:wrap">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:1.05rem;font-weight:600">
+          <input type="checkbox" id="sPopActive" style="width:20px;height:20px;accent-color:#25d366">
+          <span id="sPopLabel">Popup DISATTIVO</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
+          <input type="checkbox" id="sPopOnce" style="width:auto"> Mostra una sola volta per sessione
+        </label>
+      </div>
+      <div class="row c3" style="margin-bottom:8px">
+        <div><label>Emoji</label><input type="text" id="sPopEmoji" class="emoji-in" placeholder="🎁" style="text-align:center;font-size:20px"></div>
+        <div><label>Sfondo (colore)</label><input type="color" id="sPopBgColor" value="#131a33" style="width:100%;height:38px;border-radius:8px;border:1px solid var(--line);cursor:pointer;padding:2px"></div>
+        <div><label>Delay desktop (sec)</label><input type="number" id="sPopDelay" min="5" max="300" value="45" style="width:100%"></div>
+      </div>
+      <div class="row c2" style="margin-bottom:8px">
+        <div><label>Titolo (IT)</label><input type="text" id="sPopTitIT" placeholder="Aspetta! Un regalo per te"></div>
+        <div><label>Titolo (EN)</label><input type="text" id="sPopTitEN" placeholder="Wait! A gift for you"></div>
+      </div>
+      <div class="row c2" style="margin-bottom:8px">
+        <div><label>Messaggio (IT) — HTML semplice ok</label><textarea id="sPopMsgIT" rows="2" placeholder="Scrivici su WhatsApp e ricevi &lt;b&gt;10% di sconto&lt;/b&gt;…"></textarea></div>
+        <div><label>Messaggio (EN)</label><textarea id="sPopMsgEN" rows="2" placeholder="Message us and get &lt;b&gt;10% off&lt;/b&gt;…"></textarea></div>
+      </div>
+      <div class="row c2" style="margin-bottom:8px">
+        <div><label>Testo pulsante (IT)</label><input type="text" id="sPopBtnIT" placeholder="Ottieni il 10% di sconto"></div>
+        <div><label>Testo pulsante (EN)</label><input type="text" id="sPopBtnEN" placeholder="Get 10% off"></div>
+      </div>
+      <div class="row c2" style="margin-bottom:8px">
+        <div><label>Nota sotto pulsante (IT)</label><input type="text" id="sPopNotaIT" placeholder="Offerta per nuovi clienti · Scade tra 48h"></div>
+        <div><label>Nota sotto pulsante (EN)</label><input type="text" id="sPopNotaEN" placeholder="New customers only · Expires in 48h"></div>
+      </div>
+      <div style="margin-bottom:14px">
+        <label>Immagine di sfondo (opzionale — caricala prima dalla Media Library)</label>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px">
+          <input type="text" id="sPopBgImage" placeholder="img/nome-file.webp oppure https://…" style="flex:1;min-width:200px">
+          <button class="btn sm" id="sPopBgPick">🖼 Scegli da Media Library</button>
+          <button class="btn sm err" id="sPopBgClear" title="Rimuovi immagine">✕</button>
+        </div>
+        <div id="sPopBgPreview" style="margin-top:10px;width:100%;height:120px;border-radius:12px;border:1px solid var(--line);background-size:cover;background-position:center;display:none;position:relative;overflow:hidden">
+          <div style="position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px">Anteprima sfondo popup</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn ok" id="sPopSave">💾 Salva e pubblica</button>
+        <button class="btn" id="sPopPreview">👁 Anteprima popup</button>
+        <span class="hint" id="sPopOut"></span>
+      </div>
+    </div>
+
     <div class="card" style="border:2px solid var(--accent)">
       <h3>🔧 Modalità Manutenzione</h3>
       <p class="hint" style="margin-bottom:14px">Quando attiva, i visitatori vedono la schermata "Sito in manutenzione" con il pulsante WhatsApp. Tu e l'Admin siete sempre accessibili.</p>
@@ -1272,27 +1324,45 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
    <span class="hint mono">${esc(p.img||'img/'+p.id+'.webp')}</span>
   </div>
   <label>Gallery — ${gal.length} ${gal.length===1?'immagine':'immagini'} <span class="hint">(trascina ← → per riordinare)</span></label><div class="gal" id="ep_gal">${gal.map((g,i)=>`<div class="g"><img src="${esc((LOADED_FROM==='GitHub'&&!hasStaged(g)?LIVE():''))+esc(g)}" onerror="this.style.opacity=.2"><button class="x" data-gx="${i}">✕</button><div class="mv"><button data-gm="${i},-1">←</button><button data-gm="${i},1">→</button></div></div>`).join('')||'<span class="hint">Nessuna — aggiungi dalla Media Library («Gallery»)</span>'}</div>
-  <hr class="hr"><div style="display:flex;gap:10px;flex-wrap:wrap">
+  <hr class="hr">
+  <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:12px">
+   <input type="checkbox" id="ep_hidden" style="width:18px;height:18px;accent-color:var(--err)" ${p.hidden?'checked':''}>
+   <span><b>Prodotto nascosto</b> — non appare nel catalogo né nei filtri (utile per bozze o prodotti esauriti)</span>
+  </label>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
    <button class="btn pri" id="ep_save">✔ Salva</button><button class="btn" id="ep_dup">⧉ Duplica</button><button class="btn err" id="ep_del">🗑 Elimina</button><button class="btn" onclick="closeModal()">Annulla</button></div>`);
  $('ep_cat').onchange=()=>{$('ep_sub').innerHTML=subOptions($('ep_cat').value,1)};
  /* Legge i campi testo correnti nella scheda SENZA chiudere il modal */
  function gatherFields(){
-  p.n.it=$('ep_nit').value;p.n.en=$('ep_nen').value;
-  p.cat=$('ep_cat').value;p.sub=+$('ep_sub').value||1;
-  p.icon=$('ep_icon').value;p.price=+$('ep_price').value||0;
-  p.mat=$('ep_mat').value;p.prod=+$('ep_prod').value||3;p.rev=+$('ep_rev').value||0;
+  /* cerca SEMPRE il prodotto fresco in S.P — difende da riferimenti stantii */
+  const fresh=S.P.find(x=>x.id===p.id);
+  if(!fresh){console.error('[INGLY] gatherFields: prodotto #'+p.id+' non trovato in S.P');return;}
+  fresh.n={it:$('ep_nit').value.trim()||fresh.n.it, en:$('ep_nen').value.trim()||fresh.n.en};
+  fresh.cat=$('ep_cat').value||fresh.cat;
+  fresh.sub=+$('ep_sub').value||1;
+  fresh.icon=$('ep_icon').value||fresh.icon;
+  fresh.price=+$('ep_price').value||fresh.price;
+  fresh.mat=$('ep_mat').value||fresh.mat;
+  fresh.prod=+$('ep_prod').value||fresh.prod;
+  fresh.rev=+$('ep_rev').value||0;
+  const hid=$('ep_hidden');if(hid)fresh.hidden=hid.checked;
   const dit=$('ep_dit').value.trim(),den=$('ep_den').value.trim();
-  if(dit||den)p.desc={it:dit,en:den||dit};else delete p.desc;
-  const sku=$('ep_sku').value.trim();sku?p.sku=sku:delete p.sku;
-  const rat=parseFloat($('ep_rating').value);(rat>=1&&rat<=5)?p.rating=rat:delete p.rating;
-  const stk=$('ep_stock').value.trim();stk!==''?(p.stock=+stk):delete p.stock;
-  const strp=$('ep_stripe').value.trim();if(strp){S.CONFIG.stripeLinks=S.CONFIG.stripeLinks||{};S.CONFIG.stripeLinks[p.id]=strp}else if(S.CONFIG.stripeLinks)delete S.CONFIG.stripeLinks[p.id];
-  const vid=$('ep_video').value.trim();vid?p.video=vid:delete p.video;
-  const pos=$('ep_poster').value.trim();pos?p.poster=pos:delete p.poster;
+  if(dit||den)fresh.desc={it:dit,en:den||dit};else delete fresh.desc;
+  const sku=$('ep_sku').value.trim();sku?fresh.sku=sku:delete fresh.sku;
+  const rat=parseFloat($('ep_rating').value);(rat>=1&&rat<=5)?fresh.rating=rat:delete fresh.rating;
+  const stk=$('ep_stock').value.trim();stk!==''?(fresh.stock=+stk):delete fresh.stock;
+  const strp=$('ep_stripe').value.trim();if(strp){S.CONFIG.stripeLinks=S.CONFIG.stripeLinks||{};S.CONFIG.stripeLinks[fresh.id]=strp}else if(S.CONFIG.stripeLinks)delete S.CONFIG.stripeLinks[fresh.id];
+  const vid=$('ep_video').value.trim();vid?fresh.video=vid:delete fresh.video;
+  const pos=$('ep_poster').value.trim();pos?fresh.poster=pos:delete fresh.poster;
   const sz=$('ep_sizes').value.split('\n').map(r=>r.split('|').map(s=>s.trim())).filter(r=>r[0]&&r[1]);
-  sz.length?p.misure=sz:delete p.misure;
-  const tag=$('ep_tag').value.trim();tag?p.tag=tag:delete p.tag;
-  const coll=$('ep_coll').value.split(',').map(s=>s.trim()).filter(Boolean);coll.length?p.coll=coll:delete p.coll;
+  sz.length?fresh.misure=sz:delete fresh.misure;
+  const tag=$('ep_tag').value.trim();tag?fresh.tag=tag:delete fresh.tag;
+  const coll=$('ep_coll').value.split(',').map(s=>s.trim()).filter(Boolean);coll.length?fresh.coll=coll:delete fresh.coll;
+  /* copia fresco su p per compatibilità backward */
+  Object.assign(p,fresh);
+  /* backup bozza in localStorage — sopravvive a refresh accidentale */
+  try{localStorage.setItem('ingly_draft_products',JSON.stringify(S.P));localStorage.setItem('ingly_draft_ts',Date.now())}catch(e){}
+  console.log('[INGLY] Salvato #'+p.id+' → nome IT: "'+fresh.n.it+'" · prezzo: €'+fresh.price);
  }
  $('ep_reladd').onchange=()=>{const v=+$('ep_reladd').value;if(!v)return;
   gatherFields();p.rel=p.rel||[];if(!p.rel.includes(v))p.rel.push(v);markDirty();editProd(id)};
@@ -2666,7 +2736,68 @@ function renderSet(){
  $('setInfo').innerHTML=`${AUTODETECTED?'<span class="chip ok">owner e repository rilevati automaticamente dall\u2019indirizzo</span><br>':''}Sito online: <b><a href="${LIVE()}" target="_blank" rel="noopener">${LIVE()}</a></b><br>Admin: <b class="mono">${LIVE()}admin.html</b><br>Dati caricati da: <b>${esc(LOADED_FROM||'—')}</b>`;
  ['sOwner','sRepo','sBranch'].forEach(id=>$(id).oninput=()=>{SET.owner=$('sOwner').value.trim();SET.repo=$('sRepo').value.trim();SET.branch=$('sBranch').value.trim()||'main';saveSet()});
  $('sRemember').onchange=()=>{const t=token();localStorage.removeItem('ingly2_tok');sessionStorage.removeItem('ingly2_tok');SET.remember=$('sRemember').checked;saveSet();if(t)setToken(t)};
- $('sTok').oninput=()=>setToken($('sTok').value.trim())}
+ $('sTok').oninput=()=>setToken($('sTok').value.trim());
+ /* --- Exit-Intent Popup --- */
+ const ep=S.CONFIG.exitPopup||{};
+ $('sPopActive').checked=!!ep.attivo;
+ $('sPopOnce').checked=ep.mostraSoloUnaVolta!==false;
+ $('sPopEmoji').value=ep.emoji||'🎁';
+ $('sPopBgColor').value=ep.bgColor||'#131a33';
+ $('sPopDelay').value=ep.delaySecondi||45;
+ $('sPopTitIT').value=(ep.titolo&&ep.titolo.it)||'';
+ $('sPopTitEN').value=(ep.titolo&&ep.titolo.en)||'';
+ $('sPopMsgIT').value=(ep.messaggio&&ep.messaggio.it)||'';
+ $('sPopMsgEN').value=(ep.messaggio&&ep.messaggio.en)||'';
+ $('sPopBtnIT').value=(ep.btnTesto&&ep.btnTesto.it)||'';
+ $('sPopBtnEN').value=(ep.btnTesto&&ep.btnTesto.en)||'';
+ $('sPopNotaIT').value=(ep.notaTesto&&ep.notaTesto.it)||'';
+ $('sPopNotaEN').value=(ep.notaTesto&&ep.notaTesto.en)||'';
+ $('sPopBgImage').value=ep.bgImage||'';
+ function updatePopLabel(){const on=$('sPopActive').checked;$('sPopLabel').textContent=on?'Popup ATTIVO ✅':'Popup DISATTIVO';}
+ function updatePopBgPreview(){
+  const src=$('sPopBgImage').value.trim();
+  const prev=$('sPopBgPreview');
+  if(src){prev.style.display='block';prev.style.backgroundImage='url("'+src+'")';}
+  else prev.style.display='none';
+ }
+ updatePopLabel();
+ updatePopBgPreview();
+ $('sPopActive').onchange=updatePopLabel;
+ $('sPopBgImage').oninput=updatePopBgPreview;
+ $('sPopBgClear').onclick=()=>{$('sPopBgImage').value='';updatePopBgPreview();};
+ $('sPopBgPick').onclick=()=>{
+  if(!MEDIA.length){toast('Apri prima la Media Library per caricare le immagini');return;}
+  const url=prompt('Inserisci il percorso immagine (es: img/nome-file.webp)');
+  if(url){$('sPopBgImage').value=url.trim();updatePopBgPreview();}
+ };
+ $('sPopPreview').onclick=()=>{
+  const cfg={attivo:true,bgColor:$('sPopBgColor').value,bgImage:$('sPopBgImage').value.trim(),emoji:$('sPopEmoji').value.trim(),titolo:{it:$('sPopTitIT').value,en:$('sPopTitEN').value},messaggio:{it:$('sPopMsgIT').value,en:$('sPopMsgEN').value},btnTesto:{it:$('sPopBtnIT').value,en:$('sPopBtnEN').value},notaTesto:{it:$('sPopNotaIT').value,en:$('sPopNotaEN').value}};
+  const w=window.open(LIVE(),'_blank');
+  if(w)setTimeout(()=>{try{w.sessionStorage.removeItem('exit_shown');w._exitPreviewCfg=cfg;}catch(e){}},1500);
+  toast('Aperta anteprima sito — il popup apparirà dopo il delay impostato');
+ };
+ $('sPopSave').onclick=async()=>{
+  const out=$('sPopOut');
+  out.textContent='Salvataggio…';
+  S.CONFIG.exitPopup={
+   attivo:$('sPopActive').checked,
+   mostraSoloUnaVolta:$('sPopOnce').checked,
+   emoji:$('sPopEmoji').value.trim()||'🎁',
+   bgColor:$('sPopBgColor').value||'#131a33',
+   bgImage:$('sPopBgImage').value.trim(),
+   delaySecondi:+$('sPopDelay').value||45,
+   titolo:{it:$('sPopTitIT').value.trim(),en:$('sPopTitEN').value.trim()},
+   messaggio:{it:$('sPopMsgIT').value.trim(),en:$('sPopMsgEN').value.trim()},
+   btnTesto:{it:$('sPopBtnIT').value.trim(),en:$('sPopBtnEN').value.trim()},
+   notaTesto:{it:$('sPopNotaIT').value.trim(),en:$('sPopNotaEN').value.trim()}
+  };
+  markDirty();
+  try{
+   await pubFile('data/config.json',JSON.stringify(S.CONFIG,null,1),'🎁 Popup offerta '+(S.CONFIG.exitPopup.attivo?'attivato':'disattivato'));
+   out.innerHTML='<span style="color:var(--ok)">✔ Pubblicato! Popup aggiornato sul sito.</span>';
+  }catch(e){out.innerHTML='<span style="color:var(--err)">✖ '+esc(e.message)+'</span>';}
+ };
+}
 $('sReload').onclick=async()=>{if(pending()&&!confirm('Ci sono modifiche in bozza: ricaricando andranno perse. Continuare?'))return;MEDIA=[];BOOTED=false;refreshSync();const ok=await loadAll();renderSet();if(ok)toast('Dati caricati da '+LOADED_FROM)};
 $('sTest').onclick=async()=>{const o=$('sTestOut');o.textContent='verifica…';
  try{const r=await gh('');if(!(r.permissions&&r.permissions.push))throw new Error('il token legge ma non scrive: aggiungi Contents → Read and write');
