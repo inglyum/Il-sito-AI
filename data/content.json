@@ -3534,5 +3534,69 @@
    "it": "Scopri le offerte",
    "en": "Explore offers"
   }
+ },
+ "SOCIAL_HUB": {
+  "attivo": true,
+  "titolo": {
+   "it": "Dal laboratorio.",
+   "en": "From the lab."
+  },
+  "sottotitolo": {
+   "it": "@ingly.design",
+   "en": "@ingly.design"
+  },
+  "cards": [
+   {
+    "id": "new1785177494493",
+    "piattaforma": "Facebook",
+    "attivo": true,
+    "titolo": {
+     "it": "Nuovo canale",
+     "en": "New channel"
+    },
+    "desc": {
+     "it": "Descrizione.",
+     "en": "Description."
+    },
+    "url": "https://www.facebook.com/profile.php?id=61587546955326",
+    "badge": "@Ingly_design",
+    "colore": "#3b7de0,#1a4fc4",
+    "emoji": "📱"
+   },
+   {
+    "id": "new1785177537464",
+    "piattaforma": "Instagram",
+    "attivo": true,
+    "titolo": {
+     "it": "Nuovo canale",
+     "en": "New channel"
+    },
+    "desc": {
+     "it": "Descrizione.",
+     "en": "Description."
+    },
+    "url": "https://www.instagram.com/ingly_design",
+    "badge": "@ingly_design",
+    "colore": "#3b7de0,#1a4fc4",
+    "emoji": "📱"
+   },
+   {
+    "id": "new1785177576870",
+    "piattaforma": "Tiktok",
+    "attivo": true,
+    "titolo": {
+     "it": "Nuovo canale",
+     "en": "New channel"
+    },
+    "desc": {
+     "it": "Descrizione.",
+     "en": "Description."
+    },
+    "url": "https://www.tiktok.com/@ingly_design",
+    "badge": "@ingly_design",
+    "colore": "#3b7de0,#1a4fc4",
+    "emoji": "📱"
+   }
+  ]
  }
 }
