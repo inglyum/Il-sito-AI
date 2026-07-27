@@ -38,7 +38,11 @@
    ]
   ],
   "prod": 3,
-  "hidden": false
+  "hidden": false,
+  "gallery": [
+   "img/1-g3.webp",
+   "img/1.webp"
+  ]
  },
  {
   "id": 2,
