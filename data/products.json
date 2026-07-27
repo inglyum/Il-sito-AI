@@ -128,7 +128,7 @@
   "cat": "bambini",
   "sub": 1,
   "mat": "Plexiglass",
-  "price": 49,
+  "price": 49.99,
   "icon": "💡",
   "img": "img/4.webp",
   "desc": {
@@ -189,7 +189,7 @@
    ]
   ],
   "prod": 2,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 6,
@@ -780,7 +780,7 @@
    ]
   ],
   "prod": 2,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 24,
@@ -1890,7 +1890,7 @@
    ]
   ],
   "prod": 1,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 59,
@@ -1921,7 +1921,7 @@
    ]
   ],
   "prod": 2,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 60,
@@ -1948,7 +1948,7 @@
    ]
   ],
   "prod": 5,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 61,
@@ -1983,7 +1983,7 @@
    ]
   ],
   "prod": 3,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 62,
@@ -2014,7 +2014,7 @@
    ]
   ],
   "prod": 2,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 63,
@@ -2041,7 +2041,7 @@
    ]
   ],
   "prod": 5,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 64,
@@ -2072,7 +2072,7 @@
    ]
   ],
   "prod": 3,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 65,
@@ -2103,7 +2103,7 @@
    ]
   ],
   "prod": 2,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 66,
@@ -2134,7 +2134,7 @@
    ]
   ],
   "prod": 3,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 67,
@@ -2165,7 +2165,7 @@
    ]
   ],
   "prod": 3,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 68,
@@ -2196,7 +2196,7 @@
    ]
   ],
   "prod": 2,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 69,
@@ -2231,7 +2231,7 @@
    ]
   ],
   "prod": 3,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 70,
@@ -2262,7 +2262,7 @@
    ]
   ],
   "prod": 2,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 71,
@@ -2293,7 +2293,7 @@
    ]
   ],
   "prod": 2,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 72,
@@ -2324,7 +2324,7 @@
    ]
   ],
   "prod": 3,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 73,
@@ -2359,7 +2359,7 @@
    ]
   ],
   "prod": 4,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 74,
@@ -2380,8 +2380,8 @@
   "tag": "New",
   "rev": 145,
   "sku": "INGLY-074",
-  "prod": 0,
-  "hidden": false
+  "prod": 3,
+  "hidden": true
  },
  {
   "id": 75,
@@ -2401,8 +2401,8 @@
   },
   "rev": 88,
   "sku": "INGLY-075",
-  "prod": 0,
-  "hidden": false
+  "prod": 3,
+  "hidden": true
  },
  {
   "id": 76,
@@ -2422,8 +2422,8 @@
   },
   "rev": 54,
   "sku": "INGLY-076",
-  "prod": 0,
-  "hidden": false
+  "prod": 3,
+  "hidden": true
  },
  {
   "id": 77,
@@ -2443,8 +2443,8 @@
   },
   "rev": 67,
   "sku": "INGLY-077",
-  "prod": 0,
-  "hidden": false
+  "prod": 3,
+  "hidden": true
  },
  {
   "id": 78,
@@ -2465,8 +2465,8 @@
   "tag": "Best",
   "rev": 112,
   "sku": "INGLY-078",
-  "prod": 0,
-  "hidden": false
+  "prod": 3,
+  "hidden": true
  },
  {
   "id": 79,
@@ -2497,7 +2497,7 @@
    ]
   ],
   "prod": 3,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 80,
@@ -2528,7 +2528,7 @@
    ]
   ],
   "prod": 2,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 81,
@@ -2559,7 +2559,7 @@
    ]
   ],
   "prod": 2,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 82,
@@ -2594,7 +2594,7 @@
    ]
   ],
   "prod": 3,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 83,
@@ -2625,7 +2625,7 @@
    ]
   ],
   "prod": 2,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 84,
@@ -2660,7 +2660,7 @@
    ]
   ],
   "prod": 3,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 85,
@@ -2691,7 +2691,7 @@
    ]
   ],
   "prod": 4,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 86,
@@ -2726,7 +2726,7 @@
    ]
   ],
   "prod": 6,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 87,
@@ -2758,7 +2758,7 @@
    ]
   ],
   "prod": 7,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 88,
@@ -2789,7 +2789,7 @@
    ]
   ],
   "prod": 2,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 89,
@@ -2820,7 +2820,7 @@
    ]
   ],
   "prod": 4,
-  "hidden": false
+  "hidden": true
  },
  {
   "id": 90,
@@ -2847,20 +2847,6 @@
    ]
   ],
   "prod": 4,
-  "hidden": false
- },
- {
-  "id": 91,
-  "cat": "casa",
-  "sub": 1,
-  "n": {
-   "it": "Nuovo prodotto",
-   "en": "New product"
-  },
-  "mat": "Legno",
-  "price": 10,
-  "icon": "✨",
-  "rev": 0,
-  "prod": 3
+  "hidden": true
  }
 ]
