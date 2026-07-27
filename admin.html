@@ -310,6 +310,13 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
       <button class="btn" id="ptLib">🗂 Dalla libreria</button>
       <button class="btn" id="ptCat">📦 Dal catalogo</button>
       <button class="btn" id="ptNew">➕ Tessera vuota</button></div>
+    <div class="searchrow" id="ptSelBar" style="display:none;background:rgba(220,50,50,.08);border:1px solid rgba(220,50,50,.25);border-radius:10px;padding:10px 16px">
+      <span id="ptSelCount" style="font-weight:600;color:var(--err)">0 selezionate</span>
+      <span style="margin-left:auto"></span>
+      <button class="btn sm" id="ptSelAll">Seleziona tutto</button>
+      <button class="btn sm" id="ptSelNone">Deseleziona</button>
+      <button class="btn sm err" id="ptSelDel">🗑 Elimina selezionate</button>
+    </div>
     <div id="portList"></div>
   </section>
 
@@ -1800,9 +1807,28 @@ function renderBiz(){
 $('bizNew').onclick=()=>{S.C.BIZ.push(['✨',{it:'Nuovo servizio',en:'New service'},{it:'Descrizione del servizio.',en:'Service description.'}]);markDirty();renderBiz()};
 
 /* ================== PORTFOLIO ================== */
+let PORT_SEL=new Set();
+function updatePortSelBar(){
+ const n=PORT_SEL.size;
+ $('ptSelBar').style.display=n?'flex':'none';
+ $('ptSelCount').textContent=n+(n===1?' tessera selezionata':' tessere selezionate');
+}
+$('ptSelAll').onclick=()=>{PORT_SEL=new Set((S.C.PORT||[]).map((_,i)=>i));document.querySelectorAll('[data-pck]').forEach(cb=>cb.checked=true);updatePortSelBar()};
+$('ptSelNone').onclick=()=>{PORT_SEL.clear();document.querySelectorAll('[data-pck]').forEach(cb=>cb.checked=false);updatePortSelBar()};
+$('ptSelDel').onclick=()=>{
+ if(!PORT_SEL.size)return;
+ if(!confirm('Eliminare '+PORT_SEL.size+' tessere selezionate?'))return;
+ S.C.PORT=S.C.PORT.filter((_,i)=>!PORT_SEL.has(i));
+ PORT_SEL.clear();markDirty();renderPort()};
 function renderPort(){const PT=(S.C.PORT=S.C.PORT||[]);
+ PORT_SEL=new Set([...PORT_SEL].filter(i=>i<PT.length));
  $('portList').innerHTML=PT.map((t,i)=>{const img=t[3];const staged=img&&MEDIA.find(m=>m.path===img);
-  return `<div class="card"><h3><span style="font-size:19px">${esc(t[0])}</span> ${esc(t[1].it)}
+  const sel=PORT_SEL.has(i);
+  return `<div class="card" style="${sel?'border-color:rgba(220,50,50,.5);background:rgba(220,50,50,.04)':''}"><h3>
+   <label style="display:flex;align-items:center;gap:8px;cursor:pointer;flex:0 0 auto">
+    <input type="checkbox" data-pck="${i}" ${sel?'checked':''} style="width:18px;height:18px;accent-color:var(--err)">
+   </label>
+   <span style="font-size:19px">${esc(t[0])}</span> ${esc(t[1].it)}
    ${img?'<span class="chip ok">foto ✔</span>':'<span class="chip warn">segnaposto colorato</span>'}
    <span class="sp"></span><button class="btn sm" data-tm="${i},-1">↑</button><button class="btn sm" data-tm="${i},1">↓</button><button class="btn sm" data-te="${i}">✎</button><button class="btn sm err" data-td="${i}">🗑</button></h3>
    <div style="display:flex;gap:12px;align-items:center">
@@ -1811,11 +1837,13 @@ function renderPort(){const PT=(S.C.PORT=S.C.PORT||[]);
      ${t[4]?`<div class="hint">🔗 <a href="${esc(t[4])}" target="_blank" rel="noopener">post Instagram</a></div>`:''}
      <div style="margin-top:8px;display:flex;gap:7px"><button class="btn sm" data-tup="${i}">📷 ${img?'Sostituisci foto':'Carica foto'}</button>
       ${img?`<button class="btn sm err" data-trm="${i}">rimuovi foto</button>`:''}</div></div></div></div>`}).join('');
+ document.querySelectorAll('[data-pck]').forEach(cb=>cb.onchange=()=>{const i=+cb.dataset.pck;cb.checked?PORT_SEL.add(i):PORT_SEL.delete(i);updatePortSelBar();renderPort()});
  document.querySelectorAll('[data-tup]').forEach(b=>b.onclick=()=>{const i=+b.dataset.tup;pickImage('img/port-'+(i+1),path=>{S.C.PORT[i][3]=path;markDirty();renderPort()},'portfolio')});
  document.querySelectorAll('[data-trm]').forEach(b=>b.onclick=()=>{const i=+b.dataset.trm;MEDIA=MEDIA.filter(m=>m.path!==S.C.PORT[i][3]);S.C.PORT[i][3]='';markDirty();renderPort()});
  document.querySelectorAll('[data-tm]').forEach(b=>b.onclick=()=>{const[i,d]=b.dataset.tm.split(',').map(Number);const j=i+d;if(j<0||j>=S.C.PORT.length)return;[S.C.PORT[i],S.C.PORT[j]]=[S.C.PORT[j],S.C.PORT[i]];markDirty();renderPort()});
  document.querySelectorAll('[data-te]').forEach(b=>b.onclick=()=>editPort(+b.dataset.te));
- document.querySelectorAll('[data-td]').forEach(b=>b.onclick=()=>{if(confirm('Eliminare la tessera?')){S.C.PORT.splice(+b.dataset.td,1);markDirty();renderPort()}})}
+ document.querySelectorAll('[data-td]').forEach(b=>b.onclick=()=>{if(confirm('Eliminare la tessera?')){S.C.PORT.splice(+b.dataset.td,1);PORT_SEL.delete(+b.dataset.td);markDirty();renderPort()}});
+ updatePortSelBar()}
 $('ptNew').onclick=()=>{S.C.PORT.push(['✨',{it:'Nuovo lavoro',en:'New work'},'#e8d5b0,#c9a876']);markDirty();editPort(S.C.PORT.length-1)};
 const PORT_BG=['#e8d5b0,#c9a876','#eef7f7,#cfe6e8','#f4f0ff,#d9ccf5','#ffeede,#f6cfa8','#e3f0e8,#bcd9c6','#fde8ef,#f3c3d3'];
 const nextPortPath=()=>{let n=1;const used=new Set((S.C.PORT||[]).map(t=>t[3]).filter(Boolean));
@@ -2693,7 +2721,14 @@ $('bkImp').onchange=async e=>{const f=e.target.files[0];if(!f)return;
     nImg++}
   }
   markDirty();bindAll();go('pub');
-  toast('Backup importato ('+got.length+' file'+(nImg?', '+nImg+' immagini':'')+') — premi «Pubblica tutto» per applicarlo al sito');
+  /* Se il backup non aveva immagini incorporate, ricarica le meta da GitHub
+     così i path del portfolio tornano a mostrare le anteprime */
+  if(!nImg&&token()){
+   toast('Backup importato — ricarico elenco immagini dal repository…');
+   scanRepo().then(()=>{toast('Backup importato ('+got.length+' file) — premi «Pubblica tutto» per applicarlo al sito')}).catch(()=>{});
+  }else{
+   toast('Backup importato ('+got.length+' file'+(nImg?', '+nImg+' immagini':'')+') — premi «Pubblica tutto» per applicarlo al sito');
+  }
   $('pubMsg').value='Ripristino da backup del '+(j.date?String(j.date).slice(0,10):'—');
  }catch(err){toast('Backup non valido: '+err.message)}
  e.target.value=''};
