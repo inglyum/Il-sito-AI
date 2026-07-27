@@ -567,18 +567,17 @@
   [
    "✨",
    {
-    "it": "2",
-    "en": "2"
+    "it": "Festa della mammaRegalo frase incisione",
+    "en": "Festa della mammaRegalo frase incisione"
    },
    "#ffeede,#f6cfa8",
-   "img/port-4.webp",
-   ""
+   "img/port-4.webp"
   ],
   [
    "✨",
    {
-    "it": "5",
-    "en": "5"
+    "it": "Orecchini in legno",
+    "en": "Orecchini in legno"
    },
    "#e3f0e8,#bcd9c6",
    "img/port-5.webp"
@@ -586,72 +585,65 @@
   [
    "✨",
    {
-    "it": "494d525c 5304 4e2b b542 11daf035e597",
-    "en": "494d525c 5304 4e2b b542 11daf035e597"
+    "it": "Incisione Plexyglass personalizzata",
+    "en": "Incisione Plexyglass personalizzata"
    },
    "#fde8ef,#f3c3d3",
-   "img/port-6.webp",
-   ""
+   "img/port-6.webp"
   ],
   [
    "✨",
    {
-    "it": "691d772c e6b8 44c1 a6b5 db08b8de0925",
-    "en": "691d772c e6b8 44c1 a6b5 db08b8de0925"
+    "it": "Huntrix Nomepersonalizzato",
+    "en": "Huntrix Nomepersonalizzato"
    },
    "#e8d5b0,#c9a876",
-   "img/port-7.webp",
-   ""
+   "img/port-7.webp"
   ],
   [
    "✨",
    {
-    "it": "Ac922a3315eed4e8ea14782bfc5c249d9P",
-    "en": "Ac922a3315eed4e8ea14782bfc5c249d9P"
+    "it": "Logo  Porsche",
+    "en": "Logo  Porsche"
    },
    "#eef7f7,#cfe6e8",
-   "img/port-8.webp",
-   ""
+   "img/port-8.webp"
   ],
   [
    "✨",
    {
-    "it": "ae73acd02fd939b51a6e8c6ab673a4ea",
-    "en": "ae73acd02fd939b51a6e8c6ab673a4ea"
+    "it": "Logo Harley Davidson ",
+    "en": "Logo Harley Davidson "
    },
    "#f4f0ff,#d9ccf5",
-   "img/port-9.webp",
-   ""
+   "img/port-9.webp"
   ],
   [
    "✨",
    {
-    "it": "ChatGPT Image 12 lug 2026, 21 48 40",
-    "en": "ChatGPT Image 12 lug 2026, 21 48 40"
+    "it": "Cornice con Incisione foto personalizzata su legno",
+    "en": "Cornice con Incisione foto personalizzata su legno"
    },
    "#ffeede,#f6cfa8",
-   "img/port-10.webp",
-   ""
+   "img/port-10.webp"
   ],
   [
    "✨",
    {
-    "it": "ChatGPT Image 12 lug 2026, 22 03 00",
-    "en": "ChatGPT Image 12 lug 2026, 22 03 00"
+    "it": "Incisione e taglio con dedica",
+    "en": "Incisione e taglio con dedica"
    },
    "#e3f0e8,#bcd9c6",
-   "img/port-11.webp",
-   ""
+   "img/port-11.webp"
   ],
   [
    "✨",
    {
-    "it": "dwdadad",
+    "it": "Canzone forma Chitarra personalizzata",
     "en": "dwdadad"
    },
    "#fde8ef,#f3c3d3",
-   "img/port-12.webp",
-   ""
+   "img/port-12.webp"
   ],
   [
    "✨",
@@ -676,42 +668,43 @@
   [
    "✨",
    {
-    "it": "unnamed (28)",
-    "en": "unnamed (28)"
+    "it": "Incisione Freddie Mercury",
+    "en": "Engraving Freddie Mercury"
    },
    "#f4f0ff,#d9ccf5",
-   "img/port-15.webp",
-   ""
+   "img/port-15.webp"
   ],
   [
    "✨",
    {
-    "it": "WhatsApp Image 2026 02 19 at 18.04.35 (1) (5)",
-    "en": "WhatsApp Image 2026 02 19 at 18.04.35 (1) (5)"
+    "it": "Supereroi",
+    "en": "Supereroi"
    },
    "#ffeede,#f6cfa8",
-   "img/port-16.webp",
-   ""
+   "img/port-16.webp"
   ],
   [
    "✨",
    {
-    "it": "WhatsApp Image 2026 04 16 at 17.41.34 (2)",
-    "en": "WhatsApp Image 2026 04 16 at 17.41.34 (2)"
+    "it": "Venom ",
+    "en": "Venom "
    },
    "#e3f0e8,#bcd9c6",
    "img/port-17.webp",
-   ""
+   "",
+   {
+    "cliente": "Vincenzo G."
+   }
   ],
   [
    "✨",
    {
-    "it": "WhatsApp Image 2026 05 30 at 20.24.49",
-    "en": "WhatsApp Image 2026 05 30 at 20.24.49"
+    "it": "Action Figure personalizzata",
+    "en": "Action Figure"
    },
    "#fde8ef,#f3c3d3",
    "img/port-18.webp",
-   ""
+   "https://www.instagram.com/p/DZDXQ6XEkEM/?img_index=1"
   ]
  ],
  "FONTS": [
@@ -3568,6 +3561,18 @@
    400,
    800
   ],
+  "img/17-g1.webp": [
+   400,
+   800
+  ],
+  "img/17-g2.webp": [
+   400,
+   800
+  ],
+  "img/17.webp": [
+   400,
+   800
+  ],
   "img/2.webp": [
    400,
    800
@@ -3596,7 +3601,23 @@
    400,
    800
   ],
+  "img/22.webp": [
+   400,
+   800
+  ],
   "img/3.webp": [
+   400,
+   800
+  ],
+  "img/4-g1.webp": [
+   400,
+   800
+  ],
+  "img/4-g2.webp": [
+   400,
+   800
+  ],
+  "img/4.webp": [
    400,
    800
   ],
@@ -3605,6 +3626,10 @@
    800
   ],
   "img/8.webp": [
+   400,
+   800
+  ],
+  "img/91.webp": [
    400,
    800
   ],
@@ -3632,30 +3657,7 @@
    400,
    800
   ],
-  "img/cat-nuova-ms3k34dc.webp": [
-   400,
-   800
-  ],
-  "img/port-1.webp": [
-   400,
-   800
-  ],
-  "img/port-2.webp": [
-   400,
-   800
-  ],
-  "img/port-3.webp": [
-   400,
-   800
-  ],
-  "img/sponsor-2.webp": [
-   400,
-   800
-  ],
-  "img/sponsor-3.webp": [
-   400
-  ],
-  "img/cat-stagionale.webp": [
+  "img/cat-digitale.webp": [
    400,
    800
   ],
@@ -3663,31 +3665,7 @@
    400,
    800
   ],
-  "img/cat-digitale.webp": [
-   400,
-   800
-  ],
-  "img/cat-tecnologie.webp": [
-   400,
-   800
-  ],
   "img/cat-limited.webp": [
-   400,
-   800
-  ],
-  "img/17.webp": [
-   400,
-   800
-  ],
-  "img/17-g1.webp": [
-   400,
-   800
-  ],
-  "img/17-g2.webp": [
-   400,
-   800
-  ],
-  "img/22.webp": [
    400,
    800
   ],
@@ -3695,35 +3673,19 @@
    400,
    800
   ],
-  "img/proj-1-1.webp": [
+  "img/cat-nuova-ms3k34dc.webp": [
    400,
    800
   ],
-  "img/proj-1-2.webp": [
+  "img/cat-stagionale.webp": [
    400,
    800
   ],
-  "img/port-4.webp": [
+  "img/cat-tecnologie.webp": [
    400,
    800
   ],
-  "img/port-5.webp": [
-   400,
-   800
-  ],
-  "img/port-6.webp": [
-   400,
-   800
-  ],
-  "img/port-7.webp": [
-   400,
-   800
-  ],
-  "img/port-8.webp": [
-   400,
-   800
-  ],
-  "img/port-9.webp": [
+  "img/port-1.webp": [
    400,
    800
   ],
@@ -3762,25 +3724,56 @@
    400,
    800
   ],
+  "img/port-2.webp": [
+   400,
+   800
+  ],
+  "img/port-3.webp": [
+   400,
+   800
+  ],
+  "img/port-4.webp": [
+   400,
+   800
+  ],
+  "img/port-5.webp": [
+   400,
+   800
+  ],
+  "img/port-6.webp": [
+   400,
+   800
+  ],
+  "img/port-7.webp": [
+   400,
+   800
+  ],
+  "img/port-8.webp": [
+   400,
+   800
+  ],
+  "img/port-9.webp": [
+   400,
+   800
+  ],
+  "img/proj-1-1.webp": [
+   400,
+   800
+  ],
+  "img/proj-1-2.webp": [
+   400,
+   800
+  ],
   "img/rev-3-1.webp": [
    400,
    800
   ],
-  "img/4.webp": [
+  "img/sponsor-2.webp": [
    400,
    800
   ],
-  "img/91.webp": [
-   400,
-   800
-  ],
-  "img/4-g1.webp": [
-   400,
-   800
-  ],
-  "img/4-g2.webp": [
-   400,
-   800
+  "img/sponsor-3.webp": [
+   400
   ]
  },
  "FOCAL": {
