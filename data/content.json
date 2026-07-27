@@ -3493,6 +3493,10 @@
    400,
    800
   ],
+  "img/cat-nuova-ms3k34dc.webp": [
+   400,
+   800
+  ],
   "img/port-1.webp": [
    400,
    800
@@ -3511,10 +3515,6 @@
   ],
   "img/sponsor-3.webp": [
    400
-  ],
-  "img/cat-nuova-ms3k34dc.webp": [
-   400,
-   800
   ]
  },
  "FOCAL": {
@@ -3594,7 +3594,7 @@
      "it": "Novità, recensioni dei clienti e promozioni stagionali.",
      "en": "News, customer reviews and seasonal promotions."
     },
-    "url": "https://facebook.com/inglydesign",
+    "url": "https://www.facebook.com/profile.php?id=61587546955326",
     "colore": "#1877f2,#0d5dbf",
     "attivo": true
    },
