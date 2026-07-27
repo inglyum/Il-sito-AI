@@ -355,20 +355,6 @@
  "REVIEWS": [
   {
    "q": {
-    "it": "\"60 taglieri incisi per le aperture dei nostri ristoranti. Precisione irreale — ogni logo identico, consegna in anticipo.\"",
-    "en": "\"60 engraved boards for our restaurant openings. Unreal precision — every logo identical, delivered early.\""
-   },
-   "w": "Marco R.",
-   "s": {
-    "it": "Gruppo ristorazione · Bologna",
-    "en": "Restaurant group · Bologna"
-   },
-   "c": "var(--blue)",
-   "i": "MR",
-   "ph": []
-  },
-  {
-   "q": {
     "it": "\"Le bomboniere hanno fatto piangere mezza sala. I cuori in ardesia con la nostra data erano oltre ogni aspettativa.\"",
     "en": "\"The favors made half the room cry. The slate hearts with our date were beyond expectations.\""
    },
@@ -379,21 +365,26 @@
    },
    "c": "#8f6ad1",
    "i": "GC",
-   "ph": []
+   "ph": [],
+   "vf": true
   },
   {
    "q": {
-    "it": "\"500 card in acciaio marcate F2 per il team vendite. La finitura tattile ferma le persone. Ora cliente fisso.\"",
-    "en": "\"500 F2-marked steel cards for our sales team. The tactile finish stops people. Repeat client now.\""
+    "it": "Sono super contenta dell’acquisto! Il prodotto personalizzato è stato realizzato benissimo, con grande cura nei dettagli e materiali di qualità.\nLa cosa più importante: mia figlia è stata felicissima del regalo ricevuto.\nUn articolo davvero bello, originale e fatto con attenzione. Consigliatissimo!",
+    "en": "I’m super happy with this purchase! The personalized product was beautifully made, with great attention to detail and excellent quality.\nMost importantly, my daughter was absolutely thrilled with the gift she received.\nA truly lovely, original item — highly recommended!"
    },
-   "w": "Luca T.",
+   "w": "Valeria M.",
    "s": {
-    "it": "Azienda tech · Milano",
-    "en": "Tech company · Milano"
+    "it": "Regalo compleanno ",
+    "en": "Birthday Gift"
    },
    "c": "#2c8a5b",
-   "i": "LT",
-   "ph": []
+   "i": "VM",
+   "ph": [
+    "img/rev-3-1.webp"
+   ],
+   "dt": "Giugno 2026",
+   "vf": true
   }
  ],
  "BIZ": [
@@ -3768,6 +3759,10 @@
    800
   ],
   "img/port-18.webp": [
+   400,
+   800
+  ],
+  "img/rev-3-1.webp": [
    400,
    800
   ]
