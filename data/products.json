@@ -122,18 +122,18 @@
  {
   "id": 4,
   "n": {
-   "it": "Lampada LED Plexiglass Personalizzata",
-   "en": "Custom LED Plexiglass Lamp"
+   "it": "Set Regalo Neonato Personalizzato in Legno - Body, Copertina e Accessori",
+   "en": "Personalized Wooden Baby Gift Set - Onesie, Blanket & Accessories"
   },
-  "cat": "casa",
-  "sub": 4,
+  "cat": "bambini",
+  "sub": 1,
   "mat": "Plexiglass",
   "price": 49,
   "icon": "💡",
   "img": "img/4.webp",
   "desc": {
-   "it": "Lampada da scrivania in plexiglass trasparente con incisione laser personalizzata. Base in legno con LED RGB. Interruttore touch. Ottimo regalo per ogni occasione.",
-   "en": "Personalised plexiglass desk lamp with laser engraving. Wood base, RGB LED, touch switch."
+   "it": "Rendi unico il benvenuto al tuo bebè con questo esclusivo kit regalo personalizzabile. Perfetto per la nascita o il baby shower.\n\nMassima Personalizzazione: Nome del bambino incluso, realizzato con materiali di alta qualità.\n\nMateriali Base: Tutti i prodotti tessili sono realizzati in tessuti morbidi e delicati. Gli elementi rigidi sono in legno naturale di alta qualità.\n\nOpzione Premium su Richiesta: Gli accessori rigidi (come targhette, portaciuccio, biberon) possono essere realizzati in plexyglass colorato (rosa/azzurro) o trasparente per un tocco moderno e lucido.\n\nContenuto dei Set (Varia in base al colore): Include body, copertina coordinata, bavaglino/asciugamano, e accessori personalizzati (peluche, biberon, borsa cambio, porta ciuccio).\n\nColori Disponibili: Rosa Delicato e Azzurro Cielo.",
+   "en": "Create a unique welcome for your baby with this exclusive customizable gift kit. Perfect for newborns and baby showers.\n\nFull Customization: Baby's name included, crafted with high-quality materials.\n\nBase Materials: All textile products are made from soft and gentle fabrics. The rigid elements are crafted from high-quality natural wood.\n\nPremium Option Upon Request: Rigid accessories (like tags, pacifier clips, bottles) can be made from colored (pink/blue) or clear plexiglass for a modern, glossy finish.\n\nSet Contents (Vary by color): Includes onesie, matching blanket, bib/towel, and personalized accessories (plush toy, bottle, diaper bag, pacifier clip).\n\nAvailable Colors: Soft Pink and Sky Blue."
   },
   "tag": "New",
   "coll": [
@@ -146,19 +146,19 @@
   "misure": [
    [
     "Base",
-    "15×8 cm"
+    "25×15cm"
    ],
    [
     "Altezza totale",
-    "28 cm"
-   ],
-   [
-    "Lastra plexi",
-    "20×15 cm"
+    "28 cm circa"
    ]
   ],
   "prod": 3,
-  "hidden": false
+  "hidden": false,
+  "gallery": [
+   "img/4-g1.webp",
+   "img/4-g2.webp"
+  ]
  },
  {
   "id": 5,
