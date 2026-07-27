@@ -168,12 +168,7 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
   <section class="view" id="v-dash">
     <div class="dash" id="dashCards"></div>
     <div class="card"><h3>⚡ Stato del sistema <button class="btn sm sp" data-go="health">Health Center →</button></h3><div class="hlog" id="dashHealth">…</div></div>
-    <div class="card"><h3>Azioni rapide</h3>
-      <button class="btn" data-go="prod">➕ Nuovo prodotto</button>
-      <button class="btn" data-go="media">🖼 Carica foto</button>
-      <button class="btn" data-go="hero">🎯 Home & Hero</button>
-      <button class="btn" data-go="hist">🕘 Cronologia</button>
-    </div>
+    <div id="dashAnalytics"></div>
   </section>
 
   <!-- ============ PRODOTTI ============ -->
@@ -562,6 +557,18 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
       <div style="margin-top:12px"><button class="btn" id="pubVerify">🔍 Verifica ora il sito online</button>
       <button class="btn" id="pubDiag">🩺 Diagnosi GitHub Pages</button></div>
     </div>
+    <div class="card"><h3>⏰ Pubblicazione Programmata</h3>
+      <p class="hint" style="margin-bottom:14px">Programma una pubblicazione automatica. Funziona solo se questa pagina Admin rimane aperta nel browser fino all'orario scelto.</p>
+      <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+        <div><label>Data e ora</label><input type="datetime-local" id="schedDt" style="width:auto"></div>
+        <div><label>Messaggio commit</label><input type="text" id="schedMsg" placeholder="Pubblicazione programmata" style="min-width:200px"></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn ok" id="schedSet">⏰ Programma</button>
+        <button class="btn err" id="schedCancel" style="display:none">✕ Annulla programmazione</button>
+      </div>
+      <div class="hint" id="schedOut" style="margin-top:8px"></div>
+    </div>
   </section>
 
   <!-- ============ CRONOLOGIA ============ -->
@@ -920,8 +927,47 @@ function renderDash(){
  if(!REPO_IMG)h.push('<div class="warn">⚠ Foto: esegui «Scansiona repository» nella Media Library per il conteggio esatto</div>');
  if(noPhoto>0)h.push(`<div class="warn">⚠ ${noPhoto} prodott${noPhoto===1?'o':'i'} senz${noPhoto===1?'a':'e'} foto — <button class="btn sm" data-go="prod" onclick="setTimeout(()=>{ const s=document.getElementById('pStatusF');if(s){s.value='nofoto';renderProd()} },100)">Vedi →</button></div>`);
  $('dashHealth').innerHTML=h.join('');
+ /* analytics mini-widget */
+ renderDashAnalytics();
 }
 function hasStaged(path){return MEDIA.some(m=>m.path===path)}
+
+/* ===== ANALYTICS MINI-DASHBOARD ===== */
+function renderDashAnalytics(){
+ const el=$('dashAnalytics');if(!el)return;
+ /* GoatCounter public stats API — nessun token, funziona solo se GoatCounter è configurato */
+ const gc=S.CONFIG&&S.CONFIG.goatcounter;
+ if(!gc){
+  el.innerHTML=`<div class="card" style="margin-top:12px"><h3>📈 Statistiche Visitatori</h3>
+   <p class="hint">Per vedere le statistiche in tempo reale, configura <b><a href="https://www.goatcounter.com" target="_blank" rel="noopener" style="color:var(--laser)">GoatCounter</a></b> (gratuito, privacy-friendly, no cookie) e aggiungi il codice al sito.</p>
+   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+     <button class="btn" id="gcSetupBtn">⚙️ Configura GoatCounter</button>
+   </div>
+   <div id="gcSetupBox" style="display:none;margin-top:14px">
+     <label>Codice sito GoatCounter (es. <code>inglydesign</code>)</label>
+     <div style="display:flex;gap:8px;margin-top:6px">
+       <input type="text" id="gcCode" placeholder="inglydesign" style="max-width:220px">
+       <button class="btn ok" id="gcSave">Salva</button>
+     </div>
+     <div class="hint" style="margin-top:8px">Registrati su <a href="https://www.goatcounter.com" target="_blank" rel="noopener">goatcounter.com</a>, crea il tuo sito, poi aggiungi il codice qui. Il codice è la parte prima di <code>.goatcounter.com</code>.</div>
+   </div>
+  </div>`;
+  $('gcSetupBtn').onclick=()=>{const b=$('gcSetupBox');b.style.display=b.style.display==='none'?'block':'none'};
+  $('gcSave').onclick=()=>{
+   const code=($('gcCode').value||'').trim();if(!code)return;
+   S.CONFIG.goatcounter=code;markDirty();toast('Codice GoatCounter salvato');renderDashAnalytics();
+  };
+  return;
+ }
+ el.innerHTML=`<div class="card" style="margin-top:12px"><h3>📈 Statistiche Visitatori <span class="hint" style="font-size:12px;font-weight:400">via GoatCounter · <a href="https://${esc(gc)}.goatcounter.com" target="_blank" rel="noopener" style="color:var(--soft)">vedi tutto →</a></span></h3>
+  <iframe src="https://${esc(gc)}.goatcounter.com/api/v0/stats/hits?format=html&start=-7d" style="width:100%;height:240px;border:none;border-radius:10px;background:var(--card2)" title="Statistiche visitatori GoatCounter"></iframe>
+  <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+    <a href="https://${esc(gc)}.goatcounter.com" target="_blank" rel="noopener" class="btn btn-ghost">Dashboard completa →</a>
+    <button class="btn sm err" id="gcRemove">Rimuovi</button>
+  </div>
+ </div>`;
+ $('gcRemove').onclick=()=>{delete S.CONFIG.goatcounter;markDirty();renderDashAnalytics();};
+}
 
 /* ================== BULK EDITOR PRODOTTI ================== */
 let BULK_SEL=new Set();
@@ -1047,7 +1093,7 @@ function renderProd(){
    <td class="mono" style="color:var(--soft)">${p.id}</td>
    <td><b>${esc(p.n.it)}</b>${p.hidden?'<span class="chip warn" style="margin-left:6px;font-size:10px">nascosto</span>':''}</td>
    <td class="hint" style="font-size:12px">${cat?esc(cat.ic)+' '+esc(cat.n.it):esc(p.cat)}</td>
-   <td style="font-weight:600">€${p.price}</td>
+   <td style="font-weight:600" title="Doppio click per modificare il prezzo"><span class="qprice" data-qid="${p.id}">€${p.price}</span></td>
    <td class="hint" style="font-size:12px">${esc(p.mat||'')}</td>
    <td style="text-align:center">${hasPhoto?'<span style="color:var(--ok)">✔</span>':'<span style="color:var(--err)">✗</span>'}</td>
    <td style="text-align:center">${hasDesc?'<span style="color:var(--ok)">✔</span>':'<span style="color:var(--warn)">—</span>'}</td>
@@ -1107,6 +1153,71 @@ function initProdDrag(){
    markDirty();renderProd();toast('Ordine aggiornato')});
  });
 }
+
+/* ===== QUICK PRICE INLINE EDIT ===== */
+document.addEventListener('dblclick',e=>{
+ const span=e.target.closest('.qprice');
+ if(!span)return;
+ e.stopPropagation();
+ const pid=+span.dataset.qid;
+ const p=(S.P||[]).find(x=>x.id===pid);if(!p)return;
+ const inp=document.createElement('input');
+ Object.assign(inp.style,{width:'72px',fontWeight:'600',fontSize:'inherit',padding:'2px 4px',border:'1px solid var(--laser)',borderRadius:'5px',background:'var(--card2)',color:'var(--ink)'});
+ inp.type='number';inp.step='0.5';inp.min='0';inp.value=p.price;
+ span.replaceWith(inp);inp.focus();inp.select();
+ const commit=()=>{
+  const v=parseFloat(inp.value);
+  if(!isNaN(v)&&v>=0){p.price=+v.toFixed(2);markDirty();}
+  renderProd();
+ };
+ inp.onblur=commit;
+ inp.onkeydown=e2=>{if(e2.key==='Enter')commit();if(e2.key==='Escape'){renderProd();}};
+});
+
+/* ===== PUBLICATION SCHEDULER ===== */
+let _schedTimer=null;
+function schedUpdate(){
+ const out=$('schedOut'),cancel=$('schedCancel');
+ const saved=localStorage.getItem('ingly_sched');
+ if(!saved||!cancel){return;}
+ const {dt,msg}=JSON.parse(saved);
+ const ms=new Date(dt)-Date.now();
+ if(ms<=0){localStorage.removeItem('ingly_sched');cancel.style.display='none';out.textContent='';return;}
+ const h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000),s=Math.floor((ms%60000)/1000);
+ out.textContent=`Pubblicazione programmata fra ${h}h ${m}m ${s}s — "${msg}"`;
+ cancel.style.display='';
+ if(_schedTimer)clearTimeout(_schedTimer);
+ if(ms<1000){
+  cancel.style.display='none';out.textContent='⏳ Pubblicazione in corso…';
+  $('pubMsg').value=msg||'Pubblicazione programmata';
+  document.getElementById('pubGo')?.click();
+  localStorage.removeItem('ingly_sched');
+ } else {
+  _schedTimer=setTimeout(schedUpdate,Math.min(ms,1000));
+ }
+}
+(function initSched(){
+ const set=$('schedSet'),cancel=$('schedCancel'),out=$('schedOut'),dt=$('schedDt'),msg=$('schedMsg');
+ if(!set)return;
+ /* default: +1 ora */
+ const d=new Date(Date.now()+3600000);
+ dt.value=d.toISOString().slice(0,16);
+ set.onclick=()=>{
+  const v=dt.value;if(!v){toast('Scegli data e ora');return;}
+  const ms=new Date(v)-Date.now();
+  if(ms<=0){toast('La data deve essere nel futuro');return;}
+  localStorage.setItem('ingly_sched',JSON.stringify({dt:v,msg:msg.value||'Pubblicazione programmata'}));
+  schedUpdate();
+  toast(`Pubblicazione programmata — ${new Date(v).toLocaleString('it-IT')}`);
+ };
+ cancel.onclick=()=>{
+  localStorage.removeItem('ingly_sched');
+  if(_schedTimer)clearTimeout(_schedTimer);
+  cancel.style.display='none';out.textContent='Programmazione annullata.';
+ };
+ schedUpdate();
+ setInterval(schedUpdate,1000);
+})();
 
 $('pSearch').oninput=renderProd;$('pCatF').onchange=renderProd;
 if($('pStatusF'))$('pStatusF').onchange=renderProd;
