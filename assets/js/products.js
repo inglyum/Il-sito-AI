@@ -439,7 +439,7 @@ function renderDisc(){const u=unit(),rows=[[1,9,1],[10,19,.95],[20,49,.9],[50,'�
   $('discTable').innerHTML=`<div class="row hd"><span>${T('dQty')}</span><span>${T('dDisc')}</span><span>${T('dUnit')}</span></div>`+rows.map(r=>{const hit=sel.qty>=r[0]&&(r[1]==='∞'||sel.qty<=r[1]);return `<div class="row ${hit?'hit':''}"><span>${r[0]}${r[1]==='∞'?'+':'–'+r[1]}</span><span>${r[2]===1?'—':'−'+Math.round((1-r[2])*100)+'%'}</span><span><b>${eur(u*r[2])}</b></span></div>`}).join('')}
 export function addFromPP(){
   const matLabel=sel.matAlt?(MATN[sel.matAlt]?MATN[sel.matAlt][L]:sel.matAlt):MATN[cur.mat][L];
-  const sizeLabel=sel.sizeIdx!==undefined&&cur.misure?.(cur.misure[sel.sizeIdx])?.[1]:'';
+  const sizeLabel=(sel.sizeIdx!==undefined&&cur.misure)?(cur.misure[sel.sizeIdx]?.[1]||''):'';
   const note=[sizeLabel,sel.customNote].filter(Boolean).join(' · ');
   addToCart(cur.id,sel.qty,matLabel,note,unit()*disc(sel.qty));
 }
@@ -498,26 +498,26 @@ export function renderCart(){
         const bg=i.dig?MAT_ART.File.bg:matArt(i.p.mat).bg;
         const meta=i.dig?i.dig.f.join(' · '):i.mat+(i.txt?' · “'+i.txt+'”':'');
         const unitPrice=eur(i.u);
-        return `<div class=”ditem”>
-          <div class=”di-img” style=”background:${bg}”>${ic}</div>
-          <div style=”flex:1;min-width:0”>
+        return `<div class="ditem">
+          <div class="di-img" style="background:${bg}">${ic}</div>
+          <div style="flex:1;min-width:0">
             <h4>${nm}</h4>
-            <div class=”di-meta”>${meta}</div>
-            <div class=”di-actions”>
-              ${i.dig?'':`<div class=”qty”><button data-action=”cart-qty” data-i=”${x}” data-d=”-1” aria-label=”−”>−</button><b>${i.q}</b><button data-action=”cart-qty” data-i=”${x}” data-d=”1” aria-label=”+”>+</button></div>`}
-              <button class=”di-rm” data-action=”cart-rm” data-i=”${x}”>${T('rm')}</button>
+            <div class="di-meta">${meta}</div>
+            <div class="di-actions">
+              ${i.dig?'':`<div class="qty"><button data-action="cart-qty" data-i="${x}" data-d="-1" aria-label="−">−</button><b>${i.q}</b><button data-action="cart-qty" data-i="${x}" data-d="1" aria-label="+">+</button></div>`}
+              <button class="di-rm" data-action="cart-rm" data-i="${x}">${T('rm')}</button>
             </div>
           </div>
-          <div class=”di-price-col”>
-            <span class=”di-price”>${eur(i.u*i.q)}</span>
-            ${i.q>1?`<span class=”di-unit”>${unitPrice} cad.</span>`:''}
+          <div class="di-price-col">
+            <span class="di-price">${eur(i.u*i.q)}</span>
+            ${i.q>1?`<span class="di-unit">${unitPrice} cad.</span>`:''}
           </div>
         </div>`;
       }).join('')
-    : `<div class=”dr-empty”>
-        <div class=”ill”><svg viewBox=”0 0 24 24”><path d=”M6 7h12l-1 13H7z”/><path d=”M9 7a3 3 0 0 1 6 0”/><path d=”M9.5 11v3M14.5 11v3” opacity=”.5”/></svg></div>
+    : `<div class="dr-empty">
+        <div class="ill"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/><path d="M9.5 11v3M14.5 11v3" opacity=".5"/></svg></div>
         <b>${T('crtE')}</b><p>${T('crtE2')}</p>
-        <button class=”btn btn-primary” style=”margin-top:16px” data-action=”go” data-arg=”shop”>${L==='it'?'Vai allo shop':'Go to shop'}</button>
+        <button class="btn btn-primary" style="margin-top:16px" data-action="go" data-arg="shop">${L==='it'?'Vai allo shop':'Go to shop'}</button>
       </div>`;
 
   /* barra spedizione gratuita */
