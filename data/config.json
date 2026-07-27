@@ -53,7 +53,7 @@
  },
  "aboutMedia": {
   "tipo": "video",
-  "src": "https://www.tiktok.com/@ingly_design/video/7666447635087248662?lang=en"
+  "src": "https://www.instagram.com/p/DbN8o67jmj_/"
  },
  "maintenance": {
   "attivo": false,
@@ -67,17 +67,30 @@
   },
   "mostraWhatsapp": true
  },
- "heroVideo": "https://www.tiktok.com/@ingly_design/video/7666447635087248662?lang=en",
+ "heroVideo": "https://www.instagram.com/p/DbN8o67jmj_/",
  "exitPopup": {
   "attivo": true,
   "bgImage": "",
   "bgColor": "#131a33",
-  "titolo": { "it": "Aspetta! Un regalo per te", "en": "Wait! A gift for you" },
-  "messaggio": { "it": "Scrivici su WhatsApp e ricevi <b>10% di sconto</b> sul tuo primo ordine personalizzato. Valido 48h.", "en": "Message us on WhatsApp and get <b>10% off</b> your first custom order. Valid 48h." },
-  "btnTesto": { "it": "Ottieni il 10% di sconto", "en": "Get 10% off" },
-  "notaTesto": { "it": "Offerta per nuovi clienti · Scade tra 48h", "en": "New customers only · Expires in 48h" },
+  "titolo": {
+   "it": "Aspetta! Un regalo per te",
+   "en": "Wait! A gift for you"
+  },
+  "messaggio": {
+   "it": "Scrivici su WhatsApp e ricevi <b>10% di sconto</b> sul tuo primo ordine personalizzato. Valido 48h.",
+   "en": "Message us on WhatsApp and get <b>10% off</b> your first custom order. Valid 48h."
+  },
+  "btnTesto": {
+   "it": "Ottieni il 10% di sconto",
+   "en": "Get 10% off"
+  },
+  "notaTesto": {
+   "it": "Offerta per nuovi clienti · Scade tra 48h",
+   "en": "New customers only · Expires in 48h"
+  },
   "emoji": "🎁",
   "delaySecondi": 45,
   "mostraSoloUnaVolta": true
- }
+ },
+ "siteBg": "sunset"
 }

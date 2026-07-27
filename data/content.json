@@ -567,44 +567,13 @@
    }
   ],
   [
-   "🏆",
-   {
-    "it": "Premio in vetro — Nova Tech",
-    "en": "Glass award — Nova Tech"
-   },
-   "#eef7f7,#cfe6e8"
-  ],
-  [
-   "💍",
-   {
-    "it": "Allestimento nozze",
-    "en": "Wedding signage"
-   },
-   "#f4f0ff,#d9ccf5"
-  ],
-  [
-   "🐾",
-   {
-    "it": "Medagliette in acciaio",
-    "en": "Steel pet tags"
-   },
-   "#4a4a55,#23232c"
-  ],
-  [
-   "💡",
-   {
-    "it": "Plexi retroilluminato",
-    "en": "Edge-lit acrylic"
-   },
-   "#dbe9ff,#aac6f5"
-  ],
-  [
    "🎂",
    {
     "it": "Cake topper su misura",
     "en": "Custom cake toppers"
    },
-   "#fdf1f3,#f5c8d2"
+   "#fdf1f3,#f5c8d2",
+   "img/port-2.webp"
   ],
   [
    "🔑",
@@ -612,493 +581,8 @@
     "it": "Portachiavi in pelle",
     "en": "Leather keychains"
    },
-   "#b9825a,#8a5a38"
-  ],
-  [
-   "🎄",
-   {
-    "it": "Run natalizia ×400",
-    "en": "Christmas run ×400"
-   },
-   "#fdeaea,#f0bcbc"
-  ],
-  [
-   "⚙️",
-   {
-    "it": "Marcatura industriale F2",
-    "en": "F2 industrial marking"
-   },
-   "#33313f,#211f2e"
-  ],
-  [
-   "👶",
-   {
-    "it": "Targhe nascita",
-    "en": "Birth plaques"
-   },
-   "#eefaf1,#bfe8cd"
-  ],
-  [
-   "🎓",
-   {
-    "it": "Targhe laurea",
-    "en": "Graduation plaques"
-   },
-   "#fff8e0,#f8e69a"
-  ],
-  [
-   "🌙",
-   {
-    "it": "Lampade 3D",
-    "en": "3D lamps"
-   },
-   "#f4f0ff,#e3daf8"
-  ],
-  [
-   "✨",
-   {
-    "it": "Nuovo lavoro",
-    "en": "New work"
-   },
-   "#e8d5b0,#c9a876"
-  ],
-  [
-   "✨",
-   {
-    "it": "Nuovo lavoro",
-    "en": "New work"
-   },
-   "#e8d5b0,#c9a876"
-  ],
-  [
-   "✨",
-   {
-    "it": "2",
-    "en": "2"
-   },
-   "#f4f0ff,#d9ccf5",
-   "img/port-2.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "2c237644 4895 4304 9f34 3b0e077b7c05",
-    "en": "2c237644 4895 4304 9f34 3b0e077b7c05"
-   },
-   "#ffeede,#f6cfa8",
-   "img/port-3.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "3",
-    "en": "3"
-   },
-   "#e3f0e8,#bcd9c6",
-   "img/port-4.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "3dbff510 1ed6 4802 98e6 54b54412279b",
-    "en": "3dbff510 1ed6 4802 98e6 54b54412279b"
-   },
-   "#fde8ef,#f3c3d3",
-   "img/port-5.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "4",
-    "en": "4"
-   },
-   "#e8d5b0,#c9a876",
-   "img/port-6.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "5",
-    "en": "5"
-   },
-   "#eef7f7,#cfe6e8",
-   "img/port-7.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "6fc08ffd7f8fb6b637dd54492851a47c",
-    "en": "6fc08ffd7f8fb6b637dd54492851a47c"
-   },
-   "#f4f0ff,#d9ccf5",
-   "img/port-8.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "14",
-    "en": "14"
-   },
-   "#ffeede,#f6cfa8",
-   "img/port-9.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "22e7c748ef1fcbdd",
-    "en": "22e7c748ef1fcbdd"
-   },
-   "#e3f0e8,#bcd9c6",
-   "img/port-10.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "37e9de61 d21c 4f42 8b29 2ca5d0af58f9",
-    "en": "37e9de61 d21c 4f42 8b29 2ca5d0af58f9"
-   },
-   "#fde8ef,#f3c3d3",
-   "img/port-11.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "45ec5863 7b58 41fc 8fd0 edf86cca44c0",
-    "en": "45ec5863 7b58 41fc 8fd0 edf86cca44c0"
-   },
-   "#e8d5b0,#c9a876",
-   "img/port-12.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "494d525c 5304 4e2b b542 11daf035e597",
-    "en": "494d525c 5304 4e2b b542 11daf035e597"
-   },
-   "#eef7f7,#cfe6e8",
-   "img/port-13.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "6314c838 7653 43ff b369 e57f4e87a4ff",
-    "en": "6314c838 7653 43ff b369 e57f4e87a4ff"
-   },
-   "#f4f0ff,#d9ccf5",
-   "img/port-14.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "Ac922a3315eed4e8ea14782bfc5c249d9P",
-    "en": "Ac922a3315eed4e8ea14782bfc5c249d9P"
-   },
-   "#ffeede,#f6cfa8",
-   "img/port-15.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "adfb8827 2f71 4d0e 898c 7e5c17257a3c",
-    "en": "adfb8827 2f71 4d0e 898c 7e5c17257a3c"
-   },
-   "#e3f0e8,#bcd9c6",
-   "img/port-16.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "ae73acd02fd939b51a6e8c6ab673a4ea",
-    "en": "ae73acd02fd939b51a6e8c6ab673a4ea"
-   },
-   "#fde8ef,#f3c3d3",
-   "img/port-17.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "baaa",
-    "en": "baaa"
-   },
-   "#e8d5b0,#c9a876",
-   "img/port-18.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "bba3a7d8b9aca0645ab146fe2d84fe7e",
-    "en": "bba3a7d8b9aca0645ab146fe2d84fe7e"
-   },
-   "#eef7f7,#cfe6e8",
-   "img/port-19.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "cdc8da5c da0f99 7d2950e4cc5c4cddb8ce8f0c9293ba79 mv2",
-    "en": "cdc8da5c da0f99 7d2950e4cc5c4cddb8ce8f0c9293ba79 mv2"
-   },
-   "#f4f0ff,#d9ccf5",
-   "img/port-20.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "dwdadad",
-    "en": "dwdadad"
-   },
-   "#ffeede,#f6cfa8",
-   "img/port-21.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "eedd",
-    "en": "eedd"
-   },
-   "#e3f0e8,#bcd9c6",
-   "img/port-22.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "Gemini Generated Image  (32)",
-    "en": "Gemini Generated Image  (32)"
-   },
-   "#fde8ef,#f3c3d3",
-   "img/port-23.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "Gemini Generated Image ntbwnsntbwnsntbw",
-    "en": "Gemini Generated Image ntbwnsntbwnsntbw"
-   },
-   "#e8d5b0,#c9a876",
-   "img/port-24.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "Gemini Generated Image xt4yt5xt4yt5xt4y",
-    "en": "Gemini Generated Image xt4yt5xt4yt5xt4y"
-   },
-   "#eef7f7,#cfe6e8",
-   "img/port-25.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "il 1588xN.7573918200 c2h5",
-    "en": "il 1588xN.7573918200 c2h5"
-   },
-   "#f4f0ff,#d9ccf5",
-   "img/port-26.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "il 1588xN.7749506656 8k7s",
-    "en": "il 1588xN.7749506656 8k7s"
-   },
-   "#ffeede,#f6cfa8",
-   "img/port-27.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "inisione",
-    "en": "inisione"
-   },
-   "#e3f0e8,#bcd9c6",
-   "img/port-28.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "ironman clean minimal",
-    "en": "ironman clean minimal"
-   },
-   "#fde8ef,#f3c3d3",
-   "img/port-29.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "Plant stand E0021299 file cdr and dxf free vector download for laser cut",
-    "en": "Plant stand E0021299 file cdr and dxf free vector download for laser cut"
-   },
-   "#e8d5b0,#c9a876",
-   "img/port-30.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 02 19 at 18.04.31 (1)",
-    "en": "WhatsApp Image 2026 02 19 at 18.04.31 (1)"
-   },
-   "#eef7f7,#cfe6e8",
-   "img/port-31.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 02 19 at 18.04.31",
-    "en": "WhatsApp Image 2026 02 19 at 18.04.31"
-   },
-   "#f4f0ff,#d9ccf5",
-   "img/port-32.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 02 19 at 18.04.33",
-    "en": "WhatsApp Image 2026 02 19 at 18.04.33"
-   },
-   "#ffeede,#f6cfa8",
-   "img/port-33.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 02 19 at 18.11.59",
-    "en": "WhatsApp Image 2026 02 19 at 18.11.59"
-   },
-   "#e3f0e8,#bcd9c6",
-   "img/port-34.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 03 07 at 23.19.47",
-    "en": "WhatsApp Image 2026 03 07 at 23.19.47"
-   },
-   "#fde8ef,#f3c3d3",
-   "img/port-35.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 03 07 at 23.19.48",
-    "en": "WhatsApp Image 2026 03 07 at 23.19.48"
-   },
-   "#e8d5b0,#c9a876",
-   "img/port-36.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 03 07 at 23.19.50 (2)",
-    "en": "WhatsApp Image 2026 03 07 at 23.19.50 (2)"
-   },
-   "#eef7f7,#cfe6e8",
-   "img/port-37.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 03 07 at 23.19.50 (4)",
-    "en": "WhatsApp Image 2026 03 07 at 23.19.50 (4)"
-   },
-   "#f4f0ff,#d9ccf5",
-   "img/port-38.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 03 07 at 23.19.51",
-    "en": "WhatsApp Image 2026 03 07 at 23.19.51"
-   },
-   "#ffeede,#f6cfa8",
-   "img/port-39.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 03 08 at 00.13.20   Copia",
-    "en": "WhatsApp Image 2026 03 08 at 00.13.20   Copia"
-   },
-   "#e3f0e8,#bcd9c6",
-   "img/port-40.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 03 28 at 18.12.40",
-    "en": "WhatsApp Image 2026 03 28 at 18.12.40"
-   },
-   "#fde8ef,#f3c3d3",
-   "img/port-41.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 03 29 at 10.42.18",
-    "en": "WhatsApp Image 2026 03 29 at 10.42.18"
-   },
-   "#e8d5b0,#c9a876",
-   "img/port-42.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 04 16 at 17.41.34 (2)",
-    "en": "WhatsApp Image 2026 04 16 at 17.41.34 (2)"
-   },
-   "#eef7f7,#cfe6e8",
-   "img/port-43.webp",
-   ""
-  ],
-  [
-   "✨",
-   {
-    "it": "WhatsApp Image 2026 05 30 at 20.24.49",
-    "en": "WhatsApp Image 2026 05 30 at 20.24.49"
-   },
-   "#f4f0ff,#d9ccf5",
-   "img/port-44.webp",
-   ""
+   "#b9825a,#8a5a38",
+   "img/port-3.webp"
   ]
  ],
  "FONTS": [
@@ -3928,6 +3412,16 @@
      "en": ""
     },
     "logo": "img/sponsor-2.webp"
+   },
+   {
+    "nome": "Nuovo partner",
+    "link": "https://www.facebook.com/profile.php?id=61571904102246",
+    "livello": "",
+    "desc": {
+     "it": " Via Roma 300, San Cipirello, Italy, 90040",
+     "en": ""
+    },
+    "logo": "img/sponsor-3.webp"
    }
   ]
  },
@@ -4012,6 +3506,21 @@
   "img/port-1.webp": [
    400,
    800
+  ],
+  "img/port-2.webp": [
+   400,
+   800
+  ],
+  "img/port-3.webp": [
+   400,
+   800
+  ],
+  "img/sponsor-2.webp": [
+   400,
+   800
+  ],
+  "img/sponsor-3.webp": [
+   400
   ]
  },
  "SOCIAL_HUB": {
@@ -4027,7 +3536,9 @@
    { "id": "pt", "piattaforma": "pinterest", "attivo": true, "titolo": { "it": "Pinterest", "en": "Pinterest" }, "desc": { "it": "Idee regalo e ispirazioni per personalizzazioni.", "en": "Gift ideas and customisation inspiration." }, "url": "https://pinterest.com/inglydesign", "img": "", "badge": "inglydesign", "colore": "#E60023,#AD081B", "emoji": "📌" }
   ]
  },
- "FOCAL": {},
+ "FOCAL": {
+  "img/1.webp": "52% 42%"
+ },
  "POPUP": {
   "attivo": false,
   "id": "welcome2026",
