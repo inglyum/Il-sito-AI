@@ -3545,6 +3545,103 @@
    "it": "@ingly.design",
    "en": "@ingly.design"
   },
-  "cards": []
+  "cards": [
+   {
+    "id": "instagram",
+    "emoji": "📸",
+    "badge": "Daily",
+    "titolo": {
+     "it": "Instagram",
+     "en": "Instagram"
+    },
+    "desc": {
+     "it": "Dietro le quinte del laboratorio: incisioni live, nuovi materiali e anteprime.",
+     "en": "Behind the scenes: live engraving, new materials and previews."
+    },
+    "url": "https://instagram.com/ingly_design",
+    "colore": "#e1306c,#c13584",
+    "attivo": true
+   },
+   {
+    "id": "tiktok",
+    "emoji": "🎬",
+    "badge": "Video",
+    "titolo": {
+     "it": "TikTok",
+     "en": "TikTok"
+    },
+    "desc": {
+     "it": "Il laser in azione. Video brevi dal primo taglio al pezzo finito.",
+     "en": "The laser in action. Short videos from first cut to finished piece."
+    },
+    "url": "https://tiktok.com/@ingly.design",
+    "colore": "#25f4ee,#fe2c55",
+    "attivo": true
+   },
+   {
+    "id": "facebook",
+    "emoji": "👥",
+    "badge": "Community",
+    "titolo": {
+     "it": "Facebook",
+     "en": "Facebook"
+    },
+    "desc": {
+     "it": "Novità, recensioni dei clienti e promozioni stagionali.",
+     "en": "News, customer reviews and seasonal promotions."
+    },
+    "url": "https://facebook.com/inglydesign",
+    "colore": "#1877f2,#0d5dbf",
+    "attivo": true
+   },
+   {
+    "id": "whatsapp",
+    "emoji": "💬",
+    "badge": "Preventivi",
+    "titolo": {
+     "it": "WhatsApp",
+     "en": "WhatsApp"
+    },
+    "desc": {
+     "it": "Scrivici per un preventivo su misura. Risposta in giornata.",
+     "en": "Message us for a custom quote. Same-day reply."
+    },
+    "url": "https://wa.me/393296904627",
+    "colore": "#25d366,#128c7e",
+    "attivo": true
+   },
+   {
+    "id": "etsy",
+    "emoji": "🛍️",
+    "badge": "Shop",
+    "titolo": {
+     "it": "Etsy",
+     "en": "Etsy"
+    },
+    "desc": {
+     "it": "Il nostro negozio internazionale con spedizione in tutta Europa.",
+     "en": "Our international shop with shipping across Europe."
+    },
+    "url": "https://etsy.com/shop/inglydesign",
+    "colore": "#f56400,#d35400",
+    "attivo": true
+   },
+   {
+    "id": "pinterest",
+    "emoji": "📌",
+    "badge": "Ispirazione",
+    "titolo": {
+     "it": "Pinterest",
+     "en": "Pinterest"
+    },
+    "desc": {
+     "it": "Idee regalo, allestimenti e ispirazioni per il tuo progetto.",
+     "en": "Gift ideas, setups and inspiration for your project."
+    },
+    "url": "https://pinterest.com/inglydesign",
+    "colore": "#e60023,#b3001b",
+    "attivo": true
+   }
+  ]
  }
 }
