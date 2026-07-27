@@ -1,12 +1,19 @@
 /* ============ SERVICE WORKER — INGLY DESIGN ============
    Strategia:
-   - CSS / JS / icone / font → Cache-first (versioned, durata 7gg)
+   - CSS / JS → Network-first con fallback cache (il deploy deve SEMPRE arrivare)
    - JSON data → Network-first con fallback cache (dati freschi ogni volta)
-   - Immagini → Cache-first (durata 30gg)
+   - Immagini / font → Cache-first (contenuto immutabile, si può cachare a lungo)
    - HTML / navigazione → Network-first con fallback offline page
-   Offline page: mostrata solo se non si può caricare nessuna risorsa HTML. */
+   Offline page: mostrata solo se non si può caricare nessuna risorsa HTML.
 
-const CACHE_VER   = 'ingly-v2';
+   ATTENZIONE — perché CSS/JS sono network-first e NON cache-first:
+   il sito si pubblica dall'Admin più volte al giorno. Con cache-first i moduli
+   restavano in cache per sempre: il browser continuava a eseguire il JS vecchio
+   mentre i JSON (network-first) arrivavano nuovi. Quel disallineamento fra dati
+   nuovi e codice vecchio rompeva il sito e rendeva ogni deploy invisibile agli
+   utenti già passati sul sito. Non riportare CSS/JS a cache-first. */
+
+const CACHE_VER   = 'ingly-v3';
 const CACHE_ASSETS= CACHE_VER + '-assets';
 const CACHE_DATA  = CACHE_VER + '-data';
 const CACHE_IMG   = CACHE_VER + '-img';
@@ -73,6 +80,10 @@ self.addEventListener('fetch', e => {
 
   /* Solo richieste GET dello stesso origin (+ Google Fonts) */
   if(e.request.method !== 'GET') return;
+
+  /* Il service worker e la versione dei dati non passano mai dalla cache:
+     sono i due canali con cui il sito si accorge di un nuovo deploy. */
+  if(url.pathname === '/sw.js' || url.pathname.endsWith('/version.json')) return;
   const isFont = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
   if(url.origin !== self.location.origin && !isFont) return;
 
@@ -94,9 +105,16 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  /* CSS / JS / altri assets → Cache-first */
-  if(/\.(css|js|woff2?|ttf)$/i.test(url.pathname)){
+  /* Font locali → Cache-first (immutabili) */
+  if(/\.(woff2?|ttf)$/i.test(url.pathname)){
     e.respondWith(cacheFirst(e.request, CACHE_ASSETS));
+    return;
+  }
+
+  /* CSS / JS → Network-first: un deploy deve sempre raggiungere l'utente.
+     La cache resta solo come rete di sicurezza offline. */
+  if(/\.(css|js)$/i.test(url.pathname)){
+    e.respondWith(networkFirst(e.request, CACHE_ASSETS, 4000));
     return;
   }
 

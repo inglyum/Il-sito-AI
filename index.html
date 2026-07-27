@@ -95,9 +95,31 @@
 <script>(function(){try{var m=localStorage.getItem("ingly_mode");if(!m)m=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-mode",m)}catch(e){}})();</script>
 <!-- GitHub Pages SPA: decodifica /?p=/shop → history '/shop' prima del caricamento -->
 <script>(function(){try{var s=new URLSearchParams(location.search);var p=s.get('p');if(p){s.delete('p');var rest=s.toString();var url=p+(rest?'?'+rest:'');history.replaceState(null,'',url);}}catch(e){}})();</script>
+<!-- SBLOCCO CACHE — deve restare QUI, inline in index.html.
+     index.html è l'unico file che il service worker scarica sempre dalla rete:
+     se questo controllo vivesse in un file .js, una cache avvelenata servirebbe
+     la versione vecchia del controllo stesso e non verrebbe mai eseguito.
+     Se in memoria esistono cache di una versione precedente, le cancella,
+     rimuove il service worker e ricarica una volta sola. Aggiornare CACHE_WANT
+     insieme a CACHE_VER in sw.js. -->
+<script>(function(){
+  var CACHE_WANT='ingly-v3', FLAG='ingly_cachefix';
+  try{
+    if(!window.caches||!('serviceWorker' in navigator))return;
+    if(sessionStorage.getItem(FLAG))return;              /* una sola volta per sessione */
+    caches.keys().then(function(keys){
+      var stale=keys.filter(function(k){return k.indexOf(CACHE_WANT)!==0});
+      if(!stale.length)return;                            /* già aggiornato: non fare nulla */
+      sessionStorage.setItem(FLAG,'1');
+      return Promise.all(keys.map(function(k){return caches.delete(k)}))
+        .then(function(){return navigator.serviceWorker.getRegistrations()})
+        .then(function(rs){return Promise.all(rs.map(function(r){return r.unregister()}))})
+        .then(function(){location.reload()});
+    }).catch(function(){});
+  }catch(e){}
+})();</script>
 <!-- Preload critical assets -->
 <link rel="preload" as="image" href="assets/images/og-image.jpg" fetchpriority="high">
-<link rel="preload" as="image" href="assets/images/hero.webp" fetchpriority="high" type="image/webp">
 <link rel="preload" as="fetch" href="data/products.json" crossorigin>
 <link rel="modulepreload" href="assets/js/app.js">
 <link rel="modulepreload" href="assets/js/data-loader.js">
@@ -648,10 +670,19 @@
 <!-- Service Worker + PWA install -->
 <script>
 (function(){
-  /* SW registration */
+  /* SW registration.
+     reg.update() a ogni caricamento: il browser ricontrolla /sw.js e installa
+     subito una versione nuova dopo un deploy.
+     NIENTE reload automatico su controllerchange: un reload forzato riparte
+     dall'indirizzo corrente e, se una qualsiasi riga di JS ha nel frattempo
+     riscritto la URL, trasforma un errore silenzioso in una navigazione vera
+     verso una pagina sbagliata. Il ricambio del codice è già garantito dal
+     service worker (CSS/JS network-first) e da app.js (auto-riparazione). */
   if('serviceWorker' in navigator){
-    window.addEventListener('load',()=>{
-      navigator.serviceWorker.register('/sw.js').catch(()=>{});
+    window.addEventListener('load',function(){
+      navigator.serviceWorker.register('/sw.js').then(function(reg){
+        try{ reg.update() }catch(e){}
+      }).catch(function(){});
     });
   }
   /* Install prompt */

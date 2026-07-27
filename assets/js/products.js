@@ -651,6 +651,12 @@ export function closeLightbox(){
 let URL_LOCK=false;
 export function syncFiltersToURL(){
   if(URL_LOCK) return;
+  /* L'indirizzo dei filtri appartiene SOLO alla pagina shop.
+     renderShop() gira a ogni caricamento anche quando lo shop non è la pagina
+     visibile: senza questo controllo la home veniva riscritta in "/shop" e
+     l'utente che digitava inglydesign.it si ritrovava sul catalogo. */
+  const active=document.querySelector('.page.active');
+  if(!active || active.id!=='page-shop') return;
   try{
     const q=[];
     const t=($('q')&&$('q').value||'').trim();
