@@ -364,6 +364,7 @@
         <div class="qtyrow">
           <div class="qty"><button data-action="pp-qty" data-d="-1" aria-label="−">−</button><b id="ppQty">1</b><button data-action="pp-qty" data-d="1" aria-label="+">+</button></div>
           <button class="btn btn-primary addbtn magnetic" data-action="pp-add"><span data-i18n="ppAdd">Aggiungi</span> — <span id="ppTotal"></span></button>
+          <button class="btn btn-ghost btn-icon" id="ppShare" aria-label="Condividi" title="Condividi prodotto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg></button>
         </div>
         <div class="disc-table" id="discTable"></div>
         <!-- Tabs -->
@@ -387,6 +388,20 @@
       <span class="eyebrow" data-i18n="relEye">Abbinamenti</span>
       <h2 class="h2" style="font-size:clamp(1.8rem,3.4vw,2.6rem)" data-i18n="relH2">Stanno bene insieme</h2>
       <div class="pgrid pgrid-6" id="relGrid"></div>
+    </div>
+  </div>
+
+  <!-- INSTAGRAM FEED -->
+  <div class="sec" style="padding-top:0;padding-bottom:60px">
+    <div class="wrap">
+      <div class="sec-head reveal" style="text-align:center;margin-bottom:28px">
+        <span class="eyebrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          Instagram
+        </span>
+        <h2 class="h2" style="font-size:clamp(1.6rem,4vw,2.6rem)">Le ultime <span class="hl on">creazioni</span></h2>
+      </div>
+      <div id="igFeedSection" class="reveal"></div>
     </div>
   </div>
 </section>

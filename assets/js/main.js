@@ -11,6 +11,7 @@ import { initLazy } from './lazyload.js';
 import { initSeo, updateSeo } from './seo.js';
 import * as wish from './wishlist.js';
 import { initReferral, shareRef } from './referral.js';
+import { initShare, initFomo, openWhatsApp, renderInstagramFeed } from './social.js';
 
 /* ---- config → DOM ---- */
 function initHeroVideo(){
@@ -413,6 +414,9 @@ $('mq').innerHTML+=$('mq').innerHTML;
 applyConfig();renderSocials();initHeroVideo();
 initSeo();
 initNav();initAnimations();initLazy();initForms();prod.initShopControls();initDelegation();
+initShare();
+initFomo();
+renderInstagramFeed('igFeedSection');
 applyI18n();prod.readFiltersFromURL();renderAll();bindLightbox();bindSuggest();bindMode();
 initBgPicker();
 wish.initWish();

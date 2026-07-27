@@ -963,3 +963,43 @@ body{background-color:var(--paper)}
 .pwa-install-bar{position:fixed;bottom:0;left:0;right:0;z-index:9500;background:var(--bg-card);border-top:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -4px 24px rgba(0,0,0,.3);animation:slideUp .35s ease}
 .pwa-btns{display:flex;gap:8px;flex-shrink:0}
 @media(max-width:480px){.pwa-install-bar{flex-direction:column;text-align:center}}
+
+/* ===== FOMO TOAST ===== */
+.fomo-toast{position:fixed;bottom:90px;left:20px;z-index:9400;background:var(--bg-card);border:1px solid var(--line);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,.35);font-size:13.5px;max-width:320px;transform:translateX(-360px);transition:transform .45s cubic-bezier(.2,.7,.3,1),opacity .45s}
+.fomo-toast.in{transform:translateX(0)}
+.fomo-dot{width:8px;height:8px;border-radius:50%;background:#25d366;flex-shrink:0;box-shadow:0 0 6px #25d366}
+.fomo-toast button{margin-left:auto;opacity:.45;font-size:14px;background:none;border:none;cursor:pointer;padding:0 2px;color:var(--ink)}
+.fomo-toast button:hover{opacity:1}
+
+/* ===== SHARE TOAST ===== */
+.share-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);z-index:9500;background:var(--accent);color:#fff;padding:10px 22px;border-radius:100px;font-size:14px;font-weight:600;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none}
+.share-toast.in{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ===== SHARE BUTTON ===== */
+.btn-icon{width:44px;height:44px;border-radius:50%;padding:0;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--line)}
+.btn-icon:hover{background:var(--bg-card);transform:scale(1.08)}
+.qtyrow{gap:10px;flex-wrap:wrap}
+
+/* ===== GLASSMORPHISM CARDS ===== */
+.pcard{backdrop-filter:blur(0px);transition:transform .42s cubic-bezier(.2,.7,.3,1),box-shadow .42s,backdrop-filter .42s}
+.pcard:hover{backdrop-filter:blur(8px)}
+.pcard::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.06) 0%,transparent 60%);opacity:0;transition:opacity .4s;pointer-events:none}
+.pcard:hover::before{opacity:1}
+
+/* ===== INSTAGRAM FEED ===== */
+.ig-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.ig-link{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px;opacity:.85;transition:opacity .25s}
+.ig-link:hover{opacity:1}
+.ig-fallback{text-align:center;margin-top:18px;font-size:13px;opacity:.6}
+behold-widget{display:block;min-height:240px}
+
+/* ===== GRADIENT MESH HERO ===== */
+.hero-bg .blob{transition:none}
+
+/* ===== HERO VIDEO ===== */
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.18;z-index:0;border-radius:inherit;pointer-events:none}
+.coin-scene{position:relative;z-index:1}
+
+/* ===== LASER CURSOR GLOW ===== */
+#glow-orb{position:fixed;top:0;left:0;width:340px;height:340px;margin:-170px 0 0 -170px;border-radius:50%;background:radial-gradient(circle,rgba(255,165,40,.12) 0%,transparent 70%);pointer-events:none;z-index:9000;opacity:0;transition:opacity .6s;will-change:transform}
+#glow-orb.hot{background:radial-gradient(circle,rgba(255,100,20,.22) 0%,transparent 70%)}

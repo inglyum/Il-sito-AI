@@ -109,26 +109,110 @@ export function initAnimations(){
   addEventListener('load',()=>setTimeout(()=>document.getElementById('loader').classList.add('off'),900));
   setTimeout(()=>document.getElementById('loader').classList.add('off'),3500);
 
-  /* particelle (polvere blu + scintille arancio) */
+  /* ===== PARTICELLE LASER AVANZATE =====
+     Tre tipi: polvere blu, scintille arancio, fasci laser che seguono il cursore */
   (function(){
     const cv=document.getElementById('fx');if(!cv)return;
     let ctx=null;try{ctx=cv.getContext('2d')}catch(e){}if(!ctx)return;
     if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
     let W,H,dpr=Math.min(2,devicePixelRatio||1);
-    const rs=()=>{W=cv.width=innerWidth*dpr;H=cv.height=innerHeight*dpr};rs();addEventListener('resize',rs);
-    const N=46,pts=[];
-    for(let i=0;i<N;i++)pts.push({x:Math.random(),y:Math.random(),r:Math.random()*1.6+.4,s:Math.random()*.00022+.00005,o:Math.random()*.5+.15,sp:Math.random()<.18});
+    const rs=()=>{W=cv.width=innerWidth*dpr;H=cv.height=innerHeight*dpr};rs();addEventListener('resize',rs,{passive:true});
+
+    /* particelle dust + scintille */
+    const N=60,pts=[];
+    for(let i=0;i<N;i++) pts.push({
+      x:Math.random(),y:Math.random(),
+      vx:(Math.random()-.5)*.0002,
+      r:Math.random()*1.8+.3,
+      s:Math.random()*.00028+.00004,
+      o:Math.random()*.55+.1,
+      sp:Math.random()<.22,
+      trail:[]
+    });
+
+    /* fasci laser: partono dal cursore */
+    let mx=.5,my=.5;
+    addEventListener('mousemove',e=>{mx=e.clientX/innerWidth;my=e.clientY/innerHeight},{passive:true});
+
+    const beams=Array.from({length:3},(_,i)=>({
+      angle:Math.PI/6+i*Math.PI/5,
+      len:Math.random()*.4+.3,
+      o:Math.random()*.18+.06,
+      speed:(Math.random()-.5)*.004
+    }));
+
     (function draw(){
       if(document.hidden){requestAnimationFrame(draw);return}
       ctx.clearRect(0,0,W,H);
-      for(const p of pts){
-        p.y-=p.s;if(p.y<-.02){p.y=1.02;p.x=Math.random()}
+
+      /* fasci laser dal cursore */
+      for(const b of beams){
+        b.angle+=b.speed;
+        const ex=(mx+Math.cos(b.angle)*b.len)*W;
+        const ey=(my+Math.sin(b.angle)*b.len)*H;
+        const g=ctx.createLinearGradient(mx*W,my*H,ex,ey);
+        g.addColorStop(0,`rgba(255,200,80,${b.o*1.8})`);
+        g.addColorStop(.6,`rgba(255,120,40,${b.o})`);
+        g.addColorStop(1,'rgba(255,80,20,0)');
         ctx.beginPath();
-        if(p.sp){ctx.fillStyle=`rgba(255,138,60,${p.o})`;ctx.fillRect(p.x*W,p.y*H,2.4*dpr,2.4*dpr);
-          ctx.strokeStyle=`rgba(255,138,60,${p.o*.4})`;ctx.lineWidth=dpr*.7;ctx.moveTo(p.x*W,p.y*H);ctx.lineTo(p.x*W-9*dpr,p.y*H+9*dpr);ctx.stroke();}
-        else{ctx.fillStyle=`rgba(120,160,235,${p.o})`;ctx.arc(p.x*W,p.y*H,p.r*dpr,0,7);ctx.fill()}
+        ctx.strokeStyle=g;
+        ctx.lineWidth=dpr*(b.o*8);
+        ctx.moveTo(mx*W,my*H);ctx.lineTo(ex,ey);ctx.stroke();
+        /* glow al punto di origine */
+        const glow=ctx.createRadialGradient(mx*W,my*H,0,mx*W,my*H,30*dpr);
+        glow.addColorStop(0,`rgba(255,200,80,${b.o*.9})`);
+        glow.addColorStop(1,'rgba(255,200,80,0)');
+        ctx.beginPath();ctx.fillStyle=glow;ctx.arc(mx*W,my*H,30*dpr,0,7);ctx.fill();
       }
-      requestAnimationFrame(draw)})();
+
+      /* particelle */
+      for(const p of pts){
+        p.y-=p.s;p.x+=p.vx;
+        if(p.y<-.02){p.y=1.02;p.x=Math.random();p.trail=[]}
+        if(p.x<0)p.x=1;if(p.x>1)p.x=0;
+        /* trail leggero sulle scintille */
+        if(p.sp){
+          p.trail.push([p.x*W,p.y*H]);
+          if(p.trail.length>8)p.trail.shift();
+          if(p.trail.length>1){
+            ctx.beginPath();
+            ctx.strokeStyle=`rgba(255,138,60,${p.o*.35})`;
+            ctx.lineWidth=dpr*.8;
+            ctx.moveTo(p.trail[0][0],p.trail[0][1]);
+            for(let t=1;t<p.trail.length;t++) ctx.lineTo(p.trail[t][0],p.trail[t][1]);
+            ctx.stroke();
+          }
+          ctx.fillStyle=`rgba(255,165,60,${p.o})`;
+          ctx.fillRect(p.x*W-dpr,p.y*H-dpr,2.8*dpr,2.8*dpr);
+        } else {
+          ctx.beginPath();
+          ctx.fillStyle=`rgba(110,155,235,${p.o})`;
+          ctx.arc(p.x*W,p.y*H,p.r*dpr,0,7);
+          ctx.fill();
+        }
+      }
+      requestAnimationFrame(draw);
+    })();
+  })();
+
+  /* ===== GRADIENT MESH ANIMATO — sfondo che respira =====
+     Blob colorati che si muovono lentamente: cambia con il tema stagionale */
+  (function(){
+    if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+    const heroBg=document.querySelector('.hero-bg');
+    if(!heroBg)return;
+    const blobs=heroBg.querySelectorAll('.blob');
+    let t=0;
+    (function loop(){
+      t+=.003;
+      blobs.forEach((b,i)=>{
+        const x=50+Math.sin(t+i*2.1)*18;
+        const y=50+Math.cos(t*1.3+i*1.7)*15;
+        const scale=1+Math.sin(t*.7+i)*0.2;
+        b.style.transform=`translate(${x-50}%,${y-50}%) scale(${scale.toFixed(3)})`;
+      });
+      requestAnimationFrame(loop);
+    })();
   })();
 
   /* tilt 3D su card e moneta */
