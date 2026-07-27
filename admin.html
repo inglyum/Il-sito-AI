@@ -815,8 +815,52 @@ function refreshSync(){const n=pending();$('pubN').textContent=n||'';const d=$('
  if(!BOOTED){d.className='dot';$('syncTxt').textContent='caricamento…';return}
  if(LOADED_FROM==='errore'){d.className='dot err';$('syncTxt').textContent='dati non caricati';return}
  if(n){d.className='dot dirty';$('syncTxt').textContent=n+' modifiche in bozza'}else{d.className='dot ok';$('syncTxt').textContent='sincronizzato · '+LOADED_FROM}}
-function markDirty(){refreshSync();if(VIEW==='pub')renderPub()}
+function markDirty(){refreshSync();saveDraft();if(VIEW==='pub')renderPub()}
 window.addEventListener('beforeunload',e=>{if(pending()){e.preventDefault();e.returnValue=''}});
+
+/* ============ BOZZA LOCALE — nessun lavoro deve andare perso ============
+   Il salvataggio di un prodotto scrive solo in memoria: diventa definitivo con
+   "Pubblica". Prima, una ricarica della pagina cancellava tutto e i prodotti
+   tornavano ai valori del sito — sembrava che il salvataggio non funzionasse.
+   Ora ogni modifica finisce anche in localStorage e al riavvio viene riproposta.
+   La bozza si cancella da sola dopo una pubblicazione riuscita. */
+const DRAFT_KEY='ingly_draft', DRAFT_TS='ingly_draft_ts', DRAFT_MAXAGE=14*24*3600*1000;
+function saveDraft(){
+  try{
+    const ch=changedFiles();
+    if(!ch.length){clearDraft();return}
+    const d={};ch.forEach(f=>d[f]=S[KEY[f]]);
+    localStorage.setItem(DRAFT_KEY,jstr(d));
+    localStorage.setItem(DRAFT_TS,String(Date.now()));
+  }catch(e){ console.warn('[INGLY] bozza non salvata (spazio esaurito?):',e) }
+}
+function clearDraft(){
+  try{localStorage.removeItem(DRAFT_KEY);localStorage.removeItem(DRAFT_TS);
+      localStorage.removeItem('ingly_draft_products')}catch(e){}
+}
+/* Va chiamata DOPO che SNAP contiene lo stato del sito: così le modifiche
+   ripristinate risultano correttamente "da pubblicare". */
+function restoreDraft(){
+  try{
+    const raw=localStorage.getItem(DRAFT_KEY), ts=+localStorage.getItem(DRAFT_TS)||0;
+    if(!raw||!ts) return;
+    if(Date.now()-ts>DRAFT_MAXAGE){clearDraft();return}
+    const d=JSON.parse(raw); if(!d||typeof d!=='object') {clearDraft();return}
+    /* tiene solo le sezioni che differiscono davvero dal sito */
+    const files=Object.keys(d).filter(f=>FILES.includes(f)&&jstr(d[f])!==SNAP[f]);
+    if(!files.length){clearDraft();return}
+    const quando=new Date(ts).toLocaleString('it-IT');
+    const nomi={config:'impostazioni',texts:'testi',social:'social',products:'prodotti',categories:'categorie',content:'contenuti'};
+    const elenco=files.map(f=>nomi[f]||f).join(', ');
+    if(!confirm('Hai modifiche non pubblicate del '+quando+'.\n\nSezioni: '+elenco+
+                '\n\nOK = riprendi il lavoro\nAnnulla = scarta e riparti dai dati del sito')){
+      clearDraft();return;
+    }
+    files.forEach(f=>{S[KEY[f]]=d[f]});
+    normalize();
+    toast('Bozza ripristinata: '+elenco);
+  }catch(e){ console.warn('[INGLY] restoreDraft:',e) }
+}
 
 /* ---------- utf8/base64 ---------- */
 function b64utf8(str){const b=new TextEncoder().encode(str);let s='';for(let i=0;i<b.length;i+=0x8000)s+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000));return btoa(s)}
@@ -892,6 +936,7 @@ async function loadAll(){
  }
  normalize();
  FILES.forEach(f=>SNAP[f]=MISSING.includes(f)?'"__MANCANTE__"':jstr(S[KEY[f]]));
+ restoreDraft();   /* dopo SNAP: le modifiche riprese restano "da pubblicare" */
  DATA_OK=FILES.length-MISSING.length>0&&!MISSING.includes('products')&&!MISSING.includes('categories');
  LOADED_FROM=winner?winner.label:'errore';BOOTED=true;refreshSync();
  if(MISSING.length)toast('Attenzione: file dati non trovati: '+MISSING.join(', ')+' — vedi Impostazioni per la diagnosi');
@@ -1354,6 +1399,7 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
    <input type="checkbox" id="ep_hidden" style="width:18px;height:18px;accent-color:var(--err)" ${p.hidden?'checked':''}>
    <span><b>Prodotto nascosto</b> — non appare nel catalogo né nei filtri (utile per bozze o prodotti esauriti)</span>
   </label>
+  <div id="ep_saveErr" style="display:none;margin:10px 0;padding:10px 12px;border-radius:8px;background:rgba(255,90,90,.12);border:1px solid rgba(255,90,90,.35);color:#ffb4b4;font-size:13px;line-height:1.6"></div>
   <div style="display:flex;gap:10px;flex-wrap:wrap">
    <button class="btn pri" id="ep_save">✔ Salva</button><button class="btn" id="ep_dup">⧉ Duplica</button><button class="btn err" id="ep_del">🗑 Elimina</button><button class="btn" onclick="closeModal()">Annulla</button></div>`);
  $('ep_cat').onchange=()=>{$('ep_sub').innerHTML=subOptions($('ep_cat').value,1)};
@@ -1385,8 +1431,7 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
   const coll=$('ep_coll').value.split(',').map(s=>s.trim()).filter(Boolean);coll.length?fresh.coll=coll:delete fresh.coll;
   /* copia fresco su p per compatibilità backward */
   Object.assign(p,fresh);
-  /* backup bozza in localStorage — sopravvive a refresh accidentale */
-  try{localStorage.setItem('ingly_draft_products',JSON.stringify(S.P));localStorage.setItem('ingly_draft_ts',Date.now())}catch(e){}
+  /* la bozza viene scritta da markDirty() → saveDraft(), che copre tutte le sezioni */
   console.log('[INGLY] Salvato #'+p.id+' → nome IT: "'+fresh.n.it+'" · prezzo: €'+fresh.price);
  }
  $('ep_reladd').onchange=()=>{const v=+$('ep_reladd').value;if(!v)return;
@@ -1410,7 +1455,27 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
   markDirty();editProd(id)});
  $('ep_gal').querySelectorAll('[data-gx]').forEach(b=>b.onclick=()=>{gatherFields();p.gallery.splice(+b.dataset.gx,1);if(!p.gallery.length)delete p.gallery;markDirty();editProd(id)});
  $('ep_gal').querySelectorAll('[data-gm]').forEach(b=>b.onclick=()=>{gatherFields();const[i,d]=b.dataset.gm.split(',').map(Number);const j=i+d;if(j<0||j>=p.gallery.length)return;[p.gallery[i],p.gallery[j]]=[p.gallery[j],p.gallery[i]];markDirty();editProd(id)});
- $('ep_save').onclick=()=>{gatherFields();markDirty();closeModal();renderProd();toast('Prodotto salvato in bozza ✔')};
+ $('ep_save').onclick=()=>{
+  /* Validazione PRIMA di chiudere: se un campo è sbagliato la finestra resta
+     aperta e l'errore è visibile, invece di chiudersi senza spiegazioni. */
+  const err=[];
+  const nome=($('ep_nit').value||'').trim();
+  const prezzo=parseFloat($('ep_price').value);
+  const cat=$('ep_cat').value;
+  if(!nome) err.push('Il nome in italiano è obbligatorio.');
+  if(!(prezzo>0)) err.push('Il prezzo deve essere maggiore di zero.');
+  if(!cat||!(S.CATS||[]).some(c=>c.id===cat)) err.push('Scegli una categoria valida.');
+  const box=$('ep_saveErr');
+  if(err.length){
+   if(box){box.style.display='block';box.innerHTML='⚠ '+err.map(esc).join('<br>⚠ ')}
+   toast('Correggi i campi segnalati');
+   if(!nome)$('ep_nit').focus(); else if(!(prezzo>0))$('ep_price').focus();
+   return;
+  }
+  if(box){box.style.display='none';box.innerHTML=''}
+  gatherFields();markDirty();closeModal();renderProd();
+  toast('«'+nome+'» salvato ✔ — premi «Pubblica» per metterlo online');
+ };
  $('ep_dup').onclick=()=>{const nid=Math.max(...S.P.map(x=>x.id))+1;const c=JSON.parse(jstr(p));c.id=nid;c.n.it+=' (copia)';delete c.img;delete c.gallery;S.P.push(c);markDirty();closeModal();renderProd();toast('Duplicato come #'+nid)};
  $('ep_del').onclick=()=>{const used=(S.CONFIG.heroFeatured||[]).includes(p.id);
   if(!confirm('Eliminare «'+p.n.it+'»?'+(used?'\nATTENZIONE: è tra i prodotti in evidenza della Hero — verrà rimosso anche da lì.':'')))return;
@@ -1568,9 +1633,9 @@ async function stageFile(path,proc){const hash=await sha1(proc.buf);
  if(dup)toast('Nota: immagine identica già presente come '+dup.path);
  markDirty()}
 function destOptions(){return '<optgroup label="Prodotti">'+(S.P||[]).map(p=>`<option value="p:${p.id}">#${p.id} · ${esc(p.n.it)}</option>`).join('')+'</optgroup>'+
- '<optgroup label="Portfolio / Dal laboratorio">'+((S.C.PORT)||[]).map((t,i)=>`<option value="t:${i}">Tessera ${i+1} · ${esc(t[1].it)}</option>`).join('')+'</optgroup>'+
+ '<optgroup label="Portfolio / Dal laboratorio"><option value="t:new">➕ Nuova tessera Portfolio</option>'+((S.C.PORT)||[]).map((t,i)=>`<option value="t:${i}">Tessera ${i+1} · ${esc(t[1].it)}</option>`).join('')+'</optgroup>'+
  '<optgroup label="Categorie (12 mondi)">'+(S.CATS||[]).map(c=>`<option value="c:${esc(c.id)}">${esc(c.ic)} ${esc(c.n.it)}</option>`).join('')+'</optgroup>'+
- '<optgroup label="Altro"><option value="about">Immagine «Chi siamo»</option><option value="free">Solo libreria</option></optgroup>'}
+ '<optgroup label="Altro"><option value="about">Immagine «Chi siamo»</option><option value="free">Solo libreria (nessun collegamento — resta qui, marcata «orfana»)</option></optgroup>'}
 function renderMRows(){
  $('mRows').innerHTML=STAGE_TMP.map((s,i)=>`<div class="list-it" style="align-items:center">
   <img src="${s.url}" style="width:62px;height:62px;object-fit:cover;border-radius:9px;border:1px solid var(--line)">
@@ -1609,6 +1674,16 @@ $('mDoAssign').onclick=async()=>{let n=0;
    if(slot==='gal'||slot==='both')await addToGallery(p,s.proc);
   }else if(dest.startsWith('c:')){const cat=S.CATS.find(x=>x.id===dest.slice(2));if(!cat)continue;
    const path='img/cat-'+cat.id+'.'+s.proc.ext;await stageWithVariants(path,s.proc);cat.img=path;
+  }else if(dest==='t:new'){
+   /* crea la tessera Portfolio al volo: prima si poteva assegnare un'immagine
+      solo a tessere già esistenti, quindi da qui non si poteva pubblicare un
+      lavoro nuovo senza prima crearlo a mano nella sezione Portfolio. */
+   S.C.PORT=Array.isArray(S.C.PORT)?S.C.PORT:[];
+   const titolo=(s.name.replace(/\.[^.]+$/,'').replace(/[-_]+/g,' ').trim())||('Lavoro '+(S.C.PORT.length+1));
+   const t=['🖼',{it:titolo,en:titolo},'#e8d5b0,#c9a876','','',{foto:[],dopo:'',social:''}];
+   S.C.PORT.push(t);
+   const i=S.C.PORT.length-1;
+   const path='img/port-'+(i+1)+'.'+s.proc.ext;await stageWithVariants(path,s.proc);t[3]=path;
   }else if(dest.startsWith('t:')){const i=+dest.slice(2),t=S.C.PORT[i];if(!t)continue;
    const path='img/port-'+(i+1)+'.'+s.proc.ext;await stageWithVariants(path,s.proc);t[3]=path;
   }else if(dest==='about'){const path='img/about.'+s.proc.ext;await stageFile(path,s.proc);
@@ -2588,6 +2663,7 @@ $('pubGo').onclick=async()=>{
   dels.forEach(p=>{const n=p.replace(/^img\//,'');REPO_IMG=(REPO_IMG||[]).filter(x=>x!==n);delete REPO_META[n]});
   DELETES=[];SEL=new Set();
   FILES.forEach(f=>SNAP[f]=jstr(S[KEY[f]]));
+  clearDraft();   /* pubblicato: la bozza locale non serve più */
   MEDIA.forEach(m=>{REPO_IMG=REPO_IMG||[];const n=m.path.replace(/^img\//,'');if(!REPO_IMG.includes(n))REPO_IMG.push(n)});
   MEDIA=[];$('pubMsg').value='';renderPub();
   /* === DA QUI IN POI IL LAVORO È SALVO: il commit esiste su GitHub === */
