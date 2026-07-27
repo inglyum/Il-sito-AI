@@ -452,7 +452,7 @@ function initBgPicker(){
 }
 
 /* ---- avvio ---- */
-$('mq').innerHTML+=$('mq').innerHTML;
+const _mq=$('mq');if(_mq)_mq.innerHTML+=_mq.innerHTML;
 applyConfig();renderSocials();initHeroVideo();
 initSeo();
 initNav();initAnimations();initLazy();initForms();prod.initShopControls();initDelegation();
