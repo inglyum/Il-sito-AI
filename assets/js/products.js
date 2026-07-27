@@ -584,14 +584,13 @@ export function syncFiltersToURL(){
     if(F.sub.size) q.push('sub='+[...F.sub].join(','));
     const pr=$('pRange'); if(pr && +pr.value<120) q.push('max='+pr.value);
     if(SORT&&SORT!=='rel') q.push('sort='+SORT);
-    const base=location.hash.split('?')[0]||'#/shop';
-    const next=base+(q.length?'?'+q.join('&'):'');
-    if(location.hash!==next) history.replaceState(null,'',next);
+    const next='/shop'+(q.length?'?'+q.join('&'):'');
+    if(location.pathname+location.search!==next) history.replaceState(null,'',next);
   }catch(e){}
 }
 export function readFiltersFromURL(){
   try{
-    const raw=location.hash.split('?')[1]; if(!raw) return false;
+    const raw=location.search.slice(1)||location.hash.split('?')[1]; if(!raw) return false;
     const pr=new URLSearchParams(raw);
     URL_LOCK=true;
     F.cat.clear(); F.mat.clear(); F.sub.clear();
@@ -667,7 +666,7 @@ export function openProject(idx){
     +(D.video?`<div class="proj-video"><video src="${D.video}" controls preload="none" playsinline></video></div>`:'')
     +(linked.length?`<div class="proj-eyebrow" style="margin-top:18px">Prodotti del progetto</div>
         <div class="proj-linked">${linked.map(pr=>
-        `<a class="btn" href="#/product?id=${pr.id}" data-action="close-proj">${pr.n[L]}</a>`).join('')}</div>`:'')
+        `<a class="btn" href="/product?id=${pr.id}" data-action="close-proj">${pr.n[L]}</a>`).join('')}</div>`:'')
     +((D.social||t[4])?`<div class="proj-linked"><a class="btn btn-primary" href="${D.social||t[4]}" target="_blank" rel="noopener">Guarda su Instagram ↗</a></div>`:'');
   box.hidden=false; document.body.style.overflow='hidden';
   return true;

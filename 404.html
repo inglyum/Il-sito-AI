@@ -3,16 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <title>INGLY DESIGN</title>
-<!-- GitHub Pages SPA redirect: converte /shop → /#/shop -->
+<!-- GitHub Pages SPA — History API clean URL redirect
+     /shop        → encodes as /?p=/shop       → index.html decodes → history.replaceState('/shop')
+     /product?id=5 → /?p=/product&id=5         → index.html decodes → '/product?id=5'
+-->
 <script>
 (function(){
-  var p=window.location.pathname;
-  var s=window.location.search;
-  // Se il path è una pagina SPA (non un file con estensione), redirect con hash
-  if(p!=='/'&&!/\.[a-zA-Z]{2,4}$/.test(p)){
-    var hash='#'+p+(s?s:'');
-    window.location.replace('/'+hash);
-  }
+  var loc=window.location;
+  var path=loc.pathname;
+  var search=loc.search;
+  // Se è un file con estensione (es. .js, .css, .webp) non fare redirect — è un 404 reale
+  if(/\.[a-zA-Z]{2,5}$/.test(path)) return;
+  // Rimuovi il trailing slash
+  path=path.replace(/\/$/,'') || '/';
+  // Encode il percorso come query param, poi redirect a /
+  var dest=loc.origin+'/?p='+encodeURIComponent(path)+(search?'&'+search.slice(1):'');
+  window.location.replace(dest);
 })();
 </script>
 </head>

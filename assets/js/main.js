@@ -94,9 +94,9 @@ function bindSuggest(){
   const choose=i=>{
     const s=items[i]; if(!s) return;
     close();
-    if(s.action==='open-product'){ location.hash='#/product?id='+s.arg; }
-    else if(s.action==='go-shop'){ q.value=''; prod.togCat(s.arg); location.hash='#/shop'; }
-    else if(s.action==='sugg-mat'){ q.value=''; prod.togMat(s.arg); location.hash='#/shop'; }
+    if(s.action==='open-product'){ go('product','id='+s.arg); }
+    else if(s.action==='go-shop'){ q.value=''; prod.togCat(s.arg); go('shop'); }
+    else if(s.action==='sugg-mat'){ q.value=''; prod.togMat(s.arg); go('shop'); }
   };
   q.addEventListener('input',()=>{ items=prod.searchSuggest(q.value); cur=-1; paint() });
   q.addEventListener('keydown',e=>{
