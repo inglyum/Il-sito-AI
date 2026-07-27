@@ -59,7 +59,7 @@
 .mcard.m-lg{grid-column:span 3}
 .mcard .mtype{font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--laser);display:flex;align-items:center;gap:8px}
 .mcard .mtype::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--laser);box-shadow:0 0 10px 2px rgba(244,223,87,.9);animation:pulse 1.8s infinite}
-.mcard h3{font-size:clamp(1.4rem,2.2vw,1.8rem);margin:14px 0 8px;color:var(--paper)}.mcard p{font-size:14px}
+.mcard h3{font-size:clamp(1.4rem,2.2vw,1.8rem);margin:14px 0 8px;color:#eef1fb}.mcard p{font-size:14px;color:#9aa3c7}
 .mcard .spec{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}.mcard .spec i{font-style:normal;font-family:var(--fd);font-size:11.5px;font-weight:600;border:1px solid #454259;padding:5px 12px;border-radius:100px}
 .mcard::after{content:'';position:absolute;top:0;right:-40%;width:80%;height:100%;background:radial-gradient(circle at 70% 20%,rgba(54,118,201,.25),transparent 60%);opacity:0;transition:opacity .6s}
 .mcard:hover::after{opacity:1}

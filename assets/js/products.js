@@ -194,6 +194,23 @@ export function openProduct(id){RV=[id,...RV.filter(x=>x!==id)].slice(0,8);
   cur=P.find(x=>x.id===id)||P[0];sel={qty:1};galIdx=0;
   renderPP();go('product')}
 
+function renderVideoEmbed(url,poster){
+  // YouTube: watch?v=ID, youtu.be/ID, shorts/ID
+  const ytMatch=url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  if(ytMatch){
+    const id=ytMatch[1];
+    return `<div style="position:relative;padding-bottom:56.25%;border-radius:var(--radius);overflow:hidden;background:#000"><iframe src="https://www.youtube.com/embed/${id}?rel=0&modestbranding=1" title="Video prodotto" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;web-share" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none"></iframe></div>`;
+  }
+  // TikTok: tiktok.com/@user/video/ID
+  const ttMatch=url.match(/tiktok\.com\/@[\w.]+\/video\/(\d+)/);
+  if(ttMatch){
+    const id=ttMatch[1];
+    return `<div style="position:relative;padding-bottom:177.78%;max-width:340px;margin:0 auto;border-radius:var(--radius);overflow:hidden;background:#000"><iframe src="https://www.tiktok.com/embed/v2/${id}" title="Video prodotto" frameborder="0" allow="autoplay" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none"></iframe></div>`;
+  }
+  // direct mp4 / webm
+  return `<video src="${url}" controls preload="none" playsinline ${poster?`poster="${imgV(poster)}"`:''}></video>`;
+}
+
 export function renderPP(){
   const a=matArt(cur.mat), c=CATS.find(k=>k.id===cur.cat);
 
@@ -259,8 +276,8 @@ export function renderPP(){
   /* tab recensioni — breakdown visivo */
   renderReviews();
 
-  /* video */
-  $('ppVideo').innerHTML=cur.video?`<video src="${cur.video}" controls preload="none" playsinline ${cur.poster?`poster="${imgV(cur.poster)}"`:''}></video>`:'';
+  /* video — supporta mp4 diretto, YouTube, TikTok */
+  $('ppVideo').innerHTML=cur.video?renderVideoEmbed(cur.video,cur.poster):'';
 
   /* embed */
   if(cur.embed){

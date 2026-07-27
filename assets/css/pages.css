@@ -96,9 +96,9 @@ footer{background:var(--bg-deep,#070a14);border-top:1px solid rgba(140,160,220,.
 .ptag.y{background:var(--laser);color:#0a0d18}.ptag.b{background:var(--blue);color:#fff}
 .wish{background:var(--glass-dark,rgba(10,13,24,.72))}.wish svg{stroke:#eef1fb}
 .qadd{background:linear-gradient(135deg,#4a89ea,#2b5fc0);color:#fff}
-.mcard{background:var(--card-solid,#141830);border-color:rgba(90,120,200,.28)}
-.mcard:hover{border-color:var(--blue);box-shadow:0 0 40px rgba(59,125,224,.18)}
-.mcard .spec i{border-color:rgba(140,160,220,.3);color:#b9c2e6}
+.mcard{background:linear-gradient(135deg,#0f1428 0%,#131c3a 100%);border-color:rgba(90,120,200,.28)}
+.mcard:hover{border-color:rgba(120,160,255,.55);box-shadow:0 0 50px rgba(59,125,224,.22),0 0 0 1px rgba(120,160,255,.15) inset}
+.mcard .spec i{border-color:rgba(140,160,220,.3);color:#b9c2e6;background:rgba(120,150,255,.06)}
 .mcard p{color:#9aa3c7}
 .step .n{background:var(--white);border-color:rgba(140,160,220,.3)}
 .step:hover .n{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 0 26px rgba(59,125,224,.6)}
