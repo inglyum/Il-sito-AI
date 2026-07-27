@@ -574,7 +574,11 @@
    ]
   ],
   "prod": 1,
-  "hidden": false
+  "hidden": false,
+  "gallery": [
+   "img/17-g1.webp",
+   "img/17-g2.webp"
+  ]
  },
  {
   "id": 18,
@@ -724,8 +728,8 @@
   },
   "cat": "accessori",
   "sub": 2,
-  "mat": "Metallo",
-  "price": 12,
+  "mat": "Legno",
+  "price": 3.99,
   "icon": "🍺",
   "img": "img/22.webp",
   "desc": {
