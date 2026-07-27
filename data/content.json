@@ -166,13 +166,12 @@
     "it": "Legno, plexiglass, pelle, vetro e MDF. Taglia fino a 20 mm, incide dettagli fotografici.",
     "en": "Wood, plexiglass, leather, glass and MDF. Cuts up to 20 mm, engraves photographic detail."
    },
-   "s": ["1300×900 mm","0,025 mm"],
+   "s": [
+    "1300×900 mm",
+    "0,025 mm"
+   ],
    "lg": 1,
-   "icon": "laser",
-   "badge": "100W",
-   "color": "#f5d94e,#3b7de0",
-   "emoji": "⚡",
-   "mats": ["Legno","Plexiglass","Pelle","MDF","Vetro","Bamboo"]
+   "icon": "laser"
   },
   {
    "t": "Fiber · F2",
@@ -181,13 +180,12 @@
     "it": "Marcatura permanente e tattile su acciaio, alluminio, titanio e ottone.",
     "en": "Permanent, tactile marking on steel, aluminium, titanium and brass."
    },
-   "s": ["Deep engraving","Traceability"],
+   "s": [
+    "Deep engraving",
+    "Traceability"
+   ],
    "lg": 1,
-   "icon": "laser",
-   "badge": "Fibra",
-   "color": "#e8e8f0,#7090c0",
-   "emoji": "🔩",
-   "mats": ["Acciaio","Alluminio","Titanio","Ottone","Argento"]
+   "icon": "laser"
   },
   {
    "t": "MOPA",
@@ -196,12 +194,10 @@
     "it": "Marcature a colori su acciaio e anodizzato, massimo controllo dell’impulso.",
     "en": "Color marking on steel and anodized surfaces, full pulse control."
    },
-   "s": ["Color marking","Pulse control"],
-   "icon": "laser",
-   "badge": "MOPA",
-   "color": "#ff7e5f,#feb47b",
-   "emoji": "🌈",
-   "mats": ["Acciaio inox","Alluminio anodizzato","Titanio colorato"]
+   "s": [
+    "Color marking"
+   ],
+   "icon": "laser"
   },
   {
    "t": "DTF · Textile",
@@ -210,12 +206,10 @@
     "it": "Transfer vividi e resistenti per abbigliamento, da 1 pezzo alle divise complete.",
     "en": "Vivid, durable transfers for apparel, from 1 piece to full uniform runs."
    },
-   "s": ["Ogni tessuto","Da 1 pz"],
-   "icon": "dtf",
-   "badge": "DTF",
-   "color": "#43e97b,#38f9d7",
-   "emoji": "👕",
-   "mats": ["Cotone","Poliestere","Nylon","Felpa","Pelle sintetica"]
+   "s": [
+    "Ogni tessuto"
+   ],
+   "icon": "dtf"
   },
   {
    "t": "UV · Flatbed",
@@ -224,12 +218,10 @@
     "it": "Stampa full color con bianco e lucido, direttamente su quasi ogni oggetto.",
     "en": "Full-color print with white & gloss layers, directly on almost any object."
    },
-   "s": ["2880 dpi","White + Gloss"],
-   "icon": "uv",
-   "badge": "UV",
-   "color": "#a18cd1,#fbc2eb",
-   "emoji": "🎨",
-   "mats": ["Plexiglass","Legno","Metallo","Vetro","Ceramica","Plastica"]
+   "s": [
+    "2880 dpi"
+   ],
+   "icon": "uv"
   },
   {
    "t": "FDM / Resina",
@@ -238,12 +230,10 @@
     "it": "Prototipi, nomi 3D e oggetti di design in PLA/PETG, rifiniti a mano.",
     "en": "Prototypes, 3D names and design objects in PLA/PETG, hand finished."
    },
-   "s": ["0,05 mm layer","FDM + Resina"],
-   "icon": "3d",
-   "badge": "3D",
-   "color": "#0099f7,#f11712",
-   "emoji": "🧱",
-   "mats": ["PLA","PETG","Resina","ABS","TPU flessibile"]
+   "s": [
+    "0,05 mm layer"
+   ],
+   "icon": "3d"
   }
  ],
  "MATERIALS": [
@@ -3414,7 +3404,7 @@
     "logo": "img/sponsor-2.webp"
    },
    {
-    "nome": "Nuovo partner",
+    "nome": "Lumos Pietro Accetta",
     "link": "https://www.facebook.com/profile.php?id=61571904102246",
     "livello": "",
     "desc": {
@@ -3521,19 +3511,6 @@
   ],
   "img/sponsor-3.webp": [
    400
-  ]
- },
- "SOCIAL_HUB": {
-  "attivo": true,
-  "titolo": { "it": "Dal laboratorio.", "en": "From the lab." },
-  "sottotitolo": { "it": "@ingly.design", "en": "@ingly.design" },
-  "cards": [
-   { "id": "ig", "piattaforma": "instagram", "attivo": true, "titolo": { "it": "Instagram", "en": "Instagram" }, "desc": { "it": "Lavori, processi e dietro le quinte del laboratorio.", "en": "Works, processes and behind the scenes from the lab." }, "url": "https://instagram.com/ingly_design", "img": "", "badge": "@ingly_design", "colore": "#E1306C,#833AB4", "emoji": "📸" },
-   { "id": "tk", "piattaforma": "tiktok", "attivo": true, "titolo": { "it": "TikTok", "en": "TikTok" }, "desc": { "it": "Video delle lavorazioni laser in real time.", "en": "Real-time laser processing videos." }, "url": "https://tiktok.com/@ingly.design", "img": "", "badge": "@ingly.design", "colore": "#010101,#EE1D52", "emoji": "🎬" },
-   { "id": "fb", "piattaforma": "facebook", "attivo": true, "titolo": { "it": "Facebook", "en": "Facebook" }, "desc": { "it": "Aggiornamenti, promozioni e progetti speciali.", "en": "Updates, promotions and special projects." }, "url": "https://facebook.com/inglydesign", "img": "", "badge": "inglydesign", "colore": "#1877F2,#0C5EC9", "emoji": "👍" },
-   { "id": "wa", "piattaforma": "whatsapp", "attivo": true, "titolo": { "it": "WhatsApp", "en": "WhatsApp" }, "desc": { "it": "Scrivici direttamente per un preventivo rapido.", "en": "Message us directly for a quick quote." }, "url": "https://wa.me/393296904627?text=Ciao%20INGLY!%20Vorrei%20un%20preventivo.", "img": "", "badge": "+39 329 690 4627", "colore": "#25D366,#128C7E", "emoji": "💬" },
-   { "id": "et", "piattaforma": "etsy", "attivo": true, "titolo": { "it": "Etsy Shop", "en": "Etsy Shop" }, "desc": { "it": "Prodotti personalizzati pronti per spedire.", "en": "Custom products ready to ship worldwide." }, "url": "https://etsy.com/shop/inglydesign", "img": "", "badge": "inglydesign", "colore": "#F56400,#D95B00", "emoji": "🛍" },
-   { "id": "pt", "piattaforma": "pinterest", "attivo": true, "titolo": { "it": "Pinterest", "en": "Pinterest" }, "desc": { "it": "Idee regalo e ispirazioni per personalizzazioni.", "en": "Gift ideas and customisation inspiration." }, "url": "https://pinterest.com/inglydesign", "img": "", "badge": "inglydesign", "colore": "#E60023,#AD081B", "emoji": "📌" }
   ]
  },
  "FOCAL": {
