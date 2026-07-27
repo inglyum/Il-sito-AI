@@ -104,7 +104,6 @@ footer{background:var(--bg-deep,#070a14);border-top:1px solid rgba(140,160,220,.
 .step:hover .n{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 0 26px rgba(59,125,224,.6)}
 .nform input{background:rgba(255,255,255,.06);border-color:rgba(140,160,220,.25)}
 .searchbar:focus-within,.txtin:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(59,125,224,.18),0 0 22px rgba(59,125,224,.15)}
-.disc-table .row.hit{background:rgba(245,217,78,.10)}
 .fitem.open .pl{background:var(--laser);color:#0a0d18}
 .rcard .q{color:#cdd4ef}
 .gtile .lbl{background:var(--glass-dark,rgba(10,13,24,.78));color:#eef1fb}

@@ -394,18 +394,17 @@
           <div>🇮🇹 <b>Made in Italy</b></div>
           <div>🧱 <span data-i18n="ppMatL">Materiale</span>: <b id="ppMat"></b></div>
         </div>
-        <!-- Configuratore: materiale + taglia, visibile solo se il prodotto ha varianti -->
+        <!-- Configuratore: solo la taglia, e solo se il prodotto ne dichiara più d'una.
+             Il materiale NON si sceglie qui: è quello impostato dall'Admin sul prodotto
+             ed è già mostrato sopra in «Materiale». -->
         <div id="ppConfigurator" style="display:none;margin-bottom:18px">
-          <div id="ppMatSel" style="margin-bottom:14px"></div>
-          <div id="ppSizeSel" style="margin-bottom:14px"></div>
-          <div id="ppCustNote" style="margin-bottom:14px"></div>
+          <div id="ppSizeSel"></div>
         </div>
         <div class="qtyrow">
           <div class="qty"><button data-action="pp-qty" data-d="-1" aria-label="−">−</button><b id="ppQty">1</b><button data-action="pp-qty" data-d="1" aria-label="+">+</button></div>
           <button class="btn btn-primary addbtn magnetic" data-action="pp-add"><span data-i18n="ppAdd">Aggiungi</span> — <span id="ppTotal"></span></button>
           <button class="btn btn-ghost btn-icon" id="ppShare" aria-label="Condividi" title="Condividi prodotto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg></button>
         </div>
-        <div class="disc-table" id="discTable"></div>
         <!-- Tabs -->
         <div class="pp-tabs" role="tablist">
           <button class="pp-tab active" data-action="pp-tab" data-tab="desc" role="tab" aria-selected="true" data-i18n="tabDesc">Descrizione</button>

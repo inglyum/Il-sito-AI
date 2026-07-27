@@ -342,11 +342,6 @@ footer{background:var(--ink);color:#a5a2b8;padding:90px 0 0;position:relative;ov
 .meta-strip{display:flex;gap:22px;margin-top:22px;flex-wrap:wrap}
 .meta-strip div{font-size:13px;color:var(--ink-soft);display:flex;align-items:center;gap:8px}
 .meta-strip b{color:var(--ink)}
-.disc-table{margin-top:26px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--white)}
-.disc-table .row{display:grid;grid-template-columns:1fr 1fr 1fr;padding:12px 18px;font-size:13.5px;border-bottom:1px solid var(--line)}
-.disc-table .row:last-child{border:none}
-.disc-table .row.hd{background:var(--gray);font-family:var(--fd);font-weight:600;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}/* .disc-table .row.hit → interamente nel tema (pages.css) */
-.disc-table .row b{color:var(--blue)}
 
 /* ---------- b2b ---------- */
 .b2b-hero{padding-top:170px;padding-bottom:70px}.logo-strip{display:flex;gap:44px;flex-wrap:wrap;align-items:center;margin-top:44px;font-family:var(--fd);font-weight:700;font-size:19px;letter-spacing:.04em}

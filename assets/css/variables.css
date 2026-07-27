@@ -303,7 +303,6 @@
 :root[data-mode="light"] .crumb a:hover{ color:#b8860b }
 
 /* Prezzi e sconti */
-:root[data-mode="light"] .disc-table .row.hit{ background:rgba(184,134,11,.08) }
 
 /* FAQ */
 :root[data-mode="light"] .fitem{ border-color:rgba(26,20,16,.10) }

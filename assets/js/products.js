@@ -287,7 +287,7 @@ export function renderPP(){
     $('ppEmbed').innerHTML='';
   }
 
-  renderDisc();price();
+  price();
   renderConfigurator();
   ppTabShow('desc');
 
@@ -374,13 +374,18 @@ export function ppThumb(el){
   const art=$('ppArt'), img=art.querySelector('img.pimgph');
   if(img) img.src=src; else art.insertAdjacentHTML('beforeend',`<img class="pimgph" src="${src}" alt="" loading="lazy">`);
 }
-export function qty(d){sel.qty=Math.max(1,sel.qty+ +d);$('ppQty').textContent=sel.qty;renderDisc();price()}
+export function qty(d){sel.qty=Math.max(1,sel.qty+ +d);$('ppQty').textContent=sel.qty;price()}
 
 /* ===== CONFIGURATORE PRODOTTO =====
-   Materiale alternativo (opzionale) + selezione taglia con moltiplicatore prezzo.
-   sel.matAlt  → materiale scelto (sovrascrive cur.mat visivamente)
+   Solo la taglia, con moltiplicatore di prezzo.
    sel.sizeIdx → indice della taglia scelta
-   sel.sizeMul → moltiplicatore prezzo (es. 1.0 = base, 1.4 = +40%)  */
+   sel.sizeMul → moltiplicatore prezzo (es. 1.0 = base, 1.4 = +40%)
+
+   Il MATERIALE non si sceglie qui. Prima la pagina proponeva anche i materiali
+   usati da ALTRI prodotti della stessa categoria: su un prodotto in Metallo
+   comparivano Legno, Plexiglass e PLA, che per quel prodotto non esistono e non
+   cambiavano nulla nell'ordine. Il materiale è quello impostato nell'Admin ed è
+   già scritto sopra la scheda. */
 const SIZE_MULS={
   'S':0.8,'XS':0.7,'M':1.0,'L':1.25,'XL':1.5,'XXL':1.8,
   'A4':1.0,'A3':1.4,'A2':1.8,'A1':2.4,'A0':3.0,
@@ -390,24 +395,12 @@ const SIZE_MULS={
 function renderConfigurator(){
   const cfg=$('ppConfigurator');
   if(!cfg)return;
-  const matSel=$('ppMatSel'), sizeSel=$('ppSizeSel'), noteEl=$('ppCustNote');
-  /* raccoglie materiali alternativi dal catalogo (stesso cat) */
-  const altMats=[...new Set(window.INGLY.P.filter(x=>x.cat===cur.cat&&!x.hidden).map(x=>x.mat))].filter(m=>m&&m!==cur.mat);
-  const showMat=altMats.length>0;
+  const sizeSel=$('ppSizeSel');
+  if(!sizeSel)return;
   /* raccoglie taglie da misure: voci che hanno moltiplicatore noto */
   const sizes=(cur.misure||[]).filter(r=>SIZE_MULS[r[0]]||SIZE_MULS[r[1]]);
   const showSize=sizes.length>1;
-  cfg.style.display=(showMat||showSize||cur.custom)?'block':'none';
-  /* --- selezione materiale --- */
-  if(showMat){
-    const all=[cur.mat,...altMats];
-    matSel.innerHTML=`<div style="margin-bottom:6px;font-size:13px;font-weight:600;color:var(--ink-soft)">${L==='it'?'Materiale':'Material'}</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">${all.map(m=>{
-      const selected=(sel.matAlt||cur.mat)===m;
-      return `<button class="cfg-chip${selected?' on':''}" data-cfgmat="${m}" style="border-color:${selected?'var(--accent)':'var(--line)'}${selected?';background:rgba(245,217,78,.1)':''}">${m}</button>`;
-    }).join('')}</div>`;
-    matSel.querySelectorAll('[data-cfgmat]').forEach(b=>b.onclick=()=>{sel.matAlt=b.dataset.cfgmat;renderConfigurator();price();});
-  } else { matSel.innerHTML=''; }
+  cfg.style.display=showSize?'block':'none';
   /* --- selezione taglia --- */
   if(showSize){
     sizeSel.innerHTML=`<div style="margin-bottom:6px;font-size:13px;font-weight:600;color:var(--ink-soft)">${L==='it'?'Taglia / Formato':'Size / Format'}</div>
@@ -420,28 +413,23 @@ function renderConfigurator(){
     sizeSel.querySelectorAll('[data-cfgsize]').forEach(b=>b.onclick=()=>{sel.sizeIdx=+b.dataset.cfgsize;sel.sizeMul=+b.dataset.cfgmul;renderConfigurator();price();});
     if(sel.sizeIdx===undefined){sel.sizeIdx=0;sel.sizeMul=+sizeSel.querySelector('[data-cfgsize]')?.dataset.cfgmul||1;}
   } else { sizeSel.innerHTML='';sel.sizeIdx=undefined;sel.sizeMul=undefined; }
-  /* --- nota personalizzazione --- */
-  if(cur.custom||true){
-    noteEl.innerHTML=`<div style="margin-bottom:6px;font-size:13px;font-weight:600;color:var(--ink-soft)">${L==='it'?'Testo / Personalizzazione (opzionale)':'Text / Customization (optional)'}</div>
-    <input type="text" id="ppCustomNote" placeholder="${L==='it'?'Es. Nome, data, dedica…':'E.g. Name, date, dedication…'}" value="${sel.customNote||''}" style="width:100%;font-size:14px;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg-card);color:var(--ink)">`;
-    document.getElementById('ppCustomNote').oninput=e=>{sel.customNote=e.target.value;};
-  }
 }
 
 const unit=()=>cur.price*(sel.sizeMul||1);
-const disc=q=>q>=50?.85:q>=20?.9:q>=10?.95:1;
-function price(){const u=unit(),d=disc(sel.qty);
-  $('ppPrice').textContent=eur(u*d);
-  $('ppUnit').textContent=d<1?T('bulk')+' −'+Math.round((1-d)*100)+'%':T('perPiece');
-  $('ppTotal').textContent=eur(u*sel.qty*d);
-  const sb=$('sbPrice');if(sb){sb.textContent=eur(u*sel.qty*d);$('sbName').textContent=cur.n[L]}}
-function renderDisc(){const u=unit(),rows=[[1,9,1],[10,19,.95],[20,49,.9],[50,'∞',.85]];
-  $('discTable').innerHTML=`<div class="row hd"><span>${T('dQty')}</span><span>${T('dDisc')}</span><span>${T('dUnit')}</span></div>`+rows.map(r=>{const hit=sel.qty>=r[0]&&(r[1]==='∞'||sel.qty<=r[1]);return `<div class="row ${hit?'hit':''}"><span>${r[0]}${r[1]==='∞'?'+':'–'+r[1]}</span><span>${r[2]===1?'—':'−'+Math.round((1-r[2])*100)+'%'}</span><span><b>${eur(u*r[2])}</b></span></div>`}).join('')}
+/* Prezzo lineare: prezzo unitario × quantità.
+   Lo sconto a scaglioni è stato tolto insieme alla tabella che lo spiegava:
+   tenerlo senza tabella avrebbe fatto cambiare il totale da solo, senza che
+   il cliente potesse capire perché. Per gli ordini grandi c'è il preventivo. */
+function price(){const u=unit();
+  $('ppPrice').textContent=eur(u);
+  $('ppUnit').textContent=T('perPiece');
+  $('ppTotal').textContent=eur(u*sel.qty);
+  const sb=$('sbPrice');if(sb){sb.textContent=eur(u*sel.qty);$('sbName').textContent=cur.n[L]}}
 export function addFromPP(){
-  const matLabel=sel.matAlt?(MATN[sel.matAlt]?MATN[sel.matAlt][L]:sel.matAlt):MATN[cur.mat][L];
-  const sizeLabel=(sel.sizeIdx!==undefined&&cur.misure)?(cur.misure[sel.sizeIdx]?.[1]||''):'';
-  const note=[sizeLabel,sel.customNote].filter(Boolean).join(' · ');
-  addToCart(cur.id,sel.qty,matLabel,note,unit()*disc(sel.qty));
+  /* il materiale è quello del prodotto, deciso nell'Admin */
+  const matLabel=(MATN[cur.mat]&&MATN[cur.mat][L])||cur.mat||'';
+  const note=(sel.sizeIdx!==undefined&&cur.misure)?(cur.misure[sel.sizeIdx]?.[1]||''):'';
+  addToCart(cur.id,sel.qty,matLabel,note,unit());
 }
 
 /* ---- digitale ---- */
