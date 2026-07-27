@@ -418,5 +418,25 @@
   "icon": "limited",
   "img": "img/cat-limited.webp",
   "big": ""
+ },
+ {
+  "id": "nuova-ms3k34dc",
+  "ic": "✨",
+  "n": {
+   "it": "Nuova categoria",
+   "en": "New category"
+  },
+  "s": {
+   "it": "Descrizione",
+   "en": "Description"
+  },
+  "sub": [
+   {
+    "it": "Generale",
+    "en": "General"
+   }
+  ],
+  "big": "✨",
+  "bg": "#e8d5b0,#c9a876"
  }
 ]
