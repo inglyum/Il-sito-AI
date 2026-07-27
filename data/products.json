@@ -654,7 +654,7 @@
   },
   "cat": "bambini",
   "sub": 4,
-  "mat": "Metallo",
+  "mat": "Legno",
   "price": 34.99,
   "icon": "🔑",
   "img": "img/20.webp",
@@ -668,14 +668,14 @@
   "misure": [
    [
     "Formato",
-    "5×5 cm"
+    "25×25 cm"
    ],
    [
     "Spessore",
-    "3 mm"
+    "8 mm"
    ]
   ],
-  "prod": 2,
+  "prod": 3,
   "hidden": false,
   "gallery": [
    "img/20-g4.webp",
