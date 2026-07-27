@@ -381,6 +381,12 @@
           <div>🇮🇹 <b>Made in Italy</b></div>
           <div>🧱 <span data-i18n="ppMatL">Materiale</span>: <b id="ppMat"></b></div>
         </div>
+        <!-- Configuratore: materiale + taglia, visibile solo se il prodotto ha varianti -->
+        <div id="ppConfigurator" style="display:none;margin-bottom:18px">
+          <div id="ppMatSel" style="margin-bottom:14px"></div>
+          <div id="ppSizeSel" style="margin-bottom:14px"></div>
+          <div id="ppCustNote" style="margin-bottom:14px"></div>
+        </div>
         <div class="qtyrow">
           <div class="qty"><button data-action="pp-qty" data-d="-1" aria-label="−">−</button><b id="ppQty">1</b><button data-action="pp-qty" data-d="1" aria-label="+">+</button></div>
           <button class="btn btn-primary addbtn magnetic" data-action="pp-add"><span data-i18n="ppAdd">Aggiungi</span> — <span id="ppTotal"></span></button>
@@ -680,5 +686,41 @@
 
 <!-- Cloudflare Web Analytics — privacy-first, no cookies, GDPR compliant -->
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "INSERISCI_QUI_IL_TOKEN_CF"}'></script>
+
+<!-- ===== EXIT-INTENT POPUP ===== -->
+<div id="exitPopup" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);align-items:center;justify-content:center" role="dialog" aria-modal="true" aria-labelledby="exitPopTitle">
+  <div style="background:linear-gradient(135deg,#131a33,#0a0d18);border:1px solid rgba(245,217,78,.25);border-radius:24px;padding:clamp(24px,5vw,48px);max-width:420px;width:90vw;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.7);text-align:center">
+    <button id="exitClose" aria-label="Chiudi" style="position:absolute;top:14px;right:16px;background:none;border:none;color:var(--ink-soft,#9897b8);font-size:22px;cursor:pointer;line-height:1;padding:4px">✕</button>
+    <div style="font-size:2.8rem;margin-bottom:8px">🎁</div>
+    <h3 id="exitPopTitle" style="font-family:var(--fd,'Exo 2',sans-serif);font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;font-style:italic;color:var(--accent,#f5d94e);margin:0 0 10px">Aspetta! Un regalo per te</h3>
+    <p style="color:var(--ink-soft,#9897b8);font-size:15px;margin:0 0 20px;line-height:1.55">Scrivici su WhatsApp e ricevi <b style="color:var(--ink,#eae8f5)">10% di sconto</b> sul tuo primo ordine personalizzato. Valido 48h.</p>
+    <a id="exitWaBtn" href="https://wa.me/393296904627?text=Ciao%20INGLY%21%20Ho%20visto%20l%27offerta%20sul%20sito%20%E2%80%94%20vorrei%20un%20preventivo%20con%20il%2010%25%20di%20sconto%20%F0%9F%8E%81" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#25d366,#128c3e);color:#fff;font-weight:700;padding:14px 28px;border-radius:12px;text-decoration:none;font-size:16px;margin-bottom:12px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.535 5.856L.057 23.797a.75.75 0 00.906.94l6.123-1.607A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75A9.742 9.742 0 016.44 20.09l-.384-.23-3.977 1.044 1.064-3.878-.252-.4A9.75 9.75 0 012.25 12c0-5.376 4.374-9.75 9.75-9.75s9.75 4.374 9.75 9.75-4.374 9.75-9.75 9.75z"/></svg>
+      Ottieni il 10% di sconto
+    </a>
+    <p style="font-size:11px;color:var(--ink-muted,#5c5b78);margin:0">Offerta per nuovi clienti · Scade tra 48h</p>
+  </div>
+</div>
+<script>
+(function(){
+  if(sessionStorage.getItem('ingly_exit_shown'))return;
+  let shown=false;
+  function show(){
+    if(shown)return;shown=true;
+    sessionStorage.setItem('ingly_exit_shown','1');
+    const p=document.getElementById('exitPopup');
+    if(!p)return;
+    p.style.display='flex';
+    requestAnimationFrame(()=>p.querySelector('div').style.transform='none');
+  }
+  /* Desktop: mouse leaves viewport top */
+  document.addEventListener('mouseleave',e=>{if(e.clientY<10)show()},{once:true});
+  /* Mobile: back button / blur dopo 45s */
+  setTimeout(show,45000);
+  /* Chiudi */
+  document.getElementById('exitClose').onclick=()=>document.getElementById('exitPopup').style.display='none';
+  document.getElementById('exitPopup').addEventListener('click',e=>{if(e.target.id==='exitPopup')e.target.style.display='none'});
+})();
+</script>
 </body>
 </html>

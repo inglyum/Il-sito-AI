@@ -1003,3 +1003,8 @@ behold-widget{display:block;min-height:240px}
 /* ===== LASER CURSOR GLOW ===== */
 #glow-orb{position:fixed;top:0;left:0;width:340px;height:340px;margin:-170px 0 0 -170px;border-radius:50%;background:radial-gradient(circle,rgba(255,165,40,.12) 0%,transparent 70%);pointer-events:none;z-index:9000;opacity:0;transition:opacity .6s;will-change:transform}
 #glow-orb.hot{background:radial-gradient(circle,rgba(255,100,20,.22) 0%,transparent 70%)}
+
+/* ===== PRODUCT CONFIGURATOR ===== */
+.cfg-chip{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:99px;border:1.5px solid var(--line);background:var(--bg-card);color:var(--ink);font-size:13px;font-weight:500;cursor:pointer;transition:border-color .2s,background .2s,transform .15s;white-space:nowrap}
+.cfg-chip:hover{border-color:var(--accent);transform:translateY(-1px)}
+.cfg-chip.on{border-color:var(--accent);background:rgba(245,217,78,.08);color:var(--ink)}
