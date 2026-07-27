@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>INGLY DESIGN</title>
+<!-- GitHub Pages SPA redirect: converte /shop → /#/shop -->
+<script>
+(function(){
+  var p=window.location.pathname;
+  var s=window.location.search;
+  // Se il path è una pagina SPA (non un file con estensione), redirect con hash
+  if(p!=='/'&&!/\.[a-zA-Z]{2,4}$/.test(p)){
+    var hash='#'+p+(s?s:'');
+    window.location.replace('/'+hash);
+  }
+})();
+</script>
+</head>
+<body></body>
+</html>

@@ -594,6 +594,29 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
 
   <!-- ============ IMPOSTAZIONI ============ -->
   <section class="view" id="v-set">
+    <div class="card" style="border:2px solid var(--accent)">
+      <h3>🔧 Modalità Manutenzione</h3>
+      <p class="hint" style="margin-bottom:14px">Quando attiva, i visitatori vedono la schermata "Sito in manutenzione" con il pulsante WhatsApp. Tu e l'Admin siete sempre accessibili.</p>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;flex-wrap:wrap">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:1.05rem;font-weight:600">
+          <input type="checkbox" id="sMaintActive" style="width:20px;height:20px;accent-color:var(--accent)">
+          <span id="sMaintLabel">Manutenzione DISATTIVA — sito online ✅</span>
+        </label>
+      </div>
+      <div class="row c2">
+        <div><label>Titolo (IT)</label><input type="text" id="sMaintTitIT" placeholder="Sito in manutenzione"></div>
+        <div><label>Titolo (EN)</label><input type="text" id="sMaintTitEN" placeholder="Site under maintenance"></div>
+      </div>
+      <div class="row c2" style="margin-top:8px">
+        <div><label>Messaggio (IT)</label><textarea id="sMaintMsgIT" rows="2" placeholder="Stiamo aggiornando il catalogo. Torniamo presto!"></textarea></div>
+        <div><label>Messaggio (EN)</label><textarea id="sMaintMsgEN" rows="2" placeholder="We are updating our catalog. Back soon!"></textarea></div>
+      </div>
+      <div style="margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="sMaintWa" checked style="width:auto"> Mostra pulsante WhatsApp</label>
+        <button class="btn" id="sMaintSave">💾 Salva e pubblica</button>
+        <span class="hint" id="sMaintOut"></span>
+      </div>
+    </div>
     <div class="card"><h3>🔗 Repository GitHub</h3>
       <div class="row c3">
         <div><label>Owner</label><input type="text" id="sOwner"></div>
@@ -2495,7 +2518,39 @@ $('bkImp').onchange=async e=>{const f=e.target.files[0];if(!f)return;
  e.target.value=''};
 
 /* ================== IMPOSTAZIONI ================== */
-function renderSet(){$('sOwner').value=SET.owner;$('sRepo').value=SET.repo;$('sBranch').value=SET.branch;$('sRemember').checked=SET.remember;$('sTok').value=token();
+function renderSet(){
+ /* --- Manutenzione --- */
+ const mnt=S.CONFIG.maintenance||{};
+ $('sMaintActive').checked=!!mnt.attivo;
+ $('sMaintTitIT').value=(mnt.titolo&&mnt.titolo.it)||'Sito in manutenzione';
+ $('sMaintTitEN').value=(mnt.titolo&&mnt.titolo.en)||'Site under maintenance';
+ $('sMaintMsgIT').value=(mnt.messaggio&&mnt.messaggio.it)||'Stiamo aggiornando il catalogo. Torniamo presto! Per ordini urgenti scrivici su WhatsApp.';
+ $('sMaintMsgEN').value=(mnt.messaggio&&mnt.messaggio.en)||'We are updating our catalog. Back soon! For urgent orders, contact us on WhatsApp.';
+ $('sMaintWa').checked=mnt.mostraWhatsapp!==false;
+ function updateMaintLabel(){
+  const on=$('sMaintActive').checked;
+  $('sMaintLabel').textContent=on?'Manutenzione ATTIVA — sito in pausa ⚠️':'Manutenzione DISATTIVA — sito online ✅';
+  $('sMaintLabel').style.color=on?'var(--err)':'var(--ok)';
+ }
+ updateMaintLabel();
+ $('sMaintActive').onchange=updateMaintLabel;
+ $('sMaintSave').onclick=async()=>{
+  const out=$('sMaintOut');
+  out.textContent='Salvataggio…';
+  S.CONFIG.maintenance={
+   attivo:$('sMaintActive').checked,
+   titolo:{it:$('sMaintTitIT').value.trim()||'Sito in manutenzione',en:$('sMaintTitEN').value.trim()||'Site under maintenance'},
+   messaggio:{it:$('sMaintMsgIT').value.trim(),en:$('sMaintMsgEN').value.trim()},
+   mostraWhatsapp:$('sMaintWa').checked
+  };
+  markDirty();
+  try{
+   await pubFile('data/config.json',JSON.stringify(S.CONFIG,null,1),'⚙️ '+(S.CONFIG.maintenance.attivo?'Manutenzione ATTIVA':'Manutenzione disattivata'));
+   out.innerHTML='<span style="color:var(--ok)">✔ Pubblicato!</span>';
+  }catch(e){out.innerHTML='<span style="color:var(--err)">✖ '+esc(e.message)+'</span>'}
+ };
+ /* --- Repository / token --- */
+ $('sOwner').value=SET.owner;$('sRepo').value=SET.repo;$('sBranch').value=SET.branch;$('sRemember').checked=SET.remember;$('sTok').value=token();
  $('loadDiag').innerHTML=loadDiagHtml()||'Nessun caricamento eseguito.';
  $('setInfo').innerHTML=`${AUTODETECTED?'<span class="chip ok">owner e repository rilevati automaticamente dall\u2019indirizzo</span><br>':''}Sito online: <b><a href="${LIVE()}" target="_blank" rel="noopener">${LIVE()}</a></b><br>Admin: <b class="mono">${LIVE()}admin.html</b><br>Dati caricati da: <b>${esc(LOADED_FROM||'—')}</b>`;
  ['sOwner','sRepo','sBranch'].forEach(id=>$(id).oninput=()=>{SET.owner=$('sOwner').value.trim();SET.repo=$('sRepo').value.trim();SET.branch=$('sBranch').value.trim()||'main';saveSet()});
