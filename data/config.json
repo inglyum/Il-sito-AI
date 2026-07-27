@@ -52,15 +52,22 @@
   }
  },
  "aboutMedia": {
-  "tipo": "logo",
-  "src": ""
+  "tipo": "video",
+  "src": "https://www.tiktok.com/@ingly_design/video/7666447635087248662?lang=en"
  },
  "maintenance": {
   "attivo": false,
-  "titolo": { "it": "Sito in manutenzione", "en": "Site under maintenance" },
-  "messaggio": { "it": "Stiamo aggiornando il catalogo. Torniamo presto! Per ordini urgenti scrivici su WhatsApp.", "en": "We are updating our catalog. Back soon! For urgent orders, contact us on WhatsApp." },
+  "titolo": {
+   "it": "Sito in manutenzione",
+   "en": "Site under maintenance"
+  },
+  "messaggio": {
+   "it": "Stiamo aggiornando il catalogo. Torniamo presto! Per ordini urgenti scrivici su WhatsApp.",
+   "en": "We are updating our catalog. Back soon! For urgent orders, contact us on WhatsApp."
+  },
   "mostraWhatsapp": true
  },
+ "heroVideo": "https://www.tiktok.com/@ingly_design/video/7666447635087248662?lang=en",
  "exitPopup": {
   "attivo": true,
   "bgImage": "",
