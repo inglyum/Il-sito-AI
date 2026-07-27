@@ -451,6 +451,24 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
     <div id="techList"></div>
   </section>
 
+  <!-- ============ SOCIAL HUB ============ -->
+  <section class="view" id="v-sochub">
+    <div class="searchrow">
+      <span class="hint">Le card «Dal laboratorio» del sito: Instagram, TikTok, WhatsApp e altri canali social.</span>
+      <button class="btn pri" id="shNew" style="margin-left:auto">➕ Aggiungi canale</button>
+    </div>
+    <div class="card" style="margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin:0">
+          <input type="checkbox" id="shActive" style="width:16px;height:16px;accent-color:var(--ok)">
+          <b>Sezione attiva</b>
+        </label>
+        <span class="hint">Se disattivata, la sezione «Dal laboratorio» non compare nel sito.</span>
+      </div>
+    </div>
+    <div id="shList"></div>
+  </section>
+
   <!-- ============ TESTI ============ -->
   <section class="view" id="v-texts">
     <div class="searchrow"><input type="text" id="tSearch" placeholder="Cerca testo o chiave…"><span class="chip" id="tCount"></span></div>
@@ -914,7 +932,7 @@ function syncSocialLinks(){if(!Array.isArray(S.SOCIALS))return;const map={instag
 /* ---------- navigazione ---------- */
 const NAV=[['Panoramica',[['dash','📊','Dashboard']]],
  ['Catalogo',[['prod','📦','Prodotti'],['cats','🗂','Categorie'],['dig','💾','Digitali']]],
- ['Contenuti',[['media','🖼','Media Library'],['port','🏆','Portfolio'],['biz','🏢','Sezione Business'],['sponsor','🤝','Sponsor & Partner'],['themes','🎨','Temi stagionali'],['tech','🔥','Tecnologie'],['hero','🎯','Home & Hero'],['texts','✍️','Testi IT/EN'],['faq','❓','FAQ & Recensioni'],['adv','🧩','Avanzate']]],
+ ['Contenuti',[['media','🖼','Media Library'],['port','🏆','Portfolio'],['biz','🏢','Sezione Business'],['sponsor','🤝','Sponsor & Partner'],['themes','🎨','Temi stagionali'],['tech','🔥','Tecnologie'],['sochub','📱','Social Hub'],['hero','🎯','Home & Hero'],['texts','✍️','Testi IT/EN'],['faq','❓','FAQ & Recensioni'],['adv','🧩','Avanzate']]],
  ['Configurazione',[['contacts','📞','Contatti & Social'],['seo','🔎','SEO'],['bg','🎨','Sfondo Sito'],['set','⚙️','Impostazioni']]],
  ['Sistema',[['pub','🚀','Pubblica & Deploy'],['hist','🕘','Cronologia'],['health','🩺','Health Center'],['backup','💾','Backup']]]];
 const TITLES={};let VIEW='dash';
@@ -924,7 +942,7 @@ function go(v){
  VIEW=v;document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
  document.querySelectorAll('.nit').forEach(x=>x.classList.toggle('on',x.dataset.go===v));
  $('vtitle').textContent=TITLES[v]||'';
- const R={dash:renderDash,prod:renderProd,cats:renderCats,dig:renderDig,media:renderMedia,port:()=>{renderPort();bindAll()},biz:renderBiz,sponsor:renderSponsor,themes:renderThemes,tech:renderTech,hero:renderHero,texts:renderTexts,faq:renderFaq,adv:renderAdv,contacts:bindAll,seo:()=>{bindAll();seoLen()},bg:renderBg,pub:renderPub,hist:renderHist,set:renderSet,health:()=>{},backup:()=>{}};
+ const R={dash:renderDash,prod:renderProd,cats:renderCats,dig:renderDig,media:renderMedia,port:()=>{renderPort();bindAll()},biz:renderBiz,sponsor:renderSponsor,themes:renderThemes,tech:renderTech,sochub:renderSocialHub,hero:renderHero,texts:renderTexts,faq:renderFaq,adv:renderAdv,contacts:bindAll,seo:()=>{bindAll();seoLen()},bg:renderBg,pub:renderPub,hist:renderHist,set:renderSet,health:()=>{},backup:()=>{}};
  if(R[v])R[v]();window.scrollTo(0,0)}
 document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(g.dataset.go)});
 $('goPub').onclick=()=>go('pub');
@@ -2351,6 +2369,50 @@ function renderTech(){const T=(S.C.TECH=S.C.TECH||[]);
  document.querySelectorAll('[data-tcm]').forEach(b=>b.onclick=()=>{const[i,d]=b.dataset.tcm.split(',').map(Number);const j=i+d;if(j<0||j>=S.C.TECH.length)return;[S.C.TECH[i],S.C.TECH[j]]=[S.C.TECH[j],S.C.TECH[i]];markDirty();renderTech()});
  document.querySelectorAll('[data-tcx]').forEach(b=>b.onclick=()=>{if(confirm('Eliminare la tecnologia?')){S.C.TECH.splice(+b.dataset.tcx,1);markDirty();renderTech()}})}
 $('techNew').onclick=()=>{S.C.TECH.push({t:'LASER',n:'Nuova tecnologia',d:{it:'Descrizione.',en:'Description.'},s:['spec 1','spec 2']});markDirty();renderTech()};
+
+/* ================== SOCIAL HUB ================== */
+function renderSocialHub(){
+ const SH=S.C.SOCIAL_HUB=S.C.SOCIAL_HUB||{attivo:true,titolo:{it:'Dal laboratorio.',en:'From the lab.'},sottotitolo:{it:'@ingly.design',en:'@ingly.design'},cards:[]};
+ const act=$('shActive'); if(act) act.checked=SH.attivo!==false;
+ if(act&&!act._sh_bound){act._sh_bound=true;act.onchange=()=>{SH.attivo=act.checked;markDirty()}}
+ $('shList').innerHTML=(SH.cards||[]).map((c,i)=>`<div class="card">
+  <h3>
+   <span style="font-size:20px;margin-right:6px">${c.emoji||'🔗'}</span>${esc(c.titolo&&(c.titolo.it||c.titolo.en)||'Card '+i)}
+   <span class="chip" style="margin-left:6px;background:${(c.colore||'#3b7de0').split(',')[0]}22;color:${(c.colore||'#3b7de0').split(',')[0]}">${esc(c.piattaforma||'')}</span>
+   ${c.attivo!==false?'<span class="chip ok" style="font-size:10px">attiva</span>':'<span class="chip err" style="font-size:10px">nascosta</span>'}
+   <span class="sp"></span>
+   <button class="btn sm" data-shm="${i},-1">↑</button><button class="btn sm" data-shm="${i},1">↓</button>
+   <button class="btn sm" data-sht="${i}">${c.attivo!==false?'👁 Nascondi':'👁 Mostra'}</button>
+   <button class="btn sm err" data-shx="${i}">🗑</button>
+  </h3>
+  <div class="row c4">
+   <div><label>Emoji icona</label><input type="text" value="${esc(c.emoji||'')}" data-shf="${i},emoji" placeholder="📸"></div>
+   <div><label>Piattaforma</label><input type="text" value="${esc(c.piattaforma||'')}" data-shf="${i},piattaforma" placeholder="instagram"></div>
+   <div><label>Badge (username)</label><input type="text" value="${esc(c.badge||'')}" data-shf="${i},badge" placeholder="@utente"></div>
+   <div><label>Colori (gradiente, virgola)</label><input type="text" value="${esc(c.colore||'')}" data-shf="${i},colore" placeholder="#E1306C,#833AB4"></div>
+  </div>
+  <div class="row c2">
+   <div><label>Titolo IT</label><input type="text" value="${esc(c.titolo&&c.titolo.it||'')}" data-shd="${i},titolo,it"></div>
+   <div><label>Title EN</label><input type="text" value="${esc(c.titolo&&c.titolo.en||'')}" data-shd="${i},titolo,en"></div>
+  </div>
+  <div class="row c2">
+   <div><label>Descrizione IT</label><textarea data-shd="${i},desc,it">${esc(c.desc&&c.desc.it||'')}</textarea></div>
+   <div><label>Description EN</label><textarea data-shd="${i},desc,en">${esc(c.desc&&c.desc.en||'')}</textarea></div>
+  </div>
+  <label>URL (link del pulsante)</label><input type="url" value="${esc(c.url||'')}" data-shf="${i},url" placeholder="https://instagram.com/...">
+ </div>`).join('')||'<div class="card hint">Nessun canale social configurato. Clicca ➕ per aggiungerne uno.</div>';
+ document.querySelectorAll('[data-shf]').forEach(el=>el.oninput=()=>{const[i,f]=el.dataset.shf.split(',');SH.cards[+i][f]=el.value;markDirty()});
+ document.querySelectorAll('[data-shd]').forEach(el=>el.oninput=()=>{const[i,obj,lang]=el.dataset.shd.split(',');const c=SH.cards[+i];if(!c[obj])c[obj]={};c[obj][lang]=el.value;markDirty()});
+ document.querySelectorAll('[data-shm]').forEach(b=>b.onclick=()=>{const[i,d]=b.dataset.shm.split(',').map(Number);const j=i+d;if(j<0||j>=SH.cards.length)return;[SH.cards[i],SH.cards[j]]=[SH.cards[j],SH.cards[i]];markDirty();renderSocialHub()});
+ document.querySelectorAll('[data-sht]').forEach(b=>b.onclick=()=>{const c=SH.cards[+b.dataset.sht];c.attivo=c.attivo===false;markDirty();renderSocialHub()});
+ document.querySelectorAll('[data-shx]').forEach(b=>b.onclick=()=>{if(confirm('Eliminare questa card social?')){SH.cards.splice(+b.dataset.shx,1);markDirty();renderSocialHub()}});
+}
+$('shNew').onclick=()=>{
+ const SH=S.C.SOCIAL_HUB=S.C.SOCIAL_HUB||{attivo:true,cards:[]};
+ SH.cards=SH.cards||[];
+ SH.cards.push({id:'new'+Date.now(),piattaforma:'instagram',attivo:true,titolo:{it:'Nuovo canale',en:'New channel'},desc:{it:'Descrizione.',en:'Description.'},url:'',badge:'@handle',colore:'#3b7de0,#1a4fc4',emoji:'📱'});
+ markDirty();renderSocialHub();
+};
 
 /* ================== TESTI ================== */
 function renderTexts(){const q=($('tSearch').value||'').toLowerCase();const keys=Object.keys(S.D.it||{});

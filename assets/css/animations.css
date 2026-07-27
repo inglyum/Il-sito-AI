@@ -103,3 +103,48 @@
   from{opacity:0;transform:translateY(12px) scale(.97)}
   to{opacity:1;transform:none}
 }
+
+/* ===== ENTERPRISE ANIMATIONS ===== */
+
+/* Fade + blur reveal (Framer-style) */
+@keyframes fadeBlurIn{
+  from{opacity:0;transform:translateY(24px);filter:blur(10px)}
+  to{opacity:1;transform:none;filter:blur(0)}
+}
+
+/* Ticker card scroll (GPU-accelerated via translateX) */
+@keyframes tickerScroll{to{transform:translateX(-50%)}}
+@keyframes tickerScrollRev{to{transform:translateX(50%)}}
+
+/* Card glow entrance */
+@keyframes cardGlow{
+  0%{opacity:0;transform:scale(.95) translateY(16px)}
+  100%{opacity:1;transform:scale(1) translateY(0)}
+}
+
+/* Light sweep across cards */
+@keyframes lightSweep{
+  0%{left:-60%}
+  100%{left:120%}
+}
+
+/* Stagger system — reveals with blur */
+.reveal-blur{
+  opacity:0;
+  filter:blur(8px);
+  transform:translateY(20px);
+  transition:opacity .75s cubic-bezier(.22,.8,.4,1),transform .75s cubic-bezier(.22,.8,.4,1),filter .75s cubic-bezier(.22,.8,.4,1)
+}
+.reveal-blur.in{opacity:1;transform:none;filter:blur(0)}
+
+/* Stagger delays */
+.stagger-1{transition-delay:.08s}
+.stagger-2{transition-delay:.16s}
+.stagger-3{transition-delay:.24s}
+.stagger-4{transition-delay:.32s}
+.stagger-5{transition-delay:.40s}
+.stagger-6{transition-delay:.48s}
+
+@media (prefers-reduced-motion: reduce){
+  .reveal-blur{opacity:1;transform:none;filter:blur(0);transition:none}
+}

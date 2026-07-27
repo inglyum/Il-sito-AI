@@ -123,5 +123,5 @@
 /* RETE DI SICUREZZA: se per qualsiasi motivo l'osservatore non parte (JS in errore,
    IntersectionObserver assente, elemento fuori dai contenitori attesi), dopo 3s il contenuto
    deve comunque essere leggibile. Mai lasciare una sezione invisibile per sempre. */
-@media (scripting: none){ .reveal{opacity:1;transform:none} }
-html.reveal-failsafe .reveal{opacity:1;transform:none}
+@media (scripting: none){ .reveal,.reveal-blur{opacity:1;transform:none;filter:blur(0)} }
+html.reveal-failsafe .reveal,html.reveal-failsafe .reveal-blur{opacity:1;transform:none;filter:blur(0)}

@@ -17,7 +17,7 @@ export function observeAll(){
   /* Selettore ampio: qualunque elemento .reveal del documento viene osservato, ovunque si trovi.
      Con la lista ristretta di prima, una sezione fuori da .page e da <footer> (es. Sponsor)
      restava a opacity:0 PER SEMPRE — visibile nel DOM ma invisibile a schermo. */
-  document.querySelectorAll('.reveal, .counter, .cta-band').forEach(el=>{
+  document.querySelectorAll('.reveal, .reveal-blur, .counter, .cta-band').forEach(el=>{
     /* salta solo ciò che sta in una pagina non attiva */
     const pg=el.closest('.page');
     if(pg && !pg.classList.contains('active')) return;

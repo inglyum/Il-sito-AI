@@ -166,12 +166,13 @@
     "it": "Legno, plexiglass, pelle, vetro e MDF. Taglia fino a 20 mm, incide dettagli fotografici.",
     "en": "Wood, plexiglass, leather, glass and MDF. Cuts up to 20 mm, engraves photographic detail."
    },
-   "s": [
-    "1300×900 mm",
-    "0,025 mm"
-   ],
+   "s": ["1300×900 mm","0,025 mm"],
    "lg": 1,
-   "icon": "laser"
+   "icon": "laser",
+   "badge": "100W",
+   "color": "#f5d94e,#3b7de0",
+   "emoji": "⚡",
+   "mats": ["Legno","Plexiglass","Pelle","MDF","Vetro","Bamboo"]
   },
   {
    "t": "Fiber · F2",
@@ -180,12 +181,13 @@
     "it": "Marcatura permanente e tattile su acciaio, alluminio, titanio e ottone.",
     "en": "Permanent, tactile marking on steel, aluminium, titanium and brass."
    },
-   "s": [
-    "Deep engraving",
-    "Traceability"
-   ],
+   "s": ["Deep engraving","Traceability"],
    "lg": 1,
-   "icon": "laser"
+   "icon": "laser",
+   "badge": "Fibra",
+   "color": "#e8e8f0,#7090c0",
+   "emoji": "🔩",
+   "mats": ["Acciaio","Alluminio","Titanio","Ottone","Argento"]
   },
   {
    "t": "MOPA",
@@ -194,10 +196,12 @@
     "it": "Marcature a colori su acciaio e anodizzato, massimo controllo dell’impulso.",
     "en": "Color marking on steel and anodized surfaces, full pulse control."
    },
-   "s": [
-    "Color marking"
-   ],
-   "icon": "laser"
+   "s": ["Color marking","Pulse control"],
+   "icon": "laser",
+   "badge": "MOPA",
+   "color": "#ff7e5f,#feb47b",
+   "emoji": "🌈",
+   "mats": ["Acciaio inox","Alluminio anodizzato","Titanio colorato"]
   },
   {
    "t": "DTF · Textile",
@@ -206,10 +210,12 @@
     "it": "Transfer vividi e resistenti per abbigliamento, da 1 pezzo alle divise complete.",
     "en": "Vivid, durable transfers for apparel, from 1 piece to full uniform runs."
    },
-   "s": [
-    "Ogni tessuto"
-   ],
-   "icon": "dtf"
+   "s": ["Ogni tessuto","Da 1 pz"],
+   "icon": "dtf",
+   "badge": "DTF",
+   "color": "#43e97b,#38f9d7",
+   "emoji": "👕",
+   "mats": ["Cotone","Poliestere","Nylon","Felpa","Pelle sintetica"]
   },
   {
    "t": "UV · Flatbed",
@@ -218,10 +224,12 @@
     "it": "Stampa full color con bianco e lucido, direttamente su quasi ogni oggetto.",
     "en": "Full-color print with white & gloss layers, directly on almost any object."
    },
-   "s": [
-    "2880 dpi"
-   ],
-   "icon": "uv"
+   "s": ["2880 dpi","White + Gloss"],
+   "icon": "uv",
+   "badge": "UV",
+   "color": "#a18cd1,#fbc2eb",
+   "emoji": "🎨",
+   "mats": ["Plexiglass","Legno","Metallo","Vetro","Ceramica","Plastica"]
   },
   {
    "t": "FDM / Resina",
@@ -230,10 +238,12 @@
     "it": "Prototipi, nomi 3D e oggetti di design in PLA/PETG, rifiniti a mano.",
     "en": "Prototypes, 3D names and design objects in PLA/PETG, hand finished."
    },
-   "s": [
-    "0,05 mm layer"
-   ],
-   "icon": "3d"
+   "s": ["0,05 mm layer","FDM + Resina"],
+   "icon": "3d",
+   "badge": "3D",
+   "color": "#0099f7,#f11712",
+   "emoji": "🧱",
+   "mats": ["PLA","PETG","Resina","ABS","TPU flessibile"]
   }
  ],
  "MATERIALS": [

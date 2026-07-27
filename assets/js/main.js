@@ -59,8 +59,50 @@ function applyI18n(){
 function setLang(l){setL(l);applyI18n();renderAll();const pg=currentPage();updateSeo(pg,L,T,pg==='product'?prod.currentProduct():null)}
 
 /* ---- contenuti statici ---- */
-function renderTech(){const html=TECH.map(t=>`<div class="mcard ${t.lg?'m-lg':''} reveal"><span class="mtype">${t.icon?u.icon(t.icon,''):''}${t.t}</span><h3>${t.n}</h3><p>${t.d[L]}</p><div class="spec">${t.s.map(s=>`<i>${s}</i>`).join('')}</div></div>`).join('');
-  $('techGrid').innerHTML=html;const g2=$('techGrid2');if(g2)g2.innerHTML=html}
+function renderTicker(){
+  const el=$('techTicker'); if(!el) return;
+  const cards=TECH.map(t=>`<div class="ttcard"><span class="tc-emoji">${t.emoji||'⚡'}</span><div class="tc-body"><span class="tc-name">${t.n}</span><span class="tc-sub">${t.t}</span></div>${t.badge?`<span class="tc-badge">${t.badge}</span>`:''}</div>`).join('');
+  const row1=cards+cards; /* duplicato per loop infinito */
+  const mats=(window.INGLY.MATERIALS||[]).map(m=>`<div class="ttcard"><span class="tc-emoji">◆</span><div class="tc-body"><span class="tc-name">${Array.isArray(m)?m[0]:m}</span><span class="tc-sub">${Array.isArray(m)&&m[1]?m[1]:'Materiale premium'}</span></div></div>`).join('');
+  const row2=(mats||cards)+( mats||cards);
+  el.innerHTML=`<div class="tt-row"><div class="tt-track">${row1}</div></div><div class="tt-row tt-row--rev"><div class="tt-track">${row2}</div></div>`;
+}
+function renderTech(){
+  $('techGrid').innerHTML=TECH.map(t=>`
+    <div class="mcard ${t.lg?'m-lg':''} reveal-blur stagger-${TECH.indexOf(t)+1}">
+      <div class="mcard-sweep"></div>
+      <span class="mcard-emoji">${t.emoji||'⚡'}</span>
+      <span class="mtype">${t.t}</span>
+      <h3>${t.n}</h3>
+      <p>${t.d[L]}</p>
+      ${t.badge?`<span class="mcard-badge">${t.badge}</span>`:''}
+      ${t.mats&&t.mats.length?`<div class="mats-list">${t.mats.map(m=>`<span>${m}</span>`).join('')}</div>`:''}
+      <div class="spec">${t.s.map(s=>`<i>${s}</i>`).join('')}</div>
+    </div>`).join('');
+  const g2=$('techGrid2'); if(g2) g2.innerHTML=$('techGrid').innerHTML;
+}
+function renderSocialHub(){
+  const hub=$('socialHub'); if(!hub) return;
+  const SH=(window.INGLY&&window.INGLY.SOCIAL_HUB)||null;
+  if(!SH||SH.attivo===false){ hub.style.display='none'; return }
+  hub.style.display='';
+  const cards=(SH.cards||[]).filter(c=>c.attivo!==false);
+  if(!cards.length){ hub.innerHTML=''; return }
+  hub.innerHTML=cards.map((c,i)=>{
+    const [ca,cb]=(c.colore||'#3b7de0,#1a4fc4').split(',');
+    const cta=c.url?`<span class="shcard-cta">Visita <span class="arr">→</span></span>`:'';
+    const tag=c.url?'a':'div';
+    const attrs=c.url?`href="${c.url}" target="_blank" rel="noopener"`:'';
+    return `<${tag} class="shcard reveal-blur stagger-${(i%6)+1}" ${attrs} style="--sh-a:${ca}22;--sh-b:${cb}11">
+      <div class="shcard-top">
+        <div class="shcard-icon" style="background:linear-gradient(140deg,${ca}33,${cb}22)">${c.emoji||'🔗'}</div>
+        <div><div class="shcard-name">${c.titolo[L]||c.titolo.it}</div><div class="shcard-badge">${c.badge||''}</div></div>
+      </div>
+      <p class="shcard-desc">${c.desc[L]||c.desc.it}</p>
+      ${cta}
+    </${tag}>`;
+  }).join('');
+}
 function renderSteps(){$('stepsGrid').innerHTML=STEPS.map((s,i)=>`<div class="step reveal"><span class="n">0${i+1}</span><h3>${s[L][0]}</h3><p>${s[L][1]}</p></div>`).join('')}
 function renderReviews(){
   $('revGrid').innerHTML=REVIEWS.map(r=>{
@@ -287,7 +329,7 @@ function renderPort(){
   const g2=$('gal2'); if(g2) g2.style.display=conFoto?'':'none';
   $('portGrid').innerHTML=PORT.map(tile).join('')}
 
-function renderAll(){prod.applyThemeAccent();renderPromo();renderSponsors();renderWaFab();renderAboutArt();prod.renderHero();prod.renderCats();prod.renderColl();prod.renderChips();prod.renderShop();prod.renderPP();prod.renderDigital();renderTech();renderSteps();renderReviews();renderBiz();renderFaq();renderMat();renderPort();renderUrg();prod.renderCart();observeAll();refreshMagnets()}
+function renderAll(){prod.applyThemeAccent();renderPromo();renderSponsors();renderWaFab();renderAboutArt();prod.renderHero();prod.renderCats();prod.renderColl();prod.renderChips();prod.renderShop();prod.renderPP();prod.renderDigital();renderTicker();renderTech();renderSteps();renderReviews();renderBiz();renderFaq();renderMat();renderPort();renderSocialHub();renderUrg();prod.renderCart();observeAll();refreshMagnets()}
 
 /* ---- delega eventi (niente handler inline) ---- */
 const actions={
