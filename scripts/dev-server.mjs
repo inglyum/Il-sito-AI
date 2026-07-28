@@ -47,7 +47,16 @@ createServer(async (req, res) => {
 
   try{
     const s = await stat(p);
-    if(s.isDirectory()) p = join(p, 'index.html');
+    if(s.isDirectory()){
+      /* GitHub Pages rimanda /product/7 a /product/7/ : senza la barra finale
+         i percorsi relativi della pagina si risolverebbero un livello più su. */
+      const solo = (req.url || '/').split('?')[0];
+      if(!solo.endsWith('/')){
+        res.writeHead(301, { Location: solo + '/' + (req.url.includes('?') ? '?' + req.url.split('?')[1] : '') });
+        return res.end();
+      }
+      p = join(p, 'index.html');
+    }
     const body = await readFile(p);
     return send(res, 200, body, TYPES[extname(p).toLowerCase()] || 'application/octet-stream');
   }catch{

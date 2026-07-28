@@ -1030,6 +1030,65 @@ function loadLegacyScripts(){window.INGLY={};return new Promise((res,rej)=>{cons
   const s=document.createElement('script');s.src='data/'+fl[i++]+'.js';s.onload=next;s.onerror=()=>rej(new Error('manca '+s.src));document.head.appendChild(s)}
  ;next()})}
 
+/* ---------- PAGINE STATICHE (pre-render) ----------
+   Stessa logica di scripts/prerender.mjs, ma eseguita qui perché l'Admin è
+   l'unico che pubblica: così le pagine nascono nello stesso commit dei dati e
+   non possono restare indietro. I moduli sono ES: si caricano al volo. */
+async function generaPagineStatiche(dominio){
+  const [P,SCH]=await Promise.all([
+    import('./assets/js/prerender-engine.js'),
+    import('./assets/js/schema-engine.js'),
+  ]);
+  const guscio=await fetch('index.html?t='+Date.now(),{cache:'no-store'}).then(r=>{
+    if(!r.ok)throw new Error('index.html non leggibile');return r.text()});
+  const base=String(dominio||'').replace(/\/+$/,'');
+  const SEO=S.CONFIG.seo||{}, azienda=SEO.azienda||'INGLY DESIGN', L='it';
+  const MATN=(S.C&&S.C.MATN)||{};
+  const nomeMat=m=>(MATN[m]&&MATN[m][L])||m||'';
+  const nomeCat=id=>{const c=(S.CATS||[]).find(x=>x.id===id);return (c&&c.n&&c.n[L])||''};
+  const entita=[
+    SCH.organizzazione(S.CONFIG,{base,social:Object.values(S.CONFIG.social||{})}),
+    SCH.sitoWeb(S.CONFIG,{base}),
+    SCH.servizi((S.C&&S.C.TECH)||[],{base,azienda}),
+  ];
+  const TIT={shop:'Catalogo',digital:'Prodotti digitali',business:'B2B · Aziende',
+    portfolio:'Portfolio',about:'Chi siamo',faq:'Domande frequenti',quote:'Richiedi un preventivo'};
+  const visibili=(S.P||[]).filter(x=>!x.hidden);
+  const out={};
+  for(const v of P.elenco({prodotti:S.P||[]})){
+    if(v.file==='index.html') continue;              /* la home resta il guscio */
+    if(v.pagina==='product'){
+      const pr=(S.P||[]).find(x=>x.id===v.id); if(!pr) continue;
+      const canonico=P.indirizzo('product',{base,id:pr.id});
+      const desc=String((pr.desc&&pr.desc[L])||SEO.descrizione||'').replace(/<[^>]+>/g,'').slice(0,300);
+      out[v.file]={text:P.componi(guscio,{
+        titolo:((pr.n&&pr.n[L])||'')+' — '+azienda, descrizione:desc, canonico,
+        contenuto:P.corpoProdotto(pr,{L,azienda,categoria:nomeCat(pr.cat),materiale:nomeMat(pr.mat)}),
+        jsonld:SCH.grafo([...entita,SCH.compatta({'@type':'Product',
+          name:(pr.n&&pr.n[L])||'', sku:pr.sku||('INGLY-'+pr.id), description:desc,
+          image:SCH.immagini(pr,{base,cartella:S.CONFIG.cartellaImmagini||'img/',L}),
+          category:nomeCat(pr.cat)||undefined, material:pr.mat||undefined,
+          brand:{'@type':'Brand',name:azienda},
+          offers:{'@type':'Offer',price:pr.price,priceCurrency:'EUR',
+            availability:'https://schema.org/InStock',url:canonico,
+            seller:{'@id':base+SCH.ID.org}}})]),
+      })};
+    }else{
+      const canonico=P.indirizzo(v.pagina,{base});
+      const extra=v.pagina==='shop'
+        ? [SCH.paginaCollezione(visibili,{base,L,titolo:azienda+' — Catalogo',url:canonico})] : [];
+      out[v.file]={text:P.componi(guscio,{
+        titolo:(TIT[v.pagina]||v.pagina)+' — '+azienda, descrizione:SEO.descrizione||'', canonico,
+        contenuto:P.corpoPagina(v.pagina,{L,base,titolo:TIT[v.pagina]||v.pagina,
+          descrizione:SEO.descrizione||'',
+          prodotti:v.pagina==='shop'?visibili:[], categorie:v.pagina==='shop'?(S.CATS||[]):[]}),
+        jsonld:SCH.grafo([...entita,...extra]),
+      })};
+    }
+  }
+  return out;
+}
+
 /* ---------- rigenerazione legacy .js (stessa logica di scripts/build.mjs) ---------- */
 function genLegacy(){return{
  'data/config.js':`/* GENERATO dai JSON — non modificare a mano */\nwindow.INGLY=window.INGLY||{};\nwindow.INGLY.CONFIG=${jstr(S.CONFIG)};\n`,
@@ -2778,11 +2837,23 @@ $('pubGo').onclick=async()=>{
       valeva uno solo e nessuna scheda prodotto era raggiungibile. */
    const urls=[['/','1.0','weekly']];
    ['shop','digital','business','portfolio','about','faq','quote'].forEach(p=>urls.push(['/'+p,'0.8','weekly']));
-   (S.P||[]).filter(p=>!p.hidden).forEach(p=>urls.push(['/product?id='+p.id,'0.7','monthly']));
+   /* pagina statica per prodotto: /product/7/ — è un file vero, quindi
+      indicizzabile e leggibile anche da chi non esegue JavaScript */
+   (S.P||[]).filter(p=>!p.hidden).forEach(p=>urls.push(['/product/'+p.id+'/','0.7','monthly']));
    files['sitemap.xml']={text:'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     +urls.map(([u,pr,cf])=>' <url><loc>'+dom+u+'</loc><lastmod>'+day+'</lastmod><changefreq>'+cf+'</changefreq><priority>'+pr+'</priority></url>').join('\n')
     +'\n</urlset>\n'};
-   files['robots.txt']={text:'User-agent: *\nAllow: /\nDisallow: /admin.html\n\nSitemap: '+dom+'/sitemap.xml\n'}}
+   files['robots.txt']={text:'User-agent: *\nAllow: /\nDisallow: /admin.html\n\nSitemap: '+dom+'/sitemap.xml\n'}
+   /* PAGINE STATICHE: una per prodotto e una per sezione, con il testo già
+      scritto dentro. I crawler dei motori AI non eseguono JavaScript: senza
+      queste pagine leggerebbero un guscio vuoto. Entrano nello stesso commit
+      atomico, quindi restano sempre allineate ai dati appena pubblicati. */
+   try{
+    const gen=await generaPagineStatiche(dom);
+    for(const f in gen) files[f]=gen[f];
+    step('prep','run',Object.keys(gen).length+' pagine statiche');
+   }catch(e){ console.warn('[INGLY] pagine statiche non generate:',e);
+    toast('Attenzione: pagine statiche non generate — il sito funziona, ma i motori AI vedranno meno contenuto'); }}
   MEDIA.forEach(m=>files[m.path]={b64:m.b64});
   const dels=DELETES.slice();
   step('prep','done',Object.keys(files).length+' file'+(dels.length?' + '+dels.length+' eliminazioni':''));
