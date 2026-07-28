@@ -51,8 +51,13 @@ check('è una CollectionPage', coll['@type'] === 'CollectionPage');
 check('fa parte del sito', coll.isPartOf['@id'] === BASE + S.ID.sito);
 check('parla dell azienda', coll.about['@id'] === BASE + S.ID.org);
 check('conta i prodotti', coll.mainEntity.numberOfItems === 3);
-check('ogni voce ha un indirizzo proprio con id',
-  coll.mainEntity.itemListElement.every(x => /\/product\?id=\d+$/.test(x.url)));
+/* Deve coincidere con il canonical delle schede: se la CollectionPage indica
+   un indirizzo e la pagina ne dichiara un altro, Google riceve due versioni
+   della stessa scheda e ne sceglie una a caso. */
+check('ogni voce usa lo stesso indirizzo del canonical',
+  coll.mainEntity.itemListElement.every(x => /\/product\/\d+\/$/.test(x.url)));
+check('nessun residuo del vecchio formato con query',
+  !JSON.stringify(coll).includes('product?id='));
 check('le posizioni partono da 1', coll.mainEntity.itemListElement[0].position === 1);
 check('non dichiara più di 50 voci',
   S.paginaCollezione(Array.from({ length: 80 }, (_, i) => ({ id: i + 1, n: { it: 'P' + i } })), { base: BASE })

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<base href="../../">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cornice Portafoto Personalizzata — INGLY DESIGN</title>
@@ -82,10 +83,10 @@
   addEventListener('popstate',()=>gtag('event','page_view',{page_path:location.pathname}));
 </script>
 -->
-<link rel="icon" type="image/png" sizes="32x32" href="../../favicon/favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="../../favicon/favicon-16.png">
-<link rel="apple-touch-icon" href="../../favicon/apple-touch-icon.png">
-<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16.png">
+<link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="dns-prefetch" href="https://fonts.gstatic.com">
@@ -99,6 +100,14 @@
    "/Il-sito-AI/" in un'anteprima su GitHub Pages. Va anteposta al percorso
    decodificato, altrimenti l'indirizzo ricostruito esce dalla sottocartella. */
 var base=location.pathname.replace(/[^/]*$/,'');
+/* PRIMA di cambiare l'indirizzo: fissa la base a QUESTA cartella.
+   Cambiando la URL con replaceState, il browser risolverebbe i percorsi
+   relativi di CSS e JS — non ancora scaricati — sul NUOVO indirizzo: da
+   /product/23 andrebbe a cercare /product/assets/js/app.js, che non esiste,
+   e il sito resterebbe senza stili né codice. Con <base> il punto di partenza
+   resta questa cartella qualunque cosa faccia poi la cronologia. */
+try{var bs=document.createElement('base');bs.setAttribute('href',base||'./');
+ document.head.insertBefore(bs,document.head.firstChild);}catch(e){}
 var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,'',url);}}catch(e){}})();</script>
 <!-- SBLOCCO CACHE — deve restare QUI, inline in index.html.
      index.html è l'unico file che il service worker scarica sempre dalla rete:
@@ -124,28 +133,28 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
   }catch(e){}
 })();</script>
 <!-- Preload critical assets -->
-<link rel="preload" as="image" href="../../assets/images/og-image.jpg" fetchpriority="high">
-<link rel="preload" as="fetch" href="../../data/products.json" crossorigin>
-<link rel="modulepreload" href="../../assets/js/app.js">
-<link rel="modulepreload" href="../../assets/js/data-loader.js">
-<link rel="modulepreload" href="../../assets/js/main.js">
-<link rel="modulepreload" href="../../assets/js/products.js">
-<link rel="modulepreload" href="../../assets/js/wishlist.js">
-<link rel="modulepreload" href="../../assets/js/referral.js">
+<link rel="preload" as="image" href="assets/images/og-image.jpg" fetchpriority="high">
+<link rel="preload" as="fetch" href="data/products.json" crossorigin>
+<link rel="modulepreload" href="assets/js/app.js">
+<link rel="modulepreload" href="assets/js/data-loader.js">
+<link rel="modulepreload" href="assets/js/main.js">
+<link rel="modulepreload" href="assets/js/products.js">
+<link rel="modulepreload" href="assets/js/wishlist.js">
+<link rel="modulepreload" href="assets/js/referral.js">
 
-<script src="../../assets/js/artwork.js"></script>
-<link rel="stylesheet" href="../../assets/css/reset.css">
-<link rel="stylesheet" href="../../assets/css/variables.css">
-<link rel="stylesheet" href="../../assets/css/animations.css">
-<link rel="stylesheet" href="../../assets/css/layout.css">
-<link rel="stylesheet" href="../../assets/css/components.css">
-<link rel="stylesheet" href="../../assets/css/pages.css">
-<link rel="stylesheet" href="../../assets/css/responsive.css">
+<script src="assets/js/artwork.js"></script>
+<link rel="stylesheet" href="assets/css/reset.css">
+<link rel="stylesheet" href="assets/css/variables.css">
+<link rel="stylesheet" href="assets/css/animations.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/pages.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
 
 <!-- Dati: caricati dal data-loader (JSON con versioning; fallback data/*.js su file://) -->
-<script type="module" src="../../assets/js/app.js"></script>
-<script defer src="../../assets/js/app.fallback.js"></script>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"LocalBusiness","@id":"https://www.inglydesign.it/#organizzazione","name":"INGLY DESIGN","description":"Incisione e taglio laser, stampa UV & DTF e stampa 3D su misura. Regali personalizzati, targhe, gadget aziendali e file digitali — precisione 0,01 mm, made in Italy.","url":"https://www.inglydesign.it/","logo":{"@type":"ImageObject","url":"https://www.inglydesign.it/assets/images/logo.png"},"image":"https://www.inglydesign.it/assets/images/og-image.jpg","email":"inglydesign@gmail.com","telephone":"+393296904627","priceRange":"€€","address":{"@type":"PostalAddress","addressLocality":"Palermo","addressRegion":"Emilia-Romagna","addressCountry":"IT"},"sameAs":["https://instagram.com/ingly_design","https://facebook.com/inglydesign","https://tiktok.com/@ingly.design","https://pinterest.com/inglydesign","https://wa.me/393296904627","https://etsy.com/shop/inglydesign"]},{"@type":"WebSite","@id":"https://www.inglydesign.it/#sito","url":"https://www.inglydesign.it/","name":"INGLY DESIGN","description":"Incisione e taglio laser, stampa UV & DTF e stampa 3D su misura. Regali personalizzati, targhe, gadget aziendali e file digitali — precisione 0,01 mm, made in Italy.","inLanguage":"it","publisher":{"@id":"https://www.inglydesign.it/#organizzazione"},"potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://www.inglydesign.it/shop?q={search_term_string}"},"query-input":"required name=search_term_string"}},{"@type":"OfferCatalog","@id":"https://www.inglydesign.it/#catalogo","name":"Lavorazioni INGLY DESIGN","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Laser CO₂","description":"Legno, plexiglass, pelle, vetro e MDF. Taglia fino a 20 mm, incide dettagli fotografici.","serviceType":"CO₂ · 100W","provider":{"@id":"https://www.inglydesign.it/#organizzazione"},"areaServed":{"@type":"Country","name":"Italia"}}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Fiber Laser F2","description":"Marcatura permanente e tattile su acciaio, alluminio, titanio e ottone.","serviceType":"Fiber · F2","provider":{"@id":"https://www.inglydesign.it/#organizzazione"},"areaServed":{"@type":"Country","name":"Italia"}}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Laser MOPA","description":"Marcature a colori su acciaio e anodizzato, massimo controllo dell’impulso.","serviceType":"MOPA","provider":{"@id":"https://www.inglydesign.it/#organizzazione"},"areaServed":{"@type":"Country","name":"Italia"}}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Stampa DTF","description":"Transfer vividi e resistenti per abbigliamento, da 1 pezzo alle divise complete.","serviceType":"DTF · Textile","provider":{"@id":"https://www.inglydesign.it/#organizzazione"},"areaServed":{"@type":"Country","name":"Italia"}}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Stampa UV","description":"Stampa full color con bianco e lucido, direttamente su quasi ogni oggetto.","serviceType":"UV · Flatbed","provider":{"@id":"https://www.inglydesign.it/#organizzazione"},"areaServed":{"@type":"Country","name":"Italia"}}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Stampa 3D","description":"Prototipi, nomi 3D e oggetti di design in PLA/PETG, rifiniti a mano.","serviceType":"FDM / Resina","provider":{"@id":"https://www.inglydesign.it/#organizzazione"},"areaServed":{"@type":"Country","name":"Italia"}}}]},{"@type":"Product","name":"Cornice Portafoto Personalizzata","sku":"INGLY-045","description":"Cornice portafoto in legno di betulla incisa al laser con nomi, date o frasi speciali. Formato foto 10×15, 13×18 o 15×20. Piedistallo o gancio incluso. Regalo sempre gradito.","image":[{"@type":"ImageObject","url":"https://www.inglydesign.it/img/45.webp","caption":"Cornice Portafoto Personalizzata"}],"category":"Casa & Arredamento","material":"Legno","brand":{"@type":"Brand","name":"INGLY DESIGN"},"offers":{"@type":"Offer","price":27,"priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://www.inglydesign.it/product/45/","seller":{"@id":"https://www.inglydesign.it/#organizzazione"}}}]}</script>
+<script type="module" src="assets/js/app.js"></script>
+<script defer src="assets/js/app.fallback.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"LocalBusiness","@id":"https://www.inglydesign.it/#organizzazione","name":"INGLY DESIGN","description":"Incisione e taglio laser, stampa UV & DTF e stampa 3D su misura. Regali personalizzati, targhe, gadget aziendali e file digitali — precisione 0,01 mm, made in Italy.","url":"https://www.inglydesign.it/","logo":{"@type":"ImageObject","url":"https://www.inglydesign.it/assets/images/logo.png"},"image":"https://www.inglydesign.it/assets/images/og-image.jpg","email":"inglydesign@gmail.com","telephone":"+393296904627","priceRange":"€€","address":{"@type":"PostalAddress","addressLocality":"Palermo","addressRegion":"Emilia-Romagna","addressCountry":"IT"},"sameAs":["https://instagram.com/ingly_design","https://facebook.com/inglydesign","https://tiktok.com/@ingly.design","https://pinterest.com/inglydesign","https://wa.me/393296904627","https://etsy.com/shop/inglydesign"]},{"@type":"WebSite","@id":"https://www.inglydesign.it/#sito","url":"https://www.inglydesign.it/","name":"INGLY DESIGN","description":"Incisione e taglio laser, stampa UV & DTF e stampa 3D su misura. Regali personalizzati, targhe, gadget aziendali e file digitali — precisione 0,01 mm, made in Italy.","inLanguage":"it","publisher":{"@id":"https://www.inglydesign.it/#organizzazione"},"potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://www.inglydesign.it/shop?q={search_term_string}"},"query-input":"required name=search_term_string"}},{"@type":"OfferCatalog","@id":"https://www.inglydesign.it/#catalogo","name":"Lavorazioni INGLY DESIGN","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Laser CO₂","description":"Legno, plexiglass, pelle, vetro e MDF. Taglia fino a 20 mm, incide dettagli fotografici.","serviceType":"CO₂ · 100W","provider":{"@id":"https://www.inglydesign.it/#organizzazione"},"areaServed":{"@type":"Country","name":"Italia"}}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Fiber Laser F2","description":"Marcatura permanente e tattile su acciaio, alluminio, titanio e ottone.","serviceType":"Fiber · F2","provider":{"@id":"https://www.inglydesign.it/#organizzazione"},"areaServed":{"@type":"Country","name":"Italia"}}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Laser MOPA","description":"Marcature a colori su acciaio e anodizzato, massimo controllo dell’impulso.","serviceType":"MOPA","provider":{"@id":"https://www.inglydesign.it/#organizzazione"},"areaServed":{"@type":"Country","name":"Italia"}}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Stampa DTF","description":"Transfer vividi e resistenti per abbigliamento, da 1 pezzo alle divise complete.","serviceType":"DTF · Textile","provider":{"@id":"https://www.inglydesign.it/#organizzazione"},"areaServed":{"@type":"Country","name":"Italia"}}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Stampa UV","description":"Stampa full color con bianco e lucido, direttamente su quasi ogni oggetto.","serviceType":"UV · Flatbed","provider":{"@id":"https://www.inglydesign.it/#organizzazione"},"areaServed":{"@type":"Country","name":"Italia"}}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Stampa 3D","description":"Prototipi, nomi 3D e oggetti di design in PLA/PETG, rifiniti a mano.","serviceType":"FDM / Resina","provider":{"@id":"https://www.inglydesign.it/#organizzazione"},"areaServed":{"@type":"Country","name":"Italia"}}}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Di che materiale è Cornice Portafoto Personalizzata?","acceptedAnswer":{"@type":"Answer","text":"Cornice Portafoto Personalizzata è realizzato in Legno, lavorato e rifinito a mano nel laboratorio INGLY DESIGN di Cesena."}},{"@type":"Question","name":"Quanto costa Cornice Portafoto Personalizzata?","acceptedAnswer":{"@type":"Answer","text":"Cornice Portafoto Personalizzata parte da €27,00. Il prezzo comprende la personalizzazione; per quantità elevate si può richiedere un preventivo dedicato."}},{"@type":"Question","name":"Quanto tempo serve per realizzare Cornice Portafoto Personalizzata?","acceptedAnswer":{"@type":"Answer","text":"La produzione richiede 3 giorni lavorativi, a cui si aggiunge la spedizione (2–5 giorni in Italia)."}},{"@type":"Question","name":"Che misure ha Cornice Portafoto Personalizzata?","acceptedAnswer":{"@type":"Answer","text":"Per 10×15 cm: Esterno 18×23 cm, Per 13×18 cm: Esterno 21×26 cm. Su richiesta si possono realizzare misure diverse."}},{"@type":"Question","name":"Cornice Portafoto Personalizzata si può personalizzare?","acceptedAnswer":{"@type":"Answer","text":"Sì. Nome, data, dedica o logo vengono incisi su misura. Prima della lavorazione si riceve una prova grafica da approvare."}},{"@type":"Question","name":"Cornice Portafoto Personalizzata è adatto come regalo?","acceptedAnswer":{"@type":"Answer","text":"Sì, rientra nella categoria Casa & Arredamento ed è tra le scelte più richieste come regalo personalizzato."}},{"@type":"Question","name":"Quanto dura la produzione?","acceptedAnswer":{"@type":"Answer","text":"La maggior parte dei pezzi personalizzati viene incisa e spedita entro 3 giorni lavorativi. Gli ordini B2B ricevono un piano di produzione con date garantite."}},{"@type":"Question","name":"Posso caricare il mio logo o una foto?","acceptedAnswer":{"@type":"Answer","text":"Sì — SVG, PDF, AI, PNG o JPG. Ottimizziamo ogni file per il materiale scelto e inviamo una prova grafica prima di incidere."}}],"@id":"https://www.inglydesign.it/product/45/#faq"},{"@type":"Product","name":"Cornice Portafoto Personalizzata","sku":"INGLY-045","description":"Cornice portafoto in legno di betulla incisa al laser con nomi, date o frasi speciali. Formato foto 10×15, 13×18 o 15×20. Piedistallo o gancio incluso. Regalo sempre gradito.","image":[{"@type":"ImageObject","url":"https://www.inglydesign.it/img/45.webp","caption":"Cornice Portafoto Personalizzata"}],"category":"Casa & Arredamento","material":"Legno","brand":{"@type":"Brand","name":"INGLY DESIGN"},"offers":{"@type":"Offer","price":27,"priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://www.inglydesign.it/product/45/","seller":{"@id":"https://www.inglydesign.it/#organizzazione"}}}]}</script>
 </head>
 <body>
 <!-- MAINTENANCE MODE — controllato da data/config.json → maintenance.attivo -->
@@ -176,7 +185,7 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
   }).catch(function(){});
 })();
 </script>
-<div class="loader" id="loader"><div class="lin"><img src="../../assets/images/logo.png" alt="INGLY" width="130" height="130" fetchpriority="high"><div class="lbar"><i></i></div><span id="ldrTxt">Precisione in caricamento</span></div></div>
+<div class="loader" id="loader"><div class="lin"><img src="assets/images/logo.png" alt="INGLY" width="130" height="130" fetchpriority="high"><div class="lbar"><i></i></div><span id="ldrTxt">Precisione in caricamento</span></div></div>
 <canvas id="fx" aria-hidden="true"></canvas>
 <div class="laserfx" aria-hidden="true"></div>
 <div class="progress" id="progress"></div>
@@ -195,7 +204,7 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
 
 <header class="nav scrolled" id="nav" style="top:36px">
   <div class="wrap nav-in">
-    <a href="/home" class="brand" data-nav="home"><img src="../../assets/images/logo.png" alt="INGLY DESIGN logo" width="44" height="44"><span>INGLY<small>DESIGN · ITALY</small></span></a>
+    <a href="/home" class="brand" data-nav="home"><img src="assets/images/logo.png" alt="INGLY DESIGN logo" width="44" height="44"><span>INGLY<small>DESIGN · ITALY</small></span></a>
     <nav class="nav-links" aria-label="Main">
       <a href="/home" data-nav="home" class="active"><i class="navic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></i> <span data-i18n="nHome">Home</span></a>
       <a href="/shop" data-nav="shop"><i class="navic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg></i> Shop</a>
@@ -232,7 +241,8 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
 <p>Cornice portafoto in legno di betulla incisa al laser con nomi, date o frasi speciali. Formato foto 10×15, 13×18 o 15×20. Piedistallo o gancio incluso. Regalo sempre gradito.</p>
 <dl><dt>Materiale</dt><dd>Legno</dd><dt>Categoria</dt><dd>Casa &amp; Arredamento</dd><dt>Prezzo</dt><dd>€27,00</dd><dt>Tempo di produzione</dt><dd>3 giorni</dd><dt>Codice</dt><dd>INGLY-045</dd></dl>
 <h2>Misure e dettagli</h2><table><tbody><tr><th>Per 10×15 cm</th><td>Esterno 18×23 cm</td></tr><tr><th>Per 13×18 cm</th><td>Esterno 21×26 cm</td></tr></tbody></table>
-<p>Realizzato da INGLY DESIGN.</p></div>
+<p>Realizzato da INGLY DESIGN.</p>
+<section><h2>Domande frequenti</h2><details><summary>Di che materiale è Cornice Portafoto Personalizzata?</summary><p>Cornice Portafoto Personalizzata è realizzato in Legno, lavorato e rifinito a mano nel laboratorio INGLY DESIGN di Cesena.</p></details><details><summary>Quanto costa Cornice Portafoto Personalizzata?</summary><p>Cornice Portafoto Personalizzata parte da €27,00. Il prezzo comprende la personalizzazione; per quantità elevate si può richiedere un preventivo dedicato.</p></details><details><summary>Quanto tempo serve per realizzare Cornice Portafoto Personalizzata?</summary><p>La produzione richiede 3 giorni lavorativi, a cui si aggiunge la spedizione (2–5 giorni in Italia).</p></details><details><summary>Che misure ha Cornice Portafoto Personalizzata?</summary><p>Per 10×15 cm: Esterno 18×23 cm, Per 13×18 cm: Esterno 21×26 cm. Su richiesta si possono realizzare misure diverse.</p></details><details><summary>Cornice Portafoto Personalizzata si può personalizzare?</summary><p>Sì. Nome, data, dedica o logo vengono incisi su misura. Prima della lavorazione si riceve una prova grafica da approvare.</p></details><details><summary>Cornice Portafoto Personalizzata è adatto come regalo?</summary><p>Sì, rientra nella categoria Casa &amp; Arredamento ed è tra le scelte più richieste come regalo personalizzato.</p></details><details><summary>Quanto dura la produzione?</summary><p>La maggior parte dei pezzi personalizzati viene incisa e spedita entro 3 giorni lavorativi. Gli ordini B2B ricevono un piano di produzione con date garantite.</p></details><details><summary>Posso caricare il mio logo o una foto?</summary><p>Sì — SVG, PDF, AI, PNG o JPG. Ottimizziamo ogni file per il materiale scelto e inviamo una prova grafica prima di incidere.</p></details></section></div>
 <!-- HOME -->
 <section class="page active" id="page-home">
   <div class="hero" style="padding-top:150px">
@@ -253,7 +263,7 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
         </div>
       </div>
       <div class="hero-visual" id="heroVisual">
-        <div class="coin-scene"><div class="cring r1"></div><div class="cring r2"></div><div class="coin" id="coin"><img src="../../assets/images/logo.png" alt="INGLY badge 3D" width="360" height="360" fetchpriority="high"></div></div>
+        <div class="coin-scene"><div class="cring r1"></div><div class="cring r2"></div><div class="coin" id="coin"><img src="assets/images/logo.png" alt="INGLY badge 3D" width="360" height="360" fetchpriority="high"></div></div>
         <div class="fcard fc1" id="heroCard1"></div>
         <div class="fcard fc2" id="heroCard2"></div>
         <div class="fcard fc3" id="heroCard3"></div>
@@ -280,8 +290,8 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
       <div class="tabs" id="collTabs">
         <button class="tab active" data-action="coll" data-coll="best" data-i18n="tBest">Più venduti</button>
         <button class="tab" data-action="coll" data-coll="new" data-i18n="tNew">Novità</button>
-        <button class="tab" data-action="coll" data-coll="limited" data-i18n="tLim"><svg class="ic-svg" aria-hidden="true"><use href="../../assets/icons/ingly-icons.svg#ic-limited"></use></svg> Edizioni Limitate</button>
-        <button class="tab" data-action="coll" data-coll="season" data-i18n="tSeas"><svg class="ic-svg" aria-hidden="true"><use href="../../assets/icons/ingly-icons.svg#ic-stagionale"></use></svg> Stagionale</button>
+        <button class="tab" data-action="coll" data-coll="limited" data-i18n="tLim"><svg class="ic-svg" aria-hidden="true"><use href="assets/icons/ingly-icons.svg#ic-limited"></use></svg> Edizioni Limitate</button>
+        <button class="tab" data-action="coll" data-coll="season" data-i18n="tSeas"><svg class="ic-svg" aria-hidden="true"><use href="assets/icons/ingly-icons.svg#ic-stagionale"></use></svg> Stagionale</button>
       </div></div>
       <div class="pgrid" id="collGrid"></div>
     </div>
@@ -289,7 +299,7 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
 
   <div class="sec dark">
     <div class="wrap">
-      <div class="reveal"><span class="eyebrow" data-i18n="techEye"><svg class="ic-svg" aria-hidden="true"><use href="../../assets/icons/ingly-icons.svg#ic-tecnologie"></use></svg> Tecnologie</span>
+      <div class="reveal"><span class="eyebrow" data-i18n="techEye"><svg class="ic-svg" aria-hidden="true"><use href="assets/icons/ingly-icons.svg#ic-tecnologie"></use></svg> Tecnologie</span>
       <h2 class="h2" data-i18n="techH2">Sei tecnologie.<br>Precisione al centesimo.</h2></div>
       <div class="mach-grid" id="techGrid"></div>
     </div>
@@ -346,7 +356,7 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
 <!-- SHOP -->
 <section class="page" id="page-shop">
   <div class="wrap phero">
-    <span class="eyebrow"><svg class="ic-svg" aria-hidden="true"><use href="../../assets/icons/ingly-icons.svg#ic-shop"></use></svg> Shop</span>
+    <span class="eyebrow"><svg class="ic-svg" aria-hidden="true"><use href="assets/icons/ingly-icons.svg#ic-shop"></use></svg> Shop</span>
     <h2 class="h2" data-i18n="shopH2">Il <span class="hl on">catalogo.</span></h2>
     <p class="sub" data-i18n="shopSub">12 categorie, sottocategorie e materiali — cerca, filtra, personalizza.</p>
     <div class="shop-layout">
@@ -458,7 +468,7 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
 <!-- DIGITAL -->
 <section class="page" id="page-digital">
   <div class="wrap phero">
-    <span class="eyebrow"><svg class="ic-svg" aria-hidden="true"><use href="../../assets/icons/ingly-icons.svg#ic-digital"></use></svg> <span data-i18n="digEye">Prodotti digitali</span></span>
+    <span class="eyebrow"><svg class="ic-svg" aria-hidden="true"><use href="assets/icons/ingly-icons.svg#ic-digital"></use></svg> <span data-i18n="digEye">Prodotti digitali</span></span>
     <h2 class="h2" data-i18n="digH2">File pronti al <span class="hl on">taglio.</span></h2>
     <p class="sub" data-i18n="digSub">SVG, DXF, STL e progetti premium per CO₂, Fiber F2 e MOPA. Download istantaneo, licenza commerciale inclusa.</p>
     <div class="pgrid" id="digGrid"></div>
@@ -475,7 +485,7 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
 <!-- BUSINESS -->
 <section class="page" id="page-business">
   <div class="wrap phero">
-    <span class="eyebrow"><svg class="ic-svg" aria-hidden="true"><use href="../../assets/icons/ingly-icons.svg#ic-b2b"></use></svg> Ingly Business</span>
+    <span class="eyebrow"><svg class="ic-svg" aria-hidden="true"><use href="assets/icons/ingly-icons.svg#ic-b2b"></use></svg> Ingly Business</span>
     <h2 class="h2" style="font-size:clamp(2.6rem,6vw,4.4rem)" data-i18n="bizH2">Il tuo brand,<br>marcato <span class="hl on">per sempre.</span></h2>
     <p class="sub" data-i18n="bizSub">Gadget aziendali, targhe professionali, produzione conto terzi, incisioni industriali e prototipazione laser — da 50 a 50.000 pezzi.</p>
     <div class="hero-ctas"><button class="btn btn-primary magnetic" data-action="go" data-arg="quote"><span data-i18n="bizCta1">Richiedi preventivo</span> <span class="arr">→</span></button><button class="btn btn-ghost magnetic" data-action="go" data-arg="quote" data-i18n="bizCta2">Richiedi il catalogo</button></div>
@@ -487,7 +497,7 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
 <!-- PORTFOLIO -->
 <section class="page" id="page-portfolio">
   <div class="wrap phero">
-    <span class="eyebrow"><svg class="ic-svg" aria-hidden="true"><use href="../../assets/icons/ingly-icons.svg#ic-portfolio"></use></svg> Portfolio</span>
+    <span class="eyebrow"><svg class="ic-svg" aria-hidden="true"><use href="assets/icons/ingly-icons.svg#ic-portfolio"></use></svg> Portfolio</span>
     <h2 class="h2" data-i18n="portH2">Fatto con la <span class="hl on">luce.</span></h2>
     <p class="sub" data-i18n="portSub">Una selezione di lavori reali: incisioni, tagli, stampe UV e progetti 3D.</p>
     <div class="portgrid" id="portGrid"></div>
@@ -498,7 +508,7 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
 <section class="page" id="page-about">
   <div class="wrap phero about-grid" style="align-items:center">
     <div>
-      <span class="eyebrow"><svg class="ic-svg" aria-hidden="true"><use href="../../assets/icons/ingly-icons.svg#ic-about"></use></svg> <span data-i18n="nAbout">Chi Siamo</span></span>
+      <span class="eyebrow"><svg class="ic-svg" aria-hidden="true"><use href="assets/icons/ingly-icons.svg#ic-about"></use></svg> <span data-i18n="nAbout">Chi Siamo</span></span>
       <h2 class="h2" data-i18n="abH2">Artigianato,<br>guidato dai <span class="hl on">laser.</span></h2>
       <p class="sub" style="margin-bottom:34px" data-i18n="abSub">INGLY DESIGN è uno studio di personalizzazione dove l'istinto del design italiano incontra la precisione industriale. Ogni pezzo — uno o mille — passa per le stesse mani, gli stessi raggi, la stessa ossessione per il dettaglio.</p>
       <div class="counters">
@@ -508,15 +518,15 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
         <div class="counter"><b><span class="count" data-to="98">0</span><i>%</i></b><span data-i18n="c4">Consegne puntuali</span></div>
       </div>
     </div>
-    <div class="about-art"><div class="logo-big"><img src="../../assets/images/logo.png" alt="INGLY badge" width="420" height="420" loading="lazy"></div></div>
+    <div class="about-art"><div class="logo-big"><img src="assets/images/logo.png" alt="INGLY badge" width="420" height="420" loading="lazy"></div></div>
   </div>
   <div class="sec pt-70"><div class="wrap">
-    <span class="eyebrow"><svg class="ic-svg" aria-hidden="true"><use href="../../assets/icons/ingly-icons.svg#ic-materiali"></use></svg> <span data-i18n="matEye">Materiali</span></span>
+    <span class="eyebrow"><svg class="ic-svg" aria-hidden="true"><use href="assets/icons/ingly-icons.svg#ic-materiali"></use></svg> <span data-i18n="matEye">Materiali</span></span>
     <h2 class="h2" data-i18n="matH2">Otto materiali, <span class="hl on">un linguaggio.</span></h2>
     <div class="matgrid" id="matGrid"></div>
   </div></div>
   <div class="sec dark"><div class="wrap">
-    <span class="eyebrow" data-i18n="techEye"><svg class="ic-svg" aria-hidden="true"><use href="../../assets/icons/ingly-icons.svg#ic-tecnologie"></use></svg> Tecnologie</span>
+    <span class="eyebrow" data-i18n="techEye"><svg class="ic-svg" aria-hidden="true"><use href="assets/icons/ingly-icons.svg#ic-tecnologie"></use></svg> Tecnologie</span>
     <h2 class="h2" data-i18n="techH2b">Il parco macchine.</h2>
     <div class="mach-grid" id="techGrid2"></div>
   </div></div>
@@ -534,7 +544,7 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
 <!-- QUOTE / CUSTOM -->
 <section class="page" id="page-quote">
   <div class="wrap phero">
-    <span class="eyebrow"><svg class="ic-svg" aria-hidden="true"><use href="../../assets/icons/ingly-icons.svg#ic-custom"></use></svg> <span data-i18n="qEye">Custom su richiesta</span></span>
+    <span class="eyebrow"><svg class="ic-svg" aria-hidden="true"><use href="assets/icons/ingly-icons.svg#ic-custom"></use></svg> <span data-i18n="qEye">Custom su richiesta</span></span>
     <h2 class="h2" data-i18n="qH2">Se lo immagini,<br>lo <span class="hl on">incidiamo.</span></h2>
     <p class="sub" data-i18n="qSub">Prodotti su misura, incisione su oggetti tuoi, progettazione 3D, prototipazione laser. Raccontaci il progetto: preventivo entro 24 ore.</p>
     <form class="quote-form">
@@ -567,7 +577,7 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
   <div class="wrap">
     <div class="fgrid">
       <div class="fbrand">
-        <a href="/home" data-nav="home" class="brand" style="color:var(--paper)"><img src="../../assets/images/logo.png" alt="INGLY" width="44" height="44" loading="lazy"><span>INGLY<small style="color:#8886a0">DESIGN · ITALY</small></span></a>
+        <a href="/home" data-nav="home" class="brand" style="color:var(--paper)"><img src="assets/images/logo.png" alt="INGLY" width="44" height="44" loading="lazy"><span>INGLY<small style="color:#8886a0">DESIGN · ITALY</small></span></a>
         <p data-i18n="ftDesc">Creazioni personalizzate premium. Incisione e taglio laser, stampa UV & DTF, stampa 3D — made in Italy.</p>
         <div class="socials" id="soc3" style="margin-top:16px"></div>
       </div>
