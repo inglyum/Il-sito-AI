@@ -795,6 +795,32 @@ async function gh(path,opt){const r=await fetch(API()+path,Object.assign({header
   if(r.status===403&&r.headers.get('x-ratelimit-remaining')==='0')throw new Error('GitHub RATELIMIT su '+path);
   throw new Error('GitHub '+r.status+' su '+path+(b?' — '+b.slice(0,140):''))}
  return r.status===204?null:r.json()}
+/* ============ GUARDIA ANTI-SOVRASCRITTURA (lost update) ============
+   L'Admin carica i dati una volta e poi pubblica la propria copia in memoria.
+   Se nel frattempo un file è cambiato sul repository — un commit fatto a mano,
+   un'altra scheda dell'Admin, un deploy ancora in coda su GitHub Pages — la
+   pubblicazione lo sovrascriveva SENZA DIRE NULLA e quelle modifiche sparivano.
+   È così che i campi emoji/badge/color/mats delle Tecnologie sono stati persi.
+   Qui confrontiamo il file sul repository con lo stato che l'Admin aveva letto
+   all'avvio (SNAP): se differisce, l'utente decide cosa fare. */
+function ghDecode(b64){
+  const bin=atob(String(b64||'').replace(/\s/g,''));
+  const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
+  return new TextDecoder('utf-8').decode(bytes);
+}
+async function remoteDrift(files,ref){
+  const drift=[];
+  for(const f of files){
+    if(SNAP[f]===undefined||SNAP[f]==='"__MANCANTE__"')continue;   /* file nuovo: niente da sovrascrivere */
+    try{
+      const r=await gh('/contents/data/'+f+'.json?ref='+encodeURIComponent(ref));
+      if(!r||!r.content)continue;
+      const remote=JSON.parse(ghDecode(r.content));
+      if(jstr(remote)!==SNAP[f])drift.push(f);
+    }catch(e){ /* file assente o non leggibile: non blocchiamo la pubblicazione */ }
+  }
+  return drift;
+}
 function ghErrHint(e){const m=String(e.message||e);
  if(m.includes('RATELIMIT'))return 'Limite API di GitHub superato (60 richieste/ora senza token). Inserisci il token in Impostazioni: il limite sale a 5000/ora.';
  if(m.includes(' 401 '))return 'Token non valido o scaduto: creane uno nuovo (Developer settings → Fine-grained tokens).';
@@ -2640,6 +2666,17 @@ $('pubGo').onclick=async()=>{
   /* refs */
   step('blob','run');
   const ref=await gh(`/git/ref/heads/${SET.branch}`);const head=ref.object.sha;
+  /* qualcuno ha toccato questi file dopo che l'Admin li ha letti? */
+  const drift=await remoteDrift(ch,head);
+  if(drift.length){
+   const el=drift.map(f=>'· data/'+f+'.json').join('\n');
+   if(!confirm('ATTENZIONE — sul repository questi file sono CAMBIATI dopo che l\'Admin ha caricato i dati:\n\n'+el+
+     '\n\nSe pubblichi ora, quelle modifiche verranno sovrascritte e andranno perse.\n\n'+
+     'Annulla = fermati e ricarica l\'Admin per riprendere i dati aggiornati (consigliato)\n'+
+     'OK = pubblica comunque e sovrascrivi')){
+    return fail('prep','Pubblicazione annullata: sul repository ci sono dati più recenti ('+drift.join(', ')+'). Ricarica l\'Admin prima di ripubblicare.');
+   }
+  }
   const headC=await gh(`/git/commits/${head}`);
   const entries=[];const paths=Object.keys(files);
   for(let i=0;i<paths.length;i++){const p=paths[i];const f=files[p];
