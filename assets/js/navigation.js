@@ -8,8 +8,30 @@ import { L, T } from './utils.js';
 
 export const PAGES=['home','shop','product','digital','business','portfolio','about','faq','quote'];
 
+/* ===== PERCORSO BASE =====
+   In produzione il sito sta nella radice del dominio ("/"), ma su GitHub Pages
+   un repository di sviluppo viene servito in una sottocartella
+   ("/Il-sito-AI/"). Senza questo, "/Il-sito-AI/shop" veniva letto come pagina
+   "Il-sito-AI" — sconosciuta — e mostrava sempre la home: il sito risultava
+   non navigabile ovunque non fosse la radice.
+   La base si ricava da dove è stato caricato QUESTO modulo
+   (…/assets/js/navigation.js), quindi funziona ovunque senza configurazione. */
+export const BASE = (() => {
+  try{
+    const u = new URL('../../', import.meta.url).pathname;   // → "/" oppure "/Il-sito-AI/"
+    return u.endsWith('/') ? u : u + '/';
+  }catch(e){ return '/' }
+})();
+
+/* percorso della pagina corrente, tolta la base */
+function relPath(){
+  const p = location.pathname;
+  const rel = (BASE !== '/' && p.startsWith(BASE)) ? p.slice(BASE.length) : p.replace(/^\/+/,'');
+  return rel.replace(/^\/+/,'');
+}
+
 export function currentPage(){
-  const p=location.pathname.replace(/^\/+/,'').split('?')[0].split('/')[0]||'home';
+  const p=relPath().split('?')[0].split('/')[0]||'home';
   return PAGES.includes(p)?p:'home';
 }
 
@@ -51,8 +73,10 @@ export function show(page){
 }
 
 export function go(page,search){
-  const url='/'+page+(search?'?'+search:'');
-  if(location.pathname.replace(/^\/+/,'')===page&&!search){show(page);return;}
+  /* gli indirizzi nascono sempre sotto la base: in produzione "/shop",
+     in un'anteprima su GitHub Pages "/Il-sito-AI/shop" */
+  const url=BASE+page+(search?'?'+search:'');
+  if(relPath().split('?')[0]===page&&!search){show(page);return;}
   history.pushState({page,search:search||null},'',(url));
   show(page);
 }

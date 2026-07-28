@@ -773,7 +773,23 @@ function closeModal(){$('ovl').classList.remove('on')}
 $('ovl').addEventListener('click',e=>{if(e.target.id==='ovl')closeModal()});
 
 /* ---------- impostazioni ---------- */
-const SET=Object.assign({owner:'inglyum',repo:'Sito-ingly',branch:'main',remember:false},JSON.parse(localStorage.getItem('ingly2_set')||'{}'));
+const SET=Object.assign({owner:'inglyum',repo:'Il-sito-AI',branch:'main',remember:false},JSON.parse(localStorage.getItem('ingly2_set')||'{}'));
+/* PROTEZIONE DEL SITO IN PRODUZIONE.
+   Il repository di pubblicazione è ricordato nel browser (localStorage), non
+   nel file: aprendo QUESTO admin su un computer che ha già usato quello di
+   produzione, "Pubblica" scriverebbe sul sito online senza che nulla lo dica.
+   Questo è l'ambiente di sviluppo: se troviamo puntato il repository di
+   produzione lo riportiamo a quello di sviluppo e lo segnaliamo. */
+(function(){
+  const PROD=/^sito-claude-code-?$/i;
+  if(PROD.test(String(SET.repo||''))){
+    const era=SET.repo;
+    SET.repo='Il-sito-AI';
+    try{localStorage.setItem('ingly2_set',JSON.stringify({owner:SET.owner,repo:SET.repo,branch:SET.branch,remember:SET.remember}))}catch(e){}
+    addEventListener('DOMContentLoaded',()=>{try{toast('Destinazione riportata su «Il-sito-AI»: era «'+era+'», il sito in produzione')}catch(e){}});
+    console.warn('[INGLY] destinazione di pubblicazione corretta: '+era+' → Il-sito-AI');
+  }
+})();
 let AUTODETECTED=false;
 (function autodetect(){try{const h=location.hostname.toLowerCase();
  if(!/\.github\.io$/.test(h))return; /* dominio personalizzato o locale: valgono le impostazioni salvate */

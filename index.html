@@ -94,7 +94,12 @@
 
 <script>(function(){try{var m=localStorage.getItem("ingly_mode");if(!m)m=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-mode",m)}catch(e){}})();</script>
 <!-- GitHub Pages SPA: decodifica /?p=/shop → history '/shop' prima del caricamento -->
-<script>(function(){try{var s=new URLSearchParams(location.search);var p=s.get('p');if(p){s.delete('p');var rest=s.toString();var url=p+(rest?'?'+rest:'');history.replaceState(null,'',url);}}catch(e){}})();</script>
+<script>(function(){try{var s=new URLSearchParams(location.search);var p=s.get('p');if(p){s.delete('p');var rest=s.toString();
+/* la base è la cartella in cui vive questa pagina: "/" in produzione,
+   "/Il-sito-AI/" in un'anteprima su GitHub Pages. Va anteposta al percorso
+   decodificato, altrimenti l'indirizzo ricostruito esce dalla sottocartella. */
+var base=location.pathname.replace(/[^/]*$/,'');
+var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,'',url);}}catch(e){}})();</script>
 <!-- SBLOCCO CACHE — deve restare QUI, inline in index.html.
      index.html è l'unico file che il service worker scarica sempre dalla rete:
      se questo controllo vivesse in un file .js, una cache avvelenata servirebbe
@@ -679,7 +684,10 @@
      service worker (CSS/JS network-first) e da app.js (auto-riparazione). */
   if('serviceWorker' in navigator){
     window.addEventListener('load',function(){
-      navigator.serviceWorker.register('/sw.js').then(function(reg){
+      /* percorso relativo alla cartella della pagina: in un'anteprima su
+         GitHub Pages '/sw.js' punterebbe fuori dalla sottocartella e la
+         registrazione fallirebbe (il worker non può avere ambito superiore). */
+      navigator.serviceWorker.register(location.pathname.replace(/[^/]*$/,'')+'sw.js').then(function(reg){
         try{ reg.update() }catch(e){}
       }).catch(function(){});
     });

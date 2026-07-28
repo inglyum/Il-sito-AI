@@ -14,10 +14,20 @@
   var search=loc.search;
   // Se è un file con estensione (es. .js, .css, .webp) non fare redirect — è un 404 reale
   if(/\.[a-zA-Z]{2,5}$/.test(path)) return;
+  // Su GitHub Pages un repository di sviluppo è servito in una sottocartella
+  // (inglyum.github.io/Il-sito-AI/…): quella cartella fa parte della base e va
+  // conservata, altrimenti il redirect finisce fuori dal sito.
+  // Riconoscimento deterministico: se il primo segmento NON è una pagina nota,
+  // allora è la cartella di installazione. Nessuna dipendenza dal dominio.
+  var PAGES=['home','shop','product','digital','business','portfolio','about','faq','quote'];
+  var seg=path.replace(/^\/+/,'').split('/');
+  var base='/';
+  if(seg[0] && PAGES.indexOf(seg[0])===-1){ base='/'+seg[0]+'/'; seg=seg.slice(1); }
+  path='/'+seg.join('/');
   // Rimuovi il trailing slash
   path=path.replace(/\/$/,'') || '/';
-  // Encode il percorso come query param, poi redirect a /
-  var dest=loc.origin+'/?p='+encodeURIComponent(path)+(search?'&'+search.slice(1):'');
+  // Encode il percorso come query param, poi redirect alla base
+  var dest=loc.origin+base+'?p='+encodeURIComponent(path)+(search?'&'+search.slice(1):'');
   window.location.replace(dest);
 })();
 </script>
