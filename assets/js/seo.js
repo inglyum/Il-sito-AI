@@ -2,6 +2,7 @@
    Meta dinamici per pagina, Open Graph, Twitter Card, canonical, hreflang
    e dati strutturati Schema.org (Organization + Product sulla pagina prodotto).
    Tutto generato dai dati dell'admin: nessuna duplicazione. */
+import * as ENG from './seo-engine.js';
 const { CONFIG } = window.INGLY;
 const S = CONFIG.seo || {};
 const base = () => (S.dominio || location.origin).replace(/\/+$/,'');
@@ -49,12 +50,31 @@ export function updateSeo(page, L, T, product){
     portfolio:T('portH2'), about:T('abH2'), faq:T('faqH2'), quote:T('qH2')
   };
   const isProd = page==='product' && product;
-  const title = isProd
-      ? `${product.n[L]} — ${S.azienda||'INGLY DESIGN'}`
-      : (page==='home' ? (S.titolo||'INGLY DESIGN') : `${(titles[page]||'').replace(/<[^>]+>/g,'')} — ${S.azienda||'INGLY DESIGN'}`);
-  const desc = isProd
-      ? ((product.desc&&product.desc[L])||S.descrizione||'')
-      : (S.descrizione||'');
+  const azienda = S.azienda||'INGLY DESIGN';
+
+  /* Title e description passano dal SEO Engine: nascono da modelli modificabili
+     dall'Admin, così ogni prodotto ha un titolo suo invece di ripetere lo stesso
+     schema fisso. Se un prodotto ha un titolo scritto a mano (p.seoTitolo)
+     quello vince sempre: il modello è un buon default, non una gabbia. */
+  let title, desc;
+  if(isProd){
+    const cat=(window.INGLY.CATS||[]).find(c=>c.id===product.cat);
+    const MATN=window.INGLY.MATN||{};
+    const ctx={ L, azienda, citta:S.citta||'',
+      categoria:(cat&&cat.n&&cat.n[L])||'',
+      materiale:(MATN[product.mat]&&MATN[product.mat][L])||product.mat||'' };
+    title = product.seoTitolo || ENG.titoloProdotto(product,S,ctx);
+    desc  = product.seoDescrizione || ENG.descrizioneProdotto(product,S,ctx);
+  }else{
+    title = ENG.titoloPagina(page,S,{
+      pagina:(titles[page]||'').replace(/<[^>]+>/g,''),
+      azienda, claim:S.claim||S.titolo||'' });
+    /* la home tiene il titolo scritto a mano, se c'è: è il più curato del sito */
+    if(page==='home' && S.titolo) title=S.titolo;
+    desc = S.descrizione||'';
+  }
+  /* direttiva per i motori: sempre indicizzabile salvo scelta esplicita */
+  set('meta[name="robots"]','content',ENG.robots(page,S));
   /* URL canonico REALE della pagina.
      Prima era base()+'/#/'+page: indirizzi con '#' che Google collassa tutti
      sulla home, quindi canonical, og:url e hreflang puntavano di fatto a '/'.

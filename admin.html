@@ -564,6 +564,8 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
     </div>
   </section>
 
+  <section class="view" id="v-seoai"></section>
+
   <!-- ============ PUBBLICA ============ -->
   <section class="view" id="v-pub">
     <div id="pubCheck"></div>
@@ -1020,7 +1022,7 @@ function syncSocialLinks(){if(!Array.isArray(S.SOCIALS))return;const map={instag
 const NAV=[['Panoramica',[['dash','📊','Dashboard']]],
  ['Catalogo',[['prod','📦','Prodotti'],['cats','🗂','Categorie'],['dig','💾','Digitali']]],
  ['Contenuti',[['media','🖼','Media Library'],['port','🏆','Portfolio'],['biz','🏢','Sezione Business'],['sponsor','🤝','Sponsor & Partner'],['themes','🎨','Temi stagionali'],['tech','🔥','Tecnologie'],['sochub','📱','Social Hub'],['hero','🎯','Home & Hero'],['texts','✍️','Testi IT/EN'],['faq','❓','FAQ & Recensioni'],['adv','🧩','Avanzate']]],
- ['Configurazione',[['contacts','📞','Contatti & Social'],['seo','🔎','SEO'],['bg','🎨','Sfondo Sito'],['set','⚙️','Impostazioni']]],
+ ['Configurazione',[['contacts','📞','Contatti & Social'],['seo','🔎','SEO'],['seoai','🧠','SEO & AI Engine'],['bg','🎨','Sfondo Sito'],['set','⚙️','Impostazioni']]],
  ['Sistema',[['pub','🚀','Pubblica & Deploy'],['hist','🕘','Cronologia'],['health','🩺','Health Center'],['backup','💾','Backup']]]];
 const TITLES={};let VIEW='dash';
 $('nav').innerHTML=NAV.map(([g,items])=>`<div class="navlabel">${g}</div>`+items.map(([id,ic,t])=>{TITLES[id]=t;return `<button class="nit" data-go="${id}"><span>${ic}</span><span class="t">${t}</span>${id==='pub'?'<span class="bdg" id="navPubN"></span>':''}</button>`}).join('')).join('');
@@ -3229,5 +3231,6 @@ $('seoAiGen').onclick=async()=>{
 /* ================== AVVIO ================== */
 (async()=>{renderPipe();const ok=await loadAll();if(ok){go('dash');if(token())scanRepo().catch(()=>{})}else go('set')})();
 </script>
+<script src="assets/js/admin/seo-engine-panel.js"></script>
 </body>
 </html>
