@@ -243,11 +243,16 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
       <div class="drop" id="mDrop">Trascina qui le immagini (anche più di una) oppure clicca<br><small class="hint">JPG/PNG → ridimensionate max 1600px e convertite in WEBP · SVG passa senza modifiche</small></div>
       <input type="file" id="mFile" accept="image/*,.svg" multiple hidden>
       <div id="mAssign" style="display:none;margin-top:14px">
-        <h3 style="font-size:13.5px;margin-bottom:6px">Scegli destinazione per ogni immagine</h3>
-        <div class="row c3" style="align-items:end;margin-bottom:10px">
-          <div><label>Applica a tutte — destinazione</label><select id="mAllDest"></select></div>
-          <div><label>Applica a tutte — ruolo</label><select id="mAllSlot"><option value="main">Foto principale</option><option value="gal">Gallery</option><option value="both">Principale + Gallery</option></select></div>
-          <div><button class="btn sm" id="mApplyAll">⇊ Applica a tutte</button></div>
+        <h3 style="font-size:13.5px;margin-bottom:2px">Dove vuoi mettere queste immagini?</h3>
+        <div class="hint" style="margin-bottom:10px">Scegli prima <b>il tipo</b>, poi l'elemento. Sotto ogni immagine trovi scritto il file che verrà creato.</div>
+        <div style="border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px;background:rgba(255,255,255,.02)">
+          <label style="display:block;margin-bottom:6px">Applica a tutte</label>
+          <div id="mAllTipi" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px"></div>
+          <div class="row c3" style="align-items:end">
+            <div><label id="mAllDestLab">Elemento</label><select id="mAllDest"></select></div>
+            <div id="mAllSlotWrap"><label>Ruolo</label><select id="mAllSlot"><option value="main">Foto principale</option><option value="gal">Aggiungi alla gallery</option><option value="both">Principale + gallery</option></select></div>
+            <div><button class="btn sm" id="mApplyAll">⇊ Applica a tutte</button></div>
+          </div>
         </div>
         <div id="mRows"></div>
         <div style="display:flex;gap:10px;margin-top:12px">
@@ -483,6 +488,29 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
 
   <!-- ============ AVANZATE ============ -->
   <section class="view" id="v-adv">
+    <div class="card"><h3>🎁 Invita un amico (referral)</h3>
+      <div class="hint">Il riquadro che compare in fondo al sito con il codice da condividere.</div>
+      <label style="display:flex;gap:8px;align-items:center;font-weight:500;margin:10px 0">
+        <input type="checkbox" style="width:auto" data-b="CONFIG.referral.attivo"> Mostra il riquadro sul sito</label>
+      <div class="row c2">
+        <div><label>Titolo (IT)</label><input type="text" data-b="CONFIG.referral.titolo.it" placeholder="Invita un amico"></div>
+        <div><label>Titolo (EN)</label><input type="text" data-b="CONFIG.referral.titolo.en" placeholder="Refer a friend"></div>
+      </div>
+      <div class="row c2">
+        <div><label>Sottotitolo (IT)</label><input type="text" data-b="CONFIG.referral.sottotitolo.it"></div>
+        <div><label>Sottotitolo (EN)</label><input type="text" data-b="CONFIG.referral.sottotitolo.en"></div>
+      </div>
+      <div class="row c2">
+        <div><label>Prefisso del codice</label><input type="text" id="refPrefisso" data-b="CONFIG.referral.prefisso" placeholder="es. INGLY">
+          <div class="hint">Rende il codice riconoscibile: <span class="mono">INGLY-4XZK</span> invece di <span class="mono">O4WGGY</span>. Vuoto = codice casuale.</div></div>
+        <div><label>Codice unico per tutti (facoltativo)</label><input type="text" id="refFisso" data-b="CONFIG.referral.codiceFisso" placeholder="vuoto = uno per visitatore">
+          <div class="hint">Da usare solo per una campagna a codice unico.</div></div>
+      </div>
+      <div style="margin-top:10px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.02)">
+        <b style="font-size:12.5px">Come funziona</b>
+        <div class="hint" style="margin-top:4px">Il codice è <b>di chi condivide</b>, non del negozio: serve a capire da quale amico arriva un nuovo cliente. Per questo si sceglie il <b>formato</b>, non il codice di ogni visitatore. Se compili «codice unico per tutti», questa distinzione si perde.</div>
+      </div>
+    </div>
     <div class="card"><h3>🧩 Sezioni avanzate del catalogo</h3>
       <div class="hint">Materiali, tecnologie, step, font, opzioni: modifica guidata in JSON con validazione. Il formato viene controllato prima di accettare la modifica — impossibile rompere il sito.</div>
       <label>Sezione</label><select id="advSec"></select>
@@ -917,6 +945,13 @@ function normalize(){
  S.CONFIG=S.CONFIG||{};S.CONFIG.social=S.CONFIG.social||{};S.CONFIG.seo=S.CONFIG.seo||{};
  S.CONFIG.statistiche=S.CONFIG.statistiche||{pezzi:0,clienti:0,materiali:0,puntualita:0,rating:''};
  S.CONFIG.moduli=S.CONFIG.moduli||{};S.CONFIG.cartellaImmagini=S.CONFIG.cartellaImmagini||'img/';
+ /* referral: la struttura deve esistere prima che i campi annidati del pannello
+    possano scriverci dentro (data-b="CONFIG.referral.titolo.it") */
+ S.CONFIG.referral=Object.assign({attivo:true,prefisso:'',codiceFisso:'',
+   titolo:{it:'Invita un amico',en:'Refer a friend'},
+   sottotitolo:{it:'',en:''}}, S.CONFIG.referral||{});
+ S.CONFIG.referral.titolo=Object.assign({it:'',en:''},S.CONFIG.referral.titolo||{});
+ S.CONFIG.referral.sottotitolo=Object.assign({it:'',en:''},S.CONFIG.referral.sottotitolo||{});
  S.D=S.D||{};S.D.it=S.D.it||{};S.D.en=S.D.en||{};
  S.SOCIALS=Array.isArray(S.SOCIALS)?S.SOCIALS:[];
  S.P=Array.isArray(S.P)?S.P:[];S.CATS=Array.isArray(S.CATS)?S.CATS:[];S.C=S.C||{};
@@ -1008,7 +1043,16 @@ function setPath(root,path,val){const ks=path.split('.');let o=root;for(let i=0;
 const BROOT=r=>r==='CONTENT'?S.C:S[r];
 function bindAll(){document.querySelectorAll('[data-b]').forEach(el=>{
  const p=el.dataset.b,root=p.split('.')[0],rest=p.slice(root.length+1);
- const v=getPath(BROOT(root)||{},rest);el.value=v==null?'':v;
+ const v=getPath(BROOT(root)||{},rest);
+ /* Le caselle di spunta si leggono e si scrivono con .checked: impostare
+    .value non le spunta, e in salvataggio avrebbe scritto la stringa "on"
+    al posto di true/false. */
+ if(el.type==='checkbox'){
+  el.checked=v===true||v==='true';
+  el.onchange=()=>{setPath(BROOT(root),rest,el.checked);markDirty()};
+  return;
+ }
+ el.value=v==null?'':v;
  if(el.tagName==='SELECT'&&(v===true||v===false))el.value=String(v);
  el.oninput=el.onchange=()=>{let val=el.value;if(el.type==='number')val=val===''?0:+val;
   if(val==='true')val=true;else if(val==='false')val=false;
@@ -1680,19 +1724,54 @@ function destOptions(){return '<optgroup label="Prodotti">'+(S.P||[]).map(p=>`<o
  '<optgroup label="Portfolio / Dal laboratorio"><option value="t:new">➕ Nuova tessera Portfolio</option>'+((S.C.PORT)||[]).map((t,i)=>`<option value="t:${i}">Tessera ${i+1} · ${esc(t[1].it)}</option>`).join('')+'</optgroup>'+
  '<optgroup label="Categorie (12 mondi)">'+(S.CATS||[]).map(c=>`<option value="c:${esc(c.id)}">${esc(c.ic)} ${esc(c.n.it)}</option>`).join('')+'</optgroup>'+
  '<optgroup label="Altro"><option value="about">Immagine «Chi siamo»</option><option value="free">Solo libreria (nessun collegamento — resta qui, marcata «orfana»)</option></optgroup>'}
+/* dati che servono al modulo per costruire elenchi e descrizioni */
+function mdDati(){return{prodotti:S.P||[],portfolio:(S.C&&S.C.PORT)||[],categorie:S.CATS||[]}}
+function mdOpzioni(tipo,sel){return MEDIA_DEST.elementiPerTipo(tipo,mdDati())
+  .map(o=>`<option value="${esc(o.valore)}"${o.valore===sel?' selected':''}>${esc(o.etichetta)}</option>`).join('')}
+function mdBottoniTipo(attr,tipoSel){return MEDIA_DEST.TIPI.map(t=>
+  `<button class="btn sm${t.id===tipoSel?' pri':''}" ${attr}="${t.id}" title="${esc(t.aiuto)}">${t.icona} ${t.nome}</button>`).join('')}
+
 function renderMRows(){
- $('mRows').innerHTML=STAGE_TMP.map((s,i)=>`<div class="list-it" style="align-items:center">
+ $('mRows').innerHTML=STAGE_TMP.map((s,i)=>{
+  /* Predefinito prudente: «solo libreria». Prima il primo elemento dell'elenco
+     era un prodotto, quindi bastava premere «Assegna» senza guardare per
+     SOSTITUIRE la foto principale del prodotto #1. Ora, se non scegli, il file
+     resta in libreria e non tocca nulla. */
+  if(!s.dest) s.dest='free';
+  const tipo=MEDIA_DEST.tipoDi(s.dest), ruolo=s.slot||'main';
+  const path=MEDIA_DEST.percorso(s.dest,{ext:s.proc.ext,ruolo,nomeFile:s.name,
+    portfolio:mdDati().portfolio,
+    galleryEsistenti:(()=>{const p=(S.P||[]).find(x=>'p:'+x.id===s.dest);return (p&&p.gallery)||[]})()});
+  return `<div class="list-it" style="align-items:flex-start;flex-wrap:wrap;gap:10px">
   <img src="${s.url}" style="width:62px;height:62px;object-fit:cover;border-radius:9px;border:1px solid var(--line)">
-  <div style="flex:1;min-width:0"><div class="mono" style="font-size:11.5px;overflow:hidden;text-overflow:ellipsis">${esc(s.name)}</div>
-   <div class="hint">${Math.round(s.proc.buf.byteLength/1024)} KB${s.proc.w?' · '+s.proc.w+'×'+s.proc.h:''}</div></div>
-  <div style="width:34%;min-width:150px"><select data-mrd="${i}">${destOptions()}</select></div>
-  <div style="width:22%;min-width:120px"><select data-mrs="${i}">
-   <option value="main">Foto principale</option><option value="gal">Gallery</option><option value="both">Principale + Gallery</option></select></div>
-  <button class="btn sm err" data-mrx="${i}">✕</button></div>`).join('');
- STAGE_TMP.forEach((s,i)=>{const d=document.querySelector(`[data-mrd="${i}"]`),sl=document.querySelector(`[data-mrs="${i}"]`);
-  if(s.dest)d.value=s.dest;else s.dest=d.value;
-  if(s.slot)sl.value=s.slot;else s.slot=sl.value;
-  d.onchange=()=>{s.dest=d.value};sl.onchange=()=>{s.slot=sl.value}});
+  <div style="flex:1;min-width:180px">
+   <div class="mono" style="font-size:11.5px;overflow:hidden;text-overflow:ellipsis">${esc(s.name)}</div>
+   <div class="hint">${Math.round(s.proc.buf.byteLength/1024)} KB${s.proc.w?' · '+s.proc.w+'×'+s.proc.h:''}</div>
+   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px">${mdBottoniTipo('data-mrt="'+i+'" data-tipo',tipo)}</div>
+  </div>
+  <div style="min-width:190px;flex:1">
+   <select data-mrd="${i}">${mdOpzioni(tipo,s.dest)}</select>
+   ${MEDIA_DEST.vuoleRuolo(tipo)?`<select data-mrs="${i}" style="margin-top:6px">
+     ${MEDIA_DEST.RUOLI.map(r=>`<option value="${r.id}"${r.id===ruolo?' selected':''}>${r.nome}</option>`).join('')}</select>`:''}
+  </div>
+  <button class="btn sm err" data-mrx="${i}">✕</button>
+  <!-- la riga che mancava: dove finisce davvero questo file -->
+  <div style="flex-basis:100%;font-size:12px;color:var(--mut);border-top:1px dashed var(--line);padding-top:7px">
+   → <b style="color:var(--ok)">${esc(path)}</b> · ${esc(MEDIA_DEST.descrizione(s.dest,{...mdDati(),ruolo}))}
+  </div></div>`}).join('');
+
+ STAGE_TMP.forEach((s,i)=>{
+  const d=document.querySelector(`[data-mrd="${i}"]`),sl=document.querySelector(`[data-mrs="${i}"]`);
+  if(d){ if(s.dest)d.value=s.dest; else s.dest=d.value; d.onchange=()=>{s.dest=d.value;renderMRows()} }
+  if(sl){ sl.value=s.slot||'main'; sl.onchange=()=>{s.slot=sl.value;renderMRows()} }
+ });
+ /* cambio tipo: riparte dal primo elemento di quel tipo */
+ document.querySelectorAll('[data-mrt]').forEach(b=>b.onclick=()=>{
+  const i=+b.dataset.mrt, t=b.dataset.tipo, primo=MEDIA_DEST.elementiPerTipo(t,mdDati())[0];
+  STAGE_TMP[i].dest=primo?primo.valore:'free';
+  if(!MEDIA_DEST.vuoleRuolo(t)) STAGE_TMP[i].slot='main';
+  renderMRows();
+ });
  document.querySelectorAll('[data-mrx]').forEach(b=>b.onclick=()=>{STAGE_TMP.splice(+b.dataset.mrx,1);
   if(!STAGE_TMP.length){$('mAssign').style.display='none';return}renderMRows()})}
 async function handleFiles(files){if(!files.length)return;STAGE_TMP=[];
@@ -1701,11 +1780,30 @@ async function handleFiles(files){if(!files.length)return;STAGE_TMP=[];
   STAGE_TMP.push({name:f.name,proc,hash,url:URL.createObjectURL(proc.blob)})}catch(e){toast('File non leggibile: '+f.name)}}
  if(!STAGE_TMP.length)return;
  $('mAssign').style.display='';
- $('mAllDest').innerHTML=destOptions();
+ MD_TIPO='p';
+ renderAllBar();
  renderMRows();
  toast(STAGE_TMP.length+' immagini pronte: scegli dove va ognuna')}
+/* barra «applica a tutte»: stessi due passi delle righe singole */
+let MD_TIPO='p';
+function renderAllBar(){
+ const box=$('mAllTipi'); if(!box) return;
+ box.innerHTML=mdBottoniTipo('data-mat','')
+   .replace('data-mat="'+MD_TIPO+'"','data-mat="'+MD_TIPO+'" ')
+   ;
+ /* evidenzia il tipo scelto */
+ box.querySelectorAll('[data-mat]').forEach(b=>{
+   b.classList.toggle('pri', b.dataset.mat===MD_TIPO);
+   b.onclick=()=>{MD_TIPO=b.dataset.mat;renderAllBar()};
+ });
+ $('mAllDest').innerHTML=mdOpzioni(MD_TIPO,'');
+ const w=$('mAllSlotWrap'); if(w) w.style.display=MEDIA_DEST.vuoleRuolo(MD_TIPO)?'':'none';
+ const lab=$('mAllDestLab');
+ if(lab){ const t=MEDIA_DEST.TIPI.find(x=>x.id===MD_TIPO); lab.textContent=t?t.nome:'Elemento' }
+}
 $('mApplyAll').onclick=()=>{const d=$('mAllDest').value,s=$('mAllSlot').value;
- STAGE_TMP.forEach(x=>{x.dest=d;x.slot=s});renderMRows();toast('Applicato a tutte')};
+ STAGE_TMP.forEach(x=>{x.dest=d;x.slot=MEDIA_DEST.vuoleRuolo(MEDIA_DEST.tipoDi(d))?s:'main'});
+ renderMRows();toast('Applicato a tutte le immagini')};
 $('mCancel').onclick=()=>{STAGE_TMP=[];$('mAssign').style.display='none'};
 async function addToGallery(p,proc){p.gallery=p.gallery||[];let n=1,path;
  do{path='img/'+p.id+'-g'+n+'.'+proc.ext;n++}while(p.gallery.includes(path)||MEDIA.some(m=>m.path===path));
@@ -2606,7 +2704,9 @@ $('rNew').onclick=()=>{S.C.REVIEWS.push({q:{it:'"…"',en:'"…"'},w:'Nome Cogno
 
 /* ================== AVANZATE (JSON validato) ================== */
 const ADV=['MAT_ART','MATN','MATERIALS','STEPS','FONTS','MOPT'];
-function renderAdv(){$('advSec').innerHTML=ADV.filter(k=>S.C[k]!==undefined).map(k=>`<option>${k}</option>`).join('');advLoad()}
+function renderAdv(){$('advSec').innerHTML=ADV.filter(k=>S.C[k]!==undefined).map(k=>`<option>${k}</option>`).join('');advLoad();
+ /* la scheda contiene anche i campi referral (data-b): senza questo restano vuoti */
+ bindAll()}
 function advLoad(){const k=$('advSec').value;$('advTa').value=JSON.stringify(S.C[k],null,1);$('advMsg').textContent=''}
 $('advSec').onchange=advLoad;
 $('advSave').onclick=()=>{const k=$('advSec').value;try{const v=JSON.parse($('advTa').value);S.C[k]=v;markDirty();$('advMsg').textContent='✔ valido, applicato in bozza';$('advMsg').style.color='var(--ok)'}catch(e){$('advMsg').textContent='✖ JSON non valido: '+e.message;$('advMsg').style.color='var(--err)'}};
@@ -3232,5 +3332,13 @@ $('seoAiGen').onclick=async()=>{
 (async()=>{renderPipe();const ok=await loadAll();if(ok){go('dash');if(token())scanRepo().catch(()=>{})}else go('set')})();
 </script>
 <script src="assets/js/admin/seo-engine-panel.js"></script>
+<!-- Logica «dove finisce l'immagine»: modulo ES separato (così è testabile da
+     riga di comando) reso disponibile allo script principale come MD. Gli
+     script type=module sono differiti, quindi MD esiste molto prima che si
+     possa caricare un file dalla Media Library. -->
+<script type="module">
+  import * as MD from './assets/js/admin/media-destinazione.js';
+  window.MEDIA_DEST = MD;   /* «MD» è già usato nell'Admin per le date */
+</script>
 </body>
 </html>

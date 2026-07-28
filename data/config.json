@@ -92,5 +92,18 @@
   "delaySecondi": 45,
   "mostraSoloUnaVolta": true
  },
- "siteBg": "sunset"
+ "siteBg": "sunset",
+ "referral": {
+  "attivo": true,
+  "prefisso": "INGLY",
+  "codiceFisso": "",
+  "titolo": {
+   "it": "Invita un amico",
+   "en": "Refer a friend"
+  },
+  "sottotitolo": {
+   "it": "Condividi INGLY e ottieni vantaggi esclusivi",
+   "en": "Share INGLY and get exclusive perks"
+  }
+ }
 }
