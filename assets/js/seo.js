@@ -4,6 +4,7 @@
    Tutto generato dai dati dell'admin: nessuna duplicazione. */
 import * as ENG from './seo-engine.js';
 import * as SCH from './schema-engine.js';
+import * as FAQ from './faq-engine.js';
 const { CONFIG } = window.INGLY;
 const S = CONFIG.seo || {};
 const base = () => (S.dominio || location.origin).replace(/\/+$/,'');
@@ -129,8 +130,18 @@ export function updateSeo(page, L, T, product){
     if(cat)crumbs.push({"@type":"ListItem","position":2,"name":cat.n[L],"item":base()+'/shop?cat='+cat.id});
     crumbs.push({"@type":"ListItem","position":crumbs.length+1,"name":product.n[L],"item":url});
     jsonld('ld-crumbs',{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":crumbs});
+    /* FAQ della scheda: le stesse che finiscono nella pagina statica, così i
+       dati strutturati non raccontano qualcosa di diverso da ciò che si legge. */
+    const MATNx=window.INGLY.MATN||{};
+    const faqs=FAQ.perProdotto(product,(window.INGLY.FAQS)||[],{L,
+      azienda:S.azienda||'INGLY DESIGN',
+      categoria:(cat&&cat.n&&cat.n[L])||'',
+      materiale:(MATNx[product.mat]&&MATNx[product.mat][L])||product.mat||''});
+    const fs=FAQ.schema(faqs,{url});
+    if(fs) jsonld('ld-pfaq',Object.assign({"@context":"https://schema.org"},fs));
+    else { const e=document.getElementById('ld-pfaq'); if(e) e.remove() }
   } else {
-    ['ld-product','ld-crumbs'].forEach(id=>{const s=document.getElementById(id);if(s)s.remove()});
+    ['ld-product','ld-crumbs','ld-pfaq'].forEach(id=>{const s=document.getElementById(id);if(s)s.remove()});
   }
 
   /* Il catalogo come CollectionPage, non come semplice elenco: dichiara che è

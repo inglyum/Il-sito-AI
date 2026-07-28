@@ -15,6 +15,7 @@ import { existsSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import * as P from '../assets/js/prerender-engine.js';
 import * as SCH from '../assets/js/schema-engine.js';
+import * as FAQ from '../assets/js/faq-engine.js';
 
 const ROOT = resolve(new URL('..', import.meta.url).pathname);
 const SOLO_VERIFICA = process.argv.includes('--check');
@@ -56,11 +57,14 @@ function paginaProdotto(p){
   const canonico = P.indirizzo('product', { base, id: p.id });
   const titolo = (p.n && p.n[L]) + ' — ' + azienda;
   const desc = String((p.desc && p.desc[L]) || S.descrizione || '').replace(/<[^>]+>/g, '').slice(0, 300);
-  const contenuto = P.corpoProdotto(p, {
-    L, azienda, categoria: nomeCategoria(p.cat), materiale: nomeMateriale(p.mat),
-  });
+  const ctx = { L, azienda, categoria: nomeCategoria(p.cat), materiale: nomeMateriale(p.mat) };
+  /* Le domande sono la parte che i motori AI citano più volentieri: vanno
+     nell'HTML statico, non solo nei dati strutturati. */
+  const faqs = FAQ.perProdotto(p, contenuti.FAQS || [], ctx);
+  const contenuto = P.corpoProdotto(p, ctx) + '\n' + FAQ.html(faqs);
   const jsonld = SCH.grafo([
     ...entitaBase,
+    FAQ.schema(faqs, { url: canonico }),
     SCH.compatta({
       '@type':'Product',
       name:(p.n && p.n[L]) || '', sku:p.sku || ('INGLY-' + p.id),

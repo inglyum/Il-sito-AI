@@ -104,7 +104,7 @@ export function paginaCollezione(prodotti = [], opt = {}){
       itemListElement: prodotti.slice(0, 50).map((p, i) => ({
         '@type': 'ListItem',
         position: i + 1,
-        url: base + '/product?id=' + p.id,
+        url: base + '/product/' + p.id + '/',   /* stesso indirizzo del canonical */
         name: (p.n && p.n[L]) || '',
       })),
     },

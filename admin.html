@@ -1546,6 +1546,10 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
    <input type="checkbox" id="ep_hidden" style="width:18px;height:18px;accent-color:var(--err)" ${p.hidden?'checked':''}>
    <span><b>Prodotto nascosto</b> — non appare nel catalogo né nei filtri (utile per bozze o prodotti esauriti)</span>
   </label>
+  <label>Domande frequenti su questo prodotto</label>
+  <div class="hint">Una per riga, nel formato <span class="mono">Domanda | Risposta</span>. Lasciando vuoto, il sito genera da solo le domande dai dati del prodotto (materiale, prezzo, tempi, misure) — quelle scritte qui hanno la precedenza.</div>
+  <textarea id="ep_faq" class="mono" style="min-height:90px" placeholder="Si può lavare in lavastoviglie? | No, si consiglia il lavaggio a mano.">${esc((p.faq||[]).map(f=>((f[0]&&f[0].it)||'')+' | '+((f[1]&&f[1].it)||'')).join('\n'))}</textarea>
+  <div id="ep_faqPrev" class="hint" style="margin:6px 0 12px"></div>
   <div id="ep_saveErr" style="display:none;margin:10px 0;padding:10px 12px;border-radius:8px;background:rgba(255,90,90,.12);border:1px solid rgba(255,90,90,.35);color:#ffb4b4;font-size:13px;line-height:1.6"></div>
   <div style="display:flex;gap:10px;flex-wrap:wrap">
    <button class="btn pri" id="ep_save">✔ Salva</button><button class="btn" id="ep_dup">⧉ Duplica</button><button class="btn err" id="ep_del">🗑 Elimina</button><button class="btn" onclick="closeModal()">Annulla</button></div>`);
@@ -1575,6 +1579,13 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
   const sz=$('ep_sizes').value.split('\n').map(r=>r.split('|').map(s=>s.trim())).filter(r=>r[0]&&r[1]);
   sz.length?fresh.misure=sz:delete fresh.misure;
   const tag=$('ep_tag').value.trim();tag?fresh.tag=tag:delete fresh.tag;
+  /* FAQ: «Domanda | Risposta» per riga. Una riga senza risposta viene scartata:
+     una domanda senza risposta pubblicata sarebbe peggio che nessuna FAQ. */
+  const fq=($('ep_faq')?$('ep_faq').value:'').split('\n')
+    .map(r=>r.split('|').map(x=>x.trim()))
+    .filter(r=>r[0]&&r[1])
+    .map(r=>[{it:r[0],en:r[0]},{it:r[1],en:r[1]}]);
+  fq.length?fresh.faq=fq:delete fresh.faq;
   const coll=$('ep_coll').value.split(',').map(s=>s.trim()).filter(Boolean);coll.length?fresh.coll=coll:delete fresh.coll;
   /* copia fresco su p per compatibilità backward */
   Object.assign(p,fresh);
@@ -1602,6 +1613,31 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
   markDirty();editProd(id)});
  $('ep_gal').querySelectorAll('[data-gx]').forEach(b=>b.onclick=()=>{gatherFields();p.gallery.splice(+b.dataset.gx,1);if(!p.gallery.length)delete p.gallery;markDirty();editProd(id)});
  $('ep_gal').querySelectorAll('[data-gm]').forEach(b=>b.onclick=()=>{gatherFields();const[i,d]=b.dataset.gm.split(',').map(Number);const j=i+d;if(j<0||j>=p.gallery.length)return;[p.gallery[i],p.gallery[j]]=[p.gallery[j],p.gallery[i]];markDirty();editProd(id)});
+ /* anteprima: mostra quante domande avrà davvero la scheda, comprese quelle
+    generate dai dati. Senza, non si capisce cosa vedrà il cliente. */
+ (async()=>{
+  try{
+   const FAQ=await import('./assets/js/faq-engine.js');
+   const box=$('ep_faqPrev'); if(!box) return;
+   const agg=()=>{
+    const manuali=($('ep_faq').value||'').split('\n').map(r=>r.split('|').map(x=>x.trim()))
+      .filter(r=>r[0]&&r[1]).map(r=>[{it:r[0]},{it:r[1]}]);
+    const cat=(S.CATS||[]).find(c=>c.id===$('ep_cat').value);
+    const MATN=(S.C&&S.C.MATN)||{};
+    const finto=Object.assign({},p,{faq:manuali,
+      n:{it:$('ep_nit').value||p.n.it}, price:+$('ep_price').value||p.price,
+      prod:+$('ep_prod').value||p.prod});
+    const tutte=FAQ.perProdotto(finto,(S.C&&S.C.FAQS)||[],{L:'it',
+      azienda:(S.CONFIG.seo&&S.CONFIG.seo.azienda)||'INGLY DESIGN',
+      categoria:(cat&&cat.n&&cat.n.it)||'',
+      materiale:(MATN[$('ep_mat').value]&&MATN[$('ep_mat').value].it)||$('ep_mat').value||''});
+    box.innerHTML='La scheda mostrerà <b>'+tutte.length+'</b> domande'+
+      (manuali.length?' ('+manuali.length+' scritte da te)':' (tutte generate dai dati)')+
+      ':<br>'+tutte.map(f=>'· '+esc(f[0])).join('<br>');
+   };
+   $('ep_faq').oninput=agg; agg();
+  }catch(e){}
+ })();
  $('ep_save').onclick=()=>{
   /* Validazione PRIMA di chiudere: se un campo è sbagliato la finestra resta
      aperta e l'errore è visibile, invece di chiudersi senza spiegazioni. */
