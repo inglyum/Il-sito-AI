@@ -2653,9 +2653,14 @@ $('pubGo').onclick=async()=>{
   if(ch.length){const leg=genLegacy();for(const p in leg)files[p]={text:leg[p]}}
   if(ch.length&&S.CONFIG.seo&&S.CONFIG.seo.dominio){
    const dom=S.CONFIG.seo.dominio.replace(/\/$/,'');const day=new Date().toISOString().slice(0,10);
+   /* URL PULITI, non '/#/...'.
+      Il sito usa la History API: gli indirizzi reali sono /shop e /product?id=N.
+      La sitemap dichiarava invece '/#/shop' e '/#/product?id=N': Google collassa
+      tutto ciò che segue '#' sulla home, quindi dei 98 indirizzi dichiarati ne
+      valeva uno solo e nessuna scheda prodotto era raggiungibile. */
    const urls=[['/','1.0','weekly']];
-   ['shop','digital','business','portfolio','about','faq','quote'].forEach(p=>urls.push(['/#/'+p,'0.8','weekly']));
-   (S.P||[]).filter(p=>!p.hidden).forEach(p=>urls.push(['/#/product?id='+p.id,'0.6','monthly']));
+   ['shop','digital','business','portfolio','about','faq','quote'].forEach(p=>urls.push(['/'+p,'0.8','weekly']));
+   (S.P||[]).filter(p=>!p.hidden).forEach(p=>urls.push(['/product?id='+p.id,'0.7','monthly']));
    files['sitemap.xml']={text:'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     +urls.map(([u,pr,cf])=>' <url><loc>'+dom+u+'</loc><lastmod>'+day+'</lastmod><changefreq>'+cf+'</changefreq><priority>'+pr+'</priority></url>').join('\n')
     +'\n</urlset>\n'};
