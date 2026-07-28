@@ -3,6 +3,7 @@
    e dati strutturati Schema.org (Organization + Product sulla pagina prodotto).
    Tutto generato dai dati dell'admin: nessuna duplicazione. */
 import * as ENG from './seo-engine.js';
+import * as SCH from './schema-engine.js';
 const { CONFIG } = window.INGLY;
 const S = CONFIG.seo || {};
 const base = () => (S.dominio || location.origin).replace(/\/+$/,'');
@@ -23,19 +24,15 @@ const jsonld = (id,obj) => {
 
 /* dati strutturati fissi: chi è INGLY (aiuta Google a mostrare il brand) */
 export function initSeo(){
-  jsonld('ld-org',{
-    "@context":"https://schema.org","@type":"LocalBusiness",
-    "name":S.azienda||"INGLY DESIGN",
-    "description":S.descrizione||"",
-    "url":base(),
-    "logo":abs('assets/images/logo.png'),
-    "image":abs(S.immagineSocial||'assets/images/og-image.jpg'),
-    "email":CONFIG.email||undefined,
-    "telephone":S.telefono||undefined,
-    "address":{"@type":"PostalAddress","addressLocality":S.citta||"","addressRegion":S.regione||"","addressCountry":S.paese||"IT"},
-    "sameAs":Object.values(CONFIG.social||{}).filter(u=>u&&u.startsWith('http')),
-    "priceRange":"€€"
-  });
+  /* Grafo delle entità: azienda, sito (con la ricerca interna) e lavorazioni,
+     collegati fra loro con @id. Prima erano blocchi separati e un motore non
+     poteva sapere che il prodotto è venduto da quell'azienda. */
+  const opt={ base:base(), social:Object.values(CONFIG.social||{}) };
+  jsonld('ld-org', SCH.grafo([
+    SCH.organizzazione(CONFIG,opt),
+    SCH.sitoWeb(CONFIG,opt),
+    SCH.servizi((window.INGLY.TECH)||[],{base:opt.base,azienda:S.azienda||'INGLY DESIGN'}),
+  ]));
   set('meta[name="keywords"]','content',S.keywords||'');
   set('meta[name="theme-color"]','content','#0a0d18');
   set('meta[property="og:site_name"]','content',S.azienda||'INGLY DESIGN');
@@ -103,14 +100,13 @@ export function updateSeo(page, L, T, product){
   set('link[rel="alternate"][hreflang="x-default"]','href',url);
 
   if(isProd){
-    /* tutte le immagini del prodotto: cover + gallery, in assoluto */
-    const imgs=[img, ...((product.gallery||[]).map(g=>abs(g)))].filter((v,i,a)=>v&&a.indexOf(v)===i);
     const cat=(window.INGLY.CATS||[]).find(c=>c.id===product.cat);
     jsonld('ld-product',{
       "@context":"https://schema.org","@type":"Product",
       "name":product.n[L], "sku":product.sku||('INGLY-'+product.id),
       "description":desc.replace(/<[^>]+>/g,''),
-      "image":imgs,
+      "image":SCH.immagini(product,{base:base(),cartella:CONFIG.cartellaImmagini||"img/",L}),
+      "review":SCH.recensioni((window.INGLY.REVIEWS)||[],{L}),
       "category":cat?cat.n[L]:undefined,
       "material":product.mat||undefined,
       "brand":{"@type":"Brand","name":S.azienda||"INGLY DESIGN"},
@@ -120,7 +116,7 @@ export function updateSeo(page, L, T, product){
         "availability":product.hidden?"https://schema.org/OutOfStock":"https://schema.org/InStock",
         "url":url,"itemCondition":"https://schema.org/NewCondition",
         "priceValidUntil":new Date(Date.now()+31536000000).toISOString().slice(0,10),
-        "seller":{"@type":"Organization","name":S.azienda||"INGLY DESIGN"},
+        "seller":{"@id":base()+SCH.ID.org},
         "hasMerchantReturnPolicy":{"@type":"MerchantReturnPolicy","applicableCountry":"IT",
           "returnPolicyCategory":"https://schema.org/MerchantReturnFiniteReturnWindow",
           "merchantReturnDays":14,"returnMethod":"https://schema.org/ReturnByMail",
@@ -137,18 +133,14 @@ export function updateSeo(page, L, T, product){
     ['ld-product','ld-crumbs'].forEach(id=>{const s=document.getElementById(id);if(s)s.remove()});
   }
 
-  /* ItemList per pagina shop — aiuta Google a mostrare prodotti direttamente nei risultati */
+  /* Il catalogo come CollectionPage, non come semplice elenco: dichiara che è
+     una pagina del sito che parla dell'azienda, e i due riferimenti @id lo
+     ancorano al grafo invece di lasciarlo isolato. */
   if(page==='shop'){
-    const prods=(window.INGLY.P||[]).filter(p=>!p.hidden).slice(0,50);
-    jsonld('ld-list',{"@context":"https://schema.org","@type":"ItemList",
-      "name":(S.azienda||'INGLY DESIGN')+' — Catalogo',
-      "numberOfItems":prods.length,
-      "itemListElement":prods.map((p,i)=>({
-        "@type":"ListItem","position":i+1,
-        "url":base()+'/product?id='+p.id,
-        "name":p.n[L]
-      }))
-    });
+    const prods=(window.INGLY.P||[]).filter(p=>!p.hidden);
+    jsonld('ld-list', SCH.grafo([ SCH.paginaCollezione(prods,{
+      base:base(), L, titolo:(S.azienda||'INGLY DESIGN')+' — Catalogo', url })
+    ]));
   } else { const s=document.getElementById('ld-list'); if(s) s.remove(); }
 
   /* FAQ strutturate: compaiono come domande espandibili nei risultati Google */
