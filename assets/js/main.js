@@ -481,4 +481,7 @@ if(currentPage()==='product'){
   const pid=+currentSearch();
   if(pid && !prod.selectProduct(pid)) go('shop');   /* id inesistente → catalogo */
 }
+/* Il blocco pre-scritto ha fatto il suo lavoro (farsi leggere dai crawler):
+   ora l'applicazione disegna la pagina vera e quel duplicato va tolto. */
+document.getElementById('prerender')?.remove();
 show(currentPage());

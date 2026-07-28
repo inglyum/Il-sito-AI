@@ -79,7 +79,7 @@ export function updateSeo(page, L, T, product){
      rispecchiarli, e per il prodotto includere l'id, altrimenti tutte le schede
      dichiarano lo stesso canonico e Google ne indicizza una sola. */
   const url = page==='home' ? base()+'/'
-            : isProd        ? base()+'/product?id='+product.id
+            : isProd        ? base()+'/product/'+product.id+'/'
             :                 base()+'/'+page;
   const img = isProd ? abs((CONFIG.cartellaImmagini||'img/')+product.id+'.webp') : abs(S.immagineSocial||'assets/images/og-image.jpg');
 

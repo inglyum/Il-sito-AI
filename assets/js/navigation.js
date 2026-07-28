@@ -37,8 +37,13 @@ export function currentPage(){
 
 /* Estrai ?id=xxx dal pathname o dalla query string */
 export function currentSearch(){
-  const qs=location.search||'';
-  const params=new URLSearchParams(qs);
+  /* Indirizzo a percorso: /product/7/ — è un file vero su disco, quindi
+     GitHub Pages lo serve già scritto e i crawler che non eseguono
+     JavaScript leggono il contenuto. Resta valido anche /product?id=7,
+     perché è la forma finora condivisa e i link non devono morire. */
+  const seg=relPath().split('?')[0].split('/').filter(Boolean);
+  if(seg[0]==='product' && seg[1] && /^\d+$/.test(seg[1])) return seg[1];
+  const params=new URLSearchParams(location.search||'');
   return params.get('id')||null;
 }
 
@@ -75,7 +80,8 @@ export function show(page){
 export function go(page,search){
   /* gli indirizzi nascono sempre sotto la base: in produzione "/shop",
      in un'anteprima su GitHub Pages "/Il-sito-AI/shop" */
-  const url=BASE+page+(search?'?'+search:'');
+  const mId=page==='product'&&/^id=(\d+)$/.exec(search||'');
+  const url=mId ? BASE+'product/'+mId[1]+'/' : BASE+page+(search?'?'+search:'');
   if(relPath().split('?')[0]===page&&!search){show(page);return;}
   history.pushState({page,search:search||null},'',(url));
   show(page);
