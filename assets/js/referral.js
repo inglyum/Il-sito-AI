@@ -9,21 +9,46 @@ const REF_MY_KEY  = 'ingly_ref_my';    /* mio codice */
 const REF_FROM_KEY= 'ingly_ref_from';  /* chi mi ha referenziato */
 const REF_STATS_KEY='ingly_ref_stats'; /* { clicks: n, orders: n } */
 
-/* genera 6 caratteri alfanumerici maiuscoli */
+/* Impostazioni gestite dall'Admin (data/config.json → referral).
+   Se la sezione manca, valgono questi valori: il comportamento resta identico
+   a prima, quindi nessun sito esistente cambia da solo. */
+const RCFG = () => Object.assign({
+  attivo:true, prefisso:'', codiceFisso:'',
+  titolo:{it:'Invita un amico',en:'Refer a friend'},
+  sottotitolo:{it:'Condividi INGLY e ottieni vantaggi esclusivi',en:'Share INGLY and get exclusive perks'},
+}, ((window.INGLY&&window.INGLY.CONFIG&&window.INGLY.CONFIG.referral)||{}));
+
+/* genera 6 caratteri alfanumerici maiuscoli, con l'eventuale prefisso del brand
+   (es. «INGLY-4XZK»): un codice riconoscibile si condivide più volentieri di
+   una sigla casuale. */
 function genCode(){
-  return Math.random().toString(36).substring(2,8).toUpperCase();
+  const base=Math.random().toString(36).substring(2,8).toUpperCase();
+  const p=String(RCFG().prefisso||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+  return p ? p+'-'+base.slice(0,4) : base;
 }
 
-/* restituisce (o crea) il mio codice referral */
+/* restituisce (o crea) il mio codice referral.
+   ATTENZIONE: il codice è PER VISITATORE, non del negozio. Serve a distinguere
+   chi ha invitato chi: un codice unico uguale per tutti renderebbe impossibile
+   sapere da chi arriva un cliente. Per questo dall'Admin si sceglie il formato
+   (prefisso), non il codice di ogni visitatore.
+   «codiceFisso» esiste per il caso diverso di una campagna a codice unico. */
 export function myRef(){
+  const cfg=RCFG();
+  const fisso=String(cfg.codiceFisso||'').trim().toUpperCase();
+  if(fisso) return fisso;
   let c; try{ c=localStorage.getItem(REF_MY_KEY) }catch(e){}
   if(!c){ c=genCode(); try{ localStorage.setItem(REF_MY_KEY,c) }catch(e){} }
   return c;
 }
 
-/* URL condivisibile con il mio codice */
+/* URL condivisibile con il mio codice.
+   Prima finiva con '#/shop': un residuo del vecchio router a cancelletto.
+   Con gli indirizzi puliti quel frammento veniva ignorato e chi apriva il link
+   arrivava sulla home invece che sul catalogo. */
 export function refUrl(){
-  return location.origin + location.pathname + '?ref=' + myRef() + '#/shop';
+  const dir=location.pathname.replace(/[^/]*$/,'');   /* regge anche una sottocartella */
+  return location.origin + dir + 'shop?ref=' + encodeURIComponent(myRef());
 }
 
 /* stats referral */
@@ -61,6 +86,7 @@ export function initReferral(){
 
 /* piccolo widget share-link iniettato nel footer */
 function renderRefWidget(){
+  if(RCFG().attivo===false) return;          /* disattivato dall'Admin */
   const ft=document.querySelector('footer .ft-inner, footer, #page-about');
   if(!ft || document.getElementById('ref-widget')) return;
   const div=document.createElement('div');
@@ -70,8 +96,8 @@ function renderRefWidget(){
     <div class="ref-inner">
       <span class="ref-icon">🎁</span>
       <div class="ref-body">
-        <b>${L==='it'?'Invita un amico':'Refer a friend'}</b>
-        <span>${L==='it'?'Condividi INGLY e ottieni vantaggi esclusivi':'Share INGLY and get exclusive perks'}</span>
+        <b>${(RCFG().titolo||{})[L]||(L==='it'?'Invita un amico':'Refer a friend')}</b>
+        <span>${(RCFG().sottotitolo||{})[L]||''}</span>
       </div>
       <div class="ref-actions">
         <code class="ref-code">${myRef()}</code>
