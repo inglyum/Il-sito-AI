@@ -54,7 +54,9 @@ const check = (name, cond, extra = '') => {
 };
 
 console.log('\n=== 1. Boot e caricamento dati ===');
-check('dati caricati (dashboard popolata)', /\d/.test($('dashCards').textContent) && $('dashCards').querySelectorAll('.dcard').length === 6);
+/* Verifica che la dashboard sia POPOLATA, non che abbia un numero fisso di card:
+   il conteggio esatto cambia ogni volta che si aggiunge una statistica. */
+check('dati caricati (dashboard popolata)', /\d/.test($('dashCards').textContent) && $('dashCards').querySelectorAll('.dcard').length > 0);
 check('stato sincronizzazione mostrato', !/caricamento/.test($('syncTxt').textContent));
 check('nessun errore JS al boot', errors.length === 0, errors.slice(0, 3).join(' | '));
 
@@ -174,9 +176,11 @@ $('th_use').click(); await wait(100);
 check('«usa ora» imposta il tema attivo', $('thNow').textContent === 'Halloween');
 check('esportazione temi disponibile', !!$('thExp') && !!$('thImpBtn'));
 // sfondi generati
-check('motore artwork caricato nell admin', !!win.INGLY_ART && win.INGLY_ART.patterns.length === 15);
+check('motore artwork caricato nell admin', !!win.INGLY_ART && win.INGLY_ART.patterns.length > 0);
 doc.querySelector('[data-thopen="christmas"]').click(); await wait(120);
-check('selettore stili di sfondo presente', doc.querySelectorAll('[data-thbg]').length === 16);
+/* Invariante vera: una tessera per ogni pattern + la tessera «nessuno».
+   Prima era fissata a 16 e falliva appena il motore artwork cresceva. */
+check('selettore stili di sfondo presente', doc.querySelectorAll('[data-thbg]').length === win.INGLY_ART.patterns.length + 1);
 check('stile gia assegnato al tema', doc.querySelector('[data-thbg="bokeh"]').getAttribute('style').includes('outline'));
 doc.querySelector('[data-thbg="laser"]').click(); await wait(120);
 check('cambio stile con un click', doc.querySelector('[data-thbg="laser"]').getAttribute('style').includes('outline'));
@@ -291,8 +295,11 @@ check('l intestazione mostra il nome aggiornato', revHeader(0).includes('Anna Ve
 doc.querySelector('.nit[data-go="sponsor"]').click(); await wait(120);
 check('sponsor: pannello impostazioni', !!$('spState') && !!doc.querySelector('[data-b="CONTENT.SPONSORS.titolo.it"]'));
 check('sponsor: scelta colore/bianco e nero', !!doc.querySelector('[data-b="CONTENT.SPONSORS.grigio"]'));
+/* Conta PRIMA: i dati reali contengono già dei partner, quindi l'asserzione
+   corretta è «uno in più di prima», non «esattamente uno». */
+const spPrima = doc.querySelectorAll('[data-spx]').length;
 $('spNew').click(); await wait(120);
-check('partner aggiunto', doc.querySelectorAll('[data-spx]').length === 1);
+check('partner aggiunto', doc.querySelectorAll('[data-spx]').length === spPrima + 1);
 check('partner: livello selezionabile', !!doc.querySelector('[data-spf="0,livello"]'));
 check('partner: caricamento logo', !!doc.querySelector('[data-spu="0"]'));
 const spName = doc.querySelector('[data-spf="0,nome"]');

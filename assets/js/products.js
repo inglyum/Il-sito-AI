@@ -190,9 +190,24 @@ export function renderRV(){const w=$('rvWrap');if(!w)return;
 /* ---- pagina prodotto / configuratore ---- */
 let galIdx=0, galShots=[];
 
-export function openProduct(id){RV=[id,...RV.filter(x=>x!==id)].slice(0,8);
-  cur=P.find(x=>x.id===id)||P[0];sel={qty:1};galIdx=0;
-  renderPP();go('product')}
+/* Seleziona e disegna un prodotto SENZA toccare la cronologia.
+   Serve all'avvio: chi arriva da Google su /product?id=5 deve vedere il
+   prodotto 5, e non va aggiunta una voce di cronologia per il primo caricamento. */
+export function selectProduct(id){
+  const p=P.find(x=>x.id===id);
+  if(!p) return false;
+  RV=[id,...RV.filter(x=>x!==id)].slice(0,8);
+  cur=p; sel={qty:1}; galIdx=0;
+  renderPP();
+  return true;
+}
+/* Ogni prodotto ha un indirizzo proprio: /product?id=<id>.
+   Prima si navigava a /product senza id, quindi TUTTI i prodotti condividevano
+   la stessa URL: non erano linkabili, condivisibili né indicizzabili da Google. */
+export function openProduct(id){
+  if(!selectProduct(id)) return;
+  go('product','id='+id);
+}
 
 function renderVideoEmbed(url,poster){
   // YouTube: watch?v=ID, youtu.be/ID, shorts/ID

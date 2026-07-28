@@ -3,7 +3,7 @@
 const { CONFIG, D, SOCIALS, TECH, MATERIALS, STEPS, REVIEWS, BIZ, FAQS, PORT } = window.INGLY;
 import { $, T, L, setL, toast } from './utils.js';
 import * as u from './utils.js';
-import { initNav, show, go, goShop, toggleMenu, currentPage } from './navigation.js';
+import { initNav, show, go, goShop, toggleMenu, currentPage, currentSearch } from './navigation.js';
 import { initAnimations, observeAll, refreshMagnets } from './animations.js';
 import * as prod from './products.js';
 import { renderUrg, initForms } from './forms.js';
@@ -475,4 +475,10 @@ setTimeout(()=>{
   if(stuck.length){ document.documentElement.classList.add('reveal-failsafe');
     console.warn('[INGLY] '+stuck.length+' sezioni non rivelate: attivata la rete di sicurezza'); }
 },3000);
+/* Deep link prodotto: chi arriva da Google, da una condivisione o dalla sitemap
+   su /product?id=5 deve trovarsi davanti il prodotto 5, non il primo del catalogo. */
+if(currentPage()==='product'){
+  const pid=+currentSearch();
+  if(pid && !prod.selectProduct(pid)) go('shop');   /* id inesistente → catalogo */
+}
 show(currentPage());

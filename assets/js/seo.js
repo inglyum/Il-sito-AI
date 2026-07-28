@@ -55,7 +55,15 @@ export function updateSeo(page, L, T, product){
   const desc = isProd
       ? ((product.desc&&product.desc[L])||S.descrizione||'')
       : (S.descrizione||'');
-  const url = base()+'/#/'+page;
+  /* URL canonico REALE della pagina.
+     Prima era base()+'/#/'+page: indirizzi con '#' che Google collassa tutti
+     sulla home, quindi canonical, og:url e hreflang puntavano di fatto a '/'.
+     Il router usa la History API con percorsi puliti: il canonico deve
+     rispecchiarli, e per il prodotto includere l'id, altrimenti tutte le schede
+     dichiarano lo stesso canonico e Google ne indicizza una sola. */
+  const url = page==='home' ? base()+'/'
+            : isProd        ? base()+'/product?id='+product.id
+            :                 base()+'/'+page;
   const img = isProd ? abs((CONFIG.cartellaImmagini||'img/')+product.id+'.webp') : abs(S.immagineSocial||'assets/images/og-image.jpg');
 
   document.title = title;
@@ -102,7 +110,7 @@ export function updateSeo(page, L, T, product){
     });
     /* briciole di pane: Home › Categoria › Prodotto */
     const crumbs=[{"@type":"ListItem","position":1,"name":"Home","item":base()+'/'}];
-    if(cat)crumbs.push({"@type":"ListItem","position":2,"name":cat.n[L],"item":base()+'/#/shop?cat='+cat.id});
+    if(cat)crumbs.push({"@type":"ListItem","position":2,"name":cat.n[L],"item":base()+'/shop?cat='+cat.id});
     crumbs.push({"@type":"ListItem","position":crumbs.length+1,"name":product.n[L],"item":url});
     jsonld('ld-crumbs',{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":crumbs});
   } else {
@@ -117,7 +125,7 @@ export function updateSeo(page, L, T, product){
       "numberOfItems":prods.length,
       "itemListElement":prods.map((p,i)=>({
         "@type":"ListItem","position":i+1,
-        "url":base()+'/#/product?id='+p.id,
+        "url":base()+'/product?id='+p.id,
         "name":p.n[L]
       }))
     });
