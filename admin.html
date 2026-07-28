@@ -887,6 +887,28 @@ function refreshSync(){const n=pending();$('pubN').textContent=n||'';const d=$('
  if(!BOOTED){d.className='dot';$('syncTxt').textContent='caricamento…';return}
  if(LOADED_FROM==='errore'){d.className='dot err';$('syncTxt').textContent='dati non caricati';return}
  if(n){d.className='dot dirty';$('syncTxt').textContent=n+' modifiche in bozza'}else{d.className='dot ok';$('syncTxt').textContent='sincronizzato · '+LOADED_FROM}}
+/* Fascia in alto: dice che si sta lavorando su una bozza ripresa e offre
+   l'unico modo per scartarla, con conferma. Nessuna cancellazione automatica. */
+function mostraFasciaBozza(quando,elenco){
+  try{
+    if(document.getElementById('draftBar'))return;
+    const bar=document.createElement('div');
+    bar.id='draftBar';
+    bar.style.cssText='position:sticky;top:0;z-index:60;display:flex;gap:12px;align-items:center;flex-wrap:wrap;'+
+      'padding:9px 14px;background:rgba(245,217,78,.12);border-bottom:1px solid rgba(245,217,78,.35);font-size:13px';
+    bar.innerHTML='<b>Lavoro ripreso</b><span>Modifiche non pubblicate del '+esc(quando)+' — '+esc(elenco)+'</span>'+
+      '<span style="flex:1"></span>'+
+      '<button class="btn sm" id="draftKeep">Continua</button>'+
+      '<button class="btn sm err" id="draftDrop">Scarta e riparti dal sito</button>';
+    document.body.insertBefore(bar,document.body.firstChild);
+    document.getElementById('draftKeep').onclick=()=>bar.remove();
+    document.getElementById('draftDrop').onclick=async()=>{
+      if(!confirm('Scartare definitivamente le modifiche non pubblicate?\n\nQuesta operazione non è annullabile.'))return;
+      clearDraft(); location.reload();
+    };
+  }catch(e){ console.warn('[INGLY] fascia bozza:',e) }
+}
+
 function markDirty(){refreshSync();saveDraft();if(VIEW==='pub')renderPub()}
 window.addEventListener('beforeunload',e=>{if(pending()){e.preventDefault();e.returnValue=''}});
 
@@ -924,13 +946,16 @@ function restoreDraft(){
     const quando=new Date(ts).toLocaleString('it-IT');
     const nomi={config:'impostazioni',texts:'testi',social:'social',products:'prodotti',categories:'categorie',content:'contenuti'};
     const elenco=files.map(f=>nomi[f]||f).join(', ');
-    if(!confirm('Hai modifiche non pubblicate del '+quando+'.\n\nSezioni: '+elenco+
-                '\n\nOK = riprendi il lavoro\nAnnulla = scarta e riparti dai dati del sito')){
-      clearDraft();return;
-    }
+    /* RIPRISTINO NON DISTRUTTIVO.
+       Prima qui c'era un confirm(): premendo «Annulla» la bozza veniva
+       CANCELLATA. Un clic sbagliato bruciava ore di lavoro, ed è la ragione per
+       cui capitava di dover reinserire tutto da capo.
+       Ora il lavoro si riprende SEMPRE — è la scelta sicura, perché nel peggiore
+       dei casi basta non pubblicarlo — e la bozza si scarta solo con un gesto
+       esplicito dalla fascia in alto. */
     files.forEach(f=>{S[KEY[f]]=d[f]});
     normalize();
-    toast('Bozza ripristinata: '+elenco);
+    mostraFasciaBozza(quando,elenco);
   }catch(e){ console.warn('[INGLY] restoreDraft:',e) }
 }
 
@@ -1546,13 +1571,28 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
    <input type="checkbox" id="ep_hidden" style="width:18px;height:18px;accent-color:var(--err)" ${p.hidden?'checked':''}>
    <span><b>Prodotto nascosto</b> — non appare nel catalogo né nei filtri (utile per bozze o prodotti esauriti)</span>
   </label>
+  <div style="border:1px solid rgba(120,180,255,.3);border-radius:10px;padding:12px;margin:14px 0;background:rgba(120,180,255,.06)">
+   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <button class="btn pri" id="ep_aiAll">🤖 Compila con l'AI i campi mancanti</button>
+    <span class="hint" id="ep_aiAllStatus"></span>
+   </div>
+   <div class="hint" style="margin-top:6px">Scrive solo dove è <b>vuoto</b>: non sovrascrive mai ciò che hai già messo. Con Gemini è gratuito — configuralo in Impostazioni → AI.</div>
+  </div>
+  <div class="row c2">
+   <div><label>Titolo SEO <span class="hint">(vuoto = generato dal modello)</span></label><input type="text" id="ep_seoT" value="${esc(p.seoTitolo||'')}"></div>
+   <div><label>Meta description</label><input type="text" id="ep_seoD" value="${esc(p.seoDescrizione||'')}"></div>
+  </div>
+  <label>Parole chiave <span class="hint">(separate da virgola)</span></label>
+  <input type="text" id="ep_kw" value="${esc((p.keywords||[]).join(', '))}">
+  <label>Caratteristiche e punti di forza <span class="hint">(una per riga)</span></label>
+  <textarea id="ep_feat" style="min-height:80px">${esc((p.caratteristiche||[]).join('\n'))}</textarea>
   <label>Domande frequenti su questo prodotto</label>
   <div class="hint">Una per riga, nel formato <span class="mono">Domanda | Risposta</span>. Lasciando vuoto, il sito genera da solo le domande dai dati del prodotto (materiale, prezzo, tempi, misure) — quelle scritte qui hanno la precedenza.</div>
   <textarea id="ep_faq" class="mono" style="min-height:90px" placeholder="Si può lavare in lavastoviglie? | No, si consiglia il lavaggio a mano.">${esc((p.faq||[]).map(f=>((f[0]&&f[0].it)||'')+' | '+((f[1]&&f[1].it)||'')).join('\n'))}</textarea>
   <div id="ep_faqPrev" class="hint" style="margin:6px 0 12px"></div>
   <div id="ep_saveErr" style="display:none;margin:10px 0;padding:10px 12px;border-radius:8px;background:rgba(255,90,90,.12);border:1px solid rgba(255,90,90,.35);color:#ffb4b4;font-size:13px;line-height:1.6"></div>
   <div style="display:flex;gap:10px;flex-wrap:wrap">
-   <button class="btn pri" id="ep_save">✔ Salva</button><button class="btn" id="ep_dup">⧉ Duplica</button><button class="btn err" id="ep_del">🗑 Elimina</button><button class="btn" onclick="closeModal()">Annulla</button></div>`);
+   <button class="btn pri" id="ep_save">✔ Salva</button><span class="hint" id="ep_autosave" style="align-self:center"></span><button class="btn" id="ep_dup">⧉ Duplica</button><button class="btn err" id="ep_del">🗑 Elimina</button><button class="btn" onclick="closeModal()">Annulla</button></div>`);
  $('ep_cat').onchange=()=>{$('ep_sub').innerHTML=subOptions($('ep_cat').value,1)};
  /* Legge i campi testo correnti nella scheda SENZA chiudere il modal */
  function gatherFields(){
@@ -1581,6 +1621,12 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
   const tag=$('ep_tag').value.trim();tag?fresh.tag=tag:delete fresh.tag;
   /* FAQ: «Domanda | Risposta» per riga. Una riga senza risposta viene scartata:
      una domanda senza risposta pubblicata sarebbe peggio che nessuna FAQ. */
+  const st=($('ep_seoT')?$('ep_seoT').value:'').trim(); st?fresh.seoTitolo=st:delete fresh.seoTitolo;
+  const sd=($('ep_seoD')?$('ep_seoD').value:'').trim(); sd?fresh.seoDescrizione=sd:delete fresh.seoDescrizione;
+  const kw=($('ep_kw')?$('ep_kw').value:'').split(',').map(x=>x.trim()).filter(Boolean);
+  kw.length?fresh.keywords=kw:delete fresh.keywords;
+  const ft=($('ep_feat')?$('ep_feat').value:'').split('\n').map(x=>x.trim()).filter(Boolean);
+  ft.length?fresh.caratteristiche=ft:delete fresh.caratteristiche;
   const fq=($('ep_faq')?$('ep_faq').value:'').split('\n')
     .map(r=>r.split('|').map(x=>x.trim()))
     .filter(r=>r[0]&&r[1])
@@ -1613,6 +1659,73 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
   markDirty();editProd(id)});
  $('ep_gal').querySelectorAll('[data-gx]').forEach(b=>b.onclick=()=>{gatherFields();p.gallery.splice(+b.dataset.gx,1);if(!p.gallery.length)delete p.gallery;markDirty();editProd(id)});
  $('ep_gal').querySelectorAll('[data-gm]').forEach(b=>b.onclick=()=>{gatherFields();const[i,d]=b.dataset.gm.split(',').map(Number);const j=i+d;if(j<0||j>=p.gallery.length)return;[p.gallery[i],p.gallery[j]]=[p.gallery[j],p.gallery[i]];markDirty();editProd(id)});
+ /* ASSISTENTE AI: compila in un colpo solo i campi ancora vuoti. */
+ (async()=>{
+  const btn=$('ep_aiAll'), st=$('ep_aiAllStatus');
+  if(!btn) return;
+  /* Il modulo si carica al volo. Se non arriva — rete, file mancante, ambiente
+     senza import dinamico — l'assistente si spegne da solo e la scheda resta
+     pienamente utilizzabile: un aiuto che non c'è non deve impedire di
+     lavorare a mano. */
+  let AI;
+  try{ AI=await import('./assets/js/admin/ai-compila.js'); }
+  catch(e){ btn.disabled=true; if(st)st.textContent='assistente non disponibile'; return }
+  const aggiornaStato=()=>{
+   const mancanti=AI.campiMancanti(S.P.find(x=>x.id===p.id)||p,{L:'it'});
+   st.textContent=mancanti.length? mancanti.length+' campi da riempire' : 'scheda già completa';
+   btn.disabled=!mancanti.length;
+  };
+  aggiornaStato();
+  btn.onclick=async()=>{
+   if(!(aiProvider()==='gemini'?geminiKey():claudeKey())){
+    st.innerHTML='<span style="color:var(--warn)">Chiave AI mancante — Impostazioni → AI Generativa (Gemini è gratuito)</span>';return;
+   }
+   gatherFields();                                  /* parto da ciò che c'è ora */
+   const fresh=S.P.find(x=>x.id===p.id)||p;
+   const mancanti=AI.campiMancanti(fresh,{L:'it'});
+   if(!mancanti.length){ st.textContent='Niente da compilare: è già tutto pieno'; return }
+   const cat=(S.CATS||[]).find(c=>c.id===fresh.cat);
+   const MATN=(S.C&&S.C.MATN)||{};
+   btn.disabled=true; st.textContent='Scrivo… ('+mancanti.join(', ')+')';
+   try{
+    const raw=await callAI('Copywriter di ecommerce artigianale. Rispondi SOLO con JSON valido.',
+      AI.prompt(fresh,{L:'it',campi:mancanti,
+        azienda:(S.CONFIG.seo&&S.CONFIG.seo.azienda)||'INGLY DESIGN',
+        categoria:(cat&&cat.n&&cat.n.it)||'',
+        materiale:(MATN[fresh.mat]&&MATN[fresh.mat].it)||fresh.mat||''}));
+    const {prodotto,scritti}=AI.applica(fresh,AI.interpreta(raw),{L:'it'});
+    if(!scritti.length){ st.textContent='Nessun campo da riempire'; btn.disabled=false; return }
+    Object.assign(fresh,prodotto);
+    markDirty(); editProd(p.id);                    /* ridisegno con i valori nuovi */
+    setTimeout(()=>{const s2=$('ep_aiAllStatus');
+      if(s2)s2.innerHTML='<span style="color:var(--ok)">✔ Compilati: '+esc(scritti.join(', '))+' — controlla e premi Salva</span>';},60);
+   }catch(e){
+    st.innerHTML='<span style="color:var(--err)">✖ '+esc(e.message)+'</span>'; btn.disabled=false;
+   }
+  };
+ })();
+ /* SALVATAGGIO AUTOMATICO mentre si scrive.
+    Il pulsante «Salva» resta, ma non deve essere l'unica difesa: chiudere la
+    scheda per sbaglio, un refresh o un browser che si chiude non devono
+    costare il lavoro fatto. Ogni modifica ai campi finisce in bozza dopo un
+    secondo di pausa. Non pubblica nulla: la pubblicazione resta un gesto
+    esplicito. */
+ (function(){
+  let t=null;
+  const campi=$('modal')||document;
+  campi.addEventListener('input',e=>{
+   if(!e.target.id||!/^ep_/.test(e.target.id))return;
+   clearTimeout(t);
+   t=setTimeout(()=>{
+    try{
+     if(!document.getElementById('ep_nit'))return;   /* scheda già chiusa */
+     gatherFields(); markDirty();
+     const s=$('ep_autosave');
+     if(s){s.textContent='bozza salvata alle '+new Date().toLocaleTimeString('it-IT');}
+    }catch(err){ console.warn('[INGLY] salvataggio automatico:',err) }
+   },1000);
+  });
+ })();
  /* anteprima: mostra quante domande avrà davvero la scheda, comprese quelle
     generate dai dati. Senza, non si capisce cosa vedrà il cliente. */
  (async()=>{
@@ -2880,16 +2993,22 @@ $('pubGo').onclick=async()=>{
     +urls.map(([u,pr,cf])=>' <url><loc>'+dom+u+'</loc><lastmod>'+day+'</lastmod><changefreq>'+cf+'</changefreq><priority>'+pr+'</priority></url>').join('\n')
     +'\n</urlset>\n'};
    files['robots.txt']={text:'User-agent: *\nAllow: /\nDisallow: /admin.html\n\nSitemap: '+dom+'/sitemap.xml\n'}
-   /* PAGINE STATICHE: una per prodotto e una per sezione, con il testo già
-      scritto dentro. I crawler dei motori AI non eseguono JavaScript: senza
-      queste pagine leggerebbero un guscio vuoto. Entrano nello stesso commit
-      atomico, quindi restano sempre allineate ai dati appena pubblicati. */
-   try{
-    const gen=await generaPagineStatiche(dom);
-    for(const f in gen) files[f]=gen[f];
-    step('prep','run',Object.keys(gen).length+' pagine statiche');
-   }catch(e){ console.warn('[INGLY] pagine statiche non generate:',e);
-    toast('Attenzione: pagine statiche non generate — il sito funziona, ma i motori AI vedranno meno contenuto'); }}
+   }
+   /* PAGINE STATICHE — FUORI dal blocco del dominio.
+      Erano generate solo se era impostato un dominio SEO: senza, le pagine già
+      pubblicate restavano ferme al contenuto vecchio mentre i dati cambiavano,
+      e chi apriva una scheda leggeva il testo di prima. Ora si rigenerano a
+      ogni pubblicazione che tocca i dati, e in mancanza di dominio si usa
+      l'indirizzo del sito da cui si sta pubblicando. */
+   if(ch.length){
+    try{
+     const dominio=((S.CONFIG.seo&&S.CONFIG.seo.dominio)||location.origin).replace(/\/+$/,'');
+     const gen=await generaPagineStatiche(dominio);
+     for(const f in gen) files[f]=gen[f];
+     step('prep','run',Object.keys(gen).length+' pagine statiche');
+    }catch(e){ console.warn('[INGLY] pagine statiche non generate:',e);
+     toast('Attenzione: pagine statiche non generate — il sito funziona, ma i motori AI vedranno meno contenuto'); }
+   }
   MEDIA.forEach(m=>files[m.path]={b64:m.b64});
   const dels=DELETES.slice();
   step('prep','done',Object.keys(files).length+' file'+(dels.length?' + '+dels.length+' eliminazioni':''));
