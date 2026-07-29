@@ -36,7 +36,9 @@
   "regione": "Emilia-Romagna",
   "paese": "IT",
   "telefono": "+393296904627",
-  "keywords": "incisione laser, taglio laser, stampa UV, stampa DTF, stampa 3D, regali personalizzati, targhe personalizzate, gadget aziendali, Cesena"
+  "keywords": "incisione laser, taglio laser, stampa UV, stampa DTF, stampa 3D, regali personalizzati, targhe personalizzate, gadget aziendali, Cesena",
+  "template": {},
+  "robots": {}
  },
  "moduli": {
   "formspreePreventivo": "",
@@ -52,7 +54,7 @@
   }
  },
  "aboutMedia": {
-  "tipo": "logo",
+  "tipo": "immagine",
   "src": ""
  },
  "maintenance": {
