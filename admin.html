@@ -799,7 +799,11 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let toastT;function toast(m){$('toast').textContent=m;$('toast').classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>$('toast').classList.remove('on'),3400)}
 function modal(html){$('modal').innerHTML=html;$('ovl').classList.add('on')}
-function closeModal(){$('ovl').classList.remove('on')}
+function closeModal(){$('ovl').classList.remove('on');
+ /* la scheda non è più aperta: il salvataggio automatico non deve più avere
+    un prodotto a cui scrivere, altrimenti resterebbe agganciato all'ultimo */
+ if(typeof _gatherAttivo!=='undefined') _gatherAttivo=null;
+}
 $('ovl').addEventListener('click',e=>{if(e.target.id==='ovl')closeModal()});
 
 /* ---------- impostazioni ---------- */
@@ -908,6 +912,64 @@ function mostraFasciaBozza(quando,elenco){
     };
   }catch(e){ console.warn('[INGLY] fascia bozza:',e) }
 }
+
+/* Pubblica UN SOLO file con un commit dedicato.
+   Le scorciatoie «Salva e pubblica» di Manutenzione e Popup la chiamavano ma
+   non è mai esistita: il pulsante falliva con «pubFile is not defined» e la
+   modifica restava in bozza senza che nulla lo dicesse. */
+async function pubFile(percorso, contenuto, messaggio){
+  if(!token()) throw new Error('Configura prima il token in Impostazioni');
+  const r = await gh('');
+  if(!(r.permissions && r.permissions.push))
+    throw new Error('Il token non può scrivere su ' + r.full_name);
+
+  /* SHA del file esistente: serve a GitHub per sostituirlo invece di rifiutare */
+  let sha = null;
+  try{
+    const cur = await gh('/contents/' + percorso + '?ref=' + encodeURIComponent(SET.branch));
+    if(cur && cur.sha) sha = cur.sha;
+  }catch(e){ /* file nuovo: nessuno sha */ }
+
+  const b64 = btoa(String.fromCharCode(...new TextEncoder().encode(contenuto)));
+  const body = { message: messaggio || ('Aggiornamento ' + percorso), content: b64, branch: SET.branch };
+  if(sha) body.sha = sha;
+  await gh('/contents/' + percorso, { method:'PUT', body: JSON.stringify(body) });
+
+  /* allinea lo stato: il file appena scritto non è più «da pubblicare» */
+  const f = percorso.replace(/^data\//,'').replace(/\.json$/,'');
+  if(FILES.includes(f)){ SNAP[f] = jstr(S[KEY[f]]); refreshSync(); saveDraft(); }
+  return true;
+}
+
+/* ============ SALVATAGGIO AUTOMATICO — UN SOLO ASCOLTATORE ============
+   Il pulsante «Salva» resta, ma non deve essere l'unica difesa: un refresh o
+   una scheda chiusa per sbaglio non devono costare il lavoro fatto.
+
+   ATTENZIONE — perché l'ascoltatore è registrato QUI e non dentro editProd:
+   messo dentro editProd se ne aggiungeva uno NUOVO a ogni prodotto aperto, e
+   nessuno veniva mai rimosso. Ogni ascoltatore conservava il proprio prodotto:
+   scrivendo nella scheda del prodotto 5 si attivavano anche quelli dei prodotti
+   1, 2, 3… e ognuno copiava i campi visibili DENTRO IL PROPRIO prodotto.
+   Risultato: tutti i prodotti aperti finivano con lo stesso nome.
+   Qui l'ascoltatore è uno solo e scrive sempre e solo nella scheda aperta. */
+let _gatherAttivo = null;
+(function autosaveGlobale(){
+  let t = null;
+  document.addEventListener('input', e => {
+    if(!e.target || !e.target.id || !/^ep_/.test(e.target.id)) return;
+    if(!_gatherAttivo) return;
+    clearTimeout(t);
+    t = setTimeout(() => {
+      try{
+        if(!document.getElementById('ep_nit')) return;   /* scheda chiusa */
+        if(!_gatherAttivo) return;
+        _gatherAttivo(); markDirty();
+        const s = document.getElementById('ep_autosave');
+        if(s) s.textContent = 'bozza salvata alle ' + new Date().toLocaleTimeString('it-IT');
+      }catch(err){ console.warn('[INGLY] salvataggio automatico:', err) }
+    }, 1000);
+  });
+})();
 
 function markDirty(){refreshSync();saveDraft();if(VIEW==='pub')renderPub()}
 window.addEventListener('beforeunload',e=>{if(pending()){e.preventDefault();e.returnValue=''}});
@@ -1704,28 +1766,10 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
    }
   };
  })();
- /* SALVATAGGIO AUTOMATICO mentre si scrive.
-    Il pulsante «Salva» resta, ma non deve essere l'unica difesa: chiudere la
-    scheda per sbaglio, un refresh o un browser che si chiude non devono
-    costare il lavoro fatto. Ogni modifica ai campi finisce in bozza dopo un
-    secondo di pausa. Non pubblica nulla: la pubblicazione resta un gesto
-    esplicito. */
- (function(){
-  let t=null;
-  const campi=$('modal')||document;
-  campi.addEventListener('input',e=>{
-   if(!e.target.id||!/^ep_/.test(e.target.id))return;
-   clearTimeout(t);
-   t=setTimeout(()=>{
-    try{
-     if(!document.getElementById('ep_nit'))return;   /* scheda già chiusa */
-     gatherFields(); markDirty();
-     const s=$('ep_autosave');
-     if(s){s.textContent='bozza salvata alle '+new Date().toLocaleTimeString('it-IT');}
-    }catch(err){ console.warn('[INGLY] salvataggio automatico:',err) }
-   },1000);
-  });
- })();
+ /* Registra QUALE scheda è aperta ora. L'ascoltatore che salva da solo è uno
+    solo per tutta la pagina (vedi più sotto) e usa questo riferimento.
+    NON aggiungere qui un addEventListener: vedi il commento di autosaveGlobale. */
+ _gatherAttivo = gatherFields;
  /* anteprima: mostra quante domande avrà davvero la scheda, comprese quelle
     generate dai dati. Senza, non si capisce cosa vedrà il cliente. */
  (async()=>{
