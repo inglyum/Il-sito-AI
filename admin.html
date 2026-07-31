@@ -777,6 +777,7 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
         <div style="display:flex;gap:10px;align-items:center;margin-top:8px">
           <button class="btn" id="sSaveGeminiKey">💾 Salva (sessione)</button>
           <button class="btn err" id="sClearGeminiKey">✕ Rimuovi</button>
+          <button class="btn" id="sTestGemini">🔍 Verifica chiave</button>
           <span class="hint" id="sGeminiStatus"></span>
         </div>
         <div class="hint" style="margin-top:6px">Ottienila su <b>aistudio.google.com → Get API Key</b> — gratuita (15 req/min). La chiave non viene mai inviata al repository.</div>
@@ -3426,7 +3427,20 @@ renderSet=function(){_origRenderSet();
  $('sGeminiKey').value=geminiKey()?'••••••••••••••••••':'';
  $('sGeminiStatus').textContent=geminiKey()?'✔ Chiave configurata (sessione)':'Non configurata';
  $('sSaveGeminiKey').onclick=()=>{const k=$('sGeminiKey').value.trim();if(!k||k.startsWith('•'))return toast('Inserisci la chiave API Gemini');sessionStorage.setItem('ingly_gemini_key',k);$('sGeminiKey').value='';$('sGeminiStatus').textContent='✔ Chiave configurata (sessione)';toast('Chiave Gemini salvata in sessione')};
- $('sClearGeminiKey').onclick=()=>{sessionStorage.removeItem('ingly_gemini_key');$('sGeminiKey').value='';$('sGeminiStatus').textContent='Non configurata';toast('Chiave Gemini rimossa')};
+ $('sClearGeminiKey').onclick=()=>{sessionStorage.removeItem('ingly_gemini_key');sessionStorage.removeItem('ingly_gemini_model');$('sGeminiKey').value='';$('sGeminiStatus').textContent='Non configurata';toast('Chiave Gemini rimossa')};
+ /* Verifica in chiaro: dice SUBITO se la chiave è del tipo giusto e quale
+    modello verrà usato, invece di far scoprire il problema solo al momento di
+    generare un testo, con un errore tecnico di Google. */
+ if($('sTestGemini')) $('sTestGemini').onclick=async()=>{
+  const st=$('sGeminiStatus');
+  if(!geminiKey()){st.innerHTML='<span style="color:var(--warn)">Inserisci e salva prima la chiave</span>';return}
+  st.textContent='Verifico…';
+  try{
+   const m=await scopriModelloGemini(geminiKey());
+   sessionStorage.setItem('ingly_gemini_model',m);
+   st.innerHTML='<span style="color:var(--ok)">✔ Chiave valida — modello: <b>'+esc(m)+'</b></span>';
+  }catch(e){ st.innerHTML='<span style="color:var(--err)">✖ '+esc(e.message)+'</span>' }
+ };
  /* --- Provider selector --- */
  const prov=aiProvider();
  const rClaude=$('sAiProvClaude'),rGemini=$('sAiProvGemini');
@@ -3442,17 +3456,72 @@ renderSet=function(){_origRenderSet();
  document.querySelectorAll('input[name="sAiProvider"]').forEach(r=>r.onchange=updateAiBlocks);
 };
 
+/* Chiede a Google quali modelli esistono per questa chiave e ne sceglie uno
+   capace di generare testo. Preferisce i «flash»: i più rapidi e quelli
+   coperti dal piano gratuito.
+   Distingue anche il tipo di credenziale: una chiave AI Studio inizia con
+   «AIza…». Un token OAuth («AQ.…», «ya29.…») qui non funziona, e senza questo
+   controllo l'utente vedrebbe solo un errore generico sui modelli. */
+async function scopriModelloGemini(key){
+  if(/^(AQ\.|ya29\.)/.test(String(key||'')))
+    throw new Error('Questa non è una chiave API di Google AI Studio ma un token di accesso OAuth. Serve una chiave che inizia con «AIza…»: aistudio.google.com → Get API key → Create API key.');
+  if(!/^AIza/.test(String(key||'')))
+    throw new Error('Formato chiave non riconosciuto: una chiave Google AI Studio inizia con «AIza…». Creala su aistudio.google.com → Get API key.');
+
+  const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models?key='+encodeURIComponent(key));
+  if(!r.ok){
+   const e=await r.json().catch(()=>({}));
+   const m=e.error?.message||('HTTP '+r.status);
+   if(r.status===400||r.status===403) throw new Error('Chiave rifiutata da Google: '+m);
+   throw new Error('Non riesco a leggere l\'elenco dei modelli: '+m);
+  }
+  const d=await r.json();
+  const validi=(d.models||[])
+   .filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent'))
+   .map(m=>String(m.name||'').replace(/^models\//,''))
+   .filter(n=>n && !/embedding|aqa|tts|live|image-generation/i.test(n));
+  if(!validi.length) throw new Error('Nessun modello disponibile per questa chiave');
+  const punteggio=n=>{
+   let p=0;
+   if(/flash/i.test(n)) p+=100;
+   if(/lite/i.test(n)) p-=10;
+   if(/preview|exp/i.test(n)) p-=40;
+   p+=Math.min(parseFloat((n.match(/(\d+\.\d+|\d+)/)||[])[1]||'0'),10);
+   if(/latest/i.test(n)) p+=5;
+   return p;
+  };
+  validi.sort((a,b)=>punteggio(b)-punteggio(a));
+  console.log('[INGLY] modello Gemini scelto:',validi[0],'· disponibili:',validi.length);
+  return validi[0];
+}
+
 /* Chiama Claude o Gemini in base al provider selezionato nelle Impostazioni */
 async function callAI(systemPrompt,userPrompt){
  const prov=aiProvider();
  if(prov==='gemini'){
   const key=geminiKey();if(!key)throw new Error('Configura la chiave API Gemini in Impostazioni → AI Generativa');
-  const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(key)}`,
-   {method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({systemInstruction:{parts:[{text:systemPrompt}]},contents:[{role:'user',parts:[{text:userPrompt}]}],
-     generationConfig:{maxOutputTokens:800,temperature:0.7}})});
-  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||'HTTP '+r.status)}
-  const d=await r.json();return d.candidates?.[0]?.content?.parts?.[0]?.text||'';
+  /* Il modello NON è scritto nel codice.
+     Google ritira i modelli senza preavviso: «gemini-1.5-flash» ha smesso di
+     funzionare e l'assistente si fermava con un errore incomprensibile.
+     Qui si chiede a Google quali modelli sono davvero disponibili PER QUESTA
+     chiave, se ne sceglie uno adatto e lo si tiene per la sessione. Se in
+     futuro cambia di nuovo, si riadatta da solo. */
+  const chiama=async modello=>{
+   const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modello}:generateContent?key=${encodeURIComponent(key)}`,
+    {method:'POST',headers:{'Content-Type':'application/json'},
+     body:JSON.stringify({systemInstruction:{parts:[{text:systemPrompt}]},contents:[{role:'user',parts:[{text:userPrompt}]}],
+      generationConfig:{maxOutputTokens:800,temperature:0.7}})});
+   if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||'HTTP '+r.status)}
+   const d=await r.json();return d.candidates?.[0]?.content?.parts?.[0]?.text||'';
+  };
+  const salvato=sessionStorage.getItem('ingly_gemini_model');
+  if(salvato){
+   try{ return await chiama(salvato) }
+   catch(e){ sessionStorage.removeItem('ingly_gemini_model') }   /* non più valido: ricerco */
+  }
+  const modello=await scopriModelloGemini(key);
+  sessionStorage.setItem('ingly_gemini_model',modello);
+  return await chiama(modello);
  }
  /* default: Claude */
  const key=claudeKey();if(!key)throw new Error('Configura la chiave API Claude in Impostazioni → AI Generativa');
