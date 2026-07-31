@@ -52,8 +52,16 @@ footer{background:var(--bg-deep,#070a14);border-top:1px solid rgba(140,160,220,.
 .scroll-cue::after{background:linear-gradient(var(--ink-soft),transparent)}
 
 /* H1 hero — gradient text animato */
-#heroH1{background:linear-gradient(110deg,#eae8f5 20%,#7aabff 48%,#f5d94e 62%,#ff8a3c 78%,#eae8f5 100%);background-size:220% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradShift 7s linear infinite}
-:root[data-mode="light"] #heroH1{background:linear-gradient(110deg,#1a1410 20%,#1d4bab 50%,#b8860b 70%,#1a1410 100%);background-size:220% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradShift 7s linear infinite}
+/* TITOLO DELLA HERO — niente gradiente ritagliato sul testo.
+   Qui c'era «background-clip:text» + «-webkit-text-fill-color:transparent»:
+   il colore delle lettere veniva dal gradiente dell'H1, ritagliato sulle
+   lettere stesse. Ma ogni parola del titolo è dentro uno span animato
+   (animation:wordup, con transform), e un elemento trasformato viene disegnato
+   su un livello suo: il gradiente dell'H1 non lo raggiunge, le lettere restano
+   con riempimento trasparente e IL TITOLO SPARISCE — in chiaro e in scuro.
+   Il titolo torna a usare il colore del testo, come sul sito in produzione.
+   La parola incisa resta blu, disegnata da .engrave .fill. */
+#heroH1{color:var(--ink)}
 
 /* laser ring attorno all'hero visual */
 .hero-visual::before,.hero-visual::after{content:'';position:absolute;border-radius:50%;pointer-events:none;left:50%;top:50%;transform:translate(-50%,-50%)}

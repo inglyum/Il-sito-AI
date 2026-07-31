@@ -92,7 +92,12 @@
   },
   "emoji": "🎁",
   "delaySecondi": 45,
-  "mostraSoloUnaVolta": true
+  "mostraSoloUnaVolta": true,
+  "sfondoTipo": "nessuno",
+  "prodotto": 0,
+  "sconto": 10,
+  "scontoTipo": "perc",
+  "codice": "BENVENUTO10"
  },
  "siteBg": "sunset",
  "referral": {
@@ -107,5 +112,9 @@
    "it": "Condividi INGLY e ottieni vantaggi esclusivi",
    "en": "Share INGLY and get exclusive perks"
   }
+ },
+ "slogan": {
+  "it": "Segnati dalla **luce.**\nFatti per durare.",
+  "en": "Marked by **light.**\nMade to last."
  }
 }

@@ -327,6 +327,18 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
 
   <!-- ============ HOME & HERO ============ -->
   <section class="view" id="v-hero">
+    <div class="card" style="border:2px solid var(--accent)"><h3>✨ Titolo della Hero</h3>
+      <div class="hint">La scritta grande in cima alla home. Scrivila in chiaro: le parole fra
+       <b class="mono">**doppio asterisco**</b> sono quelle che il raggio laser incide, e andare a capo
+       nel campo manda a capo anche il titolo.<br>
+       Esempio: <span class="mono">Segnati dalla **luce.**</span> ⏎ <span class="mono">Fatti per durare.</span><br>
+       <b>Lascia vuoto per tenere il titolo attuale.</b></div>
+      <div class="row c2" style="margin-top:8px">
+        <div><label>Titolo (IT)</label><textarea id="slIt" rows="2" data-b="CONFIG.slogan.it" placeholder="Segnati dalla **luce.**&#10;Fatti per durare."></textarea></div>
+        <div><label>Title (EN)</label><textarea id="slEn" rows="2" data-b="CONFIG.slogan.en" placeholder="Marked by **light.**&#10;Made to last."></textarea></div>
+      </div>
+      <div style="margin-top:12px"><b class="hint">Anteprima</b><div id="slPrev" style="margin-top:6px"></div></div>
+    </div>
     <div class="card"><h3>🎯 Prodotti in evidenza nella Hero</h3>
       <div class="hint">Le 3 card della Home leggono nome, prezzo, materiale e foto direttamente dal catalogo: qui scegli <b>quali</b> prodotti mostrare.</div>
       <div class="row c3" id="heroPick" style="margin-top:8px"></div>
@@ -690,7 +702,30 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
         <div><label>Nota sotto pulsante (IT)</label><input type="text" id="sPopNotaIT" placeholder="Offerta per nuovi clienti · Scade tra 48h"></div>
         <div><label>Nota sotto pulsante (EN)</label><input type="text" id="sPopNotaEN" placeholder="New customers only · Expires in 48h"></div>
       </div>
+      <div class="row c3" style="margin-bottom:8px">
+        <div><label>Sconto</label><input type="number" id="sPopSconto" min="0" step="1" placeholder="10" style="width:100%"></div>
+        <div><label>Tipo di sconto</label><select id="sPopScontoTipo" style="width:100%">
+          <option value="perc">Percentuale (%)</option><option value="euro">Importo fisso (€)</option></select></div>
+        <div><label>Codice sconto (lo decidi tu)</label><input type="text" id="sPopCodice" placeholder="BENVENUTO10" style="width:100%;text-transform:uppercase"></div>
+      </div>
+      <p class="hint" style="margin:-2px 0 14px">Il codice compare nel popup con il pulsante «copia» e viene scritto da solo nel messaggio WhatsApp insieme allo sconto e al nome del prodotto: il cliente non deve ricordarsi niente.<br>
+       <b>Attenzione:</b> i campi «Messaggio» e «Testo pulsante» qui sopra sono testo libero e <b>non</b> si aggiornano da soli — se cambi lo sconto da 10% a 25%, riscrivili.</p>
+
       <div style="margin-bottom:14px">
+        <label>Cosa mostrare nel popup</label>
+        <select id="sPopSfondoTipo" style="width:100%;margin-top:6px">
+          <option value="nessuno">Solo colore di sfondo</option>
+          <option value="immagine">Un'immagine di sfondo</option>
+          <option value="prodotto">Un prodotto del catalogo (foto, nome e prezzo scontato)</option>
+        </select>
+      </div>
+      <div id="sPopProdRow" style="margin-bottom:14px;display:none">
+        <label>Prodotto in offerta</label>
+        <select id="sPopProd" style="width:100%;margin-top:6px"></select>
+        <div id="sPopProdPrev" style="margin-top:10px"></div>
+      </div>
+
+      <div id="sPopImgRow" style="margin-bottom:14px">
         <label>Immagine di sfondo (opzionale — caricala prima dalla Media Library)</label>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px">
           <input type="text" id="sPopBgImage" placeholder="img/nome-file.webp oppure https://…" style="flex:1;min-width:200px">
@@ -1066,6 +1101,20 @@ function normalize(){
  S.C.PROMO.testo=S.C.PROMO.testo||{it:'',en:''};S.C.PROMO.cta=S.C.PROMO.cta||{it:'',en:''};
  S.C.THEMES.temi=Array.isArray(S.C.THEMES.temi)?S.C.THEMES.temi:[];
  S.CONFIG.aboutMedia=S.CONFIG.aboutMedia||{tipo:'logo',src:''};
+ S.CONFIG.slogan=Object.assign({it:'',en:''},S.CONFIG.slogan||{});
+ /* Popup: ogni campo deve esistere prima che il pannello lo legga, altrimenti
+    un config vecchio apre una scheda piena di caselle rotte. */
+ S.CONFIG.exitPopup=Object.assign({attivo:false,mostraSoloUnaVolta:true,emoji:'🎁',
+  bgColor:'#131a33',bgImage:'',sfondoTipo:'nessuno',prodotto:0,sconto:10,scontoTipo:'perc',codice:'',
+  delaySecondi:45,titolo:{it:'',en:''},messaggio:{it:'',en:''},btnTesto:{it:'',en:''},notaTesto:{it:'',en:''}},
+  S.CONFIG.exitPopup||{});
+ ['titolo','messaggio','btnTesto','notaTesto'].forEach(k=>{S.CONFIG.exitPopup[k]=S.CONFIG.exitPopup[k]||{it:'',en:''}});
+ if(!['perc','euro'].includes(S.CONFIG.exitPopup.scontoTipo))S.CONFIG.exitPopup.scontoTipo='perc';
+ if(!['nessuno','immagine','prodotto'].includes(S.CONFIG.exitPopup.sfondoTipo))
+  S.CONFIG.exitPopup.sfondoTipo=S.CONFIG.exitPopup.bgImage?'immagine':'nessuno';
+ /* un prodotto cancellato lascerebbe un buco nel popup: si torna al solo testo */
+ if(S.CONFIG.exitPopup.sfondoTipo==='prodotto'&&!(S.P||[]).some(p=>p.id===Number(S.CONFIG.exitPopup.prodotto)))
+  S.CONFIG.exitPopup.sfondoTipo='nessuno';
  const w=S.CONFIG.whatsappFab=S.CONFIG.whatsappFab||{};
  if(w.attivo===undefined)w.attivo=true;
  if(!w.numero)w.numero=String(S.CONFIG.whatsapp||'').replace(/[^0-9]/g,'');
@@ -2470,7 +2519,29 @@ function editPort(i){const t=S.C.PORT[i];
   markDirty();closeModal();renderPort()}}
 
 /* ================== HOME & HERO ================== */
-function renderHero(){bindAll();renderAbout();const hf=(S.CONFIG.heroFeatured=S.CONFIG.heroFeatured||[]);
+/* Anteprima del titolo: stessa scala e stessi colori della hero, con la parte
+   incisa in blu come la vedrà il visitatore. Quello che si legge qui è quello
+   che finisce online — compresi gli a capo. */
+function sloganPreview(){
+ const box=$('slPrev'); if(!box) return;
+ const t=String((S.CONFIG.slogan&&S.CONFIG.slogan.it)||'').trim();
+ if(!t){ box.innerHTML='<div class="hint">Vuoto: resta il titolo attuale del sito.</div>'; return }
+ const html=t.split(/\r?\n/).map(riga=>
+   riga.split(/(\*\*[^*]+\*\*)/).map(pz=>{
+     if(!pz) return '';
+     return /^\*\*[^*]+\*\*$/.test(pz)
+       ? '<span style="color:#3b7de0">'+esc(pz.slice(2,-2))+'</span>'
+       : esc(pz);
+   }).join('')
+ ).join('<br>');
+ box.innerHTML='<div style="padding:18px 20px;border-radius:12px;border:1px solid var(--line);background:#0a0d18">'
+  +'<div style="font-size:38px;font-weight:800;font-style:italic;letter-spacing:-.035em;color:#eae8f5;line-height:1.05">'+html+'</div></div>';
+}
+
+function renderHero(){bindAll();renderAbout();sloganPreview();
+ ['slIt','slEn'].forEach(id=>{const el=$(id);
+  if(el&&!el.dataset.slBound){el.dataset.slBound='1';el.addEventListener('input',()=>setTimeout(sloganPreview,0))}});
+ const hf=(S.CONFIG.heroFeatured=S.CONFIG.heroFeatured||[]);
  $('heroPick').innerHTML=[0,1,2].map(i=>{const cur=hf[i];
   return `<div><label>Card ${i+1}</label><select data-hf="${i}"><option value="">—</option>${(S.P||[]).map(p=>`<option value="${p.id}"${p.id===cur?' selected':''}>#${p.id} · ${esc(p.n.it)} · €${p.price}</option>`).join('')}</select></div>`}).join('');
  document.querySelectorAll('[data-hf]').forEach(s=>s.onchange=()=>{const v=[...document.querySelectorAll('[data-hf]')].map(x=>+x.value).filter(Boolean);S.CONFIG.heroFeatured=v;markDirty()})}
@@ -3357,6 +3428,43 @@ function renderSet(){
  $('sPopNotaIT').value=(ep.notaTesto&&ep.notaTesto.it)||'';
  $('sPopNotaEN').value=(ep.notaTesto&&ep.notaTesto.en)||'';
  $('sPopBgImage').value=ep.bgImage||'';
+ $('sPopSconto').value = ep.sconto!=null ? ep.sconto : 10;
+ $('sPopScontoTipo').value = ep.scontoTipo==='euro' ? 'euro' : 'perc';
+ $('sPopCodice').value = ep.codice||'';
+ $('sPopSfondoTipo').value = ['nessuno','immagine','prodotto'].includes(ep.sfondoTipo)
+   ? ep.sfondoTipo : (ep.bgImage ? 'immagine' : 'nessuno');
+ /* elenco prodotti: foto, nome e prezzo li pesca il popup dal catalogo, qui si
+    sceglie soltanto QUALE prodotto mettere in offerta */
+ $('sPopProd').innerHTML='<option value="0">— scegli un prodotto —</option>'+(S.P||[]).map(pr=>
+  `<option value="${pr.id}"${Number(ep.prodotto)===pr.id?' selected':''}>#${pr.id} · ${esc(pr.n.it)} · €${pr.price}</option>`).join('');
+
+ function scontato(prezzo){
+  const n=+$('sPopSconto').value||0;
+  if(!(n>0)) return null;
+  return $('sPopScontoTipo').value==='euro' ? Math.max(0,prezzo-n) : prezzo*(1-n/100);
+ }
+ function updatePopSfondo(){
+  const tipo=$('sPopSfondoTipo').value;
+  $('sPopProdRow').style.display = tipo==='prodotto' ? '' : 'none';
+  $('sPopImgRow').style.display  = tipo==='immagine' ? '' : 'none';
+  const box=$('sPopProdPrev');
+  if(tipo!=='prodotto'){ box.innerHTML=''; return }
+  const pr=(S.P||[]).find(x=>x.id===+$('sPopProd').value);
+  if(!pr){ box.innerHTML='<div class="hint">Nessun prodotto scelto: il popup resterà solo testo.</div>'; return }
+  const sc=scontato(pr.price), cod=$('sPopCodice').value.trim().toUpperCase();
+  box.innerHTML=`<div style="display:flex;gap:12px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:12px">
+    <img src="${esc(LIVE()+(pr.img||('img/'+pr.id+'.webp')))}" style="width:84px;height:84px;object-fit:cover;border-radius:10px;background:#171c33" onerror="this.style.opacity=.15">
+    <div><b>${esc(pr.n.it)}</b><br>
+      <span style="font-size:15px">${sc!=null?`<s style="opacity:.55">€${pr.price.toFixed(2)}</s> <b style="color:var(--ok)">€${sc.toFixed(2)}</b>`:`€${pr.price.toFixed(2)}`}</span>
+      ${cod?`<br><span class="mono hint">codice ${esc(cod)}</span>`:''}
+    </div></div>`;
+ }
+ $('sPopSfondoTipo').onchange=updatePopSfondo;
+ $('sPopProd').onchange=updatePopSfondo;
+ ['sPopSconto','sPopScontoTipo','sPopCodice'].forEach(id=>{
+   $(id).addEventListener('input',updatePopSfondo); $(id).addEventListener('change',updatePopSfondo);
+ });
+ updatePopSfondo();
  function updatePopLabel(){const on=$('sPopActive').checked;$('sPopLabel').textContent=on?'Popup ATTIVO ✅':'Popup DISATTIVO';}
  function updatePopBgPreview(){
   const src=$('sPopBgImage').value.trim();
@@ -3369,11 +3477,12 @@ function renderSet(){
  $('sPopActive').onchange=updatePopLabel;
  $('sPopBgImage').oninput=updatePopBgPreview;
  $('sPopBgClear').onclick=()=>{$('sPopBgImage').value='';updatePopBgPreview();};
- $('sPopBgPick').onclick=()=>{
-  if(!MEDIA.length){toast('Apri prima la Media Library per caricare le immagini');return;}
-  const url=prompt('Inserisci il percorso immagine (es: img/nome-file.webp)');
-  if(url){$('sPopBgImage').value=url.trim();updatePopBgPreview();}
- };
+ /* stessa libreria usata ovunque: una foto si sceglie guardandola, non
+    ricopiando a mano un percorso dentro una finestrella di testo */
+ $('sPopBgPick').onclick=()=>pickFromLibrary(sel=>{
+  if(!sel||!sel.length)return;
+  $('sPopBgImage').value=sel[0];updatePopBgPreview();
+ });
  $('sPopPreview').onclick=()=>{
   const cfg={attivo:true,bgColor:$('sPopBgColor').value,bgImage:$('sPopBgImage').value.trim(),emoji:$('sPopEmoji').value.trim(),titolo:{it:$('sPopTitIT').value,en:$('sPopTitEN').value},messaggio:{it:$('sPopMsgIT').value,en:$('sPopMsgEN').value},btnTesto:{it:$('sPopBtnIT').value,en:$('sPopBtnEN').value},notaTesto:{it:$('sPopNotaIT').value,en:$('sPopNotaEN').value}};
   const w=window.open(LIVE(),'_blank');
@@ -3389,6 +3498,11 @@ function renderSet(){
    emoji:$('sPopEmoji').value.trim()||'🎁',
    bgColor:$('sPopBgColor').value||'#131a33',
    bgImage:$('sPopBgImage').value.trim(),
+   sfondoTipo:$('sPopSfondoTipo').value,
+   prodotto:+$('sPopProd').value||0,
+   sconto:+$('sPopSconto').value||0,
+   scontoTipo:$('sPopScontoTipo').value==='euro'?'euro':'perc',
+   codice:$('sPopCodice').value.trim().toUpperCase(),
    delaySecondi:+$('sPopDelay').value||45,
    titolo:{it:$('sPopTitIT').value.trim(),en:$('sPopTitEN').value.trim()},
    messaggio:{it:$('sPopMsgIT').value.trim(),en:$('sPopMsgEN').value.trim()},

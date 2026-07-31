@@ -34,7 +34,10 @@ function applyConfig(){
   const s=CONFIG.social, map=[s.instagram,s.facebook,s.tiktok,s.pinterest,s.whatsapp,s.etsy];
   map.forEach((u,i)=>{ if(u&&SOCIALS[i]) SOCIALS[i][1]=u });
   document.querySelectorAll('a[href^="https://instagram.com"]').forEach(a=>a.href=s.instagram);
-  document.querySelectorAll('a[href^="https://wa.me"]').forEach(a=>a.href=CONFIG.whatsapp);
+  /* [data-wa-keep] = link che porta con sé un messaggio già scritto (il popup
+     offerta include nome del prodotto, sconto e codice). Sovrascriverlo con il
+     numero nudo cancellava proprio la parte utile. */
+  document.querySelectorAll('a[href^="https://wa.me"]:not([data-wa-keep])').forEach(a=>a.href=CONFIG.whatsapp);
   document.querySelectorAll('a[href^="mailto:"]').forEach(a=>{a.href='mailto:'+CONFIG.email;a.textContent=CONFIG.email});
   $('ftCopy').textContent=CONFIG.copyright;
   $('ftLegal').textContent=CONFIG.legale;
@@ -49,13 +52,71 @@ function applyI18n(){
   document.documentElement.lang=L;
   document.querySelectorAll('[data-i18n]').forEach(el=>{const v=D[L][el.dataset.i18n];if(v!==undefined)el.innerHTML=v});
   document.querySelectorAll('[data-ph]').forEach(el=>{const v=D[L][el.dataset.ph];if(v!==undefined)el.placeholder=v});
-  $('heroH1').innerHTML=T('heroH1');
+  renderTitoloHero();
   $('langIT').classList.toggle('on',L==='it');
   $('langEN').classList.toggle('on',L==='en');
   prod.fillSort();
   const l=$('ldrTxt');if(l)l.textContent=T('ldr');
   const sb=$('sbBtn');if(sb)sb.firstChild.textContent=T('ppAdd')+' ';
 }
+/* ===== TITOLO DELLA HERO =====
+   Il titolo grande è la prima cosa che si legge del sito, e finora viveva
+   dentro texts.json già scritto in HTML: per cambiarlo bisognava comporre a
+   mano <span class="w">, i ritardi di animazione e il doppio strato
+   dell'incisione. Adesso si scrive in chiaro nell'Admin:
+
+     Segnati dalla **luce.**
+     Fatti per durare.
+
+   — le parole fra ** ** sono quelle che il laser incide;
+   — l'a capo nel campo diventa un a capo nel titolo;
+   — ogni parola sale con un ritardo crescente, come prima.
+
+   Il testo arriva dall'Admin, quindi entra nel DOM come TESTO: gli elementi
+   li costruiamo noi, mai innerHTML sul contenuto scritto dall'utente.
+   Campo vuoto = si usa il titolo di texts.json, com'era prima: nessuna
+   regressione per chi non tocca niente. */
+function titoloHero(){
+  const s=(CONFIG.slogan&&(CONFIG.slogan[L]||CONFIG.slogan.it))||'';
+  return String(s).trim();
+}
+function renderTitoloHero(){
+  const h1=$('heroH1'); if(!h1) return;
+  const testo=titoloHero();
+  if(!testo){ h1.innerHTML=T('heroH1'); return }   /* comportamento precedente */
+
+  h1.textContent='';
+  let i=0;                                          /* conta le parole per il ritardo */
+  testo.split(/\r?\n/).forEach((riga,nr)=>{
+    if(nr) h1.appendChild(document.createElement('br'));
+    /* divido tenendo i marcatori: «Segnati dalla **luce.**» → [Segnati dalla ][**luce.**] */
+    riga.split(/(\*\*[^*]+\*\*)/).forEach(pezzo=>{
+      if(!pezzo) return;
+      const inciso=/^\*\*[^*]+\*\*$/.test(pezzo);
+      const testoPezzo=inciso?pezzo.slice(2,-2):pezzo;
+      testoPezzo.split(/\s+/).filter(Boolean).forEach(parola=>{
+        const w=document.createElement('span'); w.className='w';
+        const inner=document.createElement('span');
+        inner.style.animationDelay=(0.1+i*0.11).toFixed(2)+'s';
+        i++;
+        if(inciso){
+          inner.classList.add('engrave');
+          inner.appendChild(document.createTextNode(parola));
+          const fill=document.createElement('span');
+          fill.className='fill'; fill.setAttribute('aria-hidden','true');
+          fill.textContent=parola;
+          inner.appendChild(fill);
+        } else {
+          inner.textContent=parola;
+        }
+        w.appendChild(inner);
+        h1.appendChild(w);
+        h1.appendChild(document.createTextNode(' '));
+      });
+    });
+  });
+}
+
 function setLang(l){setL(l);applyI18n();renderAll();const pg=currentPage();updateSeo(pg,L,T,pg==='product'?prod.currentProduct():null)}
 
 /* ---- contenuti statici ---- */

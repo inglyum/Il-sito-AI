@@ -112,6 +112,26 @@ console.log('\n=== SITO PUBBLICO ===');
 check('nessun errore JS', errors.length === 0, errors.slice(0, 2).join(' | '));
 check('nessun errore fatale nel loader', !/Impossibile caricare/.test(loaderTxt), loaderTxt.slice(0,120));
 
+console.log('\n=== TITOLO DELLA HERO (scritto dall\'Admin) ===');
+const h1 = doc.getElementById('heroH1');
+check('titolo composto dal testo dell\'Admin', h1 && /Segnati dalla/.test(h1.textContent), h1 && h1.textContent.slice(0,50));
+check('ogni parola nel suo contenitore animato', h1 && h1.querySelectorAll('.w').length >= 5, h1 && h1.querySelectorAll('.w').length + ' parole');
+check('l\'a capo del campo diventa un a capo nel titolo', h1 && h1.querySelectorAll('br').length === 1);
+/* le parole fra ** ** sono quelle che il laser incide */
+const inc = h1 && h1.querySelector('.engrave');
+check('la parola marcata viene incisa dal laser', !!inc && !!inc.querySelector('.fill'));
+check('viene incisa la parola giusta', inc && inc.firstChild.textContent === 'luce.', inc && inc.firstChild.textContent);
+/* il testo arriva dall'Admin: deve entrare come testo, mai come markup */
+check('titolo inserito come testo, mai come HTML', h1 && !/<(script|img|svg)/i.test(h1.innerHTML));
+
+console.log('\n=== POPUP OFFERTA ===');
+check('vetrina del prodotto presente', !!doc.getElementById('exitPopProdName') && !!doc.getElementById('exitPopProdPrice'));
+check('riquadro del codice sconto presente', !!doc.getElementById('exitPopCodeTxt'));
+/* il link WhatsApp porta con sé prodotto, sconto e codice: applyConfig()
+   non deve sovrascriverlo con il numero nudo */
+const waB = doc.getElementById('exitWaBtn');
+check('link WhatsApp del popup protetto da applyConfig', waB && waB.hasAttribute('data-wa-keep'));
+
 const bento = $('catBento');
 check('griglia "12 mondi" renderizzata', bento && bento.querySelectorAll('.bcard').length >= 12, bento ? bento.querySelectorAll('.bcard').length + ' card' : 'assente');
 check('categoria CON immagine mostra la foto', bento && bento.querySelector('.bcard--photo img.bimg') !== null);
@@ -321,8 +341,11 @@ check('Product include tutte le immagini della gallery', Array.isArray(prodData.
 check('Product ha offerta con prezzo e valuta', prodData.offers && prodData.offers.priceCurrency === 'EUR');
 check('Product ha priceValidUntil (richiesto da Google)', !!(prodData.offers && prodData.offers.priceValidUntil));
 check('Breadcrumb JSON-LD presente', !!doc.getElementById('ld-crumbs'));
-const crumbs = JSON.parse(doc.getElementById('ld-crumbs').textContent);
-check('Breadcrumb ha Home › Categoria › Prodotto', crumbs.itemListElement.length === 3);
+const crumbsEl = doc.getElementById('ld-crumbs');
+const crumbs = crumbsEl ? JSON.parse(crumbsEl.textContent) : null;
+check('Breadcrumb ha Home › Categoria › Prodotto',
+  !!crumbs && crumbs.itemListElement.length === 3,
+  crumbs ? '' : 'blocco ld-crumbs assente');
 win.location.hash = '#/faq';
 await wait(200);
 const ldFaq = doc.getElementById('ld-faq');
