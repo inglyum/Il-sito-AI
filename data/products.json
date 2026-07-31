@@ -162,8 +162,8 @@
  {
   "id": 5,
   "n": {
-   "it": "Set Segnaletica Interna Casa",
-   "en": "Interior Home Signage Set"
+   "it": "Targa Nascita Personalizzata 1:1 Silhouette Neonato | Lampada LED in Plexiglass o Targa in Legno con Dati di Nascita | Regalo Battesimo e Cameretta",
+   "en": "Newborn Silhouette Birth Announcement Sign | Wood or LED Acrylic Night Light with Birth Stats (Name, Date, Weight, Height)"
   },
   "cat": "casa",
   "sub": 5,
@@ -172,23 +172,27 @@
   "icon": "🪧",
   "img": "img/5.webp",
   "desc": {
-   "it": "Set da 4 targhette per stanze della casa (Cucina, Bagno, Camera, Soggiorno) in plexiglass oro o argento. Incisione laser con font elegante. Fissaggio adesivo incluso.",
-   "en": "Set of 4 room signs in gold or silver plexiglass. Laser engraved. Adhesive mounting included."
+   "it": "Conserva per sempre la magia del giorno in cui è nato con la silhouette in scala reale 1:1! 👶✨\n\nUn ricordo emozionante e unico: la Targa Nascita Silhouette riproduce la sagoma stilizzata del neonato integrando in modo armonioso tutti i suoi dati di nascita (Nome, Data, Ora, Peso e Altezza) lungo i contorni del disegno.\n\nDisponibile in due eleganti varianti di materiale:\n\n🪵 Versione in Legno Intagliato a Laser: Realizzata con finitura naturale o colorata (Rosa, Blu, Naturale) su base in legno massello. Un complemento d'arredo caldo, materico e minimalista.\n\n💡 Versione Lampada LED in Plexiglass: Incisione di alta precisione su plexiglass trasparente con base in legno illuminata a LED (Luce Calda Warm Light). La base è personalizzabile con una dedica o frase speciale stampata/incisa!\n\n⭐ Caratteristiche Principali:\n📐 Design & Scala Reale 1:1: Grafica personalizzata basata sulle misure reali del tuo bambino.\n\n🪵 Scelta del Materiale: Legno naturale/colorato intagliato oppure Plexiglass acrilico trasparente con LED.\n\n📝 Dati Personalizzati Inclusi: Nome, data di nascita, ora, peso (g) e altezza (cm).\n\n💡 Illuminazione LED (Opzione Plexiglass): Luce calda soffusa perfetta come luce notturna per la cameretta.\n\n🎁 Idea Regalo Unica: Il pensiero perfetto per neo-mamma, nascite, battesimi e baby shower.\n\n📏 Specifiche Tecniche:\nMateriali: Legno naturale/colorato oppure Plexiglass acrilico + Base in legno massello.\n\nDimensioni Targa: 20 x 20 cm (Altezza x Larghezza).\n\nDimensioni Base: 8 x 2 cm.\n\nAlimentazione (Versione LED): Cavo USB con interruttore ON/OFF integrato.",
+   "en": "Treasure the magic of the day they were born with a 1:1 scale custom birth silhouette! 👶✨\n\nA deeply emotional and timeless keepsake: our Birth Silhouette Sign captures the outline of a newborn while seamlessly integrating all birth details (Name, Date, Time, Weight, and Height) directly into the artwork's flowing lines.\n\nAvailable in two stunning material variations:\n\n🪵 Laser-Cut Wooden Sign: Crafted from high-quality wood with natural or color-stained finishes (Pink, Blue, Natural Wood) on a solid wooden stand.\n\n💡 Acrylic LED Lamp: Precision laser-engraved transparent acrylic set on an illuminated wooden LED base (Warm Light). The base can be customized with a special love note or dedication!\n\n⭐ Key Features:\n📐 1:1 Scale & Custom Design: Personalized layout matching your baby's birth details.\n\n🪵 Material Options: Premium laser-cut wood or Crystal-clear Acrylic with LED lighting.\n\n📝 Full Birth Stats Included: Name, birth date, time, weight (g/lbs), and length (cm/in).\n\n💡 Soft LED Backlight (Acrylic Option): Gentle warm light, ideal as a cozy nursery nightlight.\n\n🎁 Unforgettable Baby Gift: The ultimate keepsake for new parents, baby showers, and christenings.\n\n📏 Technical Details:\nMaterials: Natural/Stained Wood OR Clear Acrylic + Solid Wood Base.\n\nSign Dimensions: 20 x 20 cm (7.87\" x 7.87\").\n\nBase Dimensions: 8 x 2 cm (3.15\" x 0.78\").\n\nPower Source (LED version): USB cable with inline ON/OFF switch."
   },
   "rev": 55,
   "sku": "INGLY-005",
   "misure": [
    [
     "Ogni targa",
-    "15×5 cm"
+    "20×20 cm"
    ],
    [
     "Spessore",
-    "3 mm"
+    "84 mm"
    ]
   ],
   "prod": 2,
-  "hidden": true
+  "hidden": true,
+  "gallery": [
+   "img/5-g1.webp",
+   "img/5-g2.webp"
+  ]
  },
  {
   "id": 6,
