@@ -3456,18 +3456,20 @@ renderSet=function(){_origRenderSet();
  document.querySelectorAll('input[name="sAiProvider"]').forEach(r=>r.onchange=updateAiBlocks);
 };
 
-/* Chiede a Google quali modelli esistono per questa chiave e ne sceglie uno
-   capace di generare testo. Preferisce i «flash»: i più rapidi e quelli
-   coperti dal piano gratuito.
-   Distingue anche il tipo di credenziale: una chiave AI Studio inizia con
-   «AIza…». Un token OAuth («AQ.…», «ya29.…») qui non funziona, e senza questo
-   controllo l'utente vedrebbe solo un errore generico sui modelli. */
-async function scopriModelloGemini(key){
-  if(/^(AQ\.|ya29\.)/.test(String(key||'')))
-    throw new Error('Questa non è una chiave API di Google AI Studio ma un token di accesso OAuth. Serve una chiave che inizia con «AIza…»: aistudio.google.com → Get API key → Create API key.');
-  if(!/^AIza/.test(String(key||'')))
-    throw new Error('Formato chiave non riconosciuto: una chiave Google AI Studio inizia con «AIza…». Creala su aistudio.google.com → Get API key.');
+/* Trova un modello Gemini che funzioni DAVVERO con questa chiave.
 
+   Perché non basta leggere l'elenco dei modelli: l'endpoint ListModels
+   restituisce anche modelli che poi rifiutano di generare. Con una chiave nuova
+   «gemini-2.5-flash» compare nell'elenco ma risponde 404 «no longer available
+   to new users», e alcuni 2.0 rispondono 429 perché il piano gratuito li ha
+   esauriti. Per questo ogni candidato viene PROVATO con una richiesta minima e
+   si tiene il primo che risponde davvero.
+
+   NOTA sul formato della chiave: NON si controlla più che inizi con «AIza».
+   Google AI Studio ora rilascia chiavi che iniziano con «AQ.», e quel controllo
+   rifiutava chiavi perfettamente valide. È l'API a decidere se una chiave va
+   bene, non noi. */
+async function scopriModelloGemini(key){
   const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models?key='+encodeURIComponent(key));
   if(!r.ok){
    const e=await r.json().catch(()=>({}));
@@ -3479,20 +3481,37 @@ async function scopriModelloGemini(key){
   const validi=(d.models||[])
    .filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent'))
    .map(m=>String(m.name||'').replace(/^models\//,''))
-   .filter(n=>n && !/embedding|aqa|tts|live|image-generation/i.test(n));
+   .filter(n=>n && !/embedding|aqa|tts|live|image|vision|thinking/i.test(n));
   if(!validi.length) throw new Error('Nessun modello disponibile per questa chiave');
+
+  /* Gli alias «-latest» vengono tenuti aggiornati da Google e restano validi
+     quando una versione datata viene ritirata: si provano per primi. */
   const punteggio=n=>{
    let p=0;
+   if(/latest/i.test(n)) p+=200;
    if(/flash/i.test(n)) p+=100;
-   if(/lite/i.test(n)) p-=10;
+   if(/lite/i.test(n)) p-=15;
    if(/preview|exp/i.test(n)) p-=40;
    p+=Math.min(parseFloat((n.match(/(\d+\.\d+|\d+)/)||[])[1]||'0'),10);
-   if(/latest/i.test(n)) p+=5;
    return p;
   };
   validi.sort((a,b)=>punteggio(b)-punteggio(a));
-  console.log('[INGLY] modello Gemini scelto:',validi[0],'· disponibili:',validi.length);
-  return validi[0];
+
+  const motivi=[];
+  for(const m of validi.slice(0,8)){
+   try{
+    const t=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${encodeURIComponent(key)}`,
+     {method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{role:'user',parts:[{text:'ok'}]}],generationConfig:{maxOutputTokens:5}})});
+    if(t.ok){ console.log('[INGLY] modello Gemini funzionante:',m); return m }
+    const e=await t.json().catch(()=>({}));
+    motivi.push(m+': '+(t.status===429?'quota esaurita':t.status===404?'non più disponibile':(e.error?.message||t.status)));
+   }catch(err){ motivi.push(m+': '+err.message) }
+  }
+  const quota=motivi.some(x=>/quota/i.test(x));
+  throw new Error(quota
+   ? 'Quota Gemini esaurita per oggi sui modelli disponibili. Riprova più tardi oppure abilita la fatturazione sul progetto Google.'
+   : 'Nessun modello utilizzabile. Dettagli: '+motivi.slice(0,3).join(' · '));
 }
 
 /* Chiama Claude o Gemini in base al provider selezionato nelle Impostazioni */
