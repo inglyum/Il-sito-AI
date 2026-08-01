@@ -188,7 +188,7 @@
    ]
   ],
   "prod": 2,
-  "hidden": true,
+  "hidden": false,
   "gallery": [
    "img/5-g1.webp",
    "img/5-g2.webp"
