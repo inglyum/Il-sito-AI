@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "npx serve .",
     "build": "node scripts/build.mjs",
-    "test": "node scripts/validate-data.mjs && node scripts/generate-sitemap.mjs --verifica && node tests/test-css.mjs && node tests/test-admin.mjs && node tests/test-sito.mjs"
+    "test": "node scripts/validate-data.mjs && node scripts/generate-sitemap.mjs --verifica && node tests/test-css.mjs && node tests/test-seo-pagine.mjs && node tests/test-abbina-foto.mjs && node tests/test-admin.mjs && node tests/test-sito.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.28.1",

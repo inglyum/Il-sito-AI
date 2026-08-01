@@ -166,6 +166,7 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
 
   <!-- ============ DASHBOARD ============ -->
   <section class="view" id="v-dash">
+    <div id="dashBloccanti"></div>
     <div class="dash" id="dashCards"></div>
     <div class="card"><h3>⚡ Stato del sistema <button class="btn sm sp" data-go="health">Health Center →</button></h3><div class="hlog" id="dashHealth">…</div></div>
     <div id="dashAnalytics"></div>
@@ -669,6 +670,15 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
   <!-- ============ IMPOSTAZIONI ============ -->
   <section class="view" id="v-set">
     <!-- ===== EXIT-INTENT POPUP CARD ===== -->
+    <div class="card"><h3>📊 Statistiche di visita</h3>
+      <div class="hint" style="margin-bottom:10px">Cloudflare Web Analytics: nessun cookie, nessun banner da mostrare, conforme al GDPR.
+       Il token si trova su <b class="mono">dash.cloudflare.com → Analytics &amp; Logs → Web Analytics</b>, voce «JS snippet»: è la stringa dentro <b class="mono">token</b>.
+       <b>Finché il campo è vuoto non viene caricato nulla</b> e il sito non contatta nessuno.</div>
+      <label>Token Cloudflare Web Analytics</label>
+      <input type="text" data-b="CONFIG.analytics.cloudflare" placeholder="es. 1a2b3c4d5e6f7g8h9i0j" style="font-family:ui-monospace,monospace">
+      <div class="hint" style="margin-top:6px">Dopo averlo incollato ricordati di <b>pubblicare</b>: il token deve arrivare online per contare le visite.</div>
+    </div>
+
     <div class="card" style="border:2px solid rgba(37,211,102,.35)">
       <h3>🎁 Popup Offerta (Exit-Intent)</h3>
       <p class="hint" style="margin-bottom:14px">Appare quando il visitatore sta per lasciare il sito (mouse fuori dalla finestra su desktop, dopo N secondi su mobile). Modifica testo, sfondo e attiva/disattiva con un click.</p>
@@ -1102,6 +1112,7 @@ function normalize(){
  S.C.THEMES.temi=Array.isArray(S.C.THEMES.temi)?S.C.THEMES.temi:[];
  S.CONFIG.aboutMedia=S.CONFIG.aboutMedia||{tipo:'logo',src:''};
  S.CONFIG.slogan=Object.assign({it:'',en:''},S.CONFIG.slogan||{});
+ S.CONFIG.analytics=Object.assign({cloudflare:''},S.CONFIG.analytics||{});
  /* Popup: ogni campo deve esistere prima che il pannello lo legga, altrimenti
     un config vecchio apre una scheda piena di caselle rotte. */
  S.CONFIG.exitPopup=Object.assign({attivo:false,mostraSoloUnaVolta:true,emoji:'🎁',
@@ -1333,8 +1344,85 @@ function renderDash(){
  if(!REPO_IMG)h.push('<div class="warn">⚠ Foto: esegui «Scansiona repository» nella Media Library per il conteggio esatto</div>');
  if(noPhoto>0)h.push(`<div class="warn">⚠ ${noPhoto} prodott${noPhoto===1?'o':'i'} senz${noPhoto===1?'a':'e'} foto — <button class="btn sm" data-go="prod" onclick="setTimeout(()=>{ const s=document.getElementById('pStatusF');if(s){s.value='nofoto';renderProd()} },100)">Vedi →</button></div>`);
  $('dashHealth').innerHTML=h.join('');
+ renderBloccanti();
  /* analytics mini-widget */
  renderDashAnalytics();
+}
+
+/* ============ COSA IMPEDISCE DI VENDERE ============
+   Il Health Center dice già molte cose, ma bisogna andarci. Questo pannello sta
+   in cima alla home dell'Admin e mostra SOLO ciò che oggi costa clienti o
+   visibilità, in ordine di gravità, con il pulsante che porta dritto al campo
+   da riempire. Quando non c'è niente da segnalare sparisce: un riquadro che
+   grida sempre smette di essere letto. */
+function renderBloccanti(){
+ const box=$('dashBloccanti'); if(!box) return;
+ const P=S.P||[], CFG=S.CONFIG||{};
+ const visibili=P.filter(p=>!p.hidden);
+ const haFoto=p=>!!p.img||hasStaged('img/'+p.id+'.webp')||(REPO_IMG||[]).includes(p.id+'.webp');
+ const senzaFoto=visibili.filter(p=>!haFoto(p));
+ const senzaDesc=visibili.filter(p=>!p.desc||!p.desc.it||!p.desc.it.trim());
+ const moduli=CFG.moduli||{};
+ const v=[];
+
+ /* 1. il modulo scollegato è il danno più grande: la richiesta del cliente
+       non arriva a nessuno, e nessuno se ne accorge */
+ if(!String(moduli.formspreePreventivo||'').trim())
+   v.push({g:'grave', t:'Il modulo preventivi non è collegato',
+     d:'Chi compila «Richiedi preventivo» riceve un avviso e la richiesta non arriva a nessuno.',
+     b:'Collega ora', go:'contacts'});
+ if(!String(moduli.formspreeNewsletter||'').trim())
+   v.push({g:'medio', t:'La newsletter non è collegata',
+     d:'Le iscrizioni vengono scartate.', b:'Collega', go:'contacts'});
+
+ /* 2. un prodotto in vetrina senza foto non vende e non entra nei feed */
+ if(senzaFoto.length)
+   v.push({g:senzaFoto.length>visibili.length/3?'grave':'medio',
+     t:senzaFoto.length+' prodott'+(senzaFoto.length===1?'o':'i')+' in vetrina senz'+(senzaFoto.length===1?'a':'e')+' foto',
+     d:'Su '+visibili.length+' visibili. Mostrano un segnaposto: chi guarda non compra, e Google Shopping li rifiuta.'
+        +(REPO_IMG?'':' Conteggio basato sui dati: esegui «Scansiona repository» nella Media Library per quello esatto.'),
+     b:'Carica le foto', go:'media'});
+
+ if(senzaDesc.length)
+   v.push({g:'medio', t:senzaDesc.length+' prodott'+(senzaDesc.length===1?'o':'i')+' senza descrizione',
+     d:'Senza testo la scheda non si posiziona su nessuna ricerca.', b:'Compila', go:'prod'});
+
+ /* 3. senza numeri si decide a caso */
+ if(!String(CFG.analytics&&CFG.analytics.cloudflare||'').trim())
+   v.push({g:'medio', t:'Nessuna statistica di visita',
+     d:'Non sai quali prodotti vengono guardati né da dove arrivano le persone.',
+     b:'Configura', go:'set'});
+
+ /* 4. cose che rendono inutile il lavoro già fatto */
+ const ep=CFG.exitPopup||{};
+ if(ep.attivo===true && !String(ep.codice||'').trim())
+   v.push({g:'medio', t:'Il popup offerta è acceso ma senza codice sconto',
+     d:'Si apre senza dare niente da usare.', b:'Sistema', go:'set'});
+ if(!token())
+   v.push({g:'medio', t:'Token GitHub non configurato',
+     d:'Puoi modificare ma non pubblicare: le modifiche restano in bozza su questo computer.',
+     b:'Configura', go:'set'});
+
+ if(!v.length){
+   box.innerHTML='<div class="card" style="border-color:var(--ok)"><h3>✅ Nessun problema che blocchi le vendite</h3>'
+     +'<div class="hint">Moduli collegati, prodotti con foto e descrizione, statistiche attive.</div></div>';
+   return;
+ }
+ const ordine={grave:0,medio:1};
+ v.sort((a,b)=>ordine[a.g]-ordine[b.g]);
+ const gravi=v.filter(x=>x.g==='grave').length;
+ box.innerHTML=`<div class="card" style="border:2px solid ${gravi?'var(--err)':'var(--warn)'};margin-bottom:16px">
+  <h3>${gravi?'🚨':'⚠️'} Cosa manca per vendere <span class="chip ${gravi?'err':'warn'} sp">${v.length} punt${v.length===1?'o':'i'}</span></h3>
+  <div class="hint" style="margin-bottom:10px">In ordine di quanto ti costa adesso. Il pulsante porta dritto al punto da sistemare.</div>
+  ${v.map(x=>`<div class="list-it" style="align-items:flex-start;gap:12px">
+    <span style="font-size:18px;line-height:1.2">${x.g==='grave'?'🔴':'🟠'}</span>
+    <div style="flex:1;min-width:200px">
+      <b>${esc(x.t)}</b>
+      <div class="hint" style="margin-top:2px">${esc(x.d)}</div>
+    </div>
+    <button class="btn sm ${x.g==='grave'?'pri':''}" data-go="${x.go}">${esc(x.b)} →</button>
+  </div>`).join('')}
+ </div>`;
 }
 function hasStaged(path){return MEDIA.some(m=>m.path===path)}
 
@@ -2049,6 +2137,9 @@ function renderMRows(){
   <div style="flex:1;min-width:180px">
    <div class="mono" style="font-size:11.5px;overflow:hidden;text-overflow:ellipsis">${esc(s.name)}</div>
    <div class="hint">${Math.round(s.proc.buf.byteLength/1024)} KB${s.proc.w?' · '+s.proc.w+'×'+s.proc.h:''}</div>
+   ${s.auto?`<div class="chip ${s.auto.sicurezza==='certa'?'ok':'warn'}" style="margin-top:5px">
+     ${s.auto.sicurezza==='certa'?'✔ abbinata da sola':'≈ probabile'} · ${esc(s.auto.motivo)}${s.auto.galleria?' · va in gallery':''}</div>
+     ${s.auto.sostituisce?'<div class="chip warn" style="margin-top:4px">⚠ sostituisce la foto attuale del prodotto</div>':''}`:''}
    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px">${mdBottoniTipo('data-mrt="'+i+'" data-tipo',tipo)}</div>
   </div>
   <div style="min-width:190px;flex:1">
@@ -2083,9 +2174,29 @@ async function handleFiles(files){if(!files.length)return;STAGE_TMP=[];
  if(!STAGE_TMP.length)return;
  $('mAssign').style.display='';
  MD_TIPO='p';
+ const r=abbinaAutomatico();
  renderAllBar();
  renderMRows();
- toast(STAGE_TMP.length+' immagini pronte: scegli dove va ognuna')}
+ toast(r.abbinate
+   ? r.abbinate+' su '+r.totale+' abbinate da sole — controlla e conferma'
+   : STAGE_TMP.length+' immagini pronte: scegli dove va ognuna')}
+
+/* Prova ad assegnare da sé ogni file al suo prodotto, leggendo il nome.
+   Con 46 prodotti da fotografare, farlo a mano uno per uno è il vero costo:
+   qui il lavoro diventa «controlla e conferma». Ogni riga resta modificabile,
+   e ciò che non è chiaro non viene toccato — un abbinamento sbagliato fatto in
+   silenzio è peggio di nessun abbinamento. */
+function abbinaAutomatico(){
+ if(!window.ABBINA) return {totale:STAGE_TMP.length,abbinate:0};
+ const esiti=window.ABBINA.abbinaTutti(STAGE_TMP.map(x=>x.name), S.P||[]);
+ esiti.forEach((e,i)=>{
+   const t=STAGE_TMP[i]; if(!t||!e.abbinato) return;
+   t.dest='p:'+e.abbinato.id;
+   t.slot=e.abbinato.galleria?'gal':'main';
+   t.auto=e.abbinato;                       /* lo mostriamo nella riga */
+ });
+ return window.ABBINA.riassunto(esiti);
+}
 /* barra «applica a tutte»: stessi due passi delle righe singole */
 let MD_TIPO='p';
 function renderAllBar(){
@@ -3811,6 +3922,8 @@ $('seoAiGen').onclick=async()=>{
 <script type="module">
   import * as MD from './assets/js/admin/media-destinazione.js';
   window.MEDIA_DEST = MD;   /* «MD» è già usato nell'Admin per le date */
+  import * as AB from './assets/js/admin/abbina-foto.js';
+  window.ABBINA = AB;       /* abbinamento automatico foto → prodotto */
 </script>
 </body>
 </html>

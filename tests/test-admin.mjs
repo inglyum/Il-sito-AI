@@ -428,6 +428,47 @@ doc.querySelector('.nit[data-go="pub"]').click(); await wait(120);
 check('import backup: le immagini verranno ripubblicate',
   /restored-1\.webp/.test($('pubList').innerHTML), $('pubList').textContent.slice(0,90));
 
+console.log('\n=== Cruscotto «cosa manca per vendere» ===');
+doc.querySelector('.nit[data-go="dash"]').click(); await wait(300);
+const bloc = $('dashBloccanti');
+check('pannello presente in cima alla dashboard', !!bloc && bloc.innerHTML.trim().length > 0);
+const voci = [...bloc.querySelectorAll('.list-it')];
+check('elenca i punti aperti', voci.length > 0, voci.length + ' voci');
+/* il modulo scollegato è il danno più grande: deve stare in cima */
+check('il modulo preventivi non collegato è il primo avviso',
+  /modulo preventivi/i.test((voci[0] || {}).textContent || ''),
+  (voci[0] || {}).textContent?.slice(0, 60));
+check('ogni voce spiega la conseguenza, non solo il nome',
+  voci.every(v => (v.querySelector('.hint') || {}).textContent?.trim().length > 20));
+/* un avviso senza scorciatoia costringe a cercare il campo a mano */
+check('ogni voce porta al punto da sistemare',
+  voci.every(v => !!v.querySelector('button[data-go]')));
+const primoGo = voci[0].querySelector('button[data-go]').dataset.go;
+voci[0].querySelector('button[data-go]').click(); await wait(300);
+check('il pulsante apre davvero la sezione giusta',
+  !!doc.getElementById('v-' + primoGo) &&
+  win.getComputedStyle(doc.getElementById('v-' + primoGo)).display !== 'none',
+  primoGo);
+
+console.log('\n=== Statistiche di visita ===');
+doc.querySelector('.nit[data-go="set"]').click(); await wait(400);
+const tokCf = doc.querySelector('[data-b="CONFIG.analytics.cloudflare"]');
+check('campo token Cloudflare presente', !!tokCf);
+tokCf.value = 'abc123token';
+tokCf.dispatchEvent(new win.Event('input', { bubbles: true }));
+await wait(200);
+check('il token entra in bozza da pubblicare', pendingHas('config'));
+/* lo stato interno non è globale: si verifica riaprendo la scheda */
+doc.querySelector('.nit[data-go="dash"]').click(); await wait(200);
+doc.querySelector('.nit[data-go="set"]').click(); await wait(400);
+check('il token resta scritto riaprendo la scheda',
+  doc.querySelector('[data-b="CONFIG.analytics.cloudflare"]').value === 'abc123token',
+  doc.querySelector('[data-b="CONFIG.analytics.cloudflare"]').value);
+/* con il token configurato l'avviso deve sparire dal cruscotto */
+doc.querySelector('.nit[data-go="dash"]').click(); await wait(400);
+check('il cruscotto smette di segnalare le statistiche mancanti',
+  !/statistica di visita/i.test($('dashBloccanti').textContent));
+
 console.log(`\n=========== RISULTATO: ${pass} passati, ${fail} falliti ===========`);
 if (errors.length) { console.log('\nErrori raccolti:'); errors.slice(0, 8).forEach(e => console.log(' - ' + e.slice(0, 200))); }
 process.exit(fail ? 1 : 0);

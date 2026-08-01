@@ -754,7 +754,24 @@ setTimeout(function(){
 </script>
 
 <!-- Cloudflare Web Analytics — privacy-first, no cookies, GDPR compliant -->
-<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "INSERISCI_QUI_IL_TOKEN_CF"}'></script>
+<script>
+/* Statistiche di visita (Cloudflare Web Analytics — senza cookie, conforme GDPR).
+   Il token stava scritto qui dentro come segnaposto «INSERISCI_QUI_IL_TOKEN_CF»:
+   restava tale e quale, il beacon partiva a vuoto a ogni visita e di statistiche
+   non ce n'erano. Ora il token vive in data/config.json e si incolla dall'Admin
+   (Impostazioni → Statistiche): finché è vuoto NON viene caricato niente,
+   nessuna richiesta a terzi e nessun peso in più. */
+(function(){
+  fetch('data/config.json?v='+Date.now()).then(function(r){return r.json()}).then(function(c){
+    var t=((c.analytics||{}).cloudflare||'').trim();
+    if(!t) return;
+    var s=document.createElement('script');
+    s.defer=true; s.src='https://static.cloudflareinsights.com/beacon.min.js';
+    s.setAttribute('data-cf-beacon', JSON.stringify({token:t}));
+    document.head.appendChild(s);
+  }).catch(function(){});
+})();
+</script>
 
 <!-- ===== EXIT-INTENT POPUP — contenuto iniettato da JS via data/config.json ===== -->
 <div id="exitPopup" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);align-items:center;justify-content:center" role="dialog" aria-modal="true" aria-labelledby="exitPopTitle">
