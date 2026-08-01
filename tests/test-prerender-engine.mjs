@@ -81,7 +81,16 @@ check('la descrizione viene sostituita', out.includes('content="Topper inciso."'
 check('il canonico viene sostituito', out.includes('href="' + BASE + '/product/7/"'));
 check('og:url segue il canonico', out.includes('property="og:url" content="' + BASE + '/product/7/"'));
 check('il JSON-LD è inserito nella testa',
-  /<script type="application\/ld\+json">.*Cake Topper.*<\/script>\s*<\/head>/s.test(out));
+  /<script type="application\/ld\+json"[^>]*>.*Cake Topper.*<\/script>\s*<\/head>/s.test(out));
+/* L'id serve a seo.js per TOGLIERE questo blocco quando l'applicazione parte e
+   ne scrive di più ricchi. Senza, la pagina finiva per dichiarare la stessa
+   azienda tre volte e lo stesso prodotto due: entità in conflitto per Google. */
+check('il blocco è riconoscibile per poterlo sostituire a runtime',
+  /<script type="application\/ld\+json" id="ld-prerender">/.test(out));
+/* e il blocco di base del guscio non deve restare accanto al nostro */
+check('il blocco del guscio viene sostituito, non affiancato',
+  (out.match(/<script type="application\/ld\+json"/g) || []).length === 1,
+  (out.match(/<script type="application\/ld\+json"/g) || []).length + ' blocchi');
 check('il contenuto entra nel main', out.includes('id="prerender"') && out.includes('Cake Topper Matrimonio'));
 /* Il punto più insidioso: da /product/7/ ogni percorso relativo — compresi i
    data/*.json scaricati da JavaScript — deve risalire di due livelli. */

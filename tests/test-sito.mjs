@@ -17,6 +17,12 @@ vc.on('jsdomError', e => { const m = String(e.message || e);
 // dati di prova: una categoria e una tessera portfolio CON immagine, WhatsApp attivo
 const cats = JSON.parse(readFileSync(ROOT + '/data/categories.json', 'utf8'));
 cats[0].img = 'img/cat-casa.webp';
+/* Lo sfondo vettoriale generato serve alle categorie SENZA foto. Nei dati veri
+   ormai le hanno tutte, quindi quel percorso non veniva più eseguito e i
+   controlli fallivano additando il codice invece della loro premessa.
+   Qui la condizione la crea il test: la prima categoria tiene la foto, le
+   altre no — così si verificano davvero tutti e due i rami. */
+cats.slice(1).forEach(c => { delete c.img });
 const content = JSON.parse(readFileSync(ROOT + '/data/content.json', 'utf8'));
 content.PORT[0][3] = 'img/port-1.webp';
 const config = JSON.parse(readFileSync(ROOT + '/data/config.json', 'utf8'));
@@ -40,7 +46,11 @@ const products = JSON.parse(readFileSync(ROOT + '/data/products.json', 'utf8'));
 products[0].mat = 'MaterialeInesistente';   // causava: Cannot read properties of undefined (reading 'bg')
 products[1].sub = 0;                        // sottocategoria fuori scala
 delete products[2].n.en;                    // traduzione mancante
-content.FOCAL = { 'img/1.webp': '30% 20%' };// punto focale
+/* Punto focale: va dichiarato sull'immagine che il prodotto usa davvero.
+   Era fissato su 'img/1.webp', ma la foto principale del prodotto 1 è stata
+   cambiata dall'Admin e la mappa non veniva più consultata: il controllo
+   falliva per la sua premessa, non per il codice. */
+content.FOCAL = { [products[0].img || ('img/' + products[0].id + '.webp')]: '30% 20%' };
 content.REVIEWS[0].st = 4;
 content.REVIEWS[0].ph = ['img/1.webp', 'img/2.webp'];
 content.REVIEWS[0].vf = true;
@@ -114,6 +124,30 @@ let prodMod = null;
 let pass = 0, fail = 0;
 const check = (n, c, x = '') => { if (c) { pass++; console.log('  ✔ ' + n) } else { fail++; console.log('  ✖ ' + n + (x ? ' → ' + x : '')) } };
 const $ = id => doc.getElementById(id);
+
+/* ===== NAVIGAZIONE COME LA FA IL SITO =====
+   Questi test cambiavano pagina scrivendo location.hash ('#/product?id=1').
+   Funzionava quando il router leggeva il cancelletto; da quando usa percorsi
+   veri (/product/7/) quella riga non fa più niente: la pagina restava la home
+   e i controlli sui dati strutturati fallivano da mesi additando il codice
+   invece del test.
+   Qui si naviga come un visitatore: si clicca. */
+const vaiA = async (pagina) => {
+  const link = doc.querySelector('.nav-links [data-nav="' + pagina + '"]');
+  if(link) link.click();
+  else {
+    win.history.pushState({}, '', '/' + pagina);
+    win.dispatchEvent(new win.PopStateEvent('popstate'));
+  }
+  await wait(220);
+};
+const apriProdotto = async (id) => {
+  await vaiA('shop');
+  const card = doc.querySelector('[data-action="open-product"][data-id="' + id + '"]')
+            || doc.querySelector('[data-action="open-product"]');
+  if(card) card.click();
+  await wait(260);
+};
 
 // il loader NON deve mostrare l'errore fatale
 const loaderTxt = (doc.getElementById('loader') || {}).textContent || '';
@@ -195,6 +229,8 @@ check('portfolio: tessere senza link restano statiche', port && port.querySelect
 // test: WhatsApp disattivato
 INGLY.CONFIG.whatsappFab.attivo = false;
 win.dispatchEvent(new win.Event('resize'));
+/* la card [1] è una categoria senza foto: deve avere lo sfondo generato,
+   e il data-URI dentro l'attributo style non deve essere troncato */
 const st1 = bento.querySelectorAll('.bcard')[1].getAttribute('style').replace(/\s+/g, '');
 check('data-uri non tronca l attributo style (apici singoli)', st1.includes('svg+xml'), st1.slice(0, 90));
 check('lo sfondo generato sopravvive alle modifiche di style da JS',
@@ -242,13 +278,14 @@ check('suggerimenti mostrati mentre si scrive', doc.getElementById('sugg').hidde
   doc.getElementById('sugg').querySelectorAll('button').length > 0);
 check('suggerimenti etichettati per tipo', /class="k"/.test(doc.getElementById('sugg').innerHTML));
 // filtri nell'URL
-win.location.hash = '#/shop';
-await wait(150);
+await vaiA('shop');
 prodMod = null;
 q.value = '';
 q.dispatchEvent(new win.Event('input'));
 await wait(200);
-check('lo stato dei filtri finisce nell URL', /#\/shop/.test(win.location.hash));
+/* i filtri finiscono nell'indirizzo, che ora è un percorso vero: /shop?cat=… */
+check('lo stato dei filtri finisce nell URL',
+  /\/shop/.test(win.location.pathname), win.location.pathname + win.location.search);
 
 console.log('\n=== THEME ENGINE ===');
 check('artwork del tema applicato alla categoria', bento && /theme\/christmas-casa\.webp/.test(bento.innerHTML));
@@ -282,8 +319,7 @@ doc.getElementById('lbxClose').click(); await wait(80);
 check('alla chiusura lo scorrimento riparte', !doc.body.classList.contains('lbx-open'));
 
 // clic su una MINIATURA specifica del prodotto → zoom di QUELLA foto
-win.location.hash = '#/product?id=' + products[0].id;
-await wait(250);
+await apriProdotto(products[0].id);
 const thumbs = doc.getElementById('ppThumbs').querySelectorAll('[data-action="pp-thumb"]');
 check('il prodotto ha più miniature', thumbs.length >= 2, thumbs.length + ' miniature');
 if (thumbs.length >= 2) {
@@ -344,13 +380,18 @@ check('tema chiaro: superfici card ridefinite (niente riquadri scuri)',
 check('tema chiaro: sfondo profondo (footer/topbar) ridefinito',
   /\[data-mode="light"\][^}]*--bg-deep:\s*#e/i.test(varsCss));
 const pagesCss = readFileSync(ROOT + '/assets/css/pages.css', 'utf8');
-check('le tecnologie (.mcard) usano una variabile, non un colore fisso',
-  /\.mcard\{background:var\(--card-solid/.test(pagesCss));
+/* Le schede tecnologie hanno uno sfondo scuro pieno nel tema scuro. Il punto
+   non è QUALE variabile si usa — l'implementazione è cambiata — ma che il tema
+   chiaro non erediti quel fondo scuro lasciando testo scuro su scuro. */
+const varsCss2 = readFileSync(ROOT + '/assets/css/variables.css', 'utf8');
+check('il tema chiaro ridefinisce lo sfondo delle schede tecnologie',
+  /\[data-mode="light"\]\s*\.mcard\s*\{[^}]*background/.test(varsCss2));
+check('il tema chiaro ridefinisce anche il colore del testo',
+  /\[data-mode="light"\]\s*\.mcard\s*(h3|p)/.test(varsCss2));
 check('footer e topbar usano una variabile', /footer\{background:var\(--bg-deep/.test(pagesCss));
 
 console.log('\n=== PRODOTTO: più immagini e descrizione ===');
-win.location.hash = '#/product?id=' + products[0].id;
-await wait(250);
+await apriProdotto(products[0].id);
 check('gallery con più immagini', doc.getElementById('ppThumbs').querySelectorAll('[data-action="pp-thumb"]').length >= 2,
   doc.getElementById('ppThumbs').querySelectorAll('[data-action="pp-thumb"]').length + ' miniature');
 check('descrizione del prodotto mostrata', /Descrizione lunga di prova/.test(doc.getElementById('ppDesc').innerHTML || doc.querySelector('.ppdesc')?.innerHTML || ''));
@@ -361,8 +402,7 @@ check('tabella misure è nella colonna INFO (non nascosta sotto la foto)',
 check('le misure mostrano etichetta e valore', /30 × 20 cm/.test(doc.getElementById('ppSizes').innerHTML));
 
 console.log('\n=== DATI STRUTTURATI (SEO) ===');
-win.location.hash = '#/product?id=' + products[0].id;
-await wait(250);
+await apriProdotto(products[0].id);
 const ldProd = doc.getElementById('ld-product');
 check('JSON-LD Product presente sulla pagina prodotto', !!ldProd);
 const prodData = ldProd ? JSON.parse(ldProd.textContent) : {};
@@ -376,13 +416,11 @@ const crumbs = crumbsEl ? JSON.parse(crumbsEl.textContent) : null;
 check('Breadcrumb ha Home › Categoria › Prodotto',
   !!crumbs && crumbs.itemListElement.length === 3,
   crumbs ? '' : 'blocco ld-crumbs assente');
-win.location.hash = '#/faq';
-await wait(200);
+await vaiA('faq');
 const ldFaq = doc.getElementById('ld-faq');
 check('FAQ JSON-LD presente sulla pagina FAQ', !!ldFaq);
 check('FAQ contiene domande e risposte', ldFaq && JSON.parse(ldFaq.textContent).mainEntity.length > 0);
-win.location.hash = '#/shop';
-await wait(150);
+await vaiA('shop');
 check('Product JSON-LD rimosso fuori dalla pagina prodotto', !doc.getElementById('ld-product'));
 
 console.log('\n=== SPONSOR & PARTNER ===');
@@ -443,7 +481,11 @@ console.log('\n=== ICONE VETTORIALI ===');
 check('categorie usano le icone SVG INGLY', bento && bento.querySelectorAll('.ic .ic-svg').length >= 10);
 check('riferimento corretto allo sprite', bento && /ingly-icons\.svg#ic-casa/.test(bento.innerHTML));
 const techG = doc.getElementById('techGrid');
-check('tecnologie usano le icone SVG', techG && techG.querySelectorAll('.ic-svg').length >= 3);
+/* Le schede tecnologie sono passate alle emoji per scelta grafica: qui si
+   verifica che un simbolo ci sia comunque, non che sia per forza un SVG. */
+check('ogni tecnologia mostra il suo simbolo',
+  techG && techG.querySelectorAll('.mcard-emoji, .ic-svg').length >= 3,
+  techG ? techG.querySelectorAll('.mcard-emoji, .ic-svg').length + ' simboli' : 'griglia assente');
 // fallback: categoria senza icon deve tornare all'emoji
 check('fallback emoji per icone non definite', bento && bento.querySelectorAll('.ic .ic-emoji').length >= 0);
 
