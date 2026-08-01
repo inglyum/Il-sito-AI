@@ -8,7 +8,11 @@ import { execSync } from 'child_process';
 const ROOT = '.';
 const errors = [];
 const vc = new VirtualConsole();
-vc.on('jsdomError', e => { const m = String(e.message || e); if (!/getContext/.test(m)) errors.push('jsdomError: ' + m); });
+/* jsdom non implementa <canvas>.getContext né la riproduzione dei media:
+   sono limiti dell'ambiente di test, non difetti del sito. Il codice che li
+   usa è già protetto da try/catch. */
+vc.on('jsdomError', e => { const m = String(e.message || e);
+  if (!/getContext|HTMLMediaElement/.test(m)) errors.push('jsdomError: ' + m); });
 
 // dati di prova: una categoria e una tessera portfolio CON immagine, WhatsApp attivo
 const cats = JSON.parse(readFileSync(ROOT + '/data/categories.json', 'utf8'));
@@ -17,6 +21,11 @@ const content = JSON.parse(readFileSync(ROOT + '/data/content.json', 'utf8'));
 content.PORT[0][3] = 'img/port-1.webp';
 const config = JSON.parse(readFileSync(ROOT + '/data/config.json', 'utf8'));
 config.aboutMedia = { tipo: 'immagine', src: 'img/about.webp' };
+/* Titolo della hero: il testo lo decide il test, non i dati pubblicati.
+   Così questi controlli verificano il MECCANISMO (marcatori ** ** e a capo)
+   e non si rompono ogni volta che qualcuno cambia lo slogan dall'Admin. */
+config.slogan = { it: 'Segnati dalla **luce.**\nFatti per durare.',
+                  en: 'Marked by **light.**\nMade to last.' };
 // THEME ENGINE: tema natalizio in calendario con artwork per la categoria casa
 content.THEMES = { attivo: 'default', auto: true, temi: [
   { id:'default', n:{it:'Default',en:'Default'}, palette:['#111827','#1E3A8A','#FACC15'], stato:'libreria', art:{} },
