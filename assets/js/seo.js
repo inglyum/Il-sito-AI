@@ -25,6 +25,17 @@ const jsonld = (id,obj) => {
 
 /* dati strutturati fissi: chi è INGLY (aiuta Google a mostrare il brand) */
 export function initSeo(){
+  /* I blocchi scritti prima che partisse l'applicazione hanno finito il loro
+     lavoro: servivano ai crawler che non eseguono JavaScript. Da qui in poi
+     scriviamo noi dati più ricchi e aggiornati per pagina, quindi i vecchi
+     vanno tolti — non affiancati.
+     Senza questo passaggio una scheda prodotto arrivava a dichiarare
+     LocalBusiness tre volte e Product due: entità in conflitto, e Google
+     nel dubbio non mostra prezzo, disponibilità e stelle nei risultati. */
+  ['ld-statico','ld-prerender'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.remove();
+  });
+
   /* Grafo delle entità: azienda, sito (con la ricerca interna) e lavorazioni,
      collegati fra loro con @id. Prima erano blocchi separati e un motore non
      poteva sapere che il prodotto è venduto da quell'azienda. */

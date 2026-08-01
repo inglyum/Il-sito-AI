@@ -123,8 +123,13 @@ export function componi(guscio, opt = {}){
     '<meta property="og:description" content="' + esc(descrizione) + '">');
 
   if(jsonld){
+    /* Il guscio porta già un blocco LocalBusiness di base. Il grafo che
+       costruiamo qui lo contiene e lo arricchisce: va SOSTITUITO, non
+       aggiunto, altrimenti la pagina statica dichiara due volte la stessa
+       azienda e Google si trova entità in conflitto. */
+    out = out.replace(/<script type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>\s*/gi, '');
     out = out.replace(/<\/head>/i,
-      '<script type="application/ld+json">' + JSON.stringify(jsonld) + '</script>\n</head>');
+      '<script type="application/ld+json" id="ld-prerender">' + JSON.stringify(jsonld) + '</script>\n</head>');
   }
 
   /* Il contenuto statico vive in un contenitore che l'applicazione rimuove

@@ -18,6 +18,10 @@ jobs:
         run: node scripts/validate-data.mjs
       - name: Test di regressione CSS e srcset
         run: node tests/test-css.mjs
+      - name: Pagine statiche allineate ai dati
+        run: node scripts/prerender.mjs --verifica
+      - name: Sitemap allineata alle pagine (e senza indirizzi con #)
+        run: node scripts/generate-sitemap.mjs --verifica
       - name: Controlla riferimenti immagini nei dati
         run: |
           node -e '

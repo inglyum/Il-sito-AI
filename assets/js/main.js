@@ -546,3 +546,8 @@ if(currentPage()==='product'){
    ora l'applicazione disegna la pagina vera e quel duplicato va tolto. */
 document.getElementById('prerender')?.remove();
 show(currentPage());
+
+/* Bandierina di avvenuto avvio: la usa la rete di sicurezza in index.html per
+   decidere se serve il bundle di riserva. Va messa in fondo, quando tutto il
+   resto è andato a buon fine — prima non direbbe niente di utile. */
+window.__INGLY_PRONTO = true;

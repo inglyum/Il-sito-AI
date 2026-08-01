@@ -132,6 +132,27 @@ check('riquadro del codice sconto presente', !!doc.getElementById('exitPopCodeTx
 const waB = doc.getElementById('exitWaBtn');
 check('link WhatsApp del popup protetto da applyConfig', waB && waB.hasAttribute('data-wa-keep'));
 
+console.log('\n=== PESO DEL JAVASCRIPT ===');
+/* Il bundle di riserva serve solo ai browser che non conoscono i moduli ES.
+   Con «defer» lo scaricavano tutti: 87KB di peso morto a ogni visita. */
+const sorgente = readFileSync(ROOT + '/index.html', 'utf8');
+check('il bundle di riserva è marcato nomodule',
+  /<script nomodule[^>]+app\.fallback\.js/.test(sorgente),
+  (sorgente.match(/<script[^>]*app\.fallback\.js[^>]*>/) || ['assente'])[0]);
+check('il bundle di riserva non è più caricato da tutti',
+  !/<script defer src="assets\/js\/app\.fallback\.js"/.test(sorgente));
+/* Togliendolo ai browser moderni resterebbero senza rete se i moduli si
+   rompessero: il conto alla rovescia lo carica a mano quando serve. */
+const dopoNomodule = sorgente.slice(sorgente.indexOf('nomodule'));
+check('esiste la rete di sicurezza che lo carica se i moduli non partono',
+  /__INGLY_PRONTO/.test(dopoNomodule) && /s\.src\s*=[\s\S]{0,160}app\.fallback\.js/.test(dopoNomodule));
+check('la rete di sicurezza abbassa la bandierina che bloccherebbe il bundle',
+  /__INGLY_ESM__\s*=\s*false/.test(sorgente));
+/* deve partire da sé, non dall'evento load: load aspetta anche i font esterni
+   e se uno non risponde non arriva mai, proprio quando servirebbe */
+check('la rete di sicurezza non dipende dall\'evento load',
+  !/addEventListener\('load'[\s\S]{0,200}__INGLY_PRONTO/.test(sorgente));
+
 const bento = $('catBento');
 check('griglia "12 mondi" renderizzata', bento && bento.querySelectorAll('.bcard').length >= 12, bento ? bento.querySelectorAll('.bcard').length + ' card' : 'assente');
 check('categoria CON immagine mostra la foto', bento && bento.querySelector('.bcard--photo img.bimg') !== null);

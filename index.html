@@ -36,8 +36,12 @@
 <meta name="twitter:description" content="Creazioni personalizzate premium. Laser CO₂, fibra MOPA, UV, DTF e 3D — made in Italy.">
 <meta name="twitter:image" content="https://www.inglydesign.it/assets/images/og-image.jpg">
 
-<!-- Schema.org LocalBusiness (base — il seo.js aggiunge Product/FAQ/Breadcrumb per pagina) -->
-<script type="application/ld+json">
+<!-- Schema.org LocalBusiness (base).
+     Ha un id perché non deve MAI convivere con i blocchi più ricchi:
+     il prerender lo sostituisce nelle pagine statiche, e appena parte
+     l'applicazione seo.js lo rimuove prima di scrivere i propri.
+     Tre LocalBusiness sulla stessa pagina = entità in conflitto per Google. -->
+<script type="application/ld+json" id="ld-statico">
 {
   "@context":"https://schema.org",
   "@type":"LocalBusiness",
@@ -152,7 +156,35 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
 
 <!-- Dati: caricati dal data-loader (JSON con versioning; fallback data/*.js su file://) -->
 <script type="module" src="assets/js/app.js"></script>
-<script defer src="assets/js/app.fallback.js"></script>
+<!-- Bundle di riserva (87KB) per i browser che non conoscono i moduli ES.
+     Con «defer» veniva scaricato da tutti, anche da chi stava già usando i
+     moduli: quasi metà del JavaScript di ogni visita era peso morto.
+     Con «nomodule» lo prende solo chi ne ha davvero bisogno. -->
+<script nomodule defer src="assets/js/app.fallback.js"></script>
+<script>
+/* Rete di sicurezza per i browser moderni: «nomodule» li esclude dal bundle di
+   riserva, quindi se la catena dei moduli si rompe (è già successo: un errore
+   di sintassi in un modulo lasciò il sito bianco) non resterebbe nessuno a
+   disegnare la pagina. Qui aspettiamo il segnale di avvio e, se non arriva,
+   carichiamo il bundle a mano. Nel caso normale non costa un solo byte. */
+/* Il conto alla rovescia parte da qui, non dall'evento «load»: «load» aspetta
+   ogni risorsa esterna (i font, per dirne una) e se una non risponde non
+   arriva mai — proprio nel momento in cui la rete di sicurezza servirebbe. */
+setTimeout(function(){
+  if(window.__INGLY_PRONTO) return;                        /* tutto regolare */
+  if(document.documentElement.dataset.inglyBooted) return; /* già intervenuto */
+  console.warn('[INGLY] moduli non avviati: carico il bundle di riserva');
+  /* Il bundle si rifiuta di partire se vede questa bandierina alzata: la mette
+     app.js alla prima riga, prima ancora di sapere se ce la farà. Arrivati
+     qui sappiamo che non ce l'ha fatta, quindi la abbassiamo. */
+  window.__INGLY_ESM__ = false;
+  var b = document.querySelector('base');
+  var s = document.createElement('script');
+  s.src = b ? new URL('assets/js/app.fallback.js', b.href).href : 'assets/js/app.fallback.js';
+  s.defer = true;
+  document.head.appendChild(s);
+}, 7000);
+</script>
 </head>
 <body>
 <!-- MAINTENANCE MODE — controllato da data/config.json → maintenance.attivo -->
