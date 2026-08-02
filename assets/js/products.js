@@ -83,7 +83,9 @@ function stockBadge(x){
   if(x.stock===0)return `<span class="ptag" style="background:#dc2626;top:auto;bottom:8px">${L==='it'?'Esaurito':'Sold out'}</span>`;
   if(x.stock<=3)return `<span class="ptag y" style="top:auto;bottom:8px">${L==='it'?'Ultimi '+x.stock:'Only '+x.stock+' left'}</span>`;
   return '';}
-function card(x){const a=matArt(x.mat);
+/* esportata perché le pagine di settore mostrano gli stessi prodotti del
+   catalogo: una sola tessera, così restano identiche ovunque */
+export function card(x){const a=matArt(x.mat);
   return `<article class="pcard reveal in" data-action="open-product" data-id="${x.id}">
     <div class="pimg" style="background:${a.bg}">
       ${x.tag?`<span class="ptag ${x.tag==='Limited'?'y':x.tag==='B2B'?'b':''}">${x.tag}</span>`:''}

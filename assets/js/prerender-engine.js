@@ -141,9 +141,17 @@ export function componi(guscio, opt = {}){
 
 /* Elenco completo delle pagine da generare, con il percorso del file. */
 export function elenco(dati = {}, opt = {}){
-  const { prodotti = [], pagine = ['shop','digital','business','portfolio','about','faq','quote'] } = dati;
+  const { prodotti = [], verticali = [],
+          pagine = ['shop','digital','business','portfolio','about','faq','quote'] } = dati;
   const out = [{ file: 'index.html', pagina: 'home', id: null }];
   for(const pg of pagine) out.push({ file: pg + '/index.html', pagina: pg, id: null });
+  /* Le pagine di settore stanno SOTTO business (/business/ristoranti): sono un
+     approfondimento di quella sezione, non un ramo parallelo, e l'autorità
+     della sezione resta una sola. */
+  for(const v of verticali){
+    if(!v || v.attivo === false || !/^[a-z0-9-]+$/.test(String(v.id || ''))) continue;
+    out.push({ file: 'business/' + v.id + '/index.html', pagina: 'verticale', id: v.id });
+  }
   for(const p of prodotti.filter(x => !x.hidden)){
     out.push({ file: 'product/' + p.id + '/index.html', pagina: 'product', id: p.id });
   }

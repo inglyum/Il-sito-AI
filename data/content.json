@@ -3982,5 +3982,432 @@
     "attivo": true
    }
   ]
- }
+ },
+ "VERTICALI": [
+  {
+   "id": "ristoranti",
+   "attivo": true,
+   "icona": "🍽",
+   "n": {
+    "it": "Ristoranti, bar e locali",
+    "en": "Restaurants, bars and venues"
+   },
+   "titolo": {
+    "it": "Menu QR, targhe e insegne per il tuo locale",
+    "en": "QR menus, plaques and signage for your venue"
+   },
+   "sottotitolo": {
+    "it": "Menu digitali in plexiglass e legno, cartelli da tavolo, insegne e targhe orari — incisi a laser, resistenti a mani unte e panno umido.",
+    "en": "Plexiglass and wood QR menus, table stands, signage and opening-hours plaques — laser engraved, built for daily handling."
+   },
+   "intro": {
+    "it": "Un menu stampato si sporca, si strappa e va rifatto a ogni cambio di carta. Un supporto inciso resta: cambi il menu online, il QR resta lo stesso. Produciamo per locali di Cesena e in tutta Italia, dal singolo pezzo al set completo per la sala.",
+    "en": "A printed menu gets dirty, tears, and has to be reprinted at every change. An engraved holder stays: you update the menu online, the QR code stays the same. We produce for venues in Cesena and across Italy, from a single piece to a full set."
+   },
+   "prodotti": [
+    30,
+    11
+   ],
+   "categorie": [
+    "b2b"
+   ],
+   "servizi": [
+    {
+     "t": {
+      "it": "Menu QR da tavolo",
+      "en": "Table QR menus"
+     },
+     "d": {
+      "it": "Plexiglass o legno inciso, base stabile, formato A5 o su misura. Il QR punta al tuo menu online: lo aggiorni quando vuoi senza ristampare niente.",
+      "en": "Engraved plexiglass or wood, stable base, A5 or custom. The QR points to your online menu: update it anytime without reprinting."
+     }
+    },
+    {
+     "t": {
+      "it": "Targhe orari e avvisi",
+      "en": "Opening hours and notice plaques"
+     },
+     "d": {
+      "it": "Orari, wifi, allergeni, «riservato». Incisi, non stampati: non sbiadiscono e si puliscono con un panno.",
+      "en": "Hours, wifi, allergens, «reserved». Engraved, not printed: they do not fade and wipe clean."
+     }
+    },
+    {
+     "t": {
+      "it": "Insegne e logo del locale",
+      "en": "Signage and venue logo"
+     },
+     "d": {
+      "it": "Il tuo logo tagliato a laser in legno, plexi o metallo, per la parete o il bancone.",
+      "en": "Your logo laser cut in wood, plexi or metal, for the wall or the counter."
+     }
+    },
+    {
+     "t": {
+      "it": "Segnaposto e gadget per eventi",
+      "en": "Place cards and event items"
+     },
+     "d": {
+      "it": "Cene a tema, matrimoni in sala, serate private: segnaposto e numeri tavolo coordinati.",
+      "en": "Themed dinners, weddings, private events: matching place cards and table numbers."
+     }
+    }
+   ],
+   "faq": [
+    [
+     {
+      "it": "Quanto costa un set di menu QR per un locale?",
+      "en": "How much is a set of QR menus?"
+     },
+     {
+      "it": "Il set da 10 pezzi parte da €75, cioè €7,50 a menu. Sopra i 50 pezzi il prezzo scende: scrivici la quantità e ti mandiamo il preventivo entro 24 ore.",
+      "en": "A set of 10 starts at €75, i.e. €7.50 each. Above 50 pieces the price drops: tell us the quantity and we send a quote within 24 hours."
+     }
+    ],
+    [
+     {
+      "it": "Posso cambiare il menu senza rifare i supporti?",
+      "en": "Can I change the menu without remaking the holders?"
+     },
+     {
+      "it": "Sì, ed è il motivo per cui conviene. Il QR punta a un indirizzo tuo: cambi la pagina online e i supporti restano quelli. Li rifai solo se cambi logo o formato.",
+      "en": "Yes, and that is the point. The QR points to your own address: you change the online page and the holders stay. You only remake them if the logo or format changes."
+     }
+    ],
+    [
+     {
+      "it": "In quanto tempo consegnate?",
+      "en": "How long does it take?"
+     },
+     {
+      "it": "Tre-cinque giorni lavorativi per le quantità normali, più la spedizione. Per le urgenze abbiamo una corsia a 48 ore: dillo nel preventivo.",
+      "en": "Three to five working days for normal quantities, plus shipping. For urgent jobs we have a 48-hour lane: mention it in the quote."
+     }
+    ],
+    [
+     {
+      "it": "Fate fattura?",
+      "en": "Do you invoice?"
+     },
+     {
+      "it": "Sì, con fattura elettronica. Nel preventivo ti chiediamo ragione sociale e P.IVA o codice SDI.",
+      "en": "Yes, with electronic invoicing. In the quote form we ask for company name and VAT number."
+     }
+    ]
+   ]
+  },
+  {
+   "id": "uffici-studi",
+   "attivo": true,
+   "icona": "🏢",
+   "n": {
+    "it": "Uffici e studi professionali",
+    "en": "Offices and professional practices"
+   },
+   "titolo": {
+    "it": "Targhe e segnaletica per studi e uffici",
+    "en": "Plaques and signage for practices and offices"
+   },
+   "sottotitolo": {
+    "it": "Targhe da esterno per studi medici, legali e commercialisti, segnaletica interna e targhe porta — plexiglass, ottone, legno.",
+    "en": "Outdoor plaques for medical, legal and accounting practices, interior signage and door plates — plexiglass, brass, wood."
+   },
+   "intro": {
+    "it": "La targa è la prima cosa che un cliente legge di uno studio, e spesso l'unica prima di suonare. Incidiamo a laser su plexiglass, metallo e legno, con distanziali a muro inclusi. Dal pezzo singolo alla segnaletica completa di un piano.",
+    "en": "The plaque is the first thing a client reads, and often the only one before ringing the bell. We laser engrave on plexiglass, metal and wood, wall spacers included. From a single plate to the signage of a whole floor."
+   },
+   "prodotti": [
+    26
+   ],
+   "categorie": [
+    "b2b"
+   ],
+   "servizi": [
+    {
+     "t": {
+      "it": "Targhe da esterno",
+      "en": "Outdoor plaques"
+     },
+     "d": {
+      "it": "Plexiglass spessorato o ottone, incisione profonda che non si cancella, distanziali inclusi.",
+      "en": "Thick plexiglass or brass, deep engraving that does not wear off, spacers included."
+     }
+    },
+    {
+     "t": {
+      "it": "Targhe porta e segnaletica interna",
+      "en": "Door plates and interior signage"
+     },
+     "d": {
+      "it": "Nomi, numeri stanza, direzioni. Serie coordinate per tutto lo studio.",
+      "en": "Names, room numbers, directions. Matching sets for the whole practice."
+     }
+    },
+    {
+     "t": {
+      "it": "Timbri e cartelle personalizzate",
+      "en": "Stamps and branded folders"
+     },
+     "d": {
+      "it": "Timbri professionali e supporti con il logo dello studio.",
+      "en": "Professional stamps and holders with your practice logo."
+     }
+    },
+    {
+     "t": {
+      "it": "Regali per clienti e collaboratori",
+      "en": "Client and staff gifts"
+     },
+     "d": {
+      "it": "Penne incise, portachiavi, kit di benvenuto per i nuovi assunti.",
+      "en": "Engraved pens, keyrings, welcome kits for new hires."
+     }
+    }
+   ],
+   "faq": [
+    [
+     {
+      "it": "Che materiale conviene per una targa da esterno?",
+      "en": "Which material for an outdoor plaque?"
+     },
+     {
+      "it": "Plexiglass spessorato o ottone. Il legno è bello ma all'aperto va protetto e va rifatto prima. Se la targa sta sotto un portico il legno regge bene.",
+      "en": "Thick plexiglass or brass. Wood looks great but outdoors needs protection and ages faster. Under a porch, wood holds up well."
+     }
+    ],
+    [
+     {
+      "it": "Potete rifare una targa uguale a quella che ho già?",
+      "en": "Can you reproduce my existing plaque?"
+     },
+     {
+      "it": "Sì. Mandaci una foto ben dritta con un metro accanto per la scala, oppure le misure: ricostruiamo il file e ti mandiamo la prova grafica prima di incidere.",
+      "en": "Yes. Send a straight-on photo with a ruler for scale, or the measurements: we rebuild the file and send you a proof before engraving."
+     }
+    ],
+    [
+     {
+      "it": "Fate anche la posa?",
+      "en": "Do you install as well?"
+     },
+     {
+      "it": "Le targhe arrivano con distanziali e dima di foratura: si montano in dieci minuti. Su Cesena e dintorni possiamo occuparcene noi.",
+      "en": "Plaques come with spacers and a drilling template: ten minutes to fit. Around Cesena we can handle it ourselves."
+     }
+    ],
+    [
+     {
+      "it": "Quanto costa una targa professionale?",
+      "en": "How much is a professional plaque?"
+     },
+     {
+      "it": "Una targa da ufficio parte da €42. Il prezzo dipende da materiale, misura e numero di righe: mandaci il testo e ti diciamo subito.",
+      "en": "An office plaque starts at €42. Price depends on material, size and number of lines: send us the text and we tell you right away."
+     }
+    ]
+   ]
+  },
+  {
+   "id": "hotel",
+   "attivo": true,
+   "icona": "🏨",
+   "n": {
+    "it": "Hotel, B&B e strutture ricettive",
+    "en": "Hotels, B&Bs and hospitality"
+   },
+   "titolo": {
+    "it": "Numeri camera, cartellonistica e accoglienza",
+    "en": "Room numbers, signage and welcome items"
+   },
+   "sottotitolo": {
+    "it": "Numeri camera incisi, indicazioni di piano, cartelli servizi e oggetti di benvenuto coordinati — la stessa mano su tutta la struttura.",
+    "en": "Engraved room numbers, floor signs, service signage and matching welcome items — one consistent look across the property."
+   },
+   "intro": {
+    "it": "Un ospite giudica una struttura dai dettagli che tocca: la chiave, il numero sulla porta, il cartello del wifi. Produciamo serie coordinate per tutte le camere, con lo stesso materiale e lo stesso carattere, e le rifacciamo identiche quando ne serve una in più.",
+    "en": "A guest judges a property by the details they touch: the key fob, the door number, the wifi sign. We produce matching sets for every room, same material and typeface, and reproduce them identically when you need one more."
+   },
+   "prodotti": [],
+   "categorie": [
+    "b2b"
+   ],
+   "servizi": [
+    {
+     "t": {
+      "it": "Numeri camera e targhe porta",
+      "en": "Room numbers and door plates"
+     },
+     "d": {
+      "it": "Serie completa per tutte le camere, materiale e carattere uguali, biadesivo o viti.",
+      "en": "Full set for every room, same material and typeface, adhesive or screws."
+     }
+    },
+    {
+     "t": {
+      "it": "Cartellonistica e indicazioni",
+      "en": "Signage and wayfinding"
+     },
+     "d": {
+      "it": "Piani, uscite, colazione, spa, «non disturbare». Anche multilingua.",
+      "en": "Floors, exits, breakfast, spa, «do not disturb». Multilingual too."
+     }
+    },
+    {
+     "t": {
+      "it": "Portachiavi e accoglienza",
+      "en": "Key fobs and welcome items"
+     },
+     "d": {
+      "it": "Portachiavi incisi con numero e logo, cartoline di benvenuto, QR per il wifi.",
+      "en": "Engraved fobs with number and logo, welcome cards, wifi QR codes."
+     }
+    },
+    {
+     "t": {
+      "it": "Insegna e branding",
+      "en": "Signage and branding"
+     },
+     "d": {
+      "it": "Il logo della struttura tagliato a laser per reception e facciata.",
+      "en": "Your property logo laser cut for reception and façade."
+     }
+    }
+   ],
+   "faq": [
+    [
+     {
+      "it": "Potete fare una serie per tutte le camere?",
+      "en": "Can you produce a set for all rooms?"
+     },
+     {
+      "it": "Sì, ed è il caso più frequente. Ci mandi il numero di camere e il formato: produciamo tutto in una volta, così materiale e finitura sono identici.",
+      "en": "Yes, that is the most common case. Send us the number of rooms and the format: we produce it all in one run, so material and finish match exactly."
+     }
+    ],
+    [
+     {
+      "it": "Se si rompe un numero potete rifarlo uguale?",
+      "en": "If a number breaks, can you reproduce it?"
+     },
+     {
+      "it": "Sì. Teniamo il file del tuo ordine: ci scrivi il numero e te lo rifacciamo identico, anche a distanza di anni.",
+      "en": "Yes. We keep your order file: tell us the number and we remake it identically, even years later."
+     }
+    ],
+    [
+     {
+      "it": "Che sconto c'è sulle quantità?",
+      "en": "What volume discount is there?"
+     },
+     {
+      "it": "Cresce con i pezzi. Per una struttura da 30 camere in su il prezzo unitario cambia parecchio: mandaci il numero esatto nel preventivo.",
+      "en": "It grows with quantity. From 30 rooms up the unit price changes considerably: send us the exact number in the quote."
+     }
+    ]
+   ]
+  },
+  {
+   "id": "eventi-aziendali",
+   "attivo": true,
+   "icona": "🎯",
+   "n": {
+    "it": "Eventi e congressi aziendali",
+    "en": "Corporate events and conferences"
+   },
+   "titolo": {
+    "it": "Gadget, badge e premi per i tuoi eventi",
+    "en": "Gifts, badges and awards for your events"
+   },
+   "sottotitolo": {
+    "it": "Gadget con il logo, badge nominativi, targhe premio e kit di benvenuto — prodotti in serie, consegnati per la data.",
+    "en": "Logo gifts, name badges, award plaques and welcome kits — produced in series, delivered on time."
+   },
+   "intro": {
+    "it": "Un evento ha una data e non si sposta. Lavoriamo a ritroso da quella: definiamo il file, mandiamo la prova, produciamo e spediamo con margine. Dal singolo premio per il vincitore ai 500 kit di benvenuto.",
+    "en": "An event has a date and it does not move. We work backwards from it: define the file, send the proof, produce and ship with margin. From a single award to 500 welcome kits."
+   },
+   "prodotti": [
+    27,
+    29,
+    28
+   ],
+   "categorie": [
+    "b2b"
+   ],
+   "servizi": [
+    {
+     "t": {
+      "it": "Kit di benvenuto",
+      "en": "Welcome kits"
+     },
+     "d": {
+      "it": "Borraccia, penna, portachiavi e badge coordinati, confezionati singolarmente.",
+      "en": "Bottle, pen, keyring and badge matched and individually packed."
+     }
+    },
+    {
+     "t": {
+      "it": "Badge nominativi",
+      "en": "Name badges"
+     },
+     "d": {
+      "it": "Nome e ruolo incisi uno per uno, non stampati: ci mandi l'elenco in un foglio di calcolo.",
+      "en": "Name and role engraved one by one, not printed: send us the list in a spreadsheet."
+     }
+    },
+    {
+     "t": {
+      "it": "Targhe premio e riconoscimenti",
+      "en": "Award plaques"
+     },
+     "d": {
+      "it": "Vetro, plexiglass o legno, con incisione e base. Anche in copia unica.",
+      "en": "Glass, plexiglass or wood, engraved with a base. Single copies too."
+     }
+    },
+    {
+     "t": {
+      "it": "Segnaletica per lo stand",
+      "en": "Stand signage"
+     },
+     "d": {
+      "it": "Insegne, indicazioni e supporti per lo stand o la sala.",
+      "en": "Signs, wayfinding and holders for your stand or room."
+     }
+    }
+   ],
+   "faq": [
+    [
+     {
+      "it": "Riuscite a consegnare per una data precisa?",
+      "en": "Can you deliver by a specific date?"
+     },
+     {
+      "it": "Sì, ed è il motivo per cui chiediamo la data nel preventivo. Fissiamo a ritroso il giorno in cui ci serve il file approvato: se rientra, ci prendiamo l'impegno.",
+      "en": "Yes, that is why we ask for the date in the quote. We set backwards the day we need the approved file: if it fits, we commit to it."
+     }
+    ],
+    [
+     {
+      "it": "Da quanti pezzi partite?",
+      "en": "What is the minimum quantity?"
+     },
+     {
+      "it": "Non c'è un minimo rigido: facciamo anche il pezzo unico. Sotto i 20 pezzi però il costo di attrezzaggio pesa sul singolo, quindi conviene accorpare.",
+      "en": "There is no hard minimum: we do single pieces too. Below 20 pieces the setup cost weighs on each unit, so it pays to group orders."
+     }
+    ],
+    [
+     {
+      "it": "Potete usare il nostro font e i nostri colori?",
+      "en": "Can you use our font and colours?"
+     },
+     {
+      "it": "Sì. Mandaci il logo in vettoriale (SVG, PDF o AI) e le indicazioni di brand: prepariamo la prova grafica prima di produrre.",
+      "en": "Yes. Send the logo in vector format (SVG, PDF or AI) and your brand guidelines: we prepare a proof before production."
+     }
+    ]
+   ]
+  }
+ ]
 }

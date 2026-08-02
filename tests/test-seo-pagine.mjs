@@ -33,7 +33,8 @@ const conta = html => {
 };
 
 console.log('\n=== PAGINE STATICHE — una entità, una volta sola ===');
-const pagine = ['index.html', 'shop/index.html', 'faq/index.html', 'product/7/index.html'];
+const pagine = ['index.html', 'shop/index.html', 'faq/index.html', 'product/7/index.html',
+  'business/ristoranti/index.html'];
 for (const f of pagine) {
   if (!existsSync(f)) { check(f + ' generata', false, 'esegui node scripts/prerender.mjs'); continue }
   const html = readFileSync(f, 'utf8');
@@ -55,6 +56,25 @@ if (existsSync('product/7/index.html')) {
   check('il prodotto ha un\'offerta con prezzo', /"@type":"Offer"/.test(html) && /"priceCurrency"/.test(html));
   check('il titolo principale è nel codice HTML', /<h1>/.test(html));
   check('ha un canonico assoluto', /<link rel="canonical" href="https?:\/\/[^"]+\/product\/7\//.test(html));
+}
+
+console.log('\n=== PAGINE DI SETTORE — cosa legge un crawler ===');
+if (existsSync('business/ristoranti/index.html')) {
+  const html = readFileSync('business/ristoranti/index.html', 'utf8');
+  const n = conta(html);
+  check('dichiara il servizio offerto al settore', n.Service >= 1);
+  check('dichiara le domande del settore', n.FAQPage === 1);
+  check('dichiara il percorso Home › Business › Settore', n.BreadcrumbList === 1);
+  check('il titolo parla del settore, non del sito',
+    /<title>[^<]*Menu QR/i.test(html), (html.match(/<title>[^<]*<\/title>/) || [''])[0]);
+  check('il canonico è quello della pagina di settore',
+    /rel="canonical" href="https?:\/\/[^"]+\/business\/ristoranti"/.test(html));
+  /* il motivo per cui la pagina esiste: testo vero, non un guscio vuoto */
+  const corpo = (html.match(/<div id="prerender"[\s\S]*?<\/div>/) || [''])[0];
+  check('contiene testo leggibile, non un guscio vuoto',
+    corpo.replace(/<[^>]+>/g, ' ').trim().split(/\s+/).length > 150,
+    corpo.replace(/<[^>]+>/g, ' ').trim().split(/\s+/).length + ' parole');
+  check('collega i prodotti del catalogo', /href="[^"]*\/product\/\d+\/"/.test(corpo));
 }
 
 console.log('\n=== SITEMAP ===');

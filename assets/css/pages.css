@@ -157,3 +157,22 @@ body.on-product .stickybuy{transform:none}
 .stickybuy .btn{flex:1;justify-content:center;padding:13px 20px}
 @media(max-width:940px){.stickybuy{display:flex}}
 
+
+/* ================== PAGINE DI SETTORE (B2B) ================== */
+.vert-tit{font-family:var(--fd);font-size:clamp(1.3rem,2.6vw,1.75rem);font-weight:700;
+ letter-spacing:-.02em;margin:56px 0 18px}
+.vert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.vert-card{display:flex;flex-direction:column;gap:7px;padding:22px;border-radius:18px;
+ border:1px solid var(--line);background:var(--card-glass);transition:transform .5s var(--ease),border-color .3s}
+.vert-card:hover{transform:translateY(-5px);border-color:var(--blue)}
+.vert-ic{font-size:26px;line-height:1}
+.vert-card b{font-family:var(--fd);font-size:16.5px;line-height:1.25}
+.vert-sub{font-size:13.5px;color:var(--ink-soft);line-height:1.5}
+.vert-go{font-family:var(--fd);font-size:13.5px;font-weight:600;color:var(--blue);margin-top:4px}
+.vert-card:hover .arr{transform:translateX(4px);display:inline-block;transition:transform .35s var(--ease)}
+.vert-back{margin-bottom:20px}
+.vert-back a{font-family:var(--fd);font-size:14px;font-weight:600;color:var(--ink-soft)}
+.vert-back a:hover{color:var(--ink)}
+.vert-intro{max-width:62ch;color:var(--ink-soft);line-height:var(--lh-base);margin:18px 0 6px}
+#vertPage{padding-top:120px}
+#vertPage[hidden]{display:none}

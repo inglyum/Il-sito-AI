@@ -3,7 +3,7 @@
 const { CONFIG, D, SOCIALS, TECH, MATERIALS, STEPS, REVIEWS, BIZ, FAQS, PORT } = window.INGLY;
 import { $, T, L, setL, toast } from './utils.js';
 import * as u from './utils.js';
-import { initNav, show, go, goShop, toggleMenu, currentPage, currentSearch } from './navigation.js';
+import { initNav, show, go, goShop, toggleMenu, currentPage, currentSearch, currentVerticale } from './navigation.js';
 import { initAnimations, observeAll, refreshMagnets } from './animations.js';
 import * as prod from './products.js';
 import { renderUrg, initForms } from './forms.js';
@@ -12,6 +12,7 @@ import { initSeo, updateSeo } from './seo.js';
 import * as wish from './wishlist.js';
 import { initReferral, shareRef } from './referral.js';
 import { initShare, initFomo, openWhatsApp, renderInstagramFeed } from './social.js';
+import * as VERT from './verticali.js';
 
 /* ---- config → DOM ---- */
 function initHeroVideo(){
@@ -359,6 +360,69 @@ function renderAboutArt(){
   } /* tipo 'logo' o vuoto: resta il logo animato già nel markup */
 }
 function renderBiz(){$('bizCards').innerHTML=BIZ.map((b,i)=>`<div class="rcard reveal" style="transition-delay:${i*.06}s"><div style="font-size:30px">${b[0]}</div><h3 style="margin:14px 0 8px;font-size:20px">${b[1][L]}</h3><p style="font-size:14.5px;color:var(--ink-soft)">${b[2][L]}</p></div>`).join('')}
+/* ===== PAGINE DI SETTORE (B2B) =====
+   Una pagina per tipo di cliente aziendale. Il contenuto è lo stesso che il
+   prerender scrive nel file statico: chi arriva da Google legge subito, chi
+   naviga nel sito vede la versione viva. Una sola fonte, due modi di servirla. */
+const VERTICALI = () => VERT.attive((window.INGLY && window.INGLY.VERTICALI) || []);
+
+/* I testi dei settori li scrive una persona nell'Admin: vanno trattati come
+   testo, non come markup, o un apice storto diventa codice. */
+const escHtml = t => String(t == null ? '' : t)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+
+function renderVertStrip(){
+  const box=$('vertStrip'); if(!box) return;
+  const lista=VERTICALI();
+  if(!lista.length){ box.innerHTML=''; return }
+  box.innerHTML='<h3 class="vert-tit">'+(L==='it'?'Soluzioni per il tuo settore':'Solutions for your sector')+'</h3>'
+    +'<div class="vert-grid">'+lista.map(v=>{
+      const m=VERT.meta(v,{L});
+      return `<a class="vert-card reveal" href="/business/${v.id}" data-vert="${v.id}">
+        <span class="vert-ic" aria-hidden="true">${v.icona||'▸'}</span>
+        <b>${escHtml(VERT.lingua(v.n,L))}</b>
+        <span class="vert-sub">${VERT.lingua(v.sottotitolo,L).slice(0,95)}</span>
+        <span class="vert-go">${L==='it'?'Scopri':'Explore'} <i class="arr">→</i></span></a>`;
+    }).join('')+'</div>';
+}
+
+/* Disegna il settore aperto, oppure rimette la pagina Business generica. */
+function renderVerticale(id){
+  const pagina=$('vertPage'), hero=document.querySelector('#page-business .phero');
+  if(!pagina) return;
+  const v=id?VERT.perId(VERTICALI(),id):null;
+  if(!v){ pagina.hidden=true; pagina.innerHTML=''; if(hero) hero.hidden=false; return }
+
+  if(hero) hero.hidden=true;          /* il settore sostituisce la pagina generica */
+  pagina.hidden=false;
+  const P=(window.INGLY.P)||[];
+  const lista=VERT.prodottiDi(v,P,{L});
+  const e=escHtml;
+
+  pagina.innerHTML=`
+    <nav class="vert-back"><a href="/business" data-nav="business">← ${L==='it'?'Tutti i settori':'All sectors'}</a></nav>
+    <span class="eyebrow">${v.icona||''} ${e(VERT.lingua(v.n,L))}</span>
+    <h2 class="h2" style="font-size:clamp(2.2rem,5vw,3.6rem)">${e(VERT.lingua(v.titolo,L))}</h2>
+    <p class="sub">${e(VERT.lingua(v.sottotitolo,L))}</p>
+    ${VERT.lingua(v.intro,L)?`<p class="vert-intro">${e(VERT.lingua(v.intro,L))}</p>`:''}
+    <div class="hero-ctas">
+      <button class="btn btn-primary magnetic" data-action="go" data-arg="quote" data-search="tipo=azienda">
+        ${L==='it'?'Richiedi preventivo':'Request a quote'} <span class="arr">→</span></button>
+    </div>
+    ${(v.servizi||[]).length?`<div class="b2b-cards">${(v.servizi||[]).map((sv,i)=>
+      `<div class="rcard reveal" style="transition-delay:${i*.06}s">
+        <h3 style="margin:0 0 8px;font-size:19px">${e(VERT.lingua(sv.t,L))}</h3>
+        <p style="font-size:14.5px;color:var(--ink-soft)">${e(VERT.lingua(sv.d,L))}</p></div>`).join('')}</div>`:''}
+    ${lista.length?`<h3 class="vert-tit">${L==='it'?'Prodotti per questo settore':'Products for this sector'}</h3>
+      <div class="pgrid" id="vertProdotti">${lista.map(p=>prod.card(p)).join('')}</div>`:''}
+    ${(v.faq||[]).length?`<h3 class="vert-tit">${L==='it'?'Domande frequenti':'FAQ'}</h3>
+      ${(v.faq||[]).map(f=>`<details class="fitem reveal"><summary>${e(VERT.lingua(f[0],L))}<span class="pl" aria-hidden="true">+</span></summary>
+        <div class="fbody"><p>${e(VERT.lingua(f[1],L))}</p></div></details>`).join('')}`:''}
+  `;
+  observeAll(); refreshMagnets();
+}
+
 function renderFaq(){$('faqList').innerHTML=FAQS.map(f=>`<details class="fitem reveal"><summary>${f[0][L]}<span class="pl" aria-hidden="true">+</span></summary><div class="fbody"><p>${f[1][L]}</p></div></details>`).join('')}
 const MAT_ICON={Legno:'legno',Bamboo:'legno',MDF:'legno',Metallo:'metallo',Alluminio:'metallo',
   Plexiglass:'materiali',Acrilico:'materiali',Vetro:'materiali',Pelle:'materiali',PLA:'3d',Carta:'materiali',Tessuto:'dtf'};
@@ -390,7 +454,7 @@ function renderPort(){
   const g2=$('gal2'); if(g2) g2.style.display=conFoto?'':'none';
   $('portGrid').innerHTML=PORT.map(tile).join('')}
 
-function renderAll(){prod.applyThemeAccent();renderPromo();renderSponsors();renderWaFab();renderAboutArt();prod.renderHero();prod.renderCats();prod.renderColl();prod.renderChips();prod.renderShop();prod.renderPP();prod.renderDigital();renderTicker();renderTech();renderSteps();renderReviews();renderBiz();renderFaq();renderMat();renderPort();renderSocialHub();renderUrg();prod.renderCart();observeAll();refreshMagnets()}
+function renderAll(){prod.applyThemeAccent();renderPromo();renderSponsors();renderWaFab();renderAboutArt();prod.renderHero();prod.renderCats();prod.renderColl();prod.renderChips();prod.renderShop();prod.renderPP();prod.renderDigital();renderTicker();renderTech();renderSteps();renderReviews();renderBiz();renderVertStrip();renderVerticale(currentVerticale());renderFaq();renderMat();renderPort();renderSocialHub();renderUrg();prod.renderCart();observeAll();refreshMagnets()}
 
 /* ---- delega eventi (niente handler inline) ---- */
 const actions={
@@ -544,6 +608,12 @@ if(currentPage()==='product'){
   const pid=+currentSearch();
   if(pid && !prod.selectProduct(pid)) go('shop');   /* id inesistente → catalogo */
 }
+/* la pagina di settore si ridisegna a ogni cambio pagina: dipende
+   dall'indirizzo, non dai dati */
+document.addEventListener('ingly:pagina',e=>{
+  if(e.detail && e.detail.pagina==='business') renderVerticale(currentVerticale());
+});
+
 /* Il blocco pre-scritto ha fatto il suo lavoro (farsi leggere dai crawler):
    ora l'applicazione disegna la pagina vera e quel duplicato va tolto. */
 document.getElementById('prerender')?.remove();

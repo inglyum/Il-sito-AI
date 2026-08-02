@@ -16,6 +16,7 @@ import { join, dirname, resolve } from 'node:path';
 import * as P from '../assets/js/prerender-engine.js';
 import * as SCH from '../assets/js/schema-engine.js';
 import * as FAQ from '../assets/js/faq-engine.js';
+import * as VERT from '../assets/js/verticali.js';
 
 const ROOT = resolve(new URL('..', import.meta.url).pathname);
 const SOLO_VERIFICA = process.argv.includes('--check');
@@ -96,17 +97,44 @@ function paginaSito(pg){
   return P.componi(guscio, { titolo, descrizione:desc, canonico, contenuto, jsonld: SCH.grafo([...entitaBase, ...extra]) });
 }
 
-const lista = P.elenco({ prodotti });
+/* Pagina di settore: /business/ristoranti e simili.
+   Stesso guscio delle altre, contenuto e dati strutturati propri. È la pagina
+   che intercetta «menu qr personalizzato ristorante» — una ricerca che il
+   catalogo generico non può soddisfare, perché non parla quella lingua. */
+function paginaVerticale(v){
+  const canonico = VERT.indirizzo(v, base);
+  const { titolo, descrizione } = VERT.meta(v, { L, azienda, citta: S.citta || '' });
+  const contenuto = VERT.corpo(v, { L, base, prodotti, prezzo: P.prezzo });
+  const jsonld = SCH.grafo([
+    ...entitaBase,
+    ...VERT.schema(v, { L, base, azienda, idAzienda: SCH.ID.org }),
+    VERT.briciole(v, { L, base }),
+  ]);
+  return P.componi(guscio, { titolo, descrizione, canonico, contenuto, jsonld });
+}
+
+const verticali = contenuti.VERTICALI || [];
+const lista = P.elenco({ prodotti, verticali });
 let scritti = 0, problemi = [];
 
 /* la cartella si rigenera da zero: pagine di prodotti eliminati non devono
    sopravvivere e restare indicizzate */
 if(!SOLO_VERIFICA && existsSync(join(ROOT, 'product'))) await rm(join(ROOT, 'product'), { recursive: true, force: true });
+/* stesso motivo per i settori: uno spento o rinominato non deve sopravvivere
+   sul disco e restare indicizzato */
+if(!SOLO_VERIFICA){
+  for(const v of verticali){
+    const dir = join(ROOT, 'business', String(v && v.id || ''));
+    if(v && v.id && existsSync(dir)) await rm(dir, { recursive: true, force: true });
+  }
+}
 
 for(const voce of lista){
   if(voce.file === 'index.html') continue;      /* la home resta il guscio originale */
   const p = voce.id != null ? prodotti.find(x => x.id === voce.id) : null;
-  const html = voce.pagina === 'product' ? paginaProdotto(p) : paginaSito(voce.pagina);
+  const html = voce.pagina === 'product' ? paginaProdotto(p)
+             : voce.pagina === 'verticale' ? paginaVerticale(VERT.perId(verticali, voce.id))
+             : paginaSito(voce.pagina);
 
   if(!/<h1>/.test(html)) problemi.push(voce.file + ': manca il titolo principale');
   if(html.includes('<title></title>')) problemi.push(voce.file + ': titolo vuoto');

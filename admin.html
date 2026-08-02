@@ -541,6 +541,13 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
     <div class="card"><h3>🧱 Servizi Business <button class="btn sm sp" id="bizNew">➕ Aggiungi servizio</button></h3>
       <div id="bizList"></div>
     </div>
+
+    <div class="card" style="border:2px solid var(--accent)"><h3>🎯 Pagine di settore <span class="chip sp" id="vertCount"></span></h3>
+      <div class="hint" style="margin-bottom:12px">Una pagina per tipo di cliente aziendale — ristoranti, uffici, hotel, eventi.
+       Sono le pagine che intercettano le ricerche vere («menu qr personalizzato ristorante»), che il catalogo generico non può soddisfare.
+       Ognuna vive su <b class="mono">/business/&lt;nome&gt;</b> e pesca i prodotti dal catalogo: se un prodotto cambia nome o prezzo, cambia anche qui.</div>
+      <div id="vertList"></div>
+    </div>
   </section>
 
   <!-- ============ CONTATTI & SOCIAL ============ -->
@@ -1103,6 +1110,7 @@ function normalize(){
     perché poteva dichiarare varianti inesistenti (immagini rotte sul sito). */
  if(!S.C.MV||Array.isArray(S.C.MV)||typeof S.C.MV!=='object')S.C.MV={};
  if(!S.C.FOCAL||typeof S.C.FOCAL!=='object'||Array.isArray(S.C.FOCAL))S.C.FOCAL={};
+ S.C.VERTICALI=Array.isArray(S.C.VERTICALI)?S.C.VERTICALI:[];
  S.C.THEMES=S.C.THEMES||{attivo:'default',auto:true,temi:[]};
  S.C.SPONSORS=Object.assign({attivo:true,grigio:false,titolo:{it:'Partner & Sponsor',en:'Partners & Sponsors'},
   sottotitolo:{it:'',en:''},cta:{it:'',en:''},ctaLink:'#/contatti',lista:[]},S.C.SPONSORS||{});
@@ -2442,7 +2450,59 @@ function pickFromLibrary(cb){
 
 /* ================== SEZIONE BUSINESS ================== */
 const BIZ_KEYS=['bizEye','bizH2','bizSub','bizCta'];
-function renderBiz(){
+/* ================== PAGINE DI SETTORE ==================
+   Si modificano i testi e si scelgono i prodotti; l'indirizzo e la struttura
+   restano al loro posto. Un settore spento sparisce dal sito e dalla sitemap
+   alla prossima pubblicazione. */
+function renderVerticali(){
+ const box=$('vertList'); if(!box) return;
+ const lista=(S.C.VERTICALI=Array.isArray(S.C.VERTICALI)?S.C.VERTICALI:[]);
+ $('vertCount').textContent=lista.filter(v=>v.attivo!==false).length+' attive su '+lista.length;
+ if(!lista.length){ box.innerHTML='<div class="hint">Nessuna pagina di settore.</div>'; return }
+
+ box.innerHTML=lista.map((v,i)=>{
+  const prodotti=(v.prodotti||[]).map(id=>{
+    const p=(S.P||[]).find(x=>x.id===Number(id));
+    return p?('#'+p.id+' '+p.n.it.slice(0,34)):('#'+id+' (non esiste più)');
+  });
+  return `<div class="list-it" style="flex-direction:column;align-items:stretch;gap:10px">
+   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <span style="font-size:22px">${esc(v.icona||'▸')}</span>
+    <b style="flex:1;min-width:150px">${esc((v.n&&v.n.it)||v.id)}</b>
+    <span class="mono hint">/business/${esc(v.id)}</span>
+    <label style="display:flex;align-items:center;gap:6px;font-size:13px">
+      <input type="checkbox" data-vatt="${i}" ${v.attivo!==false?'checked':''} style="width:auto"> pubblicata</label>
+    <a class="btn sm" href="${esc(LIVE()+'business/'+v.id)}" target="_blank" rel="noopener">👁 Apri</a>
+   </div>
+   <div class="row c2">
+    <div><label>Titolo della pagina (IT)</label><input type="text" data-vt="${i},titolo,it" value="${esc((v.titolo&&v.titolo.it)||'')}"></div>
+    <div><label>Page title (EN)</label><input type="text" data-vt="${i},titolo,en" value="${esc((v.titolo&&v.titolo.en)||'')}"></div>
+   </div>
+   <div class="row c2">
+    <div><label>Sottotitolo (IT)</label><textarea rows="2" data-vt="${i},sottotitolo,it">${esc((v.sottotitolo&&v.sottotitolo.it)||'')}</textarea></div>
+    <div><label>Subtitle (EN)</label><textarea rows="2" data-vt="${i},sottotitolo,en">${esc((v.sottotitolo&&v.sottotitolo.en)||'')}</textarea></div>
+   </div>
+   <div><label>Prodotti in evidenza (numeri separati da virgola — gli altri arrivano dalle categorie)</label>
+    <input type="text" data-vp="${i}" value="${esc((v.prodotti||[]).join(', '))}" placeholder="30, 11">
+    <div class="hint" style="margin-top:4px">${prodotti.length?esc(prodotti.join(' · ')):'nessuno scelto a mano'}
+     · categorie collegate: <b>${esc((v.categorie||[]).join(', ')||'nessuna')}</b>
+     · <b>${(function(){try{return window.VERTICALI_MOD?window.VERTICALI_MOD.prodottiDi(v,S.P||[]).length:'—'}catch(e){return '—'}})()}</b> prodotti mostrati</div>
+   </div>
+   <div class="hint">${(v.servizi||[]).length} servizi · ${(v.faq||[]).length} domande frequenti — si modificano da «Avanzate → VERTICALI»</div>
+  </div>`;
+ }).join('');
+
+ box.querySelectorAll('[data-vatt]').forEach(c=>c.onchange=()=>{
+   lista[+c.dataset.vatt].attivo=c.checked; markDirty(); renderVerticali() });
+ box.querySelectorAll('[data-vt]').forEach(el=>el.oninput=()=>{
+   const[i,campo,lang]=el.dataset.vt.split(',');
+   const v=lista[+i]; v[campo]=v[campo]||{}; v[campo][lang]=el.value; markDirty() });
+ box.querySelectorAll('[data-vp]').forEach(el=>el.oninput=()=>{
+   lista[+el.dataset.vp].prodotti=el.value.split(',').map(x=>+x.trim()).filter(Boolean);
+   markDirty() });
+}
+
+function renderBiz(){renderVerticali();
  $('bizTexts').innerHTML=BIZ_KEYS.filter(k=>S.D.it[k]!==undefined).map(k=>
   `<div class="row c2"><div><label>${esc(k)} — Italiano</label><textarea data-bk="it,${k}" style="min-height:44px">${esc(S.D.it[k])}</textarea></div>
    <div><label>${esc(k)} — English</label><textarea data-bk="en,${k}" style="min-height:44px">${esc(S.D.en[k]||'')}</textarea></div></div>`).join('')
@@ -3933,6 +3993,8 @@ $('seoAiGen').onclick=async()=>{
   window.MEDIA_DEST = MD;   /* «MD» è già usato nell'Admin per le date */
   import * as AB from './assets/js/admin/abbina-foto.js';
   window.ABBINA = AB;       /* abbinamento automatico foto → prodotto */
+  import * as VE from './assets/js/verticali.js';
+  window.VERTICALI_MOD = VE;   /* conteggio prodotti delle pagine di settore */
 </script>
 </body>
 </html>

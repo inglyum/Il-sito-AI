@@ -35,6 +35,14 @@ export function currentPage(){
   return PAGES.includes(p)?p:'home';
 }
 
+/* Settore aziendale nell'indirizzo: /business/ristoranti → 'ristoranti'.
+   Sta sotto /business perché è un approfondimento di quella pagina: il router
+   mostra la pagina Business, che poi si riempie con il settore giusto. */
+export function currentVerticale(){
+  const seg=relPath().split('?')[0].split('/').filter(Boolean);
+  return (seg[0]==='business' && seg[1] && /^[a-z0-9-]+$/.test(seg[1])) ? seg[1] : null;
+}
+
 /* Estrai ?id=xxx dal pathname o dalla query string */
 export function currentSearch(){
   /* Indirizzo a percorso: /product/7/ — è un file vero su disco, quindi
@@ -66,6 +74,9 @@ export function show(page){
     window.scrollTo({top:0,behavior:'instant'});
     if(page==='shop')renderRV();
     updateSeo(page,L,T,page==='product'?currentProduct():null);
+    /* Avviso, non chiamata diretta: main.js importa questo modulo, quindi
+       importarlo di ritorno creerebbe un anello. */
+    document.dispatchEvent(new CustomEvent('ingly:pagina',{detail:{pagina:page}}));
     observeAll();
   };
 
@@ -101,7 +112,20 @@ export function initNav(){
     const href=a.getAttribute('href');
     if(!href||href.startsWith('http')||href.startsWith('mailto')||href.startsWith('tel')||href.startsWith('wa.'))return;
     const clean=href.replace(/^#\//,'/').replace(/^#/,'/');
-    const page=clean.replace(/^\/+/,'').split('?')[0]||'home';
+    const percorso=clean.replace(/^\/+/,'').split('?')[0]||'home';
+    /* /business/ristoranti è una pagina di settore e resta dentro la sezione
+       Business. Senza questo ramo il collegamento ricarica tutto il sito da
+       capo: funziona — il file statico esiste — ma è un secondo di attesa e
+       uno sfarfallio per niente. */
+    const seg=percorso.split('/');
+    if(seg[0]==='business' && seg[1] && /^[a-z0-9-]+$/.test(seg[1])){
+      e.preventDefault();
+      const dest=BASE+seg[0]+'/'+seg[1];
+      if(location.pathname.replace(/\/$/,'')!==dest.replace(/\/$/,'')) history.pushState({page:'business'},'',dest);
+      show('business');
+      return;
+    }
+    const page=seg[0]||'home';
     if(!PAGES.includes(page))return;
     e.preventDefault();
     go(page,clean.includes('?')?clean.split('?')[1]:null);

@@ -25,6 +25,7 @@ const SOLO_VERIFICA = process.argv.includes('--verifica');
 
 const config   = JSON.parse(readFileSync(join(ROOT,'data/config.json'),'utf8'));
 const prodotti = JSON.parse(readFileSync(join(ROOT,'data/products.json'),'utf8'));
+const contenuti = JSON.parse(readFileSync(join(ROOT,'data/content.json'),'utf8'));
 
 const BASE = ((config.seo && config.seo.dominio) || 'https://www.inglydesign.it').replace(/\/+$/,'');
 const OGGI = new Date().toISOString().slice(0,10);
@@ -34,6 +35,7 @@ const OGGI = new Date().toISOString().slice(0,10);
    sprechi passaggi sulle pagine ferme. */
 const REGOLE = {
   home:      ['weekly',  '1.0'],
+  verticale: ['monthly', '0.8'],
   shop:      ['weekly',  '0.9'],
   digital:   ['weekly',  '0.8'],
   business:  ['monthly', '0.8'],
@@ -60,7 +62,7 @@ const modificata = file => {
   return existsSync(f) ? statSync(f).mtime.toISOString().slice(0,10) : OGGI;
 };
 
-const pagine = PRE.elenco({ prodotti });
+const pagine = PRE.elenco({ prodotti, verticali: contenuti.VERTICALI || [] });
 const mancanti = [];
 const righe = [];
 

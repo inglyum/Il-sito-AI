@@ -5,6 +5,7 @@
 import * as ENG from './seo-engine.js';
 import * as SCH from './schema-engine.js';
 import * as FAQ from './faq-engine.js';
+import * as VERT from './verticali.js';
 const { CONFIG } = window.INGLY;
 const S = CONFIG.seo || {};
 const base = () => (S.dominio || location.origin).replace(/\/+$/,'');
@@ -59,6 +60,19 @@ export function updateSeo(page, L, T, product){
     portfolio:T('portH2'), about:T('abH2'), faq:T('faqH2'), quote:T('qH2')
   };
   const isProd = page==='product' && product;
+  /* Pagina di settore aperta? Si legge dall'indirizzo invece di importare il
+     router: seo.js è già importato DA navigation.js, e chiudere l'anello
+     spezzerebbe il caricamento dei moduli.
+     Senza questo blocco la pagina statica nasceva col titolo giusto e
+     l'applicazione, appena partita, lo sostituiva con quello generico di
+     Business — buttando via il motivo per cui la pagina esiste. */
+  const vert = (() => {
+    if(page!=='business') return null;
+    const seg=location.pathname.split('?')[0].split('/').filter(Boolean);
+    const i=seg.indexOf('business');
+    const id=i>=0 ? seg[i+1] : null;
+    return id ? VERT.perId((window.INGLY.VERTICALI)||[], id) : null;
+  })();
   const azienda = S.azienda||'INGLY DESIGN';
 
   /* Title e description passano dal SEO Engine: nascono da modelli modificabili
@@ -66,7 +80,10 @@ export function updateSeo(page, L, T, product){
      schema fisso. Se un prodotto ha un titolo scritto a mano (p.seoTitolo)
      quello vince sempre: il modello è un buon default, non una gabbia. */
   let title, desc;
-  if(isProd){
+  if(vert){
+    const m=VERT.meta(vert,{L,azienda,citta:S.citta||''});
+    title=m.titolo; desc=m.descrizione;
+  } else if(isProd){
     const cat=(window.INGLY.CATS||[]).find(c=>c.id===product.cat);
     const MATN=window.INGLY.MATN||{};
     const ctx={ L, azienda, citta:S.citta||'',
@@ -91,6 +108,7 @@ export function updateSeo(page, L, T, product){
      rispecchiarli, e per il prodotto includere l'id, altrimenti tutte le schede
      dichiarano lo stesso canonico e Google ne indicizza una sola. */
   const url = page==='home' ? base()+'/'
+            : vert          ? VERT.indirizzo(vert, base())
             : isProd        ? base()+'/product/'+product.id+'/'
             :                 base()+'/'+page;
   const img = isProd ? abs((CONFIG.cartellaImmagini||'img/')+product.id+'.webp') : abs(S.immagineSocial||'assets/images/og-image.jpg');
@@ -154,6 +172,16 @@ export function updateSeo(page, L, T, product){
   } else {
     ['ld-product','ld-crumbs','ld-pfaq'].forEach(id=>{const s=document.getElementById(id);if(s)s.remove()});
   }
+
+  /* Settore: servizio offerto, domande del settore e briciole di pane.
+     Gli stessi dati che la pagina statica porta già scritti: qui vengono
+     riscritti perché il grafo statico è stato rimosso all'avvio. */
+  if(vert){
+    jsonld('ld-vert', SCH.grafo([
+      ...VERT.schema(vert,{L,base:base(),azienda,idAzienda:SCH.ID.org}),
+      VERT.briciole(vert,{L,base:base()}),
+    ]));
+  } else { const s2=document.getElementById('ld-vert'); if(s2) s2.remove(); }
 
   /* Il catalogo come CollectionPage, non come semplice elenco: dichiara che è
      una pagina del sito che parla dell'azienda, e i due riferimenti @id lo

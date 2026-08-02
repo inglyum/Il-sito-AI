@@ -495,7 +495,13 @@ setTimeout(function(){
     <div class="hero-ctas"><button class="btn btn-primary magnetic" data-action="go" data-arg="quote" data-search="tipo=azienda"><span data-i18n="bizCta1">Richiedi preventivo</span> <span class="arr">→</span></button><button class="btn btn-ghost magnetic" data-action="go" data-arg="quote" data-search="tipo=azienda" data-i18n="bizCta2">Richiedi il catalogo</button></div>
     <div class="logo-strip">TRENTO SPA · VELLUTO · FORNARI GROUP · ADRIATICA · NOVA TECH · CASA MIA</div>
     <div class="b2b-cards" id="bizCards"></div>
+    <!-- Le pagine di settore: elenco qui, contenuto pieno su /business/<id>.
+         Stanno sotto Business e non in un ramo separato, così l'autorità
+         della sezione resta una sola. -->
+    <div class="vert-strip" id="vertStrip"></div>
   </div>
+  <!-- riempita quando l'indirizzo è /business/<settore> -->
+  <div class="wrap" id="vertPage" hidden></div>
 </section>
 
 <!-- PORTFOLIO -->
