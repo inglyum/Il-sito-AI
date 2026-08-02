@@ -44,7 +44,8 @@
  },
  "moduli": {
   "formspreePreventivo": "",
-  "formspreeNewsletter": ""
+  "formspreeNewsletter": "",
+  "formspreePreventivoB2B": ""
  },
  "whatsappFab": {
   "attivo": true,

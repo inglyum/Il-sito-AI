@@ -1099,3 +1099,21 @@ behold-widget{display:block;min-height:240px}
 .cfg-chip{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:99px;border:1.5px solid var(--line);background:var(--bg-card);color:var(--ink);font-size:13px;font-weight:500;cursor:pointer;transition:border-color .2s,background .2s,transform .15s;white-space:nowrap}
 .cfg-chip:hover{border-color:var(--accent);transform:translateY(-1px)}
 .cfg-chip.on{border-color:var(--accent);background:rgba(245,217,78,.08);color:var(--ink)}
+
+/* ================== PREVENTIVO: privato o azienda ==================
+   Due tipi di richiesta molto diversi nello stesso modulo. I campi che non
+   servono non vengono nascosti con display:none e basta: sono anche tolti
+   dall'invio e dalla tabulazione, così nessuno finisce a compilare al buio un
+   campo invisibile e la mail non arriva con voci vuote di cui non importa. */
+.qmode{display:inline-flex;gap:4px;padding:4px;margin:0 0 22px;border-radius:100px;
+ border:1px solid var(--line);background:var(--gray)}
+.qmode-b{font-family:var(--fd);font-size:14.5px;font-weight:600;padding:10px 22px;border-radius:100px;
+ border:0;background:transparent;color:var(--ink-soft);cursor:pointer;transition:background .25s,color .25s}
+.qmode-b.on{background:var(--blue);color:#fff}
+.qmode-b:not(.on):hover{color:var(--ink)}
+/* di base il modulo è per i privati */
+.quote-form .q-az{display:none}
+.quote-form[data-modo="azienda"] .q-az{display:block}
+.quote-form[data-modo="azienda"] .q-priv{display:none}
+.quote-form small.hint{display:block;margin-top:5px;font-size:var(--fs-xs);color:var(--ink-soft);line-height:1.45}
+@media(max-width:640px){ .qmode{width:100%} .qmode-b{flex:1;padding:10px 12px} }

@@ -498,7 +498,8 @@ setTimeout(function(){
     <span class="eyebrow"><svg class="ic-svg" aria-hidden="true"><use href="assets/icons/ingly-icons.svg#ic-b2b"></use></svg> Ingly Business</span>
     <h2 class="h2" style="font-size:clamp(2.6rem,6vw,4.4rem)" data-i18n="bizH2">Il tuo brand,<br>marcato <span class="hl on">per sempre.</span></h2>
     <p class="sub" data-i18n="bizSub">Gadget aziendali, targhe professionali, produzione conto terzi, incisioni industriali e prototipazione laser — da 50 a 50.000 pezzi.</p>
-    <div class="hero-ctas"><button class="btn btn-primary magnetic" data-action="go" data-arg="quote"><span data-i18n="bizCta1">Richiedi preventivo</span> <span class="arr">→</span></button><button class="btn btn-ghost magnetic" data-action="go" data-arg="quote" data-i18n="bizCta2">Richiedi il catalogo</button></div>
+    <!-- chi arriva da qui è un'azienda: il modulo si apre già nella sua forma -->
+    <div class="hero-ctas"><button class="btn btn-primary magnetic" data-action="go" data-arg="quote" data-search="tipo=azienda"><span data-i18n="bizCta1">Richiedi preventivo</span> <span class="arr">→</span></button><button class="btn btn-ghost magnetic" data-action="go" data-arg="quote" data-search="tipo=azienda" data-i18n="bizCta2">Richiedi il catalogo</button></div>
     <div class="logo-strip">TRENTO SPA · VELLUTO · FORNARI GROUP · ADRIATICA · NOVA TECH · CASA MIA</div>
     <div class="b2b-cards" id="bizCards"></div>
   </div>
@@ -557,14 +558,37 @@ setTimeout(function(){
     <span class="eyebrow"><svg class="ic-svg" aria-hidden="true"><use href="assets/icons/ingly-icons.svg#ic-custom"></use></svg> <span data-i18n="qEye">Custom su richiesta</span></span>
     <h2 class="h2" data-i18n="qH2">Se lo immagini,<br>lo <span class="hl on">incidiamo.</span></h2>
     <p class="sub" data-i18n="qSub">Prodotti su misura, incisione su oggetti tuoi, progettazione 3D, prototipazione laser. Raccontaci il progetto: preventivo entro 24 ore.</p>
-    <form class="quote-form">
+    <!-- Chi sta chiedendo: da questa scelta dipendono i campi mostrati e la
+         casella dove arriva la richiesta. Un ristorante e un privato non
+         chiedono la stessa cosa e non vanno gestiti dalla stessa coda. -->
+    <div class="qmode" role="tablist" aria-label="Tipo di richiesta">
+      <button type="button" class="qmode-b on" data-qmode="privato" role="tab" aria-selected="true"
+        data-i18n="qModoPriv">Sono un privato</button>
+      <button type="button" class="qmode-b" data-qmode="azienda" role="tab" aria-selected="false"
+        data-i18n="qModoAz">Sono un'azienda</button>
+    </div>
+    <form class="quote-form" data-modo="privato">
+      <input type="hidden" name="tipoRichiesta" id="qTipo" value="Privato">
       <div><label for="cn" data-i18n="qfN">Nome</label><input class="txtin" name="nome" id="cn" required placeholder="Anna Bianchi"></div>
       <div><label for="ce">Email</label><input class="txtin" name="email" id="ce" type="email" required placeholder="anna@email.it"></div>
-      <div><label for="cf" data-i18n="qfF">Carica foto / oggetto</label><div class="upload" data-action="fake-upload" data-done="foto.jpg" data-t="⬆ JPG, PNG — max 10MB">⬆ JPG, PNG — max 10MB</div></div>
-      <div><label for="cl" data-i18n="qfL">Carica logo / grafica</label><div class="upload" data-action="fake-upload" data-done="logo.svg" data-t="⬆ SVG, PDF, AI, PNG">⬆ SVG, PDF, AI, PNG</div></div>
+
+      <!-- ===== solo per le aziende ===== -->
+      <div class="q-az"><label for="cri" data-i18n="qfRag">Ragione sociale</label>
+        <input class="txtin" name="ragioneSociale" id="cri" placeholder="Trattoria da Mario S.r.l."></div>
+      <div class="q-az"><label for="cpi" data-i18n="qfPiva">P.IVA o Codice SDI</label>
+        <input class="txtin" name="partitaIva" id="cpi" placeholder="IT01234567890"></div>
+      <div class="q-az"><label for="cq" data-i18n="qfQta">Quantità indicativa</label>
+        <input class="txtin" name="quantita" id="cq" type="number" min="1" step="1" placeholder="50"></div>
+      <div class="q-az"><label for="cdt" data-i18n="qfCons">Ti serve entro</label>
+        <input class="txtin" name="consegna" id="cdt" type="date"></div>
+
+      <div><label for="cl" data-i18n="qfL">Link al logo o alla grafica</label>
+        <input class="txtin" name="linkGrafica" id="cl" type="url" data-ph="qfLPh"
+          placeholder="https://drive.google.com/… (Drive, WeTransfer, Dropbox)">
+        <small class="hint" data-i18n="qfLNota">Se preferisci mandarcelo a mano, scrivici su WhatsApp dopo l'invio.</small></div>
       <div class="full"><label for="cd" data-i18n="qfD">Descrizione del progetto</label><textarea class="txtin" name="descrizione" id="cd" required name="descrizione" data-ph="qfDPh" placeholder="Cosa vuoi realizzare? Dimensioni, quantità, occasione…"></textarea></div>
       <div><label data-i18n="qfM">Materiale desiderato</label><select class="txtin" name="materiale" id="cm"><option>Legno</option><option>Plexiglass</option><option>Metallo</option><option>Pelle</option><option>Vetro</option><option>Bamboo</option><option>MDF</option><option>PLA/PETG (3D)</option><option data-i18n="qfM2">Consigliatemi voi</option></select></div>
-      <div><label data-i18n="qfB">Budget indicativo</label><select class="txtin" name="budget" id="cb"><option>&lt; €50</option><option>€50–150</option><option>€150–500</option><option>€500–2.000</option><option>€2.000+</option></select></div>
+      <div class="q-priv"><label data-i18n="qfB">Budget indicativo</label><select class="txtin" name="budget" id="cb"><option>&lt; €50</option><option>€50–150</option><option>€150–500</option><option>€500–2.000</option><option>€2.000+</option></select></div>
       <div class="full"><label data-i18n="qfU">Urgenza</label><div class="pillrow" id="urgRow"></div></div>
       <div class="full"><button class="btn btn-primary magnetic btn--block" type="submit"><span data-i18n="qfSend">Invia richiesta</span> <span class="arr">→</span></button></div>
     </form>

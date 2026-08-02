@@ -553,7 +553,9 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
       <label>Copyright</label><input type="text" data-b="CONFIG.copyright">
       <label>Riga legale</label><input type="text" data-b="CONFIG.legale">
       <div class="row c2" style="margin-top:4px">
-        <div><label>Formspree preventivi (endpoint)</label><input type="text" data-b="CONFIG.moduli.formspreePreventivo"></div>
+        <div><label>Formspree preventivi — privati</label><input type="text" data-b="CONFIG.moduli.formspreePreventivo"></div>
+        <div><label>Formspree preventivi — aziende</label><input type="text" data-b="CONFIG.moduli.formspreePreventivoB2B" placeholder="lascia vuoto per usare la casella dei privati">
+         <div class="hint" style="margin-top:4px">Le richieste aziendali (ragione sociale, P.IVA, quantità) hanno tempi e priorità diversi: una casella loro evita che finiscano in mezzo alle altre. Vuoto = arrivano insieme ai privati.</div></div>
         <div><label>Formspree newsletter (endpoint)</label><input type="text" data-b="CONFIG.moduli.formspreeNewsletter"></div>
       </div>
     </div>
@@ -1113,6 +1115,7 @@ function normalize(){
  S.CONFIG.aboutMedia=S.CONFIG.aboutMedia||{tipo:'logo',src:''};
  S.CONFIG.slogan=Object.assign({it:'',en:''},S.CONFIG.slogan||{});
  S.CONFIG.analytics=Object.assign({cloudflare:''},S.CONFIG.analytics||{});
+ S.CONFIG.moduli=Object.assign({formspreePreventivo:'',formspreeNewsletter:'',formspreePreventivoB2B:''},S.CONFIG.moduli||{});
  /* Popup: ogni campo deve esistere prima che il pannello lo legga, altrimenti
     un config vecchio apre una scheda piena di caselle rotte. */
  S.CONFIG.exitPopup=Object.assign({attivo:false,mostraSoloUnaVolta:true,emoji:'🎁',
@@ -1374,6 +1377,12 @@ function renderBloccanti(){
  if(!String(moduli.formspreeNewsletter||'').trim())
    v.push({g:'medio', t:'La newsletter non è collegata',
      d:'Le iscrizioni vengono scartate.', b:'Collega', go:'contacts'});
+ /* le richieste aziendali valgono di più delle altre: se finiscono nella coda
+    dei privati si perdono in mezzo, e sono quelle da richiamare per prime */
+ if(String(moduli.formspreePreventivo||'').trim() && !String(moduli.formspreePreventivoB2B||'').trim())
+   v.push({g:'medio', t:'Le richieste aziendali arrivano insieme a quelle dei privati',
+     d:'Ragione sociale, P.IVA e quantità finiscono nella stessa casella di tutto il resto: le richieste che valgono di più sono le più facili da perdere.',
+     b:'Separa', go:'contacts'});
 
  /* 2. un prodotto in vetrina senza foto non vende e non entra nei feed */
  if(senzaFoto.length)

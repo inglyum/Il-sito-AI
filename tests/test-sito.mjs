@@ -489,6 +489,46 @@ check('ogni tecnologia mostra il suo simbolo',
 // fallback: categoria senza icon deve tornare all'emoji
 check('fallback emoji per icone non definite', bento && bento.querySelectorAll('.ic .ic-emoji').length >= 0);
 
+console.log('\n=== PREVENTIVO: privato o azienda ===');
+await vaiA('quote');
+const modulo = doc.querySelector('.quote-form');
+check('il modulo esiste', !!modulo);
+check('si può dichiarare di essere un\'azienda', doc.querySelectorAll('[data-qmode]').length === 2);
+check('di base è impostato sul privato', modulo.dataset.modo === 'privato');
+const campo = n => modulo.querySelector('[name="' + n + '"]');
+check('esistono i campi che servono a un\'azienda',
+  !!campo('ragioneSociale') && !!campo('partitaIva') && !!campo('quantita') && !!campo('consegna'));
+/* Un campo nascosto con display:none finisce comunque nel FormData e arriva
+   vuoto nella mail, ed è raggiungibile con il tasto Tab: va disattivato. */
+check('da privato i campi aziendali sono disattivati, non solo nascosti',
+  campo('ragioneSociale').disabled && campo('partitaIva').disabled);
+check('da privato la ragione sociale non è obbligatoria', !campo('ragioneSociale').required);
+
+doc.querySelector('[data-qmode="azienda"]').click();
+await wait(150);
+check('passando ad azienda i suoi campi si attivano',
+  modulo.dataset.modo === 'azienda' && !campo('ragioneSociale').disabled);
+check('da azienda la ragione sociale diventa obbligatoria', campo('ragioneSociale').required);
+check('da azienda il budget dei privati sparisce dall\'invio', campo('budget').disabled);
+check('la richiesta dichiara di chi è', modulo.querySelector('#qTipo').value === 'Azienda');
+/* il logo si manda con un link: gli allegati su modulo statico non sono
+   affidabili, e un caricamento finto è peggio di nessun caricamento */
+check('c\'è un modo reale per farci avere il logo', !!campo('linkGrafica'));
+check('nessun caricamento finto è rimasto nel modulo',
+  modulo.querySelectorAll('[data-action="fake-upload"]').length === 0);
+
+doc.querySelector('[data-qmode="privato"]').click();
+await wait(150);
+check('tornando a privato i campi aziendali si disattivano di nuovo',
+  modulo.dataset.modo === 'privato' && campo('ragioneSociale').disabled);
+
+/* chi arriva dalla pagina Business è un'azienda: il modulo deve saperlo */
+const ctaBiz = doc.querySelector('#page-business [data-search="tipo=azienda"]');
+check('i pulsanti della pagina Business puntano al modulo aziendale', !!ctaBiz);
+if(ctaBiz){ ctaBiz.click(); await wait(250);
+  check('arrivando da Business il modulo si apre già come azienda',
+    modulo.dataset.modo === 'azienda', modulo.dataset.modo); }
+
 console.log(`\n=========== SITO: ${pass} passati, ${fail} falliti ===========`);
 if (errors.length) errors.slice(0, 5).forEach(e => console.log(' - ' + e.slice(0, 180)));
 process.exit(fail ? 1 : 0);

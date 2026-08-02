@@ -394,7 +394,9 @@ function renderAll(){prod.applyThemeAccent();renderPromo();renderSponsors();rend
 
 /* ---- delega eventi (niente handler inline) ---- */
 const actions={
-  'go':el=>go(el.dataset.arg),
+  /* data-search porta con sé una query: «go quote» + «tipo=azienda» apre il
+     preventivo già nella forma aziendale, senza una seconda pagina da mantenere */
+  'go':el=>go(el.dataset.arg, el.dataset.search||null),
   'go-shop':el=>goShop(el.dataset.arg),
   'open-product':el=>prod.openProduct(+el.dataset.id),
   'wish':(el,e)=>{e.stopPropagation();wish.toggleWishItem(+el.dataset.id,el)},

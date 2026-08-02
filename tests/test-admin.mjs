@@ -450,6 +450,18 @@ check('il pulsante apre davvero la sezione giusta',
   win.getComputedStyle(doc.getElementById('v-' + primoGo)).display !== 'none',
   primoGo);
 
+console.log('\n=== Casella dedicata alle richieste aziendali ===');
+doc.querySelector('.nit[data-go="contacts"]').click(); await wait(400);
+const b2b = doc.querySelector('[data-b="CONFIG.moduli.formspreePreventivoB2B"]');
+check('campo per la casella aziendale presente', !!b2b);
+check('campo dei privati ancora al suo posto',
+  !!doc.querySelector('[data-b="CONFIG.moduli.formspreePreventivo"]'));
+/* finché la casella dei privati non è collegata, il cruscotto ha una
+   segnalazione più grave da fare: quella aziendale non deve rubarle il posto */
+doc.querySelector('.nit[data-go="dash"]').click(); await wait(400);
+check('senza modulo privati il cruscotto segnala prima quello',
+  /modulo preventivi/i.test(($('dashBloccanti').querySelector('.list-it')||{}).textContent||''));
+
 console.log('\n=== Statistiche di visita ===');
 doc.querySelector('.nit[data-go="set"]').click(); await wait(400);
 const tokCf = doc.querySelector('[data-b="CONFIG.analytics.cloudflare"]');
