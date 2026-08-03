@@ -63,9 +63,24 @@ for (const t of S.TEMI) {
       new RegExp('data-sfondo-' + t + '="' + sf.id + '"').test(css));
   }
 }
-/* lo strato sta DIETRO e non intercetta i clic: se lo facesse, coprirebbe
-   tutto il sito e nessun pulsante funzionerebbe più */
-check('lo strato sta dietro al contenuto', /body::after\{[^}]*z-index:-1/.test(css.replace(/\s+/g, '')));
+/* IL DIFETTO CHE HA FATTO PERDERE LA PRIMA VERSIONE.
+   `html` ha uno sfondo suo (components.css: html{background-color:...}).
+   Quando la radice ha uno sfondo, quello del body NON si propaga al canvas ma
+   viene disegnato come sfondo del body — e uno strato con z-index negativo
+   finisce dietro a quel fondo, quindi invisibile. Una prova con rosso pieno
+   al 90% risultava completamente coperta.
+   Lo strato deve stare a z-index 0: sopra al fondo, sotto al contenuto (che è
+   già a z-index 2). È lo stesso valore di body::before, che infatti si è
+   sempre visto. */
+const componenti = readFileSync('assets/css/components.css', 'utf8');
+const rootHaSfondo = /html\{[^}]*background/.test(componenti.replace(/\s+/g, ''));
+const zStrato = (css.replace(/\s+/g, '').match(/body::after\{[^}]*z-index:(-?\d+)/) || [])[1];
+check('lo strato ha uno z-index dichiarato', zStrato !== undefined, String(zStrato));
+check('lo strato NON è dietro allo sfondo del body (z-index non negativo)',
+  Number(zStrato) >= 0, 'z-index:' + zStrato + (rootHaSfondo ? ' con html che ha uno sfondo suo' : ''));
+check('lo strato resta sotto al contenuto', Number(zStrato) < 2, 'z-index:' + zStrato);
+check('la griglia esistente usa lo stesso livello',
+  /body::before\{[^}]*z-index:0/.test(css.replace(/\s+/g, '')));
 check('lo strato non intercetta i clic', /body::after\{[^}]*pointer-events:none/.test(css.replace(/\s+/g, '')));
 /* body::before è la griglia: non deve essere stata sovrascritta */
 check('la griglia di sfondo esistente non è stata toccata', /body::before\{/.test(css.replace(/\s+/g, '')));

@@ -181,17 +181,31 @@ body.on-product .stickybuy{transform:none}
    Tre per tema. Il predefinito è quello di sempre: senza scelta, o con una
    scelta che non esiste più, il sito resta identico a com'era.
 
-   Tutto qui dentro vive su body::after — uno strato dietro al contenuto
-   (z-index negativo) e senza eventi del mouse: non può coprire né bloccare
-   niente. body::before è già occupato dalla griglia e non viene toccato.
+   Prima versione: le intensità erano così basse (.10–.20) che cambiando
+   sfondo non si notava niente — un'opzione che non si vede è un'opzione che
+   non c'è. Qui i valori sono quelli che si riconoscono a colpo d'occhio,
+   tenendo il testo leggibile: nel tema scuro le luci restano sotto al testo
+   chiaro, nel chiaro sono tinte tenui perché basta pochissimo per rendere
+   faticosa la lettura su carta.
+
+   Lo strato vive su body::after, con z-index 0 — NON negativo, ed è il punto
+   che ha fatto perdere la prima versione: `html` ha uno sfondo suo
+   (components.css: html{background-color:var(--paper)}), quindi il fondo del
+   body non si propaga al canvas ma viene disegnato come sfondo del body. Uno
+   strato a z-index -1 finisce dietro a quel fondo e non si vede: una prova
+   con rosso pieno al 90% risultava invisibile.
+   Con z-index 0 lo strato sta sopra al fondo e sotto al contenuto, che è già
+   a z-index 2 (main, nav, footer, topbar). È lo stesso valore che usa
+   body::before per la griglia — che infatti si è sempre vista.
+   pointer-events:none: non può intercettare un clic.
 
    Nessuna libreria: niente WebGL, niente three.js, nessuna richiesta a server
-   esterni. Sono gradienti che si spostano, e il browser li disegna sulla
-   scheda grafica senza far girare JavaScript. */
+   esterni. Sono gradienti che si spostano, disegnati dalla scheda grafica
+   senza far girare JavaScript. */
 body::after{content:none}
 :root[data-sfondo-scuro]:not([data-sfondo-scuro="default"]) body::after,
 :root[data-sfondo-chiaro]:not([data-sfondo-chiaro="default"]) body::after{
-  content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;
+  content:"";position:fixed;inset:-25%;z-index:0;pointer-events:none;
   background-repeat:no-repeat}
 /* lo strato serve al tema a cui appartiene, non all'altro */
 :root[data-mode="light"][data-sfondo-chiaro="default"] body::after,
@@ -199,54 +213,58 @@ body::after{content:none}
 :root:not([data-mode="light"])[data-sfondo-scuro="default"] body::after{content:none}
 
 /* ---------- TEMA SCURO ---------- */
-/* Aurora: due veli che scorrono in diagonale, lentissimi. */
+/* Aurora: veli di luce che scorrono in diagonale. */
 :root[data-mode="dark"][data-sfondo-scuro="aurora"] body::after,
 :root:not([data-mode="light"])[data-sfondo-scuro="aurora"] body::after{
   background-image:
-    radial-gradient(ellipse 70% 45% at 25% 25%, rgba(59,125,224,.20), transparent 62%),
-    radial-gradient(ellipse 60% 40% at 78% 70%, rgba(120,70,200,.16), transparent 60%),
-    radial-gradient(ellipse 50% 35% at 55% 10%, rgba(80,200,180,.10), transparent 58%);
-  animation:sfAurora 38s ease-in-out infinite alternate}
+    radial-gradient(ellipse 65% 42% at 22% 22%, rgba(59,125,224,.58), transparent 66%),
+    radial-gradient(ellipse 58% 38% at 80% 68%, rgba(128,72,214,.50), transparent 64%),
+    radial-gradient(ellipse 52% 34% at 52%  8%, rgba(56,208,182,.34), transparent 62%),
+    radial-gradient(ellipse 46% 30% at 12% 88%, rgba(88,150,255,.30), transparent 60%);
+  animation:sfAurora 26s ease-in-out infinite alternate}
 @keyframes sfAurora{
-  0%  {transform:translate3d(-3%,-2%,0) scale(1)}
-  50% {transform:translate3d(2%,3%,0)   scale(1.08)}
-  100%{transform:translate3d(4%,-3%,0)  scale(1.03)}}
+  0%  {transform:translate3d(-5%,-3%,0) scale(1)}
+  50% {transform:translate3d(3%,4%,0)   scale(1.14)}
+  100%{transform:translate3d(6%,-4%,0)  scale(1.06)}}
 
 /* Nebbia: banchi che respirano, illuminati dal basso. */
 :root[data-mode="dark"][data-sfondo-scuro="nebbia"] body::after,
 :root:not([data-mode="light"])[data-sfondo-scuro="nebbia"] body::after{
   background-image:
-    radial-gradient(ellipse 90% 40% at 50% 100%, rgba(90,140,230,.20), transparent 65%),
-    radial-gradient(ellipse 60% 30% at 20% 78%,  rgba(150,170,255,.10), transparent 62%),
-    radial-gradient(ellipse 55% 28% at 82% 85%,  rgba(70,110,190,.14), transparent 60%);
-  animation:sfNebbia 30s ease-in-out infinite alternate}
+    radial-gradient(ellipse 95% 48% at 50% 102%, rgba(92,146,238,.62), transparent 68%),
+    radial-gradient(ellipse 62% 34% at 18% 80%,  rgba(160,182,255,.38), transparent 64%),
+    radial-gradient(ellipse 58% 32% at 84% 86%,  rgba(64,110,200,.48), transparent 62%),
+    radial-gradient(ellipse 70% 26% at 50% 20%,  rgba(120,150,220,.20), transparent 66%);
+  animation:sfNebbia 22s ease-in-out infinite alternate}
 @keyframes sfNebbia{
-  0%  {transform:translate3d(-4%,0,0) scale(1.04);opacity:.85}
-  100%{transform:translate3d(4%,-2%,0) scale(1.12);opacity:1}}
+  0%  {transform:translate3d(-6%,2%,0) scale(1.06);opacity:.8}
+  100%{transform:translate3d(6%,-3%,0) scale(1.2);opacity:1}}
 
 /* ---------- TEMA CHIARO ----------
-   Qui i valori sono volutamente più bassi: sul chiaro basta pochissimo per
-   rendere un testo faticoso da leggere. */
+   Valori più bassi che nello scuro: su carta basta pochissimo per rendere un
+   testo faticoso, e il testo qui è scuro su fondo chiaro. */
 :root[data-mode="light"][data-sfondo-chiaro="alba"] body::after{
   background-image:
-    radial-gradient(ellipse 75% 45% at 20% 12%, rgba(255,196,120,.30), transparent 62%),
-    radial-gradient(ellipse 65% 40% at 85% 28%, rgba(255,150,170,.20), transparent 60%),
-    radial-gradient(ellipse 70% 45% at 55% 95%, rgba(150,190,255,.20), transparent 62%);
-  animation:sfAlba 34s ease-in-out infinite alternate}
+    radial-gradient(ellipse 70% 42% at 18% 10%, rgba(255,176,86,.52), transparent 64%),
+    radial-gradient(ellipse 60% 38% at 86% 24%, rgba(255,124,150,.42), transparent 62%),
+    radial-gradient(ellipse 66% 42% at 56% 98%, rgba(122,170,255,.40), transparent 64%),
+    radial-gradient(ellipse 44% 28% at 34% 58%, rgba(255,214,140,.28), transparent 60%);
+  animation:sfAlba 24s ease-in-out infinite alternate}
 @keyframes sfAlba{
-  0%  {transform:translate3d(-2%,-2%,0) scale(1)}
-  100%{transform:translate3d(3%,2%,0)   scale(1.08)}}
+  0%  {transform:translate3d(-4%,-3%,0) scale(1)}
+  100%{transform:translate3d(5%,3%,0)   scale(1.14)}}
 
 :root[data-mode="light"][data-sfondo-chiaro="nuvole"] body::after{
   background-image:
-    radial-gradient(ellipse 55% 26% at 18% 22%, rgba(255,255,255,.95), transparent 60%),
-    radial-gradient(ellipse 45% 22% at 62% 14%, rgba(255,255,255,.85), transparent 58%),
-    radial-gradient(ellipse 60% 28% at 88% 40%, rgba(214,230,250,.75), transparent 60%),
-    radial-gradient(ellipse 70% 34% at 40% 88%, rgba(226,238,252,.70), transparent 62%);
-  animation:sfNuvole 55s linear infinite alternate}
+    radial-gradient(ellipse 50% 24% at 16% 18%, rgba(255,255,255,1),   transparent 62%),
+    radial-gradient(ellipse 42% 20% at 60% 10%, rgba(255,255,255,.96), transparent 60%),
+    radial-gradient(ellipse 56% 26% at 90% 34%, rgba(168,200,240,.62), transparent 62%),
+    radial-gradient(ellipse 64% 30% at 36% 84%, rgba(180,206,240,.58), transparent 64%),
+    linear-gradient(180deg, rgba(206,224,246,.55), transparent 45%);
+  animation:sfNuvole 40s linear infinite alternate}
 @keyframes sfNuvole{
-  0%  {transform:translate3d(-6%,0,0)}
-  100%{transform:translate3d(6%,-2%,0)}}
+  0%  {transform:translate3d(-8%,0,0)  scale(1.04)}
+  100%{transform:translate3d(8%,-3%,0) scale(1.12)}}
 
 /* Chi ha chiesto meno animazioni le riceve ferme, non spente: lo sfondo
    resta, smette solo di muoversi. */
