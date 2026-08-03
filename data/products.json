@@ -463,21 +463,11 @@
   "icon": "💎",
   "img": "img/14.webp",
   "desc": {
-   "it": "Targa anniversario in vetro temperato con incisione laser. Scritta personalizzata con nomi, data e dedica. Base in legno inclusa. Effetto cristallo raffinato.",
+   "it": "Festeggia i tuoi momenti speciali con questa stampa incorniciata personalizzata e trasforma la tua canzone o playlist in un regalo unico. Perfetto per i tuoi cari, la famiglia o gli amici più cari.\n\nIl codice Spotify personalizzato è inciso sulla cornice, consentendoti di scansionarlo e riprodurre il brano o la playlist specificata in qualsiasi momento.",
    "en": "Tempered glass anniversary plaque with laser engraving. Custom text with names, date and message. Wood base."
   },
   "rev": 62,
   "sku": "INGLY-014",
-  "misure": [
-   [
-    "Formato",
-    "20×15 cm"
-   ],
-   [
-    "Spessore",
-    "4 mm"
-   ]
-  ],
   "prod": 3,
   "hidden": false
  },
@@ -2865,5 +2855,43 @@
   "icon": "✨",
   "rev": 0,
   "prod": 3
+ },
+ {
+  "id": 92,
+  "cat": "casa",
+  "sub": 1,
+  "n": {
+   "it": "Immagine con Spotify",
+   "en": "Immagine con Spotify"
+  },
+  "mat": "Legno",
+  "price": 10,
+  "icon": "✨",
+  "rev": 0,
+  "prod": 3,
+  "hidden": false,
+  "desc": {
+   "it": "Festeggia i tuoi momenti speciali con questa stampa incorniciata personalizzata e trasforma la tua canzone o playlist in un regalo unico. Perfetto per i tuoi cari, la famiglia o gli amici più cari.\n\nIl codice Spotify personalizzato è inciso sulla cornice, consentendoti di scansionarlo e riprodurre il brano o la playlist specificata in qualsiasi momento.",
+   "en": "Festeggia i tuoi momenti speciali con questa stampa incorniciata personalizzata e trasforma la tua canzone o playlist in un regalo unico. Perfetto per i tuoi cari, la famiglia o gli amici più cari.\n\nIl codice Spotify personalizzato è inciso sulla cornice, consentendoti di scansionarlo e riprodurre il brano o la playlist specificata in qualsiasi momento."
+  }
+ },
+ {
+  "id": 93,
+  "cat": "eventi",
+  "sub": 6,
+  "n": {
+   "it": "Immagine con Spotify canzone preferita",
+   "en": "Frame Photo Spotify Song"
+  },
+  "mat": "Legno",
+  "price": 35,
+  "icon": "✨",
+  "rev": 0,
+  "prod": 3,
+  "hidden": false,
+  "desc": {
+   "it": "Festeggia i tuoi momenti speciali con questa stampa incorniciata personalizzata e trasforma la tua canzone o playlist in un regalo unico. Perfetto per i tuoi cari, la famiglia o gli amici più cari.\n\nIl codice Spotify personalizzato è inciso sulla cornice, consentendoti di scansionarlo e riprodurre il brano o la playlist specificata in qualsiasi momento.",
+   "en": "Festeggia i tuoi momenti speciali con questa stampa incorniciata personalizzata e trasforma la tua canzone o playlist in un regalo unico. Perfetto per i tuoi cari, la famiglia o gli amici più cari.\n\nIl codice Spotify personalizzato è inciso sulla cornice, consentendoti di scansionarlo e riprodurre il brano o la playlist specificata in qualsiasi momento."
+  }
  }
 ]
