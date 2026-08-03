@@ -124,7 +124,7 @@
   "scuro": "aurora"
  },
  "prezzi": {
-  "mostra": true,
+  "mostra": false,
   "testo": {
    "it": "Prezzo su richiesta",
    "en": "Price on request"
