@@ -28,5 +28,40 @@ check('vecchio formato array ignorato di proposito', /Array\.isArray\(mv\)/.test
 const admin = readFileSync('./admin.html', 'utf8');
 check('admin ricostruisce MV dai file reali', /auto-riparazione: MV viene ricostruito/.test(admin));
 
+
+console.log('\n=== TEMA CHIARO: nessuna fascia scura rimasta ===');
+/* La striscia scorrevole delle tecnologie restava blu notte anche a tema
+   chiaro — l'unica fascia scura in mezzo a una pagina di carta. Il colore era
+   scritto fisso invece che preso da una variabile, quindi il tema chiaro non
+   poteva raggiungerlo. Qui si cerca lo stesso difetto ovunque: ogni fondo
+   scuro scritto a mano deve avere la sua controparte chiara. */
+const vars = readFileSync('./assets/css/variables.css', 'utf8');
+const luminanza = h => {
+  const n = h.length === 4
+    ? h.slice(1).split('').map(c => parseInt(c + c, 16))
+    : [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  return n[0] * 0.299 + n[1] * 0.587 + n[2] * 0.114;
+};
+/* Il nero dietro a un video è corretto in tutti e due i temi: le bande
+   laterali di un filmato sono nere, non color carta. */
+const AMMESSI = ['#ppVideo video', '.proj-video video'];
+const scuriSenzaChiaro = [];
+for (const m of css.matchAll(/([^{}]+)\{([^}]*background(?:-color)?:\s*(#[0-9a-f]{3,6})[^}]*)\}/gi)) {
+  const selettore = m[1].trim().split(',')[0].trim();
+  if (luminanza(m[3]) >= 70) continue;
+  if (AMMESSI.some(a => selettore.includes(a))) continue;
+  const classe = (selettore.match(/\.[a-z0-9-]+/i) || [''])[0];
+  const haChiaro = classe && new RegExp('data-mode="light"\\][^{]*\\' + classe + '[^a-z0-9-]').test(vars);
+  if (!haChiaro) scuriSenzaChiaro.push(selettore + ' → ' + m[3]);
+}
+check('ogni fondo scuro scritto a mano ha la sua versione chiara',
+  scuriSenzaChiaro.length === 0, scuriSenzaChiaro.join(' | '));
+check('la striscia delle tecnologie ha una versione chiara',
+  /data-mode="light"\]\s*\.tech-ticker\{/.test(vars.replace(/\s+/g, m => m.includes('\n') ? '' : ' ')) ||
+  /\[data-mode="light"\] \.tech-ticker\{/.test(vars));
+/* su fondo chiaro il testo bianco sparisce: va ridefinito anche quello */
+check('anche i testi della striscia hanno una versione chiara',
+  /data-mode="light"\][^{]*\.tc-name/.test(vars) && /data-mode="light"\][^{]*\.tc-sub/.test(vars));
+
 console.log(`\n=========== CSS/SRCSET: ${pass} passati, ${fail} falliti ===========`);
 process.exit(fail ? 1 : 0);
