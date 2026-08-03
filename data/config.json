@@ -122,5 +122,16 @@
  "sfondi": {
   "chiaro": "nuvole",
   "scuro": "aurora"
+ },
+ "prezzi": {
+  "mostra": true,
+  "testo": {
+   "it": "Prezzo su richiesta",
+   "en": "Price on request"
+  },
+  "azione": {
+   "it": "Richiedi il prezzo",
+   "en": "Request a price"
+  }
  }
 }

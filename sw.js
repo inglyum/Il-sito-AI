@@ -13,7 +13,7 @@
    nuovi e codice vecchio rompeva il sito e rendeva ogni deploy invisibile agli
    utenti già passati sul sito. Non riportare CSS/JS a cache-first. */
 
-const CACHE_VER   = 'ingly-v4';
+const CACHE_VER   = 'ingly-v5';
 const CACHE_ASSETS= CACHE_VER + '-assets';
 const CACHE_DATA  = CACHE_VER + '-data';
 const CACHE_IMG   = CACHE_VER + '-img';

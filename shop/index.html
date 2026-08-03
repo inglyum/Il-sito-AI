@@ -96,7 +96,7 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
      rimuove il service worker e ricarica una volta sola. Aggiornare CACHE_WANT
      insieme a CACHE_VER in sw.js. -->
 <script>(function(){
-  var CACHE_WANT='ingly-v4', FLAG='ingly_cachefix';
+  var CACHE_WANT='ingly-v5', FLAG='ingly_cachefix';
   try{
     if(!window.caches||!('serviceWorker' in navigator))return;
     if(sessionStorage.getItem(FLAG))return;              /* una sola volta per sessione */
@@ -428,7 +428,7 @@ setTimeout(function(){
         </div>
         <div class="qtyrow">
           <div class="qty"><button data-action="pp-qty" data-d="-1" aria-label="−">−</button><b id="ppQty">1</b><button data-action="pp-qty" data-d="1" aria-label="+">+</button></div>
-          <button class="btn btn-primary addbtn magnetic" data-action="pp-add"><span data-i18n="ppAdd">Aggiungi</span> — <span id="ppTotal"></span></button>
+          <button class="btn btn-primary addbtn magnetic" data-action="pp-add"><span data-i18n="ppAdd">Aggiungi</span><span class="addbtn-tot"> — <span id="ppTotal"></span></span></button>
           <button class="btn btn-ghost btn-icon" id="ppShare" aria-label="Condividi" title="Condividi prodotto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg></button>
         </div>
         <!-- Tabs -->

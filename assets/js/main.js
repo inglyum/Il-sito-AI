@@ -14,6 +14,7 @@ import { initReferral, shareRef } from './referral.js';
 import { initShare, initFomo, openWhatsApp, renderInstagramFeed } from './social.js';
 import * as VERT from './verticali.js';
 import * as SFONDI from './sfondi.js';
+import * as PREZZI from './prezzi.js';
 
 /* ---- config → DOM ---- */
 function initHeroVideo(){
@@ -38,6 +39,9 @@ function applyConfig(){
     const att=SFONDI.attributi(CONFIG);
     Object.keys(att).forEach(k=>document.documentElement.setAttribute(k,att[k]));
   }catch(e){ console.warn('[INGLY] sfondo:',e) }
+  /* Prezzi esposti oppure «contattaci»: è una decisione dell'Admin e va presa
+     prima del primo disegno, altrimenti il prezzo lampeggia e poi sparisce. */
+  document.documentElement.classList.toggle('senza-prezzi', !PREZZI.mostraPrezzi(CONFIG));
   document.title = CONFIG.titolo;
   const md=document.querySelector('meta[name="description"]'); if(md) md.content=CONFIG.descrizione;
   const s=CONFIG.social, map=[s.instagram,s.facebook,s.tiktok,s.pinterest,s.whatsapp,s.etsy];

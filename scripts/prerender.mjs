@@ -17,6 +17,7 @@ import * as P from '../assets/js/prerender-engine.js';
 import * as SCH from '../assets/js/schema-engine.js';
 import * as FAQ from '../assets/js/faq-engine.js';
 import * as VERT from '../assets/js/verticali.js';
+import * as PR from '../assets/js/prezzi.js';
 
 const ROOT = resolve(new URL('..', import.meta.url).pathname);
 const SOLO_VERIFICA = process.argv.includes('--check');
@@ -74,9 +75,9 @@ function paginaProdotto(p){
       category:nomeCategoria(p.cat) || undefined,
       material:p.mat || undefined,
       brand:{ '@type':'Brand', name:azienda },
-      offers:{ '@type':'Offer', price:p.price, priceCurrency:'EUR',
-        availability:'https://schema.org/InStock', url:canonico,
-        seller:{ '@id': base + SCH.ID.org } },
+      /* con i prezzi spenti nell'Admin non si dichiara una cifra che la
+         pagina non mostra: Google segnala i prezzi che non corrispondono */
+      offers:PR.offertaSchema(p, cfg, { url:canonico, venditore:{ '@id': base + SCH.ID.org } }),
     }),
   ]);
   return P.componi(guscio, { titolo, descrizione:desc, canonico, contenuto, jsonld });

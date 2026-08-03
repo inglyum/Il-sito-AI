@@ -3,7 +3,16 @@
    configuratore e prezzo live, digitale, carrello, wishlist. */
 import { $, T, eur, imgTag, imgV, srcsetFor, focalOf, icon, toast, L } from './utils.js';
 import { refTag, onOrderPlaced } from './referral.js';
+import * as PR from './prezzi.js';
 const { MAT_ART, MATN, CATS, P, DIG, CONFIG } = window.INGLY;
+
+/* Con l'interruttore dei prezzi spento ogni cifra diventa «Prezzo su
+   richiesta» e le azioni d'acquisto diventano richieste di preventivo.
+   Passano tutte da qui: se un punto dimenticasse di usarle, mostrerebbe un
+   prezzo che il resto del sito sta nascondendo. */
+const prezziVisibili = () => PR.mostraPrezzi(CONFIG);
+const prezzo  = v => PR.testoPrezzo(v, CONFIG, { L, eur });
+const suRichiesta = () => PR.etichetta(CONFIG, L);
 /* materiale sempre risolvibile: MAT_ART[mat] mancante faceva crollare l'intero sito */
 const matArt = m => MAT_ART[m] || MAT_ART[Object.keys(MAT_ART)[0]] || { bg:'#3a2f26,#6b543e' };
 import { go } from './navigation.js';
@@ -91,10 +100,10 @@ export function card(x){const a=matArt(x.mat);
       ${x.tag?`<span class="ptag ${x.tag==='Limited'?'y':x.tag==='B2B'?'b':''}">${x.tag}</span>`:''}
       <button class="wish ${lsWish().has(x.id)?'on':''}" aria-label="Wishlist" data-action="wish" data-id="${x.id}"><svg viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 2-3.2 2-5a5 5 0 0 0-9-3 5 5 0 0 0-9 3c0 1.8.5 3.5 2 5l7 7z"/></svg></button>
       <div class="art">${x.icon}</div>${imgTag(x)}${stockBadge(x)}
-      ${x.stock===0?'':`<button class="qadd" data-action="quick-add" data-id="${x.id}">+ ${eur(x.price)}</button>`}
+      ${(x.stock===0||!prezziVisibili())?'':`<button class="qadd" data-action="quick-add" data-id="${x.id}">+ ${eur(x.price)}</button>`}
     </div>
     <div class="pbody"><span class="mat">${MATN[x.mat][L]} · ${CATS.find(c=>c.id===x.cat).n[L]}</span><h3>${x.n[L]}</h3>
-    <div class="prow"><span class="price">${eur(x.price)}</span><span class="stars">★★★★★ <span>(${x.rev})</span></span></div></div></article>`}
+    <div class="prow"><span class="price${prezziVisibili()?'':' price--rich'}">${prezzo(x.price)}</span><span class="stars">★★★★★ <span>(${x.rev})</span></span></div></div></article>`}
 
 export const currentProduct = () => cur;
 
@@ -117,7 +126,7 @@ export function renderHero(){
     el.dataset.action='open-product'; el.dataset.id=x.id;
     el.innerHTML=`<div class="ph" style="background:${a.bg}">
       <div style="position:absolute;inset:0;display:grid;place-items:center;font-size:46px">${x.icon}</div>${imgTag(x)}</div>
-      <h4>${x.n[L]}</h4><p>${sub}</p><div class="pr">${T('from')} ${eur(x.price)}</div>`;
+      <h4>${x.n[L]}</h4><p>${sub}</p><div class="pr">${prezziVisibili()?T('from')+' '+eur(x.price):suRichiesta()}</div>`;
   });
 }
 
@@ -183,11 +192,15 @@ export function renderShop(){
 }
 export function setSort(v){SORT=v;renderShop()}
 export function fillSort(){const s=$('sortSel');if(!s)return;
-  s.innerHTML=[['rel','sortRel'],['nw','sortNw'],['pa','sortPa'],['pd','sortPd'],['rv','sortRv']].map(o=>`<option value="${o[0]}" ${SORT===o[0]?'selected':''}>${T(o[1])}</option>`).join('')}
+  /* «prezzo crescente» non ha senso in una vetrina senza prezzi */
+  const voci=[['rel','sortRel'],['nw','sortNw'],['pa','sortPa'],['pd','sortPd'],['rv','sortRv']]
+    .filter(o=>prezziVisibili()||(o[0]!=='pa'&&o[0]!=='pd'));
+  if(!prezziVisibili()&&(SORT==='pa'||SORT==='pd')) SORT='rel';
+  s.innerHTML=voci.map(o=>`<option value="${o[0]}" ${SORT===o[0]?'selected':''}>${T(o[1])}</option>`).join('')}
 export function renderRV(){const w=$('rvWrap');if(!w)return;
   const items=RV.map(id=>P.find(x=>x.id===id)).filter(Boolean);
   w.classList.toggle('show',items.length>0);
-  $('rvStrip').innerHTML=items.map(x=>`<div class="rv-it" data-action="open-product" data-id="${x.id}"><div class="ri" style="background:${matArt(x.mat).bg}">${x.icon}</div><div><b>${x.n[L]}</b><span>${eur(x.price)}</span></div></div>`).join('')}
+  $('rvStrip').innerHTML=items.map(x=>`<div class="rv-it" data-action="open-product" data-id="${x.id}"><div class="ri" style="background:${matArt(x.mat).bg}">${x.icon}</div><div><b>${x.n[L]}</b><span>${prezzo(x.price)}</span></div></div>`).join('')}
 
 /* ---- pagina prodotto / configuratore ---- */
 let galIdx=0, galShots=[];
@@ -438,10 +451,22 @@ const unit=()=>cur.price*(sel.sizeMul||1);
    tenerlo senza tabella avrebbe fatto cambiare il totale da solo, senza che
    il cliente potesse capire perché. Per gli ordini grandi c'è il preventivo. */
 function price(){const u=unit();
-  $('ppPrice').textContent=eur(u);
-  $('ppUnit').textContent=T('perPiece');
-  $('ppTotal').textContent=eur(u*sel.qty);
-  const sb=$('sbPrice');if(sb){sb.textContent=eur(u*sel.qty);$('sbName').textContent=cur.n[L]}}
+  const visibili=prezziVisibili();
+  $('ppPrice').textContent=prezzo(u);
+  $('ppUnit').textContent=visibili?T('perPiece'):'';
+  $('ppTotal').textContent=prezzo(u*sel.qty);
+  const sb=$('sbPrice');if(sb){sb.textContent=prezzo(u*sel.qty);$('sbName').textContent=cur.n[L]}
+  /* «Aggiungi al carrello» senza un prezzo è un vicolo cieco: diventa una
+     richiesta di preventivo, che è quello che si vuole davvero. */
+  /* Senza prezzi «Aggiungi — €0,00» non ha senso: il pulsante diventa la
+     richiesta. Il totale accanto è nascosto dal CSS (.addbtn-tot). */
+  document.querySelectorAll('[data-action="pp-add"]').forEach(b=>{
+    const et=b.querySelector('span:not(.addbtn-tot):not(.arr)');
+    if(!et) return;
+    if(!b.dataset.testoOrig) b.dataset.testoOrig=et.textContent;
+    et.textContent=visibili?b.dataset.testoOrig:PR.etichettaAzione(CONFIG,L);
+  });
+  document.documentElement.classList.toggle('senza-prezzi',!visibili);}
 export function addFromPP(){
   /* il materiale è quello del prodotto, deciso nell'Admin */
   const matLabel=(MATN[cur.mat]&&MATN[cur.mat][L])||cur.mat||'';
@@ -460,7 +485,7 @@ export function renderDigital(){$('digGrid').innerHTML=DIG.map(d=>{
   <h3 style="font-size:17px;margin-top:14px">${d.n[L]}</h3>
   <div class="fmt">${d.f.map(f=>`<i>${f}</i>`).join('')}</div>
   <span class="lic">${T('lic')}</span>
-  <div class="dl"><span class="price">${eur(d.price)}</span>${buyBtn}</div></div>`}).join('')}
+  <div class="dl"><span class="price">${prezzo(d.price)}</span>${buyBtn}</div></div>`}).join('')}
 export function addDigital(id){const d=DIG.find(x=>x.id===+id);cart.push({dig:d,q:1,u:d.price});renderCart();saveCart();toast(T('added'));openCart()}
 
 /* ---- carrello ---- */
@@ -502,7 +527,7 @@ export function renderCart(){
         const ic=i.dig?i.dig.icon:i.p.icon;
         const bg=i.dig?MAT_ART.File.bg:matArt(i.p.mat).bg;
         const meta=i.dig?i.dig.f.join(' · '):i.mat+(i.txt?' · “'+i.txt+'”':'');
-        const unitPrice=eur(i.u);
+        const unitPrice=prezzo(i.u);
         return `<div class="ditem">
           <div class="di-img" style="background:${bg}">${ic}</div>
           <div style="flex:1;min-width:0">
@@ -514,8 +539,8 @@ export function renderCart(){
             </div>
           </div>
           <div class="di-price-col">
-            <span class="di-price">${eur(i.u*i.q)}</span>
-            ${i.q>1?`<span class="di-unit">${unitPrice} cad.</span>`:''}
+            <span class="di-price">${prezzo(i.u*i.q)}</span>
+            ${(prezziVisibili()&&i.q>1)?`<span class="di-unit">${unitPrice} cad.</span>`:''}
           </div>
         </div>`;
       }).join('')
@@ -529,7 +554,8 @@ export function renderCart(){
   const sub=cart.reduce((s,i)=>s+i.u*i.q,0);
   const bar=$('drShipBar'), fill=$('drShipFill'), msg=$('drShipMsg');
   if(bar){
-    if(!cart.length){ bar.style.display='none'; }
+    /* la barra «ti mancano X€» presuppone dei prezzi: senza, non dice niente */
+    if(!cart.length||!prezziVisibili()){ bar.style.display='none'; }
     else if(sub>=FREE_SHIP){
       bar.style.display='';
       fill.style.width='100%';
@@ -539,7 +565,7 @@ export function renderCart(){
       bar.style.display='';
       const pct=Math.min(100,Math.round(sub/FREE_SHIP*100));
       fill.style.width=pct+'%';
-      const manca=eur(FREE_SHIP-sub);
+      const manca=prezzo(FREE_SHIP-sub);
       msg.textContent=(L==='it'?`Aggiungi ancora ${manca} per la spedizione gratuita`:`Add ${manca} more for free shipping`);
       msg.className='dr-ship-msg';
     }
@@ -548,14 +574,22 @@ export function renderCart(){
   /* totali con coupon */
   const discountAmt=activeCoupon?Math.round(sub*activeCoupon.pct*100)/100:0;
   const total=sub-discountAmt;
-  const subEl=$('drSubtotal'); if(subEl) subEl.textContent=eur(sub);
+  const subEl=$('drSubtotal'); if(subEl) subEl.textContent=prezzo(sub);
   const dr=$('drDiscountRow');
   if(dr){
     dr.style.display=activeCoupon?'flex':'none';
     const lbl=$('drCouponLabel'); if(lbl) lbl.textContent=activeCoupon?activeCoupon.label:'Sconto';
     const dv=$('drDiscountVal'); if(dv) dv.textContent='−'+eur(discountAmt);
   }
-  $('drTotal').textContent=eur(total);
+  $('drTotal').textContent=prezzo(total);
+  /* senza prezzi il coupon non ha niente da scontare: il pannello sparisce */
+  const cpBox=document.querySelector('.dr-coupon'); if(cpBox) cpBox.style.display=prezziVisibili()?'':'none';
+  if(dr&&!prezziVisibili()) dr.style.display='none';
+  /* il carrello diventa una lista di cose su cui farsi fare un prezzo */
+  document.querySelectorAll('[data-action="checkout-wa"]').forEach(b=>{
+    if(!b.dataset.testoOrig) b.dataset.testoOrig=b.textContent;
+    b.textContent=prezziVisibili()?b.dataset.testoOrig:PR.etichettaAzione(CONFIG,L);
+  });
 }
 
 export function openCart(){
@@ -572,22 +606,30 @@ export function checkoutWhatsApp(){
   const discountAmt=activeCoupon?Math.round(sub*activeCoupon.pct*100)/100:0;
   const total=sub-discountAmt;
   const ship=sub>=FREE_SHIP?(L==='it'?'Spedizione: GRATUITA':'Shipping: FREE'):(L==='it'?'Spedizione: da concordare':'Shipping: to be agreed');
-  let msg=(L==='it'?'👋 Ciao INGLY Design! Vorrei ordinare:':'👋 Hi INGLY Design! I would like to order:')+'\n\n';
+  let msg=(prezziVisibili()
+    ?(L==='it'?'👋 Ciao INGLY Design! Vorrei ordinare:':'👋 Hi INGLY Design! I would like to order:')
+    :(L==='it'?'👋 Ciao INGLY Design! Vorrei un preventivo per:':'👋 Hi INGLY Design! I would like a quote for:'))+'\n\n';
   cart.forEach(i=>{
     const nm=i.dig?i.dig.n[L]:i.p.n[L];
     const meta=i.dig?'':(i.mat?' ['+i.mat+']':'')+(i.txt?' “'+i.txt+'”':'');
     const sku=(!i.dig&&i.p.sku)?` (${i.p.sku})`:'';
-    msg+=`• ${i.q}× ${nm}${meta}${sku} — ${eur(i.u*i.q)}\n`;
+    msg+=`• ${i.q}× ${nm}${meta}${sku}${prezziVisibili()?' — '+eur(i.u*i.q):''}\n`;
   });
-  msg+='\n'+ship;
-  if(activeCoupon) msg+=`\n${L==='it'?'Codice sconto':'Discount code'}: ${activeCoupon.code} (${activeCoupon.label})`;
-  msg+='\n'+(L==='it'?'Totale stimato':'Estimated total')+': *'+eur(total)+'*';
+  if(prezziVisibili()){
+    msg+='\n'+ship;
+    if(activeCoupon) msg+=`\n${L==='it'?'Codice sconto':'Discount code'}: ${activeCoupon.code} (${activeCoupon.label})`;
+    msg+='\n'+(L==='it'?'Totale stimato':'Estimated total')+': *'+eur(total)+'*';
+  } else {
+    /* nessuna cifra: è una richiesta di preventivo, non un ordine */
+    msg+='\n'+(L==='it'?'Potete indicarmi il preventivo per questi articoli?'
+                       :'Could you send me a quote for these items?');
+  }
   msg+='\n\n'+(L==='it'?'📍 Confermate il preventivo definitivo con prova grafica prima della produzione.':'📍 We\'ll confirm the final quote with a graphic proof before production.');
   msg+='\n'+refTag();
   window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank');
   onOrderPlaced();
   /* premia l'utente con punti fedeltà */
-  const pts = Math.floor(total);
+  const pts = prezziVisibili()?Math.floor(total):0;
   try{
     const w = window._wish;
     if(w && w.addPoints) w.addPoints(pts);

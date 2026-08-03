@@ -3,6 +3,7 @@
    exit-intent popup configurabile dall'admin via content.json. */
 import { $, T, eur, imgTag, toast, L } from './utils.js';
 import { addToCart } from './products.js';
+import * as PR from './prezzi.js';
 const { P, CONFIG } = window.INGLY;
 
 /* ===== WISHLIST ===== */
@@ -72,7 +73,7 @@ function renderWishDrawer(){
       <div class="di-img">${imgTag(p)}</div>
       <div class="di-body">
         <div class="di-name">${p.n[L]}</div>
-        <div class="di-price">${eur(p.price)}</div>
+        <div class="di-price">${PR.testoPrezzo(p.price,CONFIG,{L,eur})}</div>
         <div class="di-actions">
           <button class="btn btn-primary" style="font-size:12px;padding:5px 12px" data-action="wish-add-cart" data-id="${p.id}">+🛒</button>
           <button class="di-rm" data-action="wish-rm" data-id="${p.id}" aria-label="Rimuovi">✕</button>

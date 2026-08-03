@@ -6,6 +6,7 @@ import * as ENG from './seo-engine.js';
 import * as SCH from './schema-engine.js';
 import * as FAQ from './faq-engine.js';
 import * as VERT from './verticali.js';
+import * as PR from './prezzi.js';
 const { CONFIG } = window.INGLY;
 const S = CONFIG.seo || {};
 const base = () => (S.dominio || location.origin).replace(/\/+$/,'');
@@ -142,10 +143,10 @@ export function updateSeo(page, L, T, product){
       "brand":{"@type":"Brand","name":S.azienda||"INGLY DESIGN"},
       "aggregateRating":product.rev?{"@type":"AggregateRating","ratingValue":String(product.rating||4.9),
         "reviewCount":product.rev,"bestRating":"5","worstRating":"1"}:undefined,
-      "offers":{"@type":"Offer","price":product.price,"priceCurrency":"EUR",
+      "offers":{"@type":"Offer",...(PR.mostraPrezzi(CONFIG)?{"price":product.price,"priceCurrency":"EUR",
+        "priceValidUntil":new Date(Date.now()+31536000000).toISOString().slice(0,10)}:{}),
         "availability":product.hidden?"https://schema.org/OutOfStock":"https://schema.org/InStock",
         "url":url,"itemCondition":"https://schema.org/NewCondition",
-        "priceValidUntil":new Date(Date.now()+31536000000).toISOString().slice(0,10),
         "seller":{"@id":base()+SCH.ID.org},
         "hasMerchantReturnPolicy":{"@type":"MerchantReturnPolicy","applicableCountry":"IT",
           "returnPolicyCategory":"https://schema.org/MerchantReturnFiniteReturnWindow",

@@ -139,6 +139,19 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
 .bulk-bar{display:none;position:sticky;top:56px;z-index:25;background:var(--card2);border:1px solid var(--laser);border-radius:11px;padding:9px 14px;margin-bottom:10px;align-items:center;gap:10px;flex-wrap:wrap}
 .bulk-bar.on{display:flex}
 .bulk-bar b{color:var(--laser)}
+/* ===== Prezzi in vetrina (in admin) ===== */
+.pz-scelta{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.pz-card{text-align:left;padding:16px;border:2px solid var(--line);border-radius:12px;
+ background:var(--card);cursor:pointer;display:flex;flex-direction:column;gap:6px;color:inherit}
+.pz-card b{font-family:var(--fd);font-size:15px}
+.pz-card span{font-size:12.5px;color:var(--soft);line-height:1.5}
+.pz-card.on{border-color:var(--pri);box-shadow:0 0 0 3px rgba(30,58,138,.14)}
+.pz-prev{display:flex;gap:14px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:12px}
+.pz-prev-img{width:64px;height:64px;border-radius:10px;display:grid;place-items:center;font-size:28px;background:var(--bg2)}
+.pz-prev-body{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.pz-prev-price{font-family:var(--fd);font-weight:700;font-size:17px}
+.pz-prev-price.rich{font-family:inherit;font-size:13.5px;font-weight:600;color:var(--pri)}
+
 /* ===== Sfondo picker (in admin) ===== */
 .bg-swatch{width:52px;height:52px;border-radius:10px;border:2px solid transparent;cursor:pointer;transition:.15s;position:relative}
 /* scelta degli sfondi: si sceglie guardando, quindi ogni voce mostra
@@ -332,6 +345,44 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
     </div>
   </section>
 
+
+  <!-- ============ PREZZI O «CONTATTACI» ============ -->
+  <section class="view" id="v-prezzi">
+    <div class="card">
+      <h3>🏷 Prezzi in vetrina</h3>
+      <p class="hint" style="margin-bottom:6px">Decidi se il catalogo mostra i prezzi oppure invita a chiedere. Su una lavorazione personalizzata il prezzo esposto è spesso una promessa difficile da mantenere: dipende da quantità, materiale, grafica e tempi.</p>
+      <p class="hint" style="margin-bottom:16px"><b>Attenzione:</b> spegnendo i prezzi il carrello smette di essere un ordine e diventa una richiesta di preventivo — sparisce il totale, sparisce il codice sconto, e il messaggio WhatsApp chiede un preventivo invece di ordinare. È la scelta giusta se lavori su misura, non se vendi prodotti a listino.</p>
+
+      <div class="pz-scelta">
+        <button type="button" class="pz-card" data-pz="1">
+          <b>💶 Mostra i prezzi</b>
+          <span>Il visitatore vede la cifra, aggiunge al carrello e ordina da solo. Serve se i prodotti hanno un prezzo fisso.</span>
+        </button>
+        <button type="button" class="pz-card" data-pz="0">
+          <b>✉️ Prezzo su richiesta</b>
+          <span>Al posto della cifra compare un invito a contattarti. Ogni pulsante d'acquisto diventa una richiesta di preventivo.</span>
+        </button>
+      </div>
+
+      <div id="pzTesti" style="margin-top:22px">
+        <h4 style="font-family:var(--fd);margin:0 0 10px">Che cosa si legge al posto del prezzo</h4>
+        <div class="grid2">
+          <label>Etichetta (italiano)<input type="text" id="pzTestoIt" placeholder="Prezzo su richiesta"></label>
+          <label>Etichetta (inglese)<input type="text" id="pzTestoEn" placeholder="Price on request"></label>
+          <label>Pulsante (italiano)<input type="text" id="pzAzioneIt" placeholder="Richiedi il prezzo"></label>
+          <label>Pulsante (inglese)<input type="text" id="pzAzioneEn" placeholder="Request a price"></label>
+        </div>
+        <p class="hint" style="margin-top:8px">Lasciali vuoti per usare i testi predefiniti.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>👁 Come si vedrà</h3>
+      <div class="hint" style="margin-bottom:10px">La stessa scheda prodotto, con la scelta appena fatta.</div>
+      <div id="pzAnteprima"></div>
+      <p class="hint" id="pzStato" style="margin-top:14px"></p>
+    </div>
+  </section>
   <!-- ============ PORTFOLIO ============ -->
   <section class="view" id="v-port">
     <div class="card"><h3>📸 Instagram</h3>
@@ -1152,6 +1203,12 @@ function normalize(){
  S.CONFIG.slogan=Object.assign({it:'',en:''},S.CONFIG.slogan||{});
  S.CONFIG.analytics=Object.assign({cloudflare:''},S.CONFIG.analytics||{});
  S.CONFIG.sfondi=Object.assign({chiaro:'default',scuro:'default'},S.CONFIG.sfondi||{});
+ /* Prezzi: un dato mancante o storto non deve spegnerli per sbaglio — si
+    spengono solo se qualcuno lo ha chiesto per davvero (mostra===false). */
+ S.CONFIG.prezzi=Object.assign({mostra:true,testo:{it:'',en:''},azione:{it:'',en:''}},S.CONFIG.prezzi||{});
+ S.CONFIG.prezzi.mostra=S.CONFIG.prezzi.mostra!==false;
+ S.CONFIG.prezzi.testo=Object.assign({it:'',en:''},S.CONFIG.prezzi.testo||{});
+ S.CONFIG.prezzi.azione=Object.assign({it:'',en:''},S.CONFIG.prezzi.azione||{});
  S.CONFIG.moduli=Object.assign({formspreePreventivo:'',formspreeNewsletter:'',formspreePreventivoB2B:''},S.CONFIG.moduli||{});
  /* Popup: ogni campo deve esistere prima che il pannello lo legga, altrimenti
     un config vecchio apre una scheda piena di caselle rotte. */
@@ -1311,7 +1368,7 @@ function syncSocialLinks(){if(!Array.isArray(S.SOCIALS))return;const map={instag
 
 /* ---------- navigazione ---------- */
 const NAV=[['Panoramica',[['dash','📊','Dashboard']]],
- ['Catalogo',[['prod','📦','Prodotti'],['cats','🗂','Categorie'],['dig','💾','Digitali']]],
+ ['Catalogo',[['prod','📦','Prodotti'],['cats','🗂','Categorie'],['dig','💾','Digitali'],['prezzi','🏷','Prezzi in vetrina']]],
  ['Contenuti',[['media','🖼','Media Library'],['port','🏆','Portfolio'],['biz','🏢','Sezione Business'],['sponsor','🤝','Sponsor & Partner'],['themes','🎨','Temi stagionali'],['tech','🔥','Tecnologie'],['sochub','📱','Social Hub'],['hero','🎯','Home & Hero'],['texts','✍️','Testi IT/EN'],['faq','❓','FAQ & Recensioni'],['adv','🧩','Avanzate']]],
  ['Configurazione',[['contacts','📞','Contatti & Social'],['seo','🔎','SEO'],['seoai','🧠','SEO & AI Engine'],['bg','🎨','Sfondo Sito'],['set','⚙️','Impostazioni']]],
  ['Sistema',[['pub','🚀','Pubblica & Deploy'],['hist','🕘','Cronologia'],['health','🩺','Health Center'],['backup','💾','Backup']]]];
@@ -1322,7 +1379,7 @@ function go(v){
  VIEW=v;document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
  document.querySelectorAll('.nit').forEach(x=>x.classList.toggle('on',x.dataset.go===v));
  $('vtitle').textContent=TITLES[v]||'';
- const R={dash:renderDash,prod:renderProd,cats:renderCats,dig:renderDig,media:renderMedia,port:()=>{renderPort();bindAll()},biz:renderBiz,sponsor:renderSponsor,themes:renderThemes,tech:renderTech,sochub:renderSocialHub,hero:renderHero,texts:renderTexts,faq:renderFaq,adv:renderAdv,contacts:bindAll,seo:()=>{bindAll();seoLen()},bg:renderSfondi,pub:renderPub,hist:renderHist,set:renderSet,health:()=>{},backup:()=>{}};
+ const R={dash:renderDash,prod:renderProd,cats:renderCats,dig:renderDig,media:renderMedia,port:()=>{renderPort();bindAll()},biz:renderBiz,sponsor:renderSponsor,themes:renderThemes,tech:renderTech,sochub:renderSocialHub,hero:renderHero,texts:renderTexts,faq:renderFaq,adv:renderAdv,contacts:bindAll,seo:()=>{bindAll();seoLen()},bg:renderSfondi,prezzi:renderPrezzi,pub:renderPub,hist:renderHist,set:renderSet,health:()=>{},backup:()=>{}};
  if(R[v])R[v]();window.scrollTo(0,0)}
 document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(g.dataset.go)});
 $('goPub').onclick=()=>go('pub');
@@ -1564,6 +1621,51 @@ function sfCatalogo(tema){
 function sfScelta(){
  const M=window.SFONDI_MOD;
  return M?M.scelta(S.CONFIG||{}):{chiaro:'default',scuro:'default'};
+}
+
+/* ===== PREZZI IN VETRINA =====
+   Un interruttore con conseguenze grosse: l'anteprima serve a farle vedere
+   prima di pubblicare, non dopo. */
+function renderPrezzi(){
+ if(!$('pzAnteprima')) return;
+ const pz=S.CONFIG.prezzi=Object.assign({mostra:true,testo:{it:'',en:''},azione:{it:'',en:''}},S.CONFIG.prezzi||{});
+ pz.mostra=pz.mostra!==false;
+ pz.testo=Object.assign({it:'',en:''},pz.testo||{});
+ pz.azione=Object.assign({it:'',en:''},pz.azione||{});
+
+ document.querySelectorAll('[data-pz]').forEach(b=>{
+  b.classList.toggle('on', (b.dataset.pz==='1')===pz.mostra);
+  b.onclick=()=>{ pz.mostra=b.dataset.pz==='1'; markDirty(); renderPrezzi();
+   toast(pz.mostra?'I prezzi tornano visibili — pubblica per renderlo live'
+                  :'Prezzo su richiesta — pubblica per renderlo live') };
+ });
+
+ const campi=[['pzTestoIt',pz.testo,'it'],['pzTestoEn',pz.testo,'en'],
+              ['pzAzioneIt',pz.azione,'it'],['pzAzioneEn',pz.azione,'en']];
+ campi.forEach(([id,ogg,k])=>{ const el=$(id); if(!el) return;
+  el.value=ogg[k]||'';
+  el.oninput=()=>{ ogg[k]=el.value.trim(); markDirty(); pzDisegnaAnteprima() }; });
+ $('pzTesti').style.display=pz.mostra?'none':'';
+
+ pzDisegnaAnteprima();
+ $('pzStato').innerHTML=pz.mostra
+  ? 'In bozza: i prezzi <b>si vedono</b>. Il carrello funziona come un ordine.'
+  : 'In bozza: <b>prezzo su richiesta</b>. Il carrello diventa una richiesta di preventivo e i dati per Google non dichiarano nessuna cifra.';
+}
+
+function pzDisegnaAnteprima(){
+ const pz=S.CONFIG.prezzi, p=(S.P||[])[0]||{n:{it:'Prodotto'},price:29.9,icon:'🪵',rev:12};
+ const M=window.PREZZI_MOD;
+ const cfg={prezzi:pz};
+ const testo=M?M.testoPrezzo(p.price,cfg,{L:'it'}):'€'+Number(p.price||0).toFixed(2);
+ const azione=M?M.etichettaAzione(cfg,'it'):'Richiedi il prezzo';
+ $('pzAnteprima').innerHTML=`<div class="pz-prev">
+   <div class="pz-prev-img">${esc(p.icon||'🪵')}</div>
+   <div class="pz-prev-body">
+     <b>${esc((p.n&&p.n.it)||'Prodotto')}</b>
+     <div class="pz-prev-price${pz.mostra?'':' rich'}">${esc(testo)}</div>
+     <button type="button" class="btn pri sm" disabled>${esc(pz.mostra?'Aggiungi al carrello':azione)}</button>
+   </div></div>`;
 }
 
 function renderSfondi(){
@@ -4045,6 +4147,10 @@ $('seoAiGen').onclick=async()=>{
   window.VERTICALI_MOD = VE;   /* conteggio prodotti delle pagine di settore */
   import * as SF from './assets/js/sfondi.js';
   window.SFONDI_MOD = SF;      /* catalogo degli sfondi, uno per tema */
+  import * as PZ from './assets/js/prezzi.js';
+  window.PREZZI_MOD = PZ;      /* prezzi esposti oppure «su richiesta» */
+  /* il pannello può essere già aperto quando il modulo arriva: ridisegnalo */
+  if(typeof renderPrezzi === 'function') renderPrezzi();
 </script>
 </body>
 </html>

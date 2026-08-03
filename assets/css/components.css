@@ -1117,3 +1117,25 @@ behold-widget{display:block;min-height:240px}
 .quote-form[data-modo="azienda"] .q-priv{display:none}
 .quote-form small.hint{display:block;margin-top:5px;font-size:var(--fs-xs);color:var(--ink-soft);line-height:1.45}
 @media(max-width:640px){ .qmode{width:100%} .qmode-b{flex:1;padding:10px 12px} }
+
+/* ===== PREZZI SU RICHIESTA =====
+   Quando l'Admin spegne i prezzi, al loro posto compare un invito a chiedere.
+   È un testo, non una cifra: deve smettere di sembrare un numero — stesso
+   posto, stesso peso visivo, ma tono da etichetta e non da importo. */
+.price--rich,
+:root.senza-prezzi .di-price,
+:root.senza-prezzi .pcard .pr,
+:root.senza-prezzi #ppPrice,
+:root.senza-prezzi #ppTotal,
+:root.senza-prezzi #drTotal,
+:root.senza-prezzi #drSubtotal{
+  font-family:var(--f);font-weight:600;font-size:var(--fs-sm);
+  letter-spacing:.01em;color:var(--accent);white-space:normal}
+/* nel pulsante d'acquisto il totale sparisce: resta solo l'invito a chiedere */
+:root.senza-prezzi .addbtn-tot{display:none}
+/* il «cad.» e il prezzo barrato non hanno più niente da confrontare */
+:root.senza-prezzi .di-unit,
+:root.senza-prezzi .price small,
+:root.senza-prezzi #ppUnit{display:none}
+/* il filtro «prezzo massimo» non può filtrare quello che non si vede */
+:root.senza-prezzi .fgroup:has(#pRange){display:none}
