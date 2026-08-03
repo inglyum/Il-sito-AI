@@ -56,12 +56,23 @@ for (const m of css.matchAll(/([^{}]+)\{([^}]*background(?:-color)?:\s*(#[0-9a-f
 }
 check('ogni fondo scuro scritto a mano ha la sua versione chiara',
   scuriSenzaChiaro.length === 0, scuriSenzaChiaro.join(' | '));
-check('la striscia delle tecnologie ha una versione chiara',
-  /data-mode="light"\]\s*\.tech-ticker\{/.test(vars.replace(/\s+/g, m => m.includes('\n') ? '' : ' ')) ||
-  /\[data-mode="light"\] \.tech-ticker\{/.test(vars));
-/* su fondo chiaro il testo bianco sparisce: va ridefinito anche quello */
-check('anche i testi della striscia hanno una versione chiara',
-  /data-mode="light"\][^{]*\.tc-name/.test(vars) && /data-mode="light"\][^{]*\.tc-sub/.test(vars));
+/* La striscia prende i colori da variabili, non da valori scritti a mano:
+   così il tema chiaro li ridefinisce da sé e non conta più chi vince nella
+   cascata né in che ordine sono caricati i fogli di stile. */
+const TICKER = ['bg','card','card-hover','bordo','nome','sub','badge-bg','badge-testo','badge-bordo'];
+const senzaVariabile = TICKER.filter(v => !new RegExp('--ticker-' + v + '\\s*:').test(vars));
+check('la striscia ha tutte le sue variabili di colore', senzaVariabile.length === 0, senzaVariabile.join(', '));
+/* devono esistere DUE volte: una nel tema scuro, una in quello chiaro */
+const senzaChiaro = TICKER.filter(v =>
+  (vars.match(new RegExp('--ticker-' + v + '\\s*:', 'g')) || []).length < 2);
+check('ogni colore della striscia è ridefinito nel tema chiaro',
+  senzaChiaro.length === 0, senzaChiaro.join(', '));
+/* e il foglio dei componenti non deve più contenere quei colori scritti a mano */
+const fissi = ['#080c1a', '#eef1fb', '#6b7db3', '#f5d94e'].filter(c => {
+  const blocco = css.slice(css.indexOf('.tech-ticker{'), css.indexOf('.tech-ticker{') + 2200);
+  return blocco.includes(c);
+});
+check('nessun colore della striscia è più scritto a mano', fissi.length === 0, fissi.join(' '));
 
 console.log(`\n=========== CSS/SRCSET: ${pass} passati, ${fail} falliti ===========`);
 process.exit(fail ? 1 : 0);

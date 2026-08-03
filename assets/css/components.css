@@ -55,21 +55,21 @@
 .about-art .logo-big img{width:62%;filter:drop-shadow(0 30px 60px rgba(33,31,46,.25));animation:floaty 8s ease-in-out infinite}
 
 /* ---------- tech ticker ---------- */
-.tech-ticker{overflow:hidden;background:#080c1a;padding:0;position:relative}
+.tech-ticker{overflow:hidden;background:var(--ticker-bg);padding:0;position:relative}
 .tech-ticker::before,.tech-ticker::after{content:'';position:absolute;top:0;bottom:0;width:100px;z-index:3;pointer-events:none}
-.tech-ticker::before{left:0;background:linear-gradient(to right,#080c1a,transparent)}
-.tech-ticker::after{right:0;background:linear-gradient(to left,#080c1a,transparent)}
+.tech-ticker::before{left:0;background:linear-gradient(to right,var(--ticker-bg),transparent)}
+.tech-ticker::after{right:0;background:linear-gradient(to left,var(--ticker-bg),transparent)}
 .tt-row{padding:12px 0;overflow:hidden;display:flex}
 .tt-track{display:flex;gap:0;width:max-content;animation:tickerScroll 40s linear infinite;will-change:transform}
 .tt-row--rev .tt-track{animation:tickerScroll 48s linear infinite reverse}
 .tech-ticker:hover .tt-track{animation-play-state:paused}
-.ttcard{display:inline-flex;align-items:center;gap:14px;margin:0 10px;padding:14px 22px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px);white-space:nowrap;transition:background .3s,transform .3s;cursor:default;flex-shrink:0}
-.ttcard:hover{background:rgba(255,255,255,.09);transform:translateY(-2px)}
+.ttcard{display:inline-flex;align-items:center;gap:14px;margin:0 10px;padding:14px 22px;border-radius:14px;background:var(--ticker-card);border:1px solid var(--ticker-bordo);backdrop-filter:blur(12px);white-space:nowrap;transition:background .3s,transform .3s;cursor:default;flex-shrink:0}
+.ttcard:hover{background:var(--ticker-card-hover);transform:translateY(-2px)}
 .ttcard .tc-emoji{font-size:22px;line-height:1}
 .ttcard .tc-body{display:flex;flex-direction:column;gap:2px}
-.ttcard .tc-name{font-family:var(--fd);font-weight:700;font-size:13.5px;color:#eef1fb}
-.ttcard .tc-sub{font-family:var(--fd);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6b7db3}
-.ttcard .tc-badge{margin-left:4px;padding:3px 10px;border-radius:100px;font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.1em;background:rgba(245,217,78,.15);color:#f5d94e;border:1px solid rgba(245,217,78,.3)}
+.ttcard .tc-name{font-family:var(--fd);font-weight:700;font-size:13.5px;color:var(--ticker-nome)}
+.ttcard .tc-sub{font-family:var(--fd);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ticker-sub)}
+.ttcard .tc-badge{margin-left:4px;padding:3px 10px;border-radius:100px;font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.1em;background:var(--ticker-badge-bg);color:var(--ticker-badge-testo);border:1px solid var(--ticker-badge-bordo)}
 
 /* ---------- machines (dark) — enterprise redesign ---------- */
 .mach-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:20px;margin-top:60px}

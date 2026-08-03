@@ -1,3 +1,19 @@
+:root{
+  /* Striscia scorrevole delle tecnologie.
+     Erano colori scritti a mano dentro components.css, quindi il tema chiaro
+     non poteva raggiungerli: restava una fascia blu notte in mezzo a una
+     pagina di carta. Passando da variabili la cosa si risolve da sé, senza
+     dipendere da chi vince nella cascata. */
+  --ticker-bg:#080c1a;
+  --ticker-card:rgba(255,255,255,.04);
+  --ticker-card-hover:rgba(255,255,255,.09);
+  --ticker-bordo:rgba(255,255,255,.08);
+  --ticker-nome:#eef1fb;
+  --ticker-sub:#6b7db3;
+  --ticker-badge-bg:rgba(245,217,78,.15);
+  --ticker-badge-testo:#f5d94e;
+  --ticker-badge-bordo:rgba(245,217,78,.3);
+}
 :root{--radius:20px;--radius-lg:28px;--ease:cubic-bezier(.16,1,.3,1);--fb:'Inter',system-ui,sans-serif}
 
 /* — TEMA IMMERSIVO (vince sul precedente) — */
@@ -41,6 +57,17 @@
    Si attiva con <html data-mode="light">. Palette premium: carta naturale + oro caldo.
    Nessun componente va riscritto — solo variabili. */
 :root[data-mode="light"]{
+  /* Striscia tecnologie: carta, non notte */
+  --ticker-bg:#ede9e2;
+  --ticker-card:rgba(255,255,255,.75);
+  --ticker-card-hover:#ffffff;
+  --ticker-bordo:rgba(17,24,39,.10);
+  --ticker-nome:#1a1410;
+  --ticker-sub:#6b6255;
+  /* il giallo laser su carta bianca non si legge: stesso accento, tono scurito */
+  --ticker-badge-bg:rgba(184,134,11,.12);
+  --ticker-badge-testo:#8a6206;
+  --ticker-badge-bordo:rgba(184,134,11,.3);
   /* Superficie */
   --paper:#f5f3ef; --white:#ffffff; --graphite:#ede9e2;
   --gray:#ede9e2;
@@ -434,25 +461,3 @@
 :root[data-mode="light"] .btn-ghost:hover{
   background:rgba(26,20,16,.06);
 }
-
-/* ================== TEMA CHIARO: STRISCIA DELLE TECNOLOGIE ==================
-   La striscia scorrevole restava blu notte anche a tema chiaro: era l'unica
-   fascia scura in mezzo a una pagina di carta, e si vedeva. Il colore era
-   scritto fisso (#080c1a) invece che preso da una variabile, quindi il tema
-   chiaro non poteva raggiungerlo.
-   Qui viene ridefinita per intero — fondo, sfumature ai lati, tessere, testi —
-   perché su un fondo chiaro non basta cambiare lo sfondo: il testo era bianco
-   e sparirebbe. Il tema scuro non viene toccato. */
-:root[data-mode="light"] .tech-ticker{ background:var(--bg-deep) }
-:root[data-mode="light"] .tech-ticker::before{
-  background:linear-gradient(to right,var(--bg-deep),transparent) }
-:root[data-mode="light"] .tech-ticker::after{
-  background:linear-gradient(to left,var(--bg-deep),transparent) }
-:root[data-mode="light"] .ttcard{
-  background:rgba(255,255,255,.75); border-color:rgba(17,24,39,.10) }
-:root[data-mode="light"] .ttcard:hover{ background:#ffffff }
-:root[data-mode="light"] .ttcard .tc-name{ color:var(--ink) }
-:root[data-mode="light"] .ttcard .tc-sub{ color:var(--ink-soft) }
-/* il giallo laser su carta bianca non si legge: stesso accento, tono scurito */
-:root[data-mode="light"] .ttcard .tc-badge{
-  background:rgba(184,134,11,.12); color:#8a6206; border-color:rgba(184,134,11,.3) }
