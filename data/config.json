@@ -118,5 +118,9 @@
  },
  "analytics": {
   "cloudflare": ""
+ },
+ "sfondi": {
+  "chiaro": "default",
+  "scuro": "default"
  }
 }

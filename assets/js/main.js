@@ -13,6 +13,7 @@ import * as wish from './wishlist.js';
 import { initReferral, shareRef } from './referral.js';
 import { initShare, initFomo, openWhatsApp, renderInstagramFeed } from './social.js';
 import * as VERT from './verticali.js';
+import * as SFONDI from './sfondi.js';
 
 /* ---- config → DOM ---- */
 function initHeroVideo(){
@@ -30,6 +31,13 @@ function initHeroVideo(){
 }
 
 function applyConfig(){
+  /* Sfondo scelto nell'Admin, uno per tema. Sono due attributi e non uno
+     perché l'interruttore chiaro/scuro cambia tema senza ricaricare: devono
+     essere già pronti tutti e due. */
+  try{
+    const att=SFONDI.attributi(CONFIG);
+    Object.keys(att).forEach(k=>document.documentElement.setAttribute(k,att[k]));
+  }catch(e){ console.warn('[INGLY] sfondo:',e) }
   document.title = CONFIG.titolo;
   const md=document.querySelector('meta[name="description"]'); if(md) md.content=CONFIG.descrizione;
   const s=CONFIG.social, map=[s.instagram,s.facebook,s.tiktok,s.pinterest,s.whatsapp,s.etsy];

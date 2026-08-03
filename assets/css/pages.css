@@ -176,3 +176,82 @@ body.on-product .stickybuy{transform:none}
 .vert-intro{max-width:62ch;color:var(--ink-soft);line-height:var(--lh-base);margin:18px 0 6px}
 #vertPage{padding-top:120px}
 #vertPage[hidden]{display:none}
+
+/* ================== SFONDI SELEZIONABILI ==================
+   Tre per tema. Il predefinito è quello di sempre: senza scelta, o con una
+   scelta che non esiste più, il sito resta identico a com'era.
+
+   Tutto qui dentro vive su body::after — uno strato dietro al contenuto
+   (z-index negativo) e senza eventi del mouse: non può coprire né bloccare
+   niente. body::before è già occupato dalla griglia e non viene toccato.
+
+   Nessuna libreria: niente WebGL, niente three.js, nessuna richiesta a server
+   esterni. Sono gradienti che si spostano, e il browser li disegna sulla
+   scheda grafica senza far girare JavaScript. */
+body::after{content:none}
+:root[data-sfondo-scuro]:not([data-sfondo-scuro="default"]) body::after,
+:root[data-sfondo-chiaro]:not([data-sfondo-chiaro="default"]) body::after{
+  content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;
+  background-repeat:no-repeat}
+/* lo strato serve al tema a cui appartiene, non all'altro */
+:root[data-mode="light"][data-sfondo-chiaro="default"] body::after,
+:root[data-mode="dark"][data-sfondo-scuro="default"] body::after,
+:root:not([data-mode="light"])[data-sfondo-scuro="default"] body::after{content:none}
+
+/* ---------- TEMA SCURO ---------- */
+/* Aurora: due veli che scorrono in diagonale, lentissimi. */
+:root[data-mode="dark"][data-sfondo-scuro="aurora"] body::after,
+:root:not([data-mode="light"])[data-sfondo-scuro="aurora"] body::after{
+  background-image:
+    radial-gradient(ellipse 70% 45% at 25% 25%, rgba(59,125,224,.20), transparent 62%),
+    radial-gradient(ellipse 60% 40% at 78% 70%, rgba(120,70,200,.16), transparent 60%),
+    radial-gradient(ellipse 50% 35% at 55% 10%, rgba(80,200,180,.10), transparent 58%);
+  animation:sfAurora 38s ease-in-out infinite alternate}
+@keyframes sfAurora{
+  0%  {transform:translate3d(-3%,-2%,0) scale(1)}
+  50% {transform:translate3d(2%,3%,0)   scale(1.08)}
+  100%{transform:translate3d(4%,-3%,0)  scale(1.03)}}
+
+/* Nebbia: banchi che respirano, illuminati dal basso. */
+:root[data-mode="dark"][data-sfondo-scuro="nebbia"] body::after,
+:root:not([data-mode="light"])[data-sfondo-scuro="nebbia"] body::after{
+  background-image:
+    radial-gradient(ellipse 90% 40% at 50% 100%, rgba(90,140,230,.20), transparent 65%),
+    radial-gradient(ellipse 60% 30% at 20% 78%,  rgba(150,170,255,.10), transparent 62%),
+    radial-gradient(ellipse 55% 28% at 82% 85%,  rgba(70,110,190,.14), transparent 60%);
+  animation:sfNebbia 30s ease-in-out infinite alternate}
+@keyframes sfNebbia{
+  0%  {transform:translate3d(-4%,0,0) scale(1.04);opacity:.85}
+  100%{transform:translate3d(4%,-2%,0) scale(1.12);opacity:1}}
+
+/* ---------- TEMA CHIARO ----------
+   Qui i valori sono volutamente più bassi: sul chiaro basta pochissimo per
+   rendere un testo faticoso da leggere. */
+:root[data-mode="light"][data-sfondo-chiaro="alba"] body::after{
+  background-image:
+    radial-gradient(ellipse 75% 45% at 20% 12%, rgba(255,196,120,.30), transparent 62%),
+    radial-gradient(ellipse 65% 40% at 85% 28%, rgba(255,150,170,.20), transparent 60%),
+    radial-gradient(ellipse 70% 45% at 55% 95%, rgba(150,190,255,.20), transparent 62%);
+  animation:sfAlba 34s ease-in-out infinite alternate}
+@keyframes sfAlba{
+  0%  {transform:translate3d(-2%,-2%,0) scale(1)}
+  100%{transform:translate3d(3%,2%,0)   scale(1.08)}}
+
+:root[data-mode="light"][data-sfondo-chiaro="nuvole"] body::after{
+  background-image:
+    radial-gradient(ellipse 55% 26% at 18% 22%, rgba(255,255,255,.95), transparent 60%),
+    radial-gradient(ellipse 45% 22% at 62% 14%, rgba(255,255,255,.85), transparent 58%),
+    radial-gradient(ellipse 60% 28% at 88% 40%, rgba(214,230,250,.75), transparent 60%),
+    radial-gradient(ellipse 70% 34% at 40% 88%, rgba(226,238,252,.70), transparent 62%);
+  animation:sfNuvole 55s linear infinite alternate}
+@keyframes sfNuvole{
+  0%  {transform:translate3d(-6%,0,0)}
+  100%{transform:translate3d(6%,-2%,0)}}
+
+/* Chi ha chiesto meno animazioni le riceve ferme, non spente: lo sfondo
+   resta, smette solo di muoversi. */
+@media (prefers-reduced-motion:reduce){
+  body::after{animation:none!important}
+}
+/* In stampa uno sfondo colorato è solo inchiostro sprecato. */
+@media print{ body::after{display:none} }

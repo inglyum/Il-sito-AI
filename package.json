@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "npx serve .",
     "build": "node scripts/build.mjs",
-    "test": "node scripts/validate-data.mjs && node scripts/prerender.mjs --verifica && node scripts/generate-sitemap.mjs --verifica && for t in css seo-pagine abbina-foto verticali schema-engine seo-engine faq-engine prerender-engine media-destinazione ai-compila admin sito; do node tests/test-$t.mjs || exit 1; done"
+    "test": "node scripts/validate-data.mjs && node scripts/prerender.mjs --verifica && node scripts/generate-sitemap.mjs --verifica && for t in css sfondi seo-pagine abbina-foto verticali schema-engine seo-engine faq-engine prerender-engine media-destinazione ai-compila admin sito; do node tests/test-$t.mjs || exit 1; done"
   },
   "devDependencies": {
     "esbuild": "^0.28.1",

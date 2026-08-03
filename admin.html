@@ -141,6 +141,26 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
 .bulk-bar b{color:var(--laser)}
 /* ===== Sfondo picker (in admin) ===== */
 .bg-swatch{width:52px;height:52px;border-radius:10px;border:2px solid transparent;cursor:pointer;transition:.15s;position:relative}
+/* scelta degli sfondi: si sceglie guardando, quindi ogni voce mostra
+   davvero com'è fatta invece di un quadratino colorato e un nome */
+.sf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+.sf-card{border:2px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;
+ background:var(--card);transition:border-color .15s,transform .15s;text-align:left;padding:0}
+.sf-card:hover{transform:translateY(-2px)}
+.sf-card.on{border-color:var(--laser);box-shadow:0 0 0 3px rgba(245,217,78,.2)}
+.sf-mini{height:96px;position:relative;overflow:hidden}
+.sf-mini span{position:absolute;left:10px;bottom:8px;font-size:11.5px;font-weight:700;
+ padding:2px 8px;border-radius:99px;background:rgba(0,0,0,.45);color:#fff}
+.sf-card.on .sf-mini::after{content:'✓';position:absolute;top:8px;right:10px;font-size:17px;
+ color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.sf-body{padding:11px 13px 13px}
+.sf-body b{display:block;font-family:var(--fd);font-size:14.5px;margin-bottom:3px}
+.sf-body span{font-size:12px;color:var(--soft);line-height:1.45;display:block}
+.sf-prev{height:230px;border-radius:14px;border:1px solid var(--line);position:relative;overflow:hidden;
+ display:grid;place-items:center;text-align:center;padding:24px}
+.sf-prev .sf-testo{position:relative;z-index:2;max-width:34ch}
+.sf-prev h5{font-family:var(--fd);font-size:24px;margin:0 0 6px}
+.sf-prev p{font-size:13.5px;margin:0;opacity:.85}
 .bg-swatch.on{border-color:var(--laser);box-shadow:0 0 0 3px rgba(245,217,78,.25)}
 .bg-swatch.on::after{content:'✓';position:absolute;inset:0;display:grid;place-items:center;font-size:18px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5)}
 .bg-preview{width:100%;height:140px;border-radius:12px;border:1px solid var(--line);margin-top:12px;background:#0a0d18;transition:background .4s}
@@ -287,20 +307,28 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
   <section class="view" id="v-bg">
     <div class="card">
       <h3>🎨 Sfondo del sito</h3>
-      <p class="hint" style="margin-bottom:16px">Scegli lo sfondo predefinito che i visitatori vedono. La modifica è immediata e salvata localmente finché non pubblichi.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center" id="bgSwatches"></div>
-      <div class="bg-preview" id="bgPreview"></div>
-      <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <button class="btn pri" id="bgSave">💾 Salva in configurazione</button>
-        <span class="hint" id="bgSaveHint"></span>
+      <p class="hint" style="margin-bottom:6px">Tre sfondi per il tema chiaro e tre per quello scuro. I visitatori scelgono il tema con l'interruttore in alto: qui decidi che sfondo vedono in ciascuno dei due.</p>
+      <p class="hint" style="margin-bottom:16px">Quelli animati si muovono molto lentamente — sono pensati per non distrarre dalla lettura. Chi ha chiesto al proprio dispositivo meno animazioni li vede fermi. <b>«Predefinito» è lo sfondo di sempre.</b></p>
+
+      <h4 style="font-family:var(--fd);margin:18px 0 8px">🌙 Tema scuro</h4>
+      <div class="sf-grid" id="sfScuro"></div>
+
+      <h4 style="font-family:var(--fd);margin:26px 0 8px">☀️ Tema chiaro</h4>
+      <div class="sf-grid" id="sfChiaro"></div>
+
+      <div style="margin-top:22px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <span class="hint" id="sfStato"></span>
       </div>
     </div>
+
     <div class="card">
-      <h3>🖌 Sfondo personalizzato</h3>
-      <div class="row c2">
-        <div><label>Codice CSS personalizzato (background)</label><input type="text" id="bgCustomInput" placeholder="es. linear-gradient(135deg,#0a0d18,#1e1b4b)"></div>
-        <div style="align-self:end"><button class="btn" id="bgCustomApply">Applica</button></div>
+      <h3>👁 Anteprima dal vivo</h3>
+      <div class="hint" style="margin-bottom:10px">Il riquadro mostra lo sfondo scelto con del testo sopra: se qui si legge male, si legge male anche sul sito.</div>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <button class="btn sm pri" id="sfPrevScuro">🌙 Scuro</button>
+        <button class="btn sm" id="sfPrevChiaro">☀️ Chiaro</button>
       </div>
+      <div id="sfPrev" class="sf-prev"></div>
     </div>
   </section>
 
@@ -1123,6 +1151,7 @@ function normalize(){
  S.CONFIG.aboutMedia=S.CONFIG.aboutMedia||{tipo:'logo',src:''};
  S.CONFIG.slogan=Object.assign({it:'',en:''},S.CONFIG.slogan||{});
  S.CONFIG.analytics=Object.assign({cloudflare:''},S.CONFIG.analytics||{});
+ S.CONFIG.sfondi=Object.assign({chiaro:'default',scuro:'default'},S.CONFIG.sfondi||{});
  S.CONFIG.moduli=Object.assign({formspreePreventivo:'',formspreeNewsletter:'',formspreePreventivoB2B:''},S.CONFIG.moduli||{});
  /* Popup: ogni campo deve esistere prima che il pannello lo legga, altrimenti
     un config vecchio apre una scheda piena di caselle rotte. */
@@ -1293,7 +1322,7 @@ function go(v){
  VIEW=v;document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
  document.querySelectorAll('.nit').forEach(x=>x.classList.toggle('on',x.dataset.go===v));
  $('vtitle').textContent=TITLES[v]||'';
- const R={dash:renderDash,prod:renderProd,cats:renderCats,dig:renderDig,media:renderMedia,port:()=>{renderPort();bindAll()},biz:renderBiz,sponsor:renderSponsor,themes:renderThemes,tech:renderTech,sochub:renderSocialHub,hero:renderHero,texts:renderTexts,faq:renderFaq,adv:renderAdv,contacts:bindAll,seo:()=>{bindAll();seoLen()},bg:renderBg,pub:renderPub,hist:renderHist,set:renderSet,health:()=>{},backup:()=>{}};
+ const R={dash:renderDash,prod:renderProd,cats:renderCats,dig:renderDig,media:renderMedia,port:()=>{renderPort();bindAll()},biz:renderBiz,sponsor:renderSponsor,themes:renderThemes,tech:renderTech,sochub:renderSocialHub,hero:renderHero,texts:renderTexts,faq:renderFaq,adv:renderAdv,contacts:bindAll,seo:()=>{bindAll();seoLen()},bg:renderSfondi,pub:renderPub,hist:renderHist,set:renderSet,health:()=>{},backup:()=>{}};
  if(R[v])R[v]();window.scrollTo(0,0)}
 document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(g.dataset.go)});
 $('goPub').onclick=()=>go('pub');
@@ -1510,51 +1539,70 @@ function runBulk(){
 })();
 
 /* ================== SFONDO SITO ================== */
-const BG_PRESETS=[
- {k:'default',label:'Default',bg:'radial-gradient(ellipse at 50% 0%,#131a33,#0a0d18)'},
- {k:'deep-space',label:'Deep Space',bg:'radial-gradient(ellipse at 50% 0%,#0d0a2e,#050510)'},
- {k:'forest',label:'Foresta',bg:'radial-gradient(ellipse at 30% 20%,#0a1e0d,#050d08)'},
- {k:'sunset',label:'Tramonto',bg:'radial-gradient(ellipse at 50% 0%,#2a0a1e,#0d0a18)'},
- {k:'ocean',label:'Oceano',bg:'radial-gradient(ellipse at 50% 0%,#051528,#010a14)'},
- {k:'obsidian',label:'Ossidiana',bg:'radial-gradient(ellipse at 50% 0%,#1a1a1a,#030303)'},
- {k:'aurora',label:'Aurora',bg:'radial-gradient(ellipse at 30% 0%,#071a26,#0a0d18),radial-gradient(ellipse at 70% 100%,#1a0a24,transparent)'},
- {k:'copper',label:'Rame',bg:'radial-gradient(ellipse at 50% 0%,#1e1006,#0d0805)'},
-];
-function renderBg(){
- const cur=(S.CONFIG&&S.CONFIG.siteBg)||'default';
- $('bgSwatches').innerHTML=BG_PRESETS.map(p=>`<div class="bg-swatch${p.k===cur?' on':''}" style="background:${p.bg}" title="${p.label}" data-bgk="${p.k}" data-bgv="${p.bg.replace(/"/g,"'")}"></div>`).join('');
- applyBgPreview(cur);
- document.querySelectorAll('.bg-swatch').forEach(sw=>{
-  sw.onclick=()=>{
-   document.querySelectorAll('.bg-swatch').forEach(x=>x.classList.remove('on'));
-   sw.classList.add('on');
-   applyBgPreview(null,sw.dataset.bgv);
-   $('bgCustomInput').value='';
-   $('bgSaveHint').textContent='';
-  };
- });
- const ci=$('bgCustomInput'),ca=$('bgCustomApply'),bs=$('bgSave');
- if(ca) ca.onclick=()=>{
-  const v=ci.value.trim(); if(!v)return;
-  document.querySelectorAll('.bg-swatch').forEach(x=>x.classList.remove('on'));
-  applyBgPreview(null,v);
- };
- if(bs) bs.onclick=()=>{
-  const on=document.querySelector('.bg-swatch.on');
-  const val=on?on.dataset.bgk:null;
-  const custom=$('bgCustomInput').value.trim();
-  if(!S.CONFIG) S.CONFIG={};
-  if(val){ S.CONFIG.siteBg=val; } else if(custom){ S.CONFIG.siteBg='custom'; S.CONFIG.siteBgCustom=custom; }
-  else return;
-  markDirty();
-  $('bgSaveHint').textContent='✔ Salvato in bozza — pubblica per renderlo live';
-  toast('Sfondo salvato in configurazione');
- };
+/* ================== SFONDI DEL SITO ==================
+   Il pannello precedente salvava CONFIG.siteBg, ma nessuno sul sito lo
+   leggeva: si sceglieva uno sfondo e non cambiava niente. Ora la scelta è una
+   per tema — chiaro e scuro sono due ambienti diversi, e un fondo che sta bene
+   su uno può rendere illeggibile il testo sull'altro. */
+const SF_MINI = {
+ scuro:{
+  default:'radial-gradient(ellipse at 50% 0%,#131a33,#0a0d18 60%)',
+  aurora:'radial-gradient(ellipse 70% 45% at 25% 25%,rgba(59,125,224,.5),transparent 62%),radial-gradient(ellipse 60% 40% at 78% 70%,rgba(120,70,200,.42),transparent 60%),radial-gradient(ellipse at 50% 0%,#131a33,#0a0d18 60%)',
+  nebbia:'radial-gradient(ellipse 90% 45% at 50% 100%,rgba(90,140,230,.5),transparent 65%),radial-gradient(ellipse 55% 30% at 82% 85%,rgba(70,110,190,.4),transparent 60%),radial-gradient(ellipse at 50% 0%,#131a33,#0a0d18 60%)',
+ },
+ chiaro:{
+  default:'radial-gradient(ellipse at 50% 0%,#ffffff,#eef1f7 60%)',
+  alba:'radial-gradient(ellipse 75% 45% at 20% 12%,rgba(255,196,120,.75),transparent 62%),radial-gradient(ellipse 65% 40% at 85% 28%,rgba(255,150,170,.55),transparent 60%),radial-gradient(ellipse at 50% 0%,#ffffff,#eef1f7 60%)',
+  nuvole:'radial-gradient(ellipse 55% 28% at 18% 22%,rgba(255,255,255,.98),transparent 60%),radial-gradient(ellipse 60% 30% at 88% 40%,rgba(214,230,250,.9),transparent 60%),radial-gradient(ellipse at 50% 0%,#e9eef7,#dfe6f2 60%)',
+ }};
+let SF_PREV_TEMA='scuro';
+
+function sfCatalogo(tema){
+ const M=window.SFONDI_MOD;
+ return M?M.elenco(tema):[{id:'default',nome:'Predefinito',anima:false,descrizione:''}];
 }
-function applyBgPreview(key,val){
- const prev=$('bgPreview'); if(!prev) return;
- if(key){const p=BG_PRESETS.find(x=>x.k===key);if(p)prev.style.background=p.bg;}
- else if(val){prev.style.background=val;}
+function sfScelta(){
+ const M=window.SFONDI_MOD;
+ return M?M.scelta(S.CONFIG||{}):{chiaro:'default',scuro:'default'};
+}
+
+function renderSfondi(){
+ if(!$('sfScuro')) return;
+ S.CONFIG.sfondi=Object.assign({chiaro:'default',scuro:'default'},S.CONFIG.sfondi||{});
+ const scelto=sfScelta();
+
+ ['scuro','chiaro'].forEach(tema=>{
+  $(tema==='scuro'?'sfScuro':'sfChiaro').innerHTML=sfCatalogo(tema).map(sf=>`
+   <button type="button" class="sf-card${sf.id===scelto[tema]?' on':''}" data-sf="${tema},${esc(sf.id)}">
+     <div class="sf-mini" style="background:${SF_MINI[tema][sf.id]||''}">
+       ${sf.anima?'<span>● animato</span>':''}</div>
+     <div class="sf-body"><b>${esc(sf.nome)}</b><span>${esc(sf.descrizione)}</span></div>
+   </button>`).join('');
+ });
+
+ document.querySelectorAll('[data-sf]').forEach(b=>b.onclick=()=>{
+  const[tema,id]=b.dataset.sf.split(',');
+  S.CONFIG.sfondi[tema]=id;
+  markDirty();
+  SF_PREV_TEMA=tema;
+  renderSfondi();
+  toast('Sfondo «'+id+'» per il tema '+tema+' — pubblica per renderlo live');
+ });
+
+ $('sfStato').innerHTML='In bozza: tema scuro <b>'+esc(scelto.scuro)+'</b> · tema chiaro <b>'+esc(scelto.chiaro)+'</b>. Ricordati di <b>pubblicare</b>.';
+ $('sfPrevScuro').classList.toggle('pri',SF_PREV_TEMA==='scuro');
+ $('sfPrevChiaro').classList.toggle('pri',SF_PREV_TEMA==='chiaro');
+ $('sfPrevScuro').onclick=()=>{SF_PREV_TEMA='scuro';renderSfondi()};
+ $('sfPrevChiaro').onclick=()=>{SF_PREV_TEMA='chiaro';renderSfondi()};
+
+ /* Anteprima con del testo sopra: uno sfondo si giudica dalla leggibilità,
+    non da com'è bello da solo. */
+ const t=SF_PREV_TEMA, id=scelto[t];
+ const p=$('sfPrev');
+ p.style.background=SF_MINI[t][id]||'';
+ p.style.color=t==='scuro'?'#eae8f5':'#141830';
+ p.innerHTML='<div class="sf-testo"><h5>Segnati dalla luce.</h5>'
+  +'<p>Creazioni personalizzate premium in legno, plexiglass, metallo, vetro e pelle.</p></div>';
 }
 
 /* ================== PRODOTTI ================== */
@@ -3995,6 +4043,8 @@ $('seoAiGen').onclick=async()=>{
   window.ABBINA = AB;       /* abbinamento automatico foto → prodotto */
   import * as VE from './assets/js/verticali.js';
   window.VERTICALI_MOD = VE;   /* conteggio prodotti delle pagine di settore */
+  import * as SF from './assets/js/sfondi.js';
+  window.SFONDI_MOD = SF;      /* catalogo degli sfondi, uno per tema */
 </script>
 </body>
 </html>
