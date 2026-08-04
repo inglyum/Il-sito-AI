@@ -3068,5 +3068,38 @@
    "it": "Aggiungi un tocco di velocità e adrenalina alla tua collezione con questa action figure del Flash in legno. Realizzata con precisione e dettagli impeccabili, questa figura è un must-have per i fan dell'eroe più veloce del mondo e per gli appassionati di collezionismo. Ideale come regalo o per decorare la tua stanza, ufficio o studio.",
    "en": "Add a touch of speed and adrenaline to your collection with this wooden Flash action figure. Crafted with precision and impeccable details, this figure is a must-have for fans of the fastest man alive and collectors alike. Perfect as a gift or to decorate your room, office, or studio."
   }
+ },
+ {
+  "id": 106,
+  "cat": "casa",
+  "sub": 1,
+  "n": {
+   "it": "Nuovo prodotto",
+   "en": "New product"
+  },
+  "mat": "Legno",
+  "price": 10,
+  "icon": "✨",
+  "rev": 0,
+  "prod": 3
+ },
+ {
+  "id": 107,
+  "cat": "limited",
+  "sub": 1,
+  "n": {
+   "it": "Statuetta Personalizzata in Legno – Ritratto Personale con Pallone da Calcio Inter | Regalo Unico Made in Italy",
+   "en": "Custom Wooden Figurine – Personal Portrait with Inter Football | Unique Handmade Gift Made in Italy"
+  },
+  "mat": "Legno",
+  "price": 79.99,
+  "icon": "✨",
+  "rev": 0,
+  "prod": 3,
+  "hidden": false,
+  "desc": {
+   "it": "Statuetta artigianale interamente personalizzata, realizzata con materiali pregiati e lavorazioni precise. Ogni dettaglio è curato a mano: dal ritratto fedele alla persona, fino alla pallina da calcio con i colori della squadra. Perfetta come regalo speciale per compleanni, anniversari, ricorrenze o per arredare con originalità ogni ambiente. Completamente personalizzabile con nomi, dettagli e temi a scelta.",
+   "en": "Fully custom handmade figurine, crafted with premium materials and precise workmanship. Every detail is carefully finished by hand: from the faithful portrait to the football in team colours. Perfect as a special gift for birthdays, anniversaries, celebrations or to add a unique touch to any space. Fully customisable with names, details and themes of your choice."
+  }
  }
 ]
