@@ -2993,5 +2993,24 @@
   "icon": "✨",
   "rev": 0,
   "prod": 3
+ },
+ {
+  "id": 102,
+  "cat": "nuova-ms3k34dc",
+  "sub": 2,
+  "n": {
+   "it": "Action Figure Spider-Man in Legno - Collezione Esclusiva",
+   "en": "Wooden Spider-Man Action Figure - Exclusive Collection"
+  },
+  "mat": "Legno",
+  "price": 39.99,
+  "icon": "✨",
+  "rev": 0,
+  "prod": 3,
+  "hidden": false,
+  "desc": {
+   "it": "Aggiungi un tocco di forza e avventura alla tua collezione con questa action figure di Spider-Man in legno. Realizzata con precisione e dettagli impeccabili, questa figura è un must-have per i fan dell'eroe arancione e per gli appassionati di collezionismo. Ideale come regalo o per decorare la tua stanza, ufficio o studio.",
+   "en": "Add a touch of strength and adventure to your collection with this wooden Spider-Man action figure. Crafted with precision and impeccable details, this figure is a must-have for fans of the orange hero and collectors alike. Perfect as a gift or to decorate your room, office, or studio."
+  }
  }
 ]
