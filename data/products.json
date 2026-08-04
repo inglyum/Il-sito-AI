@@ -197,36 +197,36 @@
  {
   "id": 6,
   "n": {
-   "it": "Decorazione 3D Stampata Personalizzata",
-   "en": "Custom 3D Printed Decoration"
+   "it": "Orologio da Parete in Legno \"Albero della Vita\" - Design Elegante per Arredamento",
+   "en": "\"Tree of Life\" Wooden Wall Clock - Elegant Design for Home Decor"
   },
   "cat": "casa",
   "sub": 6,
-  "mat": "PLA",
-  "price": 27,
+  "mat": "Legno",
+  "price": 59.99,
   "icon": "🎨",
   "img": "img/6.webp",
   "desc": {
-   "it": "Decorazione da parete o da scaffale stampata in 3D su misura. Scegli forma, colore e scritta. PLA premium disponibile in 12 colori. Finitura opaca o lucida.",
-   "en": "Custom 3D-printed wall or shelf decoration. Choose shape, colour and text. 12 PLA colours."
+   "it": "Orologio da parete in legno massello con intaglio \"Albero della Vita\". Stile rustico e moderno, perfetto per decorare la tua casa, ufficio o ristorante. Orologio silenzioso, design esclusivo, made in Italy. Regalo unico per anniversari e occasioni speciali.",
+   "en": "Solid wood wall clock with \"Tree of Life\" engraving. A perfect blend of rustic and modern styles, ideal for decorating your home, office, or restaurant. Silent clock mechanism, exclusive design, made in Italy. A unique gift for anniversaries and special occasions."
   },
   "rev": 38,
   "sku": "INGLY-006",
   "misure": [
    [
     "Max larghezza",
-    "20 cm"
+    "45 cm"
    ],
    [
     "Max altezza",
-    "20 cm"
+    "45 cm"
    ],
    [
     "Spessore",
-    "5 mm"
+    "12 mm"
    ]
   ],
-  "prod": 3,
+  "prod": -5,
   "hidden": false
  },
  {
@@ -2843,39 +2843,6 @@
   "hidden": true
  },
  {
-  "id": 91,
-  "cat": "casa",
-  "sub": 1,
-  "n": {
-   "it": "Nuovo prodotto",
-   "en": "New product"
-  },
-  "mat": "Legno",
-  "price": 10,
-  "icon": "✨",
-  "rev": 0,
-  "prod": 3
- },
- {
-  "id": 92,
-  "cat": "casa",
-  "sub": 1,
-  "n": {
-   "it": "Immagine con Spotify",
-   "en": "Immagine con Spotify"
-  },
-  "mat": "Legno",
-  "price": 10,
-  "icon": "✨",
-  "rev": 0,
-  "prod": 3,
-  "hidden": false,
-  "desc": {
-   "it": "Festeggia i tuoi momenti speciali con questa stampa incorniciata personalizzata e trasforma la tua canzone o playlist in un regalo unico. Perfetto per i tuoi cari, la famiglia o gli amici più cari.\n\nIl codice Spotify personalizzato è inciso sulla cornice, consentendoti di scansionarlo e riprodurre il brano o la playlist specificata in qualsiasi momento.",
-   "en": "Festeggia i tuoi momenti speciali con questa stampa incorniciata personalizzata e trasforma la tua canzone o playlist in un regalo unico. Perfetto per i tuoi cari, la famiglia o gli amici più cari.\n\nIl codice Spotify personalizzato è inciso sulla cornice, consentendoti di scansionarlo e riprodurre il brano o la playlist specificata in qualsiasi momento."
-  }
- },
- {
   "id": 93,
   "cat": "eventi",
   "sub": 6,
@@ -2893,5 +2860,19 @@
    "it": "Festeggia i tuoi momenti speciali con questa stampa incorniciata personalizzata e trasforma la tua canzone o playlist in un regalo unico. Perfetto per i tuoi cari, la famiglia o gli amici più cari.\n\nIl codice Spotify personalizzato è inciso sulla cornice, consentendoti di scansionarlo e riprodurre il brano o la playlist specificata in qualsiasi momento.",
    "en": "Festeggia i tuoi momenti speciali con questa stampa incorniciata personalizzata e trasforma la tua canzone o playlist in un regalo unico. Perfetto per i tuoi cari, la famiglia o gli amici più cari.\n\nIl codice Spotify personalizzato è inciso sulla cornice, consentendoti di scansionarlo e riprodurre il brano o la playlist specificata in qualsiasi momento."
   }
+ },
+ {
+  "id": 94,
+  "cat": "casa",
+  "sub": 1,
+  "n": {
+   "it": "Nuovo prodotto",
+   "en": "New product"
+  },
+  "mat": "Legno",
+  "price": 10,
+  "icon": "✨",
+  "rev": 0,
+  "prod": 3
  }
 ]
