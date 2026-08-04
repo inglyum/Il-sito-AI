@@ -2866,20 +2866,6 @@
   }
  },
  {
-  "id": 94,
-  "cat": "casa",
-  "sub": 1,
-  "n": {
-   "it": "Nuovo prodotto",
-   "en": "New product"
-  },
-  "mat": "Legno",
-  "price": 10,
-  "icon": "✨",
-  "rev": 0,
-  "prod": 3
- },
- {
   "id": 95,
   "cat": "nuova-ms3k34dc",
   "sub": 2,
@@ -2903,20 +2889,6 @@
   ]
  },
  {
-  "id": 96,
-  "cat": "casa",
-  "sub": 1,
-  "n": {
-   "it": "Nuovo prodotto",
-   "en": "New product"
-  },
-  "mat": "Legno",
-  "price": 10,
-  "icon": "✨",
-  "rev": 0,
-  "prod": 3
- },
- {
   "id": 97,
   "cat": "nuova-ms3k34dc",
   "sub": 2,
@@ -2937,62 +2909,6 @@
   "gallery": [
    "img/97-g1.webp"
   ]
- },
- {
-  "id": 98,
-  "cat": "casa",
-  "sub": 1,
-  "n": {
-   "it": "Nuovo prodotto",
-   "en": "New product"
-  },
-  "mat": "Legno",
-  "price": 10,
-  "icon": "✨",
-  "rev": 0,
-  "prod": 3
- },
- {
-  "id": 99,
-  "cat": "casa",
-  "sub": 1,
-  "n": {
-   "it": "Nuovo prodotto",
-   "en": "New product"
-  },
-  "mat": "Legno",
-  "price": 10,
-  "icon": "✨",
-  "rev": 0,
-  "prod": 3
- },
- {
-  "id": 100,
-  "cat": "casa",
-  "sub": 1,
-  "n": {
-   "it": "Nuovo prodotto",
-   "en": "New product"
-  },
-  "mat": "Legno",
-  "price": 10,
-  "icon": "✨",
-  "rev": 0,
-  "prod": 3
- },
- {
-  "id": 101,
-  "cat": "casa",
-  "sub": 1,
-  "n": {
-   "it": "Nuovo prodotto",
-   "en": "New product"
-  },
-  "mat": "Legno",
-  "price": 10,
-  "icon": "✨",
-  "rev": 0,
-  "prod": 3
  },
  {
   "id": 102,
@@ -3068,20 +2984,6 @@
    "it": "Aggiungi un tocco di velocità e adrenalina alla tua collezione con questa action figure del Flash in legno. Realizzata con precisione e dettagli impeccabili, questa figura è un must-have per i fan dell'eroe più veloce del mondo e per gli appassionati di collezionismo. Ideale come regalo o per decorare la tua stanza, ufficio o studio.",
    "en": "Add a touch of speed and adrenaline to your collection with this wooden Flash action figure. Crafted with precision and impeccable details, this figure is a must-have for fans of the fastest man alive and collectors alike. Perfect as a gift or to decorate your room, office, or studio."
   }
- },
- {
-  "id": 106,
-  "cat": "casa",
-  "sub": 1,
-  "n": {
-   "it": "Nuovo prodotto",
-   "en": "New product"
-  },
-  "mat": "Legno",
-  "price": 10,
-  "icon": "✨",
-  "rev": 0,
-  "prod": 3
  },
  {
   "id": 107,
