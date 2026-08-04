@@ -80,5 +80,25 @@ check('ogni tipo ha icona, nome e aiuto',
 check('i valori generati si rileggono nello stesso tipo',
   D.TIPI.every(t => D.elementiPerTipo(t.id, dati).every(v => D.tipoDi(v.valore) === t.id)));
 
+console.log('\n=== DUE FILE CON LO STESSO NOME ===');
+/* Caricando decine di foto insieme, due «IMG_1234.jpg» presi da cartelle
+   diverse sono la norma. L'anteprima prometteva a entrambi lo stesso
+   percorso: si vedevano venti righe e ne arrivavano meno. */
+const p1 = D.percorso('free', { ext:'webp', nomeFile:'IMG_1234.jpg', occupati:[] });
+const p2 = D.percorso('free', { ext:'webp', nomeFile:'IMG_1234.jpg', occupati:[p1] });
+const p3 = D.percorso('free', { ext:'webp', nomeFile:'IMG_1234.jpg', occupati:[p1, p2] });
+check('il primo prende il nome pulito', p1 === 'img/img-1234.webp', p1);
+check('il secondo non ruba il posto al primo', p2 !== p1, p2);
+check('il terzo nemmeno', p3 !== p1 && p3 !== p2, p3);
+check('i suffissi sono leggibili', p2 === 'img/img-1234-2.webp' && p3 === 'img/img-1234-3.webp', p2 + ' ' + p3);
+check('senza conflitti niente suffisso inutile',
+  D.percorso('free', { ext:'webp', nomeFile:'targa.png', occupati:['img/altro.webp'] }) === 'img/targa.webp');
+/* Le altre destinazioni DEVONO invece sovrascrivere: la foto principale del
+   prodotto 7 è «img/7.webp» e basta, altrimenti il sito non la troverebbe. */
+check('la foto di un prodotto resta al suo posto anche se già esiste',
+  D.percorso('p:7', { ext:'webp', occupati:['img/7.webp'] }) === 'img/7.webp');
+check('la copertina di una categoria resta al suo posto',
+  D.percorso('c:arredamento', { ext:'webp', occupati:['img/cat-arredamento.webp'] }) === 'img/cat-arredamento.webp');
+
 console.log(`\n=========== MEDIA DESTINAZIONE: ${ok} passati, ${ko} falliti ===========\n`);
 process.exit(ko ? 1 : 0);

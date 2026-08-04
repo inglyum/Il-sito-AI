@@ -57,7 +57,8 @@ export function slug(nome){
    Deve restare allineato a ciò che fa la pubblicazione: se qui e là divergono,
    l'anteprima direbbe una bugia. Il test lo verifica su ogni tipo. */
 export function percorso(dest, opt = {}){
-  const { ext = 'webp', nomeFile = '', prodotti = [], portfolio = [], galleryEsistenti = [] } = opt;
+  const { ext = 'webp', nomeFile = '', prodotti = [], portfolio = [], galleryEsistenti = [],
+          occupati = [] } = opt;
   const tipo = tipoDi(dest);
 
   if(tipo === 'p'){
@@ -75,7 +76,16 @@ export function percorso(dest, opt = {}){
   }
   if(tipo === 'c') return 'img/cat-' + String(dest).slice(2) + '.' + ext;
   if(tipo === 'about') return 'img/about.' + ext;
-  return 'img/' + slug(nomeFile) + '.' + ext;
+  /* Solo libreria: il nome viene dal file, e due file possono chiamarsi
+     uguale — «IMG_1234.jpg» preso da due cartelle diverse è la norma quando
+     si caricano decine di foto insieme. Senza un suffisso l'anteprima
+     prometteva a entrambi lo stesso percorso: chi carica venti foto vedeva
+     venti righe e ne otteneva meno. La pubblicazione già numerava i doppioni;
+     era l'anteprima a dire una bugia. Ora la regola è una sola, qui. */
+  const base = 'img/' + slug(nomeFile);
+  let p = base + '.' + ext, k = 2;
+  while(occupati.includes(p)){ p = base + '-' + k + '.' + ext; k++ }
+  return p;
 }
 
 /* Frase in italiano che dice dove finisce l'immagine.

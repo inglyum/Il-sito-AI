@@ -2344,6 +2344,9 @@ function mdBottoniTipo(attr,tipoSel){return MEDIA_DEST.TIPI.map(t=>
   `<button class="btn sm${t.id===tipoSel?' pri':''}" ${attr}="${t.id}" title="${esc(t.aiuto)}">${t.icona} ${t.nome}</button>`).join('')}
 
 function renderMRows(){
+ /* i percorsi già promessi alle righe precedenti, più quelli già in coda:
+    servono a non promettere due volte lo stesso file */
+ const giaPresi=MEDIA.map(m=>m.path);
  $('mRows').innerHTML=STAGE_TMP.map((s,i)=>{
   /* Predefinito prudente: «solo libreria». Prima il primo elemento dell'elenco
      era un prodotto, quindi bastava premere «Assegna» senza guardare per
@@ -2352,8 +2355,9 @@ function renderMRows(){
   if(!s.dest) s.dest='free';
   const tipo=MEDIA_DEST.tipoDi(s.dest), ruolo=s.slot||'main';
   const path=MEDIA_DEST.percorso(s.dest,{ext:s.proc.ext,ruolo,nomeFile:s.name,
-    portfolio:mdDati().portfolio,
+    portfolio:mdDati().portfolio, occupati:giaPresi,
     galleryEsistenti:(()=>{const p=(S.P||[]).find(x=>'p:'+x.id===s.dest);return (p&&p.gallery)||[]})()});
+  if(MEDIA_DEST.tipoDi(s.dest)==='free') giaPresi.push(path);
   return `<div class="list-it" style="align-items:flex-start;flex-wrap:wrap;gap:10px">
   <img src="${s.url}" style="width:62px;height:62px;object-fit:cover;border-radius:9px;border:1px solid var(--line)">
   <div style="flex:1;min-width:180px">
@@ -2465,8 +2469,10 @@ $('mDoAssign').onclick=async()=>{let n=0;
    const path='img/port-'+(i+1)+'.'+s.proc.ext;await stageWithVariants(path,s.proc);t[3]=path;
   }else if(dest==='about'){const path='img/about.'+s.proc.ext;await stageFile(path,s.proc);
    S.CONFIG.aboutMedia=S.CONFIG.aboutMedia||{};S.CONFIG.aboutMedia.tipo='immagine';S.CONFIG.aboutMedia.src=path;
-  }else{const base=(s.name.replace(/\.[^.]+$/,'').toLowerCase().replace(/[^a-z0-9-]/g,'-')||'img');
-   let path='img/'+base+'.'+s.proc.ext,k=2;while(MEDIA.some(m=>m.path===path)){path='img/'+base+'-'+k+'.'+s.proc.ext;k++}
+  }else{
+   /* stessa funzione dell'anteprima: se qui e là divergessero, la riga
+      «→ img/…» mostrata prima di premere direbbe una bugia */
+   const path=MEDIA_DEST.percorso('free',{ext:s.proc.ext,nomeFile:s.name,occupati:MEDIA.map(m=>m.path)});
    await stageFile(path,s.proc)}
   n++}
  STAGE_TMP=[];$('mAssign').style.display='none';markDirty();renderMedia();
