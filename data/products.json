@@ -2901,5 +2901,41 @@
    "img/95-g1.webp",
    "img/95-g2.webp"
   ]
+ },
+ {
+  "id": 96,
+  "cat": "casa",
+  "sub": 1,
+  "n": {
+   "it": "Nuovo prodotto",
+   "en": "New product"
+  },
+  "mat": "Legno",
+  "price": 10,
+  "icon": "✨",
+  "rev": 0,
+  "prod": 3
+ },
+ {
+  "id": 97,
+  "cat": "nuova-ms3k34dc",
+  "sub": 2,
+  "n": {
+   "it": "Action Figure Hulk in Legno - Collezione Esclusiva",
+   "en": "Wooden Hulk Action Figure - Exclusive Collection"
+  },
+  "mat": "Legno",
+  "price": 39.99,
+  "icon": "✨",
+  "rev": 0,
+  "prod": 3,
+  "hidden": false,
+  "desc": {
+   "it": "Aggiungi un tocco di forza e avventura alla tua collezione con questa action figure di Hulk in legno. Realizzata con precisione e dettagli impeccabili, questa figura è un must-have per i fan dell'eroe verde e per gli appassionati di collezionismo. Ideale come regalo o per decorare la tua stanza, ufficio o studio.",
+   "en": "Add a touch of strength and adventure to your collection with this wooden Hulk action figure. Crafted with precision and impeccable details, this figure is a must-have for fans of the green hero and collectors alike. Perfect as a gift or to decorate your room, office, or studio."
+  },
+  "gallery": [
+   "img/97-g1.webp"
+  ]
  }
 ]
