@@ -121,7 +121,7 @@
  },
  "sfondi": {
   "chiaro": "alba",
-  "scuro": "aurora"
+  "scuro": "default"
  },
  "prezzi": {
   "mostra": false,
