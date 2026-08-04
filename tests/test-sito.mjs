@@ -412,8 +412,15 @@ check('JSON-LD Product presente sulla pagina prodotto', !!ldProd);
 const prodData = ldProd ? JSON.parse(ldProd.textContent) : {};
 check('Product include tutte le immagini della gallery', Array.isArray(prodData.image) && prodData.image.length >= 2,
   (prodData.image||[]).length + ' immagini');
-check('Product ha offerta con prezzo e valuta', prodData.offers && prodData.offers.priceCurrency === 'EUR');
-check('Product ha priceValidUntil (richiesto da Google)', !!(prodData.offers && prodData.offers.priceValidUntil));
+check('Product dichiara un\'offerta', !!(prodData.offers && prodData.offers['@type'] === 'Offer'));
+/* La cifra segue l'interruttore «Prezzi in vetrina» dell'Admin: con i prezzi
+   spenti dichiararla sarebbe un dato falso, e Google segnala i prezzi dei dati
+   strutturati che non compaiono sulla pagina. */
+const prezziAccesi = (win.INGLY.CONFIG.prezzi || {}).mostra !== false;
+check(prezziAccesi ? 'con i prezzi accesi l\'offerta ha prezzo, valuta e scadenza'
+                   : 'con i prezzi spenti l\'offerta non ha nessuna cifra',
+  !!(prodData.offers && prodData.offers.priceCurrency === 'EUR' && prodData.offers.priceValidUntil) === prezziAccesi,
+  JSON.stringify(prodData.offers || {}).slice(0, 120));
 check('Breadcrumb JSON-LD presente', !!doc.getElementById('ld-crumbs'));
 const crumbsEl = doc.getElementById('ld-crumbs');
 const crumbs = crumbsEl ? JSON.parse(crumbsEl.textContent) : null;
