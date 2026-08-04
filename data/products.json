@@ -3035,5 +3035,38 @@
    "img/103-g1.webp",
    "img/103-g2.webp"
   ]
+ },
+ {
+  "id": 104,
+  "cat": "casa",
+  "sub": 1,
+  "n": {
+   "it": "Nuovo prodotto",
+   "en": "New product"
+  },
+  "mat": "Legno",
+  "price": 10,
+  "icon": "✨",
+  "rev": 0,
+  "prod": 3
+ },
+ {
+  "id": 105,
+  "cat": "nuova-ms3k34dc",
+  "sub": 2,
+  "n": {
+   "it": "Action Figure Flash in Legno - Collezione Esclusiva",
+   "en": "Wooden Flash Action Figure - Exclusive Collection"
+  },
+  "mat": "Legno",
+  "price": 39.99,
+  "icon": "✨",
+  "rev": 0,
+  "prod": 3,
+  "hidden": false,
+  "desc": {
+   "it": "Aggiungi un tocco di velocità e adrenalina alla tua collezione con questa action figure del Flash in legno. Realizzata con precisione e dettagli impeccabili, questa figura è un must-have per i fan dell'eroe più veloce del mondo e per gli appassionati di collezionismo. Ideale come regalo o per decorare la tua stanza, ufficio o studio.",
+   "en": "Add a touch of speed and adrenaline to your collection with this wooden Flash action figure. Crafted with precision and impeccable details, this figure is a must-have for fans of the fastest man alive and collectors alike. Perfect as a gift or to decorate your room, office, or studio."
+  }
  }
 ]
