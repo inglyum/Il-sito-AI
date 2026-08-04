@@ -765,6 +765,46 @@
    "#fde8ef,#f3c3d3",
    "img/port-18.webp",
    "https://www.instagram.com/p/DZDXQ6XEkEM/?img_index=1"
+  ],
+  [
+   "✨",
+   {
+    "it": "Sostituzione prodotto (26)",
+    "en": "Sostituzione prodotto (26)"
+   },
+   "#e8d5b0,#c9a876",
+   "img/port-19.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "936bb560 a8ab 44f8 909d 25d839d94313",
+    "en": "936bb560 a8ab 44f8 909d 25d839d94313"
+   },
+   "#eef7f7,#cfe6e8",
+   "img/port-20.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "Sostituzione prodotto (15)",
+    "en": "Sostituzione prodotto (15)"
+   },
+   "#f4f0ff,#d9ccf5",
+   "img/port-21.webp",
+   ""
+  ],
+  [
+   "✨",
+   {
+    "it": "Sostituzione prodotto (6)",
+    "en": "Sostituzione prodotto (6)"
+   },
+   "#ffeede,#f6cfa8",
+   "img/port-22.webp",
+   ""
   ]
  ],
  "FONTS": [
@@ -3932,6 +3972,30 @@
    800
   ],
   "img/107.webp": [
+   400,
+   800
+  ],
+  "img/107-g1.webp": [
+   400,
+   800
+  ],
+  "img/107-g2.webp": [
+   400,
+   800
+  ],
+  "img/port-19.webp": [
+   400,
+   800
+  ],
+  "img/port-20.webp": [
+   400,
+   800
+  ],
+  "img/port-21.webp": [
+   400,
+   800
+  ],
+  "img/port-22.webp": [
    400,
    800
   ]
