@@ -227,7 +227,11 @@
    ]
   ],
   "prod": -5,
-  "hidden": false
+  "hidden": false,
+  "gallery": [
+   "img/6-g1.webp",
+   "img/6-g2.webp"
+  ]
  },
  {
   "id": 7,
@@ -2874,5 +2878,28 @@
   "icon": "✨",
   "rev": 0,
   "prod": 3
+ },
+ {
+  "id": 95,
+  "cat": "nuova-ms3k34dc",
+  "sub": 2,
+  "n": {
+   "it": "Action Figure Batman in Legno - Collezione Esclusiva",
+   "en": "Wooden Batman Action Figure - Exclusive Collection"
+  },
+  "mat": "Legno",
+  "price": 39.99,
+  "icon": "✨",
+  "rev": 0,
+  "prod": 3,
+  "hidden": false,
+  "desc": {
+   "it": "Aggiungi un tocco di eroismo alla tua collezione con questa action figure di Batman in legno. Realizzata con precisione e dettagli impeccabili, questa figura è un must-have per i fan del Cavaliere Oscuro e per gli appassionati di collezionismo. Ideale come regalo o per decorare la tua stanza, ufficio o studio.",
+   "en": "Wooden Batman Action Figure - Exclusive Collection\nDescription: Add a touch of heroism to your collection with this wooden Batman action figure. Crafted with precision and impeccable details, this figure is a must-have for fans of the Dark Knight and collectors alike. Perfect as a gift or to decorate your room, office, or studio."
+  },
+  "gallery": [
+   "img/95-g1.webp",
+   "img/95-g2.webp"
+  ]
  }
 ]
