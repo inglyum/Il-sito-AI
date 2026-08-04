@@ -481,6 +481,73 @@ doc.querySelector('.nit[data-go="dash"]').click(); await wait(400);
 check('il cruscotto smette di segnalare le statistiche mancanti',
   !/statistica di visita/i.test($('dashBloccanti').textContent));
 
+console.log('\n=== Una finestra che ne apre un\'altra non fa perdere il lavoro ===');
+/* IL DIFETTO. C'è una sola finestra: modal() sostituisce il contenuto di
+   #modal. Aprendo il ritaglio della foto da dentro la scheda prodotto, il
+   modulo veniva distrutto e con lui tutto ciò che era stato scritto e non
+   ancora salvato. Poi la funzione che rilegge i campi trovava il modulo
+   sparito e falliva con «Cannot read properties of null (reading 'value')»,
+   mostrato all'utente come un «Errore:» senza spiegazione.
+   Sintomi riferiti: «quando aggiungo un'immagine dà errore» e «se cambio
+   titolo e salvo rimane lo stesso».
+   Lo stato interno non è globale: si verifica sempre riaprendo la scheda. */
+const riapriProdotto = async () => {
+  closeAll();
+  doc.querySelector('.nit[data-go="prod"]').click(); await wait(150);
+  doc.querySelector('#pTable [data-edit]').click(); await wait(200);
+  return $('ep_nit');
+};
+let campoNome = await riapriProdotto();
+check('la scheda di un prodotto si apre', !!campoNome);
+const NOME_NUOVO = 'Nome scritto e non ancora salvato';
+campoNome.value = NOME_NUOVO;
+/* qui l'utente preme «Carica foto»: si apre un'altra finestra sopra questa */
+const erroriPrima = errors.length;
+win.modal('<h3>la finestra del ritaglio arriva sopra</h3>');
+await wait(80);
+check('la nuova finestra ha davvero sostituito il modulo', !$('ep_nit'));
+check('nessun errore JS mentre la finestra veniva sostituita',
+  errors.length === erroriPrima, errors.slice(erroriPrima).join(' | '));
+campoNome = await riapriProdotto();
+check('il nome scritto NON è andato perso',
+  campoNome && campoNome.value === NOME_NUOVO, campoNome && campoNome.value);
+check('la modifica risulta da pubblicare', pendingHas('products'));
+
+/* Stessa prova sulla categoria: anche lì c'è un «carica immagine». */
+const riapriCategoria = async () => {
+  closeAll();
+  doc.querySelector('.nit[data-go="cats"]').click(); await wait(150);
+  doc.querySelector('[data-ce]').click(); await wait(200);
+  return $('ec_nit');
+};
+let campoCat = await riapriCategoria();
+check('la scheda categoria si apre', !!campoCat);
+if (campoCat) {
+  const NOME_CAT = 'Categoria rinominata al volo';
+  campoCat.value = NOME_CAT;
+  win.modal('<h3>ritaglio</h3>');
+  await wait(80);
+  campoCat = await riapriCategoria();
+  check('il nome della categoria NON è andato perso',
+    campoCat && campoCat.value === NOME_CAT, campoCat && campoCat.value);
+}
+
+/* Annullare deve restare annullare: chiudere con «Annulla» non deve far
+   passare per buono ciò che era stato scritto e poi ripescarlo. */
+campoNome = await riapriProdotto();
+if (campoNome) {
+  const primaDiAnnullare = campoNome.value;
+  campoNome.value = 'QUESTO NON DEVE ESSERE SALVATO';
+  win.closeModal();
+  await wait(60);
+  win.modal('<h3>una finestra qualsiasi, più tardi</h3>');
+  await wait(80);
+  campoNome = await riapriProdotto();
+  check('dopo «Annulla» quello che era scritto non viene ripescato',
+    campoNome && campoNome.value === primaDiAnnullare, campoNome && campoNome.value);
+}
+closeAll();
+
 console.log(`\n=========== RISULTATO: ${pass} passati, ${fail} falliti ===========`);
 if (errors.length) { console.log('\nErrori raccolti:'); errors.slice(0, 8).forEach(e => console.log(' - ' + e.slice(0, 200))); }
 process.exit(fail ? 1 : 0);

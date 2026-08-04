@@ -162,7 +162,11 @@ check('ogni parola nel suo contenitore animato', h1 && h1.querySelectorAll('.w')
 check('l\'a capo del campo diventa un a capo nel titolo', h1 && h1.querySelectorAll('br').length === 1);
 /* le parole fra ** ** sono quelle che il laser incide */
 const inc = h1 && h1.querySelector('.engrave');
-check('la parola marcata viene incisa dal laser', !!inc && !!inc.querySelector('.fill'));
+check('la parola marcata viene incisa dal laser', !!inc && !!inc.dataset.parola);
+/* IL DIFETTO: lo strato colorato era un secondo <span> con la stessa parola.
+   Invisibile a schermo, ma il titolo letto da Google diceva «luce.luce.». */
+check('la parola marcata non compare due volte nel titolo',
+  !!h1 && !/(\S{3,})\1/.test(h1.textContent.replace(/\s+/g,' ')), h1 && h1.textContent);
 check('viene incisa la parola giusta', inc && inc.firstChild.textContent === 'luce.', inc && inc.firstChild.textContent);
 /* il testo arriva dall'Admin: deve entrare come testo, mai come markup */
 check('titolo inserito come testo, mai come HTML', h1 && !/<(script|img|svg)/i.test(h1.innerHTML));

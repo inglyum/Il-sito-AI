@@ -76,15 +76,14 @@
 .engrave{position:relative;display:inline-block}
 .engrave::before{content:'';position:absolute;top:-6%;bottom:-6%;left:0;width:2px;background:var(--laser);box-shadow:0 0 16px 3px rgba(244,223,87,.95),0 0 40px 8px rgba(54,118,201,.4);animation:sweep 2.2s var(--ease) 1s forwards;opacity:0}
 
-.engrave .fill{position:absolute;inset:0;color:var(--blue);clip-path:inset(0 100% 0 0);animation:fillin 2.2s var(--ease) 1s forwards}
-/* Il doppio strato dell'incisione: .fill è uno <span> dentro .w, quindi veniva
-   preso anche da «.hero h1 .w span» — più specifico — che gli imponeva
-   l'animazione «wordup» al posto di «fillin». Risultato: il ritaglio restava
-   chiuso al 100% e la parola non si coloriva mai; il raggio passava sopra
-   senza lasciare traccia. Qui la regola giusta torna a vincere.
-   Serve anche azzerare il transform: senza «wordup» lo strato resterebbe
-   spinto in basso di 112%, cioè fuori da .w che ritaglia. */
-.hero h1 .w span.fill{transform:none;animation:fillin 2.2s var(--ease) 1s forwards}
+/* Lo strato che il raggio colora. È contenuto generato, non un altro <span>:
+   un secondo elemento con la stessa parola dentro la rendeva doppia nel testo
+   della pagina («luce.luce.») e finiva così nel titolo letto da Google.
+   Essendo uno pseudo-elemento non viene più preso da «.hero h1 .w span», che
+   gli imponeva l'animazione «wordup» al posto di «fillin» lasciando la parola
+   per sempre incolore: quel conflitto qui non può più nascere. */
+.engrave::after{content:attr(data-parola);position:absolute;inset:0;color:var(--blue);
+ clip-path:inset(0 100% 0 0);animation:fillin 2.2s var(--ease) 1s forwards;pointer-events:none}
 
 .hero-ctas{display:flex;gap:14px;margin-top:36px;flex-wrap:wrap}
 .hero-meta{display:flex;gap:34px;margin-top:52px;flex-wrap:wrap}

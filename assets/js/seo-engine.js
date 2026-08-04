@@ -52,6 +52,19 @@ export function tronca(testo, max){
     .replace(/[\s\-—·|,.;:]+$/, '') + '…';
 }
 
+/* Da HTML a testo semplice.
+   I testi dell'Admin contengono marcatori: «Il tuo brand,<br>marcato per
+   sempre.». Togliendo i tag e basta le due parole si incollavano —
+   «brand,marcato» — e quel titolo finiva nei risultati di Google. Un tag è un
+   confine tra parole: al suo posto va uno spazio, e gli spazi doppi si
+   riducono dopo. */
+export function soloTesto(t){
+  return String(t == null ? '' : t)
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 /* Il nome del prodotto contiene già questa parola? Confronto senza accenti né
    maiuscole, così "Pelle" e "pelle" contano come la stessa parola. */
 export function contiene(testo, parola){
@@ -92,7 +105,7 @@ export function titoloProdotto(p, cfg = {}, ctx = {}){
 
 export function descrizioneProdotto(p, cfg = {}, ctx = {}){
   const m = (cfg.template && cfg.template.descrizioneProdotto) || DEFAULTS.descrizioneProdotto;
-  const testo = applica(m, contestoProdotto(p, ctx)).replace(/<[^>]+>/g, '');
+  const testo = soloTesto(applica(m, contestoProdotto(p, ctx)));
   return tronca(testo, LIMITI.descrizioneMax);
 }
 

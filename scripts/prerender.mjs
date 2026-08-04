@@ -58,7 +58,7 @@ const TITOLI = {
 function paginaProdotto(p){
   const canonico = P.indirizzo('product', { base, id: p.id });
   const titolo = (p.n && p.n[L]) + ' — ' + azienda;
-  const desc = String((p.desc && p.desc[L]) || S.descrizione || '').replace(/<[^>]+>/g, '').slice(0, 300);
+  const desc = P.soloTesto((p.desc && p.desc[L]) || S.descrizione || '').slice(0, 300);
   const ctx = { L, azienda, categoria: nomeCategoria(p.cat), materiale: nomeMateriale(p.mat) };
   /* Le domande sono la parte che i motori AI citano più volentieri: vanno
      nell'HTML statico, non solo nei dati strutturati. */

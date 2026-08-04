@@ -113,12 +113,15 @@ function renderTitoloHero(){
         inner.style.animationDelay=(0.1+i*0.11).toFixed(2)+'s';
         i++;
         if(inciso){
+          /* Lo strato colorato che il raggio «incide» era un secondo <span>
+             con dentro la stessa parola. Sovrapposto perfettamente, quindi
+             invisibile all'occhio — ma nel testo la parola c'era due volte:
+             il titolo che Google leggeva diceva «Segnati dalla luce.luce.».
+             Ora la copia la disegna il CSS con content:attr(data-parola):
+             il contenuto generato non fa parte del testo della pagina. */
           inner.classList.add('engrave');
-          inner.appendChild(document.createTextNode(parola));
-          const fill=document.createElement('span');
-          fill.className='fill'; fill.setAttribute('aria-hidden','true');
-          fill.textContent=parola;
-          inner.appendChild(fill);
+          inner.dataset.parola=parola;
+          inner.textContent=parola;
         } else {
           inner.textContent=parola;
         }

@@ -94,7 +94,7 @@ export function updateSeo(page, L, T, product){
     desc  = product.seoDescrizione || ENG.descrizioneProdotto(product,S,ctx);
   }else{
     title = ENG.titoloPagina(page,S,{
-      pagina:(titles[page]||'').replace(/<[^>]+>/g,''),
+      pagina:ENG.soloTesto(titles[page]),
       azienda, claim:S.claim||S.titolo||'' });
     /* la home tiene il titolo scritto a mano, se c'è: è il più curato del sito */
     if(page==='home' && S.titolo) title=S.titolo;
@@ -135,7 +135,7 @@ export function updateSeo(page, L, T, product){
     jsonld('ld-product',{
       "@context":"https://schema.org","@type":"Product",
       "name":product.n[L], "sku":product.sku||('INGLY-'+product.id),
-      "description":desc.replace(/<[^>]+>/g,''),
+      "description":ENG.soloTesto(desc),
       "image":SCH.immagini(product,{base:base(),cartella:CONFIG.cartellaImmagini||"img/",L}),
       "review":SCH.recensioni((window.INGLY.REVIEWS)||[],{L}),
       "category":cat?cat.n[L]:undefined,
@@ -199,6 +199,6 @@ export function updateSeo(page, L, T, product){
   if(page==='faq' && faqs.length){
     jsonld('ld-faq',{"@context":"https://schema.org","@type":"FAQPage",
       "mainEntity":faqs.slice(0,20).map(f=>({"@type":"Question","name":(f[0]&&f[0][L])||'',
-        "acceptedAnswer":{"@type":"Answer","text":((f[1]&&f[1][L])||'').replace(/<[^>]+>/g,'')}}))});
+        "acceptedAnswer":{"@type":"Answer","text":ENG.soloTesto((f[1]&&f[1][L])||'')}}))});
   } else { const s=document.getElementById('ld-faq'); if(s) s.remove(); }
 }

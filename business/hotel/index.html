@@ -96,7 +96,7 @@ var url=base.replace(/\/$/,'')+p+(rest?'?'+rest:'');history.replaceState(null,''
      rimuove il service worker e ricarica una volta sola. Aggiornare CACHE_WANT
      insieme a CACHE_VER in sw.js. -->
 <script>(function(){
-  var CACHE_WANT='ingly-v5', FLAG='ingly_cachefix';
+  var CACHE_WANT='ingly-v6', FLAG='ingly_cachefix';
   try{
     if(!window.caches||!('serviceWorker' in navigator))return;
     if(sessionStorage.getItem(FLAG))return;              /* una sola volta per sessione */
@@ -165,9 +165,9 @@ setTimeout(function(){
 </head>
 <body>
 <!-- MAINTENANCE MODE — controllato da data/config.json → maintenance.attivo -->
-<div id="maintenanceOverlay" style="display:none;position:fixed;inset:0;z-index:99999;background:var(--bg-deep,#0a0d18);color:var(--ink,#eae8f5);font-family:var(--fb,'Inter',sans-serif);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem">
+<div id="maintenanceOverlay" hidden style="display:none;position:fixed;inset:0;z-index:99999;background:var(--bg-deep,#0a0d18);color:var(--ink,#eae8f5);font-family:var(--fb,'Inter',sans-serif);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem">
   <div style="font-size:3rem;margin-bottom:1rem">🔧</div>
-  <h1 id="mntTitle" style="font-size:clamp(1.4rem,4vw,2.4rem);font-weight:700;margin-bottom:1rem">Sito in manutenzione</h1>
+  <p id="mntTitle" role="heading" aria-level="1" style="font-size:clamp(1.4rem,4vw,2.4rem);font-weight:700;margin-bottom:1rem">Sito in manutenzione</p>
   <p id="mntMsg" style="font-size:1rem;opacity:.75;max-width:480px;line-height:1.7;margin-bottom:2rem">Stiamo aggiornando il catalogo. Torniamo presto!<br>Per ordini urgenti scrivici su WhatsApp.</p>
   <a id="mntWa" href="https://wa.me/393296904627" style="display:inline-flex;align-items:center;gap:.5rem;background:#25d366;color:#fff;padding:.8rem 1.6rem;border-radius:2rem;font-weight:600;font-size:1rem;text-decoration:none">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9s-.5-.1-.7.1-.7.9-.9 1.1-.3.1-.6 0a8 8 0 0 1-2.3-1.4 8.6 8.6 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.4-.5.3-.5v-.5l-.9-2.1c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4C8 7.8 7 8.8 7 10.8s1.4 3.9 1.6 4.2 2.8 4.2 6.7 5.9c.9.4 1.7.6 2.2.8.9.3 1.8.2 2.4.1.7-.1 2.2-.9 2.5-1.8s.3-1.6.2-1.8c-.1-.2-.3-.3-.6-.4z"/><path d="M12 2a10 10 0 0 0-8.7 14.9L2 22l5.3-1.4A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>
@@ -187,7 +187,7 @@ setTimeout(function(){
     document.getElementById('mntTitle').textContent=t;
     document.getElementById('mntMsg').innerHTML=msg.replace(/\n/g,'<br>');
     if(m.mostraWhatsapp===false)document.getElementById('mntWa').style.display='none';
-    ov.style.display='flex';
+    ov.hidden=false; ov.style.display='flex';
     document.body.style.overflow='hidden';
   }).catch(function(){});
 })();

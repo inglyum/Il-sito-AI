@@ -932,11 +932,40 @@ tr.rowc.dragging{opacity:.4}tr.rowc.drag-over td{border-top:2px solid var(--lase
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let toastT;function toast(m){$('toast').textContent=m;$('toast').classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>$('toast').classList.remove('on'),3400)}
-function modal(html){$('modal').innerHTML=html;$('ovl').classList.add('on')}
+/* ============ FINESTRE CHE NE APRONO ALTRE ============
+   C'è UNA sola finestra: modal() sostituisce il contenuto di #modal. Quando da
+   una scheda si apre il ritaglio della foto o la libreria immagini, il modulo
+   che si stava compilando viene distrutto — e con lui tutto ciò che era stato
+   scritto e non ancora salvato.
+
+   Succedeva questo: scrivi il nuovo nome del prodotto, premi «Carica foto»,
+   ritagli, e al ritorno la scheda si riapre con il nome di prima. Peggio: la
+   funzione che rilegge i campi trovava il modulo sparito e falliva con
+   «Cannot read properties of null (reading 'value')», mostrato come un
+   «Errore:» senza spiegazione.
+
+   La cura sta qui, nel punto in cui la finestra viene sostituita: prima di
+   buttare via il modulo si rilegge quello che contiene. Ogni scheda dichiara
+   con registraCattura() come si rileggono i suoi campi. Così vale per tutte —
+   prodotti, categorie, portfolio, temi — e nessuna nuova scheda dovrà
+   ricordarsi di risolvere lo stesso problema da capo. */
+let _catturaModale = null;
+function registraCattura(fn){ _catturaModale = fn }
+function catturaModaleAperta(){
+  const fn = _catturaModale;
+  if(!fn) return false;
+  _catturaModale = null;              /* una sola volta: il modulo sta per sparire */
+  try{ fn(); markDirty(); return true }
+  catch(e){ console.warn('[INGLY] campi non recuperati dalla scheda aperta:', e); return false }
+}
+function modal(html){
+  catturaModaleAperta();              /* salva ciò che si stava scrivendo */
+  $('modal').innerHTML=html;$('ovl').classList.add('on')}
 function closeModal(){$('ovl').classList.remove('on');
  /* la scheda non è più aperta: il salvataggio automatico non deve più avere
     un prodotto a cui scrivere, altrimenti resterebbe agganciato all'ultimo */
  if(typeof _gatherAttivo!=='undefined') _gatherAttivo=null;
+ _catturaModale = null;
 }
 $('ovl').addEventListener('click',e=>{if(e.target.id==='ovl')closeModal()});
 
@@ -1627,7 +1656,10 @@ function sfScelta(){
    Un interruttore con conseguenze grosse: l'anteprima serve a farle vedere
    prima di pubblicare, non dopo. */
 function renderPrezzi(){
- if(!$('pzAnteprima')) return;
+ /* La sezione esiste nel documento fin dall'inizio: la sua presenza NON
+    significa che i dati siano arrivati. Senza questo controllo il modulo,
+    che si carica prima del fetch, entrava qui con S.CONFIG ancora null. */
+ if(!$('pzAnteprima') || !S.CONFIG) return;
  const pz=S.CONFIG.prezzi=Object.assign({mostra:true,testo:{it:'',en:''},azione:{it:'',en:''}},S.CONFIG.prezzi||{});
  pz.mostra=pz.mostra!==false;
  pz.testo=Object.assign({it:'',en:''},pz.testo||{});
@@ -1963,6 +1995,11 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
  $('ep_cat').onchange=()=>{$('ep_sub').innerHTML=subOptions($('ep_cat').value,1)};
  /* Legge i campi testo correnti nella scheda SENZA chiudere il modal */
  function gatherFields(){
+  /* Il modulo può non esserci più: un'altra finestra (ritaglio foto, libreria)
+     ne ha preso il posto. Leggere .value da un elemento che non c'è era
+     l'origine dell'errore «reading 'value'». Qui ci si ferma e basta: i campi
+     sono già stati raccolti da catturaModaleAperta() prima della sostituzione. */
+  if(!document.getElementById('ep_nit')) return;
   /* cerca SEMPRE il prodotto fresco in S.P — difende da riferimenti stantii */
   const fresh=S.P.find(x=>x.id===p.id);
   if(!fresh){console.error('[INGLY] gatherFields: prodotto #'+p.id+' non trovato in S.P');return;}
@@ -2075,6 +2112,9 @@ function editProd(id){const p=S.P.find(x=>x.id===id);if(!p)return;
     solo per tutta la pagina (vedi più sotto) e usa questo riferimento.
     NON aggiungere qui un addEventListener: vedi il commento di autosaveGlobale. */
  _gatherAttivo = gatherFields;
+ /* se questa scheda viene sostituita da un'altra finestra, i campi scritti
+    finora vengono raccolti prima che il modulo sparisca */
+ registraCattura(gatherFields);
  /* anteprima: mostra quante domande avrà davvero la scheda, comprese quelle
     generate dai dati. Senza, non si capisce cosa vedrà il cliente. */
  (async()=>{
@@ -2166,10 +2206,18 @@ function editCat(i){const c=S.CATS[i];
   const users=(S.P||[]).filter(p=>p.cat===c.id&&p.sub===k+1).length;
   if(users&&!confirm(users+' prodotti usano questa sottocategoria: verranno spostati sulla prima. Continuare?'))return;
   c.sub.splice(k,1);(S.P||[]).forEach(p=>{if(p.cat===c.id){if(p.sub===k+1)p.sub=1;else if(p.sub>k+1)p.sub--}});markDirty();editCat(i)});
- $('ec_save').onclick=()=>{const oldId=c.id,nid=$('ec_id').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'-')||oldId;
-  document.querySelectorAll('#ec_subs .list-it').forEach(row=>{const k=+row.dataset.k;row.querySelectorAll('input').forEach(inp=>c.sub[k][inp.dataset.f]=inp.value)});
+ /* Rilegge i campi nella scheda. Serve al salvataggio, ma anche quando la
+    scheda viene sostituita dal ritaglio di un'immagine: senza, il nome appena
+    scritto tornava indietro appena si caricava la foto. */
+ function ecCattura(){
+  if(!document.getElementById('ec_id')) return;      /* scheda non più aperta */
+  const oldId=c.id,nid=$('ec_id').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'-')||oldId;
+  document.querySelectorAll('#ec_subs .list-it').forEach(row=>{const k=+row.dataset.k;row.querySelectorAll('input').forEach(inp=>{if(c.sub[k])c.sub[k][inp.dataset.f]=inp.value})});
   c.id=nid;c.ic=$('ec_ic').value;c.big=$('ec_big').value;c.n.it=$('ec_nit').value;c.n.en=$('ec_nen').value;c.s.it=$('ec_sit').value;c.s.en=$('ec_sen').value;c.bg=$('ec_bg').value;
   if(nid!==oldId)(S.P||[]).forEach(p=>{if(p.cat===oldId)p.cat=nid});
+ }
+ registraCattura(ecCattura);
+ $('ec_save').onclick=()=>{ecCattura();
   markDirty();closeModal();renderCats();toast('Categoria salvata in bozza')}}
 
 /* ================== DIGITALI ================== */
@@ -2183,7 +2231,14 @@ function editDig(i){const d=S.C.DIG[i];
  <div class="row c2"><div><label>Nome (IT)</label><input type="text" id="ed_it" value="${esc(d.n.it)}"></div><div><label>Nome (EN)</label><input type="text" id="ed_en" value="${esc(d.n.en)}"></div></div>
  <div class="row c3"><div><label>Formati (virgola)</label><input type="text" id="ed_f" value="${esc((d.f||[]).join(','))}"></div><div><label>Prezzo €</label><input type="number" id="ed_p" value="${d.price}"></div><div><label>Icona</label><input type="text" id="ed_ic" class="emoji-in" value="${esc(d.icon||'')}"></div></div>
  <hr class="hr"><button class="btn pri" id="ed_save">✔ Salva</button> <button class="btn" onclick="closeModal()">Annulla</button>`);
- $('ed_save').onclick=()=>{d.n.it=$('ed_it').value;d.n.en=$('ed_en').value;d.f=$('ed_f').value.split(',').map(s=>s.trim()).filter(Boolean);d.price=+$('ed_p').value||0;d.icon=$('ed_ic').value;markDirty();closeModal();renderDig()}}
+ function edCattura(){
+  if(!document.getElementById('ed_it')) return;
+  d.n.it=$('ed_it').value;d.n.en=$('ed_en').value;
+  d.f=$('ed_f').value.split(',').map(s=>s.trim()).filter(Boolean);
+  d.price=+$('ed_p').value||0;d.icon=$('ed_ic').value;
+ }
+ registraCattura(edCattura);
+ $('ed_save').onclick=()=>{edCattura();markDirty();closeModal();renderDig()}}
 
 /* ================== MEDIA LIBRARY ================== */
 let STAGE_TMP=[]; /* file appena caricati, in attesa di destinazione */
@@ -2819,7 +2874,11 @@ function editPort(i){const t=S.C.PORT[i];
   MEDIA=MEDIA.filter(m=>m.path!==D.foto[k]);D.foto.splice(k,1);t[5]=D;markDirty();editPort(i)});
  $('pj_ba').onclick=()=>pickImage('img/proj-'+(i+1)+'-prima',path=>{D.prima=path;t[5]=D;markDirty();editPort(i)},'portfolio');
  $('pj_bb').onclick=()=>pickImage('img/proj-'+(i+1)+'-dopo',path=>{D.dopo=path;t[5]=D;markDirty();editPort(i)},'portfolio');
- $('et_save').onclick=()=>{t[0]=$('et_ic').value;t[2]=$('et_bg').value;t[1].it=$('et_it').value;t[1].en=$('et_en').value;
+ /* Anche qui: aggiungere una foto al progetto apre un'altra finestra e
+    distrugge questo modulo. I campi vanno riletti prima. */
+ function etCattura(){
+  if(!document.getElementById('et_it')) return;
+  t[0]=$('et_ic').value;t[2]=$('et_bg').value;t[1].it=$('et_it').value;t[1].en=$('et_en').value;
   const lk=$('et_link').value.trim();
   /* raccoglie i dettagli progetto */
   const d={};
@@ -2846,7 +2905,9 @@ function editPort(i){const t=S.C.PORT[i];
   else if(t.length<5)while(t.length<4)t.push('');
   if(hasProj){while(t.length<5)t.push(t.length===4?'':'');t[5]=d}
   else if(t.length>5)t.length=5;
-  markDirty();closeModal();renderPort()}}
+ }
+ registraCattura(etCattura);
+ $('et_save').onclick=()=>{etCattura();markDirty();closeModal();renderPort()}}
 
 /* ================== HOME & HERO ================== */
 /* Anteprima del titolo: stessa scala e stessi colori della hero, con la parte
@@ -4149,7 +4210,8 @@ $('seoAiGen').onclick=async()=>{
   window.SFONDI_MOD = SF;      /* catalogo degli sfondi, uno per tema */
   import * as PZ from './assets/js/prezzi.js';
   window.PREZZI_MOD = PZ;      /* prezzi esposti oppure «su richiesta» */
-  /* il pannello può essere già aperto quando il modulo arriva: ridisegnalo */
+  /* il pannello può essere già aperto quando il modulo arriva: ridisegnalo
+     (renderPrezzi si tira indietro da solo se i dati non ci sono ancora) */
   if(typeof renderPrezzi === 'function') renderPrezzi();
 </script>
 </body>

@@ -19,11 +19,15 @@
 
    Funzioni pure: nessun DOM, nessun filesystem. Testabili da riga di comando. */
 
+import { soloTesto } from './seo-engine.js';
+
 const esc = t => String(t == null ? '' : t)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
-const testo = t => String(t || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+/* stessa regola di seo-engine: un tag vale uno spazio, non il nulla */
+const testo = soloTesto;
+export { soloTesto };
 
 /* prezzo in formato italiano, senza dipendere da Intl (che in Node e nel
    browser può avere dati locali diversi) */

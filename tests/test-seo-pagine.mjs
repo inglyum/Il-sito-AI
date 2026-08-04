@@ -53,7 +53,14 @@ if (existsSync('product/7/index.html')) {
   const n = conta(html);
   check('dichiara il prodotto', n.Product === 1);
   check('dichiara l\'azienda che lo vende', (n.LocalBusiness || n.Organization) === 1);
-  check('il prodotto ha un\'offerta con prezzo', /"@type":"Offer"/.test(html) && /"priceCurrency"/.test(html));
+  check('il prodotto dichiara un\'offerta', /"@type":"Offer"/.test(html));
+  /* La cifra dipende dall'interruttore «Prezzi in vetrina» dell'Admin. Con i
+     prezzi spenti dichiararla sarebbe un dato falso: Google segnala i prezzi
+     che non corrispondono alla pagina. Il test segue l'interruttore. */
+  const prezziAccesi = JSON.parse(readFileSync('data/config.json','utf8')).prezzi?.mostra !== false;
+  check(prezziAccesi ? 'con i prezzi accesi l\'offerta dichiara la cifra'
+                     : 'con i prezzi spenti l\'offerta NON dichiara nessuna cifra',
+    /"priceCurrency"/.test(html) === prezziAccesi);
   check('il titolo principale è nel codice HTML', /<h1>/.test(html));
   check('ha un canonico assoluto', /<link rel="canonical" href="https?:\/\/[^"]+\/product\/7\//.test(html));
 }
@@ -98,5 +105,47 @@ else {
   check('nessun indirizzo ripetuto', new Set(loc).size === loc.length);
 }
 
-console.log(`\n=========== SEO PAGINE: ${pass} passati, ${fail} falliti ===========`);
-process.exit(fail ? 1 : 0);
+console.log('\n=== IL TITOLO CHE GOOGLE LEGGE DAVVERO ===');
+import('../assets/js/seo-engine.js').then(ENG => {
+  /* IL DIFETTO: i testi dell'Admin contengono marcatori — «Il tuo
+     brand,<br>marcato per sempre.» — e togliendo i tag senza mettere niente
+     al loro posto le parole si incollavano. Nei risultati di Google si
+     leggeva «Il tuo brand,marcato per sempre.». */
+  check('un tag vale uno spazio, non il nulla',
+    ENG.soloTesto('Il tuo brand,<br>marcato per sempre.') === 'Il tuo brand, marcato per sempre.',
+    ENG.soloTesto('Il tuo brand,<br>marcato per sempre.'));
+  check('gli spazi non si moltiplicano',
+    ENG.soloTesto('<b>Il </b> <i>catalogo.</i>') === 'Il catalogo.');
+  check('un testo senza tag resta identico',
+    ENG.soloTesto('Domande, risposte.') === 'Domande, risposte.');
+  check('niente e nullo non fanno esplodere niente',
+    ENG.soloTesto() === '' && ENG.soloTesto(null) === '');
+
+  /* Le pagine pubblicate non devono avere parole incollate a una virgola. */
+  const paginePubbl = ['shop','business','portfolio','about','faq','quote','digital']
+    .map(p => [p, p + '/index.html']).filter(([, f]) => existsSync(f));
+  for(const [nome, file] of paginePubbl){
+    const t = (readFileSync(file, 'utf8').match(/<title>([^<]*)<\/title>/) || [])[1] || '';
+    check('«' + nome + '»: nessuna parola incollata alla punteggiatura',
+      !/[,;:][A-Za-zÀ-ÿ]/.test(t), t);
+  }
+
+  console.log('\n=== NESSUNA PAGINA DICE DI ESSERE IN MANUTENZIONE ===');
+  /* IL DIFETTO: il pannello di manutenzione, nascosto ma presente nel
+     documento, conteneva un <h1>. Era il PRIMO h1 di ogni pagina statica —
+     quelle costruite apposta per i motori che non eseguono JavaScript. Un
+     crawler leggeva «Sito in manutenzione» come titolo del sito. */
+  const daControllare = ['index.html', 'shop/index.html', 'product/1/index.html']
+    .filter(f => existsSync(f));
+  for(const file of daControllare){
+    const html = readFileSync(file, 'utf8');
+    check(file + ': il pannello manutenzione non è un h1',
+      !/<h1[^>]*id="mntTitle"/.test(html));
+    const primoH1 = (html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/) || [])[1] || '';
+    check(file + ': il primo titolo non parla di manutenzione',
+      !/manutenzione|maintenance/i.test(primoH1), primoH1.replace(/\s+/g,' ').slice(0,60));
+  }
+
+  console.log(`\n=========== SEO PAGINE: ${pass} passati, ${fail} falliti ===========`);
+  process.exit(fail ? 1 : 0);
+});
