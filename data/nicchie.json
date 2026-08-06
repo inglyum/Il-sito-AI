@@ -1,0 +1,46 @@
+{
+  "_nota": "Valutazione argomentata delle nicchie, non una misura. Da rifare con i dati veri dopo il primo mese di EverBee e Search Console. Criteri da 1 a 5; 'ripete' pesa più di 'domanda' perché separa un mestiere da una rincorsa.",
+  "criteri": ["domanda", "scontrino", "ripete", "pocoAffollata", "bassoRischioIp"],
+  "nicchie": [
+    { "id": "horeca", "n": { "it": "HORECA", "en": "Hospitality" },
+      "canale": "b2b", "punteggi": [3, 5, 5, 5, 5], "totale": 23,
+      "perche": "Un ristorante cambia menu 3-4 volte l'anno e ha gia' il file pronto: il secondo ordine non ha costo di acquisizione. Fornitori italiani ancora su catalogo cartaceo e rappresentante.",
+      "famiglieDaCostruire": ["portamenu", "numeri-tavolo", "targhe-porta", "espositori-qr", "targhette-camera", "portaconto", "insegne-interne", "sottobicchieri"] },
+
+    { "id": "industriale", "n": { "it": "Industriale", "en": "Industrial" },
+      "canale": "b2b", "punteggi": [2, 5, 5, 5, 5], "totale": 22,
+      "perche": "Domanda di ricerca bassa ma chi cerca compra. Ordini ricorrenti per obbligo normativo, volumi per stabilimento, nessuno ci fa SEO perche' e' noioso. Emilia-Romagna: il mercato e' a venti minuti.",
+      "famiglieDaCostruire": ["targhe-matricola", "etichette-quadri", "shadow-board", "cartellonistica-sicurezza", "targhette-cablaggio"] },
+
+    { "id": "aziendale", "n": { "it": "Aziendale", "en": "Corporate" },
+      "canale": "b2b", "punteggi": [3, 4, 4, 4, 5], "totale": 20,
+      "perche": "Scontrino alto e riacquisto annuale, ma concentrato a fine anno.",
+      "famiglieDaCostruire": ["premi-trofei", "targhe-riconoscimento", "regali-dipendenti", "biglietti-metallo", "insegne-ufficio"] },
+
+    { "id": "eventi", "n": { "it": "Eventi e ricorrenze", "en": "Events" },
+      "canale": "b2c", "punteggi": [5, 4, 1, 2, 5], "totale": 17,
+      "perche": "Domanda piu' alta di tutte (700 produttori italiani, 80% artigianali, 6000 punti vendita) ma stagionale e senza riacquisto: e' il motore di traffico, non il centro dell'azienda.",
+      "famiglieDaCostruire": ["bomboniere", "segnaposto", "tableau", "guest-book", "cake-topper", "partecipazioni"] },
+
+    { "id": "animali", "n": { "it": "Animali", "en": "Pets" },
+      "canale": "b2c", "punteggi": [4, 2, 3, 2, 5], "totale": 16,
+      "perche": "Buona domanda e qualche riacquisto, ma scontrino basso.",
+      "famiglieDaCostruire": ["medagliette", "targhe-cuccia", "memoriali"] },
+
+    { "id": "bambini", "n": { "it": "Bambini", "en": "Kids" },
+      "canale": "b2c", "punteggi": [4, 3, 2, 3, 3], "totale": 15,
+      "perche": "Domanda alta e regalo frequente. Rischio IP il piu' alto del catalogo: e' la categoria dove entrano i personaggi.",
+      "famiglieDaCostruire": ["targhe-nascita", "scritte-nome", "misuratori", "portagiochi"] },
+
+    { "id": "home-deco", "n": { "it": "Casa e arredamento", "en": "Home decor" },
+      "canale": "b2c", "punteggi": [4, 3, 1, 1, 4], "totale": 13,
+      "perche": "SCONSIGLIATA per nuovi investimenti: compete con la produzione industriale a basso costo, l'unico terreno dove la personalizzazione conta poco. Tenere i pochi articoli forti gia' presenti.",
+      "famiglieDaCostruire": [] }
+  ],
+  "daRimuovere": {
+    "_nota": "Prodotti che richiamano marchi di terzi. Opera derivata: rimozione e sospensione su una singola segnalazione valida, e nessun fossato competitivo.",
+    "prodotti": [97, 102, 103, 20, 1],
+    "categoria": "nuova-ms3k34dc",
+    "alternativa": "Stessa forma (sagoma in legno a strati, personalizzata) venduta come «Ritratto sagomato dal tuo disegno»: nessun rischio, margine migliore, e l'originale lo porta il cliente."
+  }
+}
