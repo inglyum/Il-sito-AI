@@ -1,6 +1,5 @@
 {
-  "_nota": "Il catalogo per famiglie: una famiglia = una pagina, un servizio fotografico, N configurazioni vendibili. Ogni famiglia dichiara le macchine che servono. Il campo 'esclusiva' segna le famiglie che richiedono DUE O PIÙ macchine: sono quelle che un concorrente con una sola macchina non può nemmeno preventivare. Prezzi indicativi da verificare sul costo reale.",
-
+  "_nota": "Il catalogo per famiglie: una famiglia = una pagina, un servizio fotografico, N configurazioni vendibili. Ogni famiglia dichiara le macchine che servono. Il campo 'esclusiva' segna le famiglie che richiedono DUE O PIÙ macchine: un concorrente con una macchina sola non le può nemmeno preventivare. Prezzi indicativi, da rifare sul costo reale dopo la prima serie cronometrata.",
   "_schema": {
     "macchine": "id da data/macchine.json",
     "esclusiva": "true = servono 2+ macchine, nessun concorrente mono-macchina la può fare",
@@ -8,267 +7,1536 @@
     "b2c.prezzoDa": "prezzo esposto al privato, entra nel feed Merchant Center",
     "foto": "scatti rappresentativi necessari / configurazioni coperte"
   },
-
   "famiglie": [
-
-    { "id": "portamenu", "nicchia": "horeca", "esclusiva": true,
-      "n": { "it": "Portamenu da tavolo", "en": "Table menu holder" },
-      "macchine": ["co2", "uv"],
-      "processo": "CO2 taglia e piega la struttura · UV stampa il logo a colori sul fronte",
-      "varianti": { "materiale": ["Legno", "Plexiglass"], "formato": ["A5", "A4", "1/3 A4"], "finitura": ["naturale", "inciso", "inciso + logo a colori"] },
-      "personalizzazione": ["logo", "nome locale", "QR"],
-      "b2c": { "prezzoDa": 18.0 },
-      "b2b": { "minimo": 10, "scaglioni": [[10, 14.5], [25, 12.9], [50, 11.2]] },
-      "foto": { "scatti": 3, "configurazioni": 18 } },
-
-    { "id": "numeri-tavolo", "nicchia": "horeca", "esclusiva": true,
-      "n": { "it": "Numeri da tavolo", "en": "Table numbers" },
-      "macchine": ["co2", "f2ultra"],
-      "processo": "CO2 per legno e plexiglass · F2 per la versione in ottone o inox, con numero a colori",
-      "varianti": { "materiale": ["Legno", "Plexiglass", "Ottone", "Inox"], "formato": ["da tavolo", "a bandiera", "adesivo"] },
-      "personalizzazione": ["numerazione", "logo"],
-      "b2c": { "prezzoDa": 6.5 },
-      "b2b": { "minimo": 20, "scaglioni": [[20, 4.9], [50, 3.9], [100, 3.2]] },
-      "foto": { "scatti": 3, "configurazioni": 12 } },
-
-    { "id": "targhe-porta-camera", "nicchia": "horeca", "esclusiva": true,
-      "n": { "it": "Targhe numero camera", "en": "Room number plates" },
-      "macchine": ["f2ultra", "uv"],
-      "processo": "F2 incide inox o alluminio anodizzato · UV aggiunge il colore del brand",
-      "varianti": { "materiale": ["Inox", "Alluminio anodizzato", "Ottone"], "formato": ["100×100", "150×80", "tonda ⌀90"] },
-      "personalizzazione": ["numero", "logo hotel", "pittogrammi", "braille in vernice UV"],
-      "b2c": { "prezzoDa": 22.0 },
-      "b2b": { "minimo": 10, "scaglioni": [[10, 17.5], [30, 14.9], [80, 12.5]] },
-      "foto": { "scatti": 3, "configurazioni": 9 } },
-
-    { "id": "espositori-qr", "nicchia": "horeca", "esclusiva": true,
-      "n": { "it": "Espositori QR da banco", "en": "QR code stands" },
-      "macchine": ["co2", "uv"],
-      "processo": "CO2 taglia la sagoma · UV stampa QR e istruzioni a colori (il QR stampato legge meglio dell'inciso)",
-      "varianti": { "materiale": ["Legno", "Plexiglass"], "formato": ["piccolo", "medio", "a bandiera"] },
-      "personalizzazione": ["QR", "logo", "testo multilingua"],
-      "b2c": { "prezzoDa": 12.0 },
-      "b2b": { "minimo": 10, "scaglioni": [[10, 9.5], [30, 7.9], [60, 6.5]] },
-      "foto": { "scatti": 2, "configurazioni": 6 } },
-
-    { "id": "calici-personalizzati", "nicchia": "horeca", "esclusiva": false,
-      "n": { "it": "Calici e bicchieri personalizzati", "en": "Custom glassware" },
-      "macchine": ["uv"],
+    {
+      "id": "portamenu",
+      "nicchia": "horeca",
+      "esclusiva": true,
+      "n": {
+        "it": "Portamenu da tavolo",
+        "en": "Table menu holder"
+      },
+      "macchine": [
+        "p3",
+        "uv"
+      ],
+      "processo": "P3 taglia e piega la struttura · UV stampa il logo a colori sul fronte",
+      "varianti": {
+        "materiale": [
+          "Legno",
+          "Plexiglass"
+        ],
+        "formato": [
+          "A5",
+          "A4",
+          "1/3 A4"
+        ],
+        "finitura": [
+          "naturale",
+          "inciso",
+          "inciso + logo a colori"
+        ]
+      },
+      "personalizzazione": [
+        "logo",
+        "nome locale",
+        "QR"
+      ],
+      "b2c": {
+        "prezzoDa": 18.0
+      },
+      "b2b": {
+        "minimo": 10,
+        "scaglioni": [
+          [
+            10,
+            14.5
+          ],
+          [
+            25,
+            12.9
+          ],
+          [
+            50,
+            11.2
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 18
+      }
+    },
+    {
+      "id": "numeri-tavolo",
+      "nicchia": "horeca",
+      "esclusiva": true,
+      "n": {
+        "it": "Numeri da tavolo",
+        "en": "Table numbers"
+      },
+      "macchine": [
+        "p3",
+        "f2"
+      ],
+      "processo": "P3 taglia legno e plexiglass · F2 marca i numeri su piastrine metalliche acquistate già tagliate",
+      "varianti": {
+        "materiale": [
+          "Legno",
+          "Plexiglass",
+          "Ottone (piastrina)",
+          "Inox (piastrina)"
+        ],
+        "formato": [
+          "da tavolo",
+          "a bandiera",
+          "adesivo"
+        ]
+      },
+      "personalizzazione": [
+        "numerazione",
+        "logo"
+      ],
+      "b2c": {
+        "prezzoDa": 6.5
+      },
+      "b2b": {
+        "minimo": 20,
+        "scaglioni": [
+          [
+            20,
+            4.9
+          ],
+          [
+            50,
+            3.9
+          ],
+          [
+            100,
+            3.2
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 12
+      }
+    },
+    {
+      "id": "targhe-porta-camera",
+      "nicchia": "horeca",
+      "esclusiva": true,
+      "n": {
+        "it": "Targhe numero camera",
+        "en": "Room number plates"
+      },
+      "macchine": [
+        "f2",
+        "uv"
+      ],
+      "processo": "F2 marca la piastra metallica acquistata a misura · UV stampa il colore del brand",
+      "varianti": {
+        "materiale": [
+          "Inox",
+          "Alluminio anodizzato",
+          "Ottone"
+        ],
+        "formato": [
+          "100×100",
+          "150×80",
+          "tonda ⌀90"
+        ]
+      },
+      "personalizzazione": [
+        "numero",
+        "logo hotel",
+        "pittogrammi",
+        "braille in vernice UV"
+      ],
+      "b2c": {
+        "prezzoDa": 22.0
+      },
+      "b2b": {
+        "minimo": 10,
+        "scaglioni": [
+          [
+            10,
+            17.5
+          ],
+          [
+            30,
+            14.9
+          ],
+          [
+            80,
+            12.5
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 9
+      }
+    },
+    {
+      "id": "espositori-qr",
+      "nicchia": "horeca",
+      "esclusiva": true,
+      "n": {
+        "it": "Espositori QR da banco",
+        "en": "QR code stands"
+      },
+      "macchine": [
+        "p3",
+        "uv"
+      ],
+      "processo": "P3 taglia la sagoma · UV stampa QR e istruzioni a colori (il QR stampato legge meglio dell'inciso)",
+      "varianti": {
+        "materiale": [
+          "Legno",
+          "Plexiglass"
+        ],
+        "formato": [
+          "piccolo",
+          "medio",
+          "a bandiera"
+        ]
+      },
+      "personalizzazione": [
+        "QR",
+        "logo",
+        "testo multilingua"
+      ],
+      "b2c": {
+        "prezzoDa": 12.0
+      },
+      "b2b": {
+        "minimo": 10,
+        "scaglioni": [
+          [
+            10,
+            9.5
+          ],
+          [
+            30,
+            7.9
+          ],
+          [
+            60,
+            6.5
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 2,
+        "configurazioni": 6
+      }
+    },
+    {
+      "id": "calici-personalizzati",
+      "nicchia": "horeca",
+      "esclusiva": false,
+      "n": {
+        "it": "Calici e bicchieri personalizzati",
+        "en": "Custom glassware"
+      },
+      "macchine": [
+        "uv"
+      ],
       "processo": "UV con rotativo: stampa a colori su vetro cilindrico, senza calore",
-      "varianti": { "articolo": ["Calice vino", "Bicchiere birra", "Flute", "Tumbler", "Bottiglia"], "finitura": ["colore", "bianco coprente", "vernice lucida"] },
-      "personalizzazione": ["logo", "nome", "annata"],
-      "b2c": { "prezzoDa": 9.5 },
-      "b2b": { "minimo": 24, "scaglioni": [[24, 7.2], [60, 5.9], [144, 4.9]] },
-      "foto": { "scatti": 3, "configurazioni": 15 },
-      "nota": "Enoteche e birrifici: ordine ricorrente per stagione. Il rotativo è la capacità che quasi nessuno ha in zona." },
-
-    { "id": "sottobicchieri", "nicchia": "horeca", "esclusiva": true,
-      "n": { "it": "Sottobicchieri personalizzati", "en": "Custom coasters" },
-      "macchine": ["co2", "uv"],
-      "processo": "CO2 taglia sughero o legno · UV stampa il logo a colori",
-      "varianti": { "materiale": ["Sughero", "Legno", "Ardesia"], "formato": ["tondo ⌀90", "quadro 95", "sagomato"] },
-      "personalizzazione": ["logo", "claim"],
-      "b2c": { "prezzoDa": 4.5 },
-      "b2b": { "minimo": 50, "scaglioni": [[50, 2.9], [150, 2.2], [400, 1.7]] },
-      "foto": { "scatti": 2, "configurazioni": 9 } },
-
-    { "id": "targhette-allergeni", "nicchia": "horeca", "esclusiva": false,
-      "n": { "it": "Targhette allergeni e igiene", "en": "Allergen and hygiene tags" },
-      "macchine": ["f2ultra"],
+      "varianti": {
+        "articolo": [
+          "Calice vino",
+          "Bicchiere birra",
+          "Flute",
+          "Tumbler",
+          "Bottiglia"
+        ],
+        "finitura": [
+          "colore",
+          "bianco coprente",
+          "vernice lucida"
+        ]
+      },
+      "personalizzazione": [
+        "logo",
+        "nome",
+        "annata"
+      ],
+      "b2c": {
+        "prezzoDa": 9.5
+      },
+      "b2b": {
+        "minimo": 24,
+        "scaglioni": [
+          [
+            24,
+            7.2
+          ],
+          [
+            60,
+            5.9
+          ],
+          [
+            144,
+            4.9
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 15
+      },
+      "nota": "Enoteche e birrifici: ordine ricorrente per stagione. Il rotativo è la capacità che quasi nessuno ha in zona."
+    },
+    {
+      "id": "sottobicchieri",
+      "nicchia": "horeca",
+      "esclusiva": true,
+      "n": {
+        "it": "Sottobicchieri personalizzati",
+        "en": "Custom coasters"
+      },
+      "macchine": [
+        "p3",
+        "uv"
+      ],
+      "processo": "P3 taglia sughero o legno · UV stampa il logo a colori",
+      "varianti": {
+        "materiale": [
+          "Sughero",
+          "Legno",
+          "Ardesia"
+        ],
+        "formato": [
+          "tondo ⌀90",
+          "quadro 95",
+          "sagomato"
+        ]
+      },
+      "personalizzazione": [
+        "logo",
+        "claim"
+      ],
+      "b2c": {
+        "prezzoDa": 4.5
+      },
+      "b2b": {
+        "minimo": 50,
+        "scaglioni": [
+          [
+            50,
+            2.9
+          ],
+          [
+            150,
+            2.2
+          ],
+          [
+            400,
+            1.7
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 2,
+        "configurazioni": 9
+      }
+    },
+    {
+      "id": "targhette-allergeni",
+      "nicchia": "horeca",
+      "esclusiva": false,
+      "n": {
+        "it": "Targhette allergeni e igiene",
+        "en": "Allergen and hygiene tags"
+      },
+      "macchine": [
+        "f2"
+      ],
       "processo": "F2 su inox: marcatura permanente, lavabile, resistente ai disinfettanti",
-      "varianti": { "materiale": ["Inox"], "formato": ["clip", "adesiva", "a spillo"] },
-      "personalizzazione": ["pittogrammi allergeni", "numerazione"],
-      "b2c": { "prezzoDa": 5.0 },
-      "b2b": { "minimo": 25, "scaglioni": [[25, 3.9], [100, 2.9]] },
-      "foto": { "scatti": 1, "configurazioni": 3 } },
-
-    { "id": "targhe-matricola", "nicchia": "industriale", "esclusiva": false,
-      "n": { "it": "Targhe matricola e dati macchina", "en": "Machine data plates" },
-      "macchine": ["f2ultra"],
-      "processo": "F2 MOPA su inox o alluminio anodizzato: marcatura permanente, resiste a oli e solventi",
-      "varianti": { "materiale": ["Inox", "Alluminio anodizzato"], "formato": ["60×40", "100×70", "150×100"] },
-      "personalizzazione": ["dati targa", "matricola progressiva", "QR", "marcatura CE"],
-      "b2c": { "prezzoDa": 14.0 },
-      "b2b": { "minimo": 25, "scaglioni": [[25, 9.9], [100, 6.9], [500, 4.5]] },
-      "foto": { "scatti": 2, "configurazioni": 6 },
-      "nota": "Riordino per obbligo normativo: il cliente torna perché deve, non perché vuole." },
-
-    { "id": "etichette-quadri", "nicchia": "industriale", "esclusiva": false,
-      "n": { "it": "Etichette per quadri elettrici", "en": "Electrical panel labels" },
-      "macchine": ["f2ultra"],
-      "processo": "F2 su alluminio anodizzato: marcatura bianca netta, la più leggibile a distanza",
-      "varianti": { "materiale": ["Alluminio anodizzato", "Inox"], "fissaggio": ["adesivo", "forata", "a incastro"] },
-      "personalizzazione": ["siglatura", "numerazione progressiva"],
-      "b2b": { "minimo": 50, "scaglioni": [[50, 2.9], [200, 1.9], [1000, 1.2]] },
-      "foto": { "scatti": 1, "configurazioni": 6 } },
-
-    { "id": "cartellonistica-sicurezza", "nicchia": "industriale", "esclusiva": true,
-      "n": { "it": "Cartellonistica di sicurezza", "en": "Safety signage" },
-      "macchine": ["co2", "uv"],
-      "processo": "CO2 sagoma il supporto · UV stampa i colori che la norma impone (rosso, giallo, verde, blu non sono opzionali)",
-      "varianti": { "materiale": ["Plexiglass", "Alluminio composito"], "formato": ["A5", "A4", "A3"] },
-      "personalizzazione": ["pittogrammi UNI EN ISO 7010", "testo", "logo aziendale"],
-      "b2b": { "minimo": 10, "scaglioni": [[10, 12.9], [50, 8.9], [200, 6.5]] },
-      "foto": { "scatti": 2, "configurazioni": 6 },
-      "nota": "Il colore è obbligatorio per norma: un concorrente con il solo CO2 non può farla. È l'esempio più chiaro del vantaggio delle tre macchine." },
-
-    { "id": "shadow-board", "nicchia": "industriale", "esclusiva": false,
-      "n": { "it": "Pannelli sagomati porta-attrezzi", "en": "Tool shadow boards" },
-      "macchine": ["co2"],
-      "processo": "CO2 taglia le sagome degli utensili sul pannello",
-      "varianti": { "materiale": ["Schiuma tecnica", "Plexiglass", "MDF"], "formato": ["su misura"] },
-      "personalizzazione": ["sagome utensili", "siglatura postazione", "logo"],
-      "b2b": { "minimo": 1, "suMisura": true },
-      "foto": { "scatti": 2, "configurazioni": 4 },
-      "_verificare": "La schiuma va verificata: solo polietilene o poliuretano. Mai PVC." },
-
-    { "id": "premi-trofei", "nicchia": "aziendale", "esclusiva": true,
-      "n": { "it": "Premi e trofei", "en": "Awards and trophies" },
-      "macchine": ["co2", "f2ultra", "uv"],
-      "processo": "CO2 taglia la base · F2 incide la targhetta in metallo · UV stampa il logo a colori. Tutte e tre.",
-      "varianti": { "materiale": ["Plexiglass + metallo", "Legno + metallo", "Vetro + metallo"], "formato": ["piccolo", "medio", "grande"] },
-      "personalizzazione": ["nome premiato", "anno", "logo", "motivazione"],
-      "b2c": { "prezzoDa": 45.0 },
-      "b2b": { "minimo": 5, "scaglioni": [[5, 38.0], [15, 32.0], [40, 27.0]] },
-      "foto": { "scatti": 3, "configurazioni": 9 },
-      "nota": "La famiglia con il margine più alto del catalogo e la sola che usa tutte e tre le macchine." },
-
-    { "id": "biglietti-metallo", "nicchia": "aziendale", "esclusiva": false,
-      "n": { "it": "Biglietti da visita in metallo", "en": "Metal business cards" },
-      "macchine": ["f2ultra"],
-      "processo": "F2: taglio e marcatura a colori su inox sottile in un solo passaggio",
-      "varianti": { "materiale": ["Inox", "Ottone", "Alluminio nero"], "finitura": ["inciso", "inciso a colori", "traforato"] },
-      "personalizzazione": ["dati", "logo", "QR"],
-      "b2c": { "prezzoDa": 8.5 },
-      "b2b": { "minimo": 25, "scaglioni": [[25, 6.5], [100, 4.9], [250, 3.9]] },
-      "foto": { "scatti": 3, "configurazioni": 9 } },
-
-    { "id": "regali-dipendenti", "nicchia": "aziendale", "esclusiva": true,
-      "n": { "it": "Regali aziendali personalizzati", "en": "Corporate gifts" },
-      "macchine": ["co2", "uv"],
-      "processo": "CO2 per la scatola e gli oggetti in legno · UV per il colore su borracce, taccuini, power bank",
-      "varianti": { "articolo": ["Borraccia", "Taccuino", "Set scrittura", "Tagliere", "Cofanetto"], "confezione": ["singola", "kit"] },
-      "personalizzazione": ["logo", "nome dipendente", "messaggio"],
-      "b2b": { "minimo": 20, "scaglioni": [[20, 24.0], [60, 19.5], [150, 16.0]] },
-      "foto": { "scatti": 4, "configurazioni": 20 } },
-
-    { "id": "bomboniere", "nicchia": "eventi", "esclusiva": true,
-      "n": { "it": "Bomboniere personalizzate", "en": "Wedding favours" },
-      "macchine": ["co2", "uv"],
-      "processo": "CO2 taglia e incide · UV aggiunge il colore dove il tema lo richiede",
-      "varianti": { "materiale": ["Legno", "Plexiglass", "Sughero"], "occasione": ["Matrimonio", "Battesimo", "Comunione", "Cresima", "Laurea"] },
-      "personalizzazione": ["nomi", "data", "frase", "colore tema"],
-      "b2c": { "prezzoDa": 3.5 },
-      "b2b": { "minimo": 30, "scaglioni": [[30, 2.9], [80, 2.4], [200, 1.9]] },
-      "foto": { "scatti": 5, "configurazioni": 30 } },
-
-    { "id": "segnaposto", "nicchia": "eventi", "esclusiva": false,
-      "n": { "it": "Segnaposto", "en": "Place cards" },
-      "macchine": ["co2"],
-      "processo": "CO2: taglio e incisione del nome",
-      "varianti": { "materiale": ["Legno", "Plexiglass", "Cartoncino"], "forma": ["rettangolare", "sagomata", "a foglia"] },
-      "personalizzazione": ["nome ospite", "tavolo"],
-      "b2c": { "prezzoDa": 1.8 },
-      "b2b": { "minimo": 50, "scaglioni": [[50, 1.4], [120, 1.1], [250, 0.9]] },
-      "foto": { "scatti": 3, "configurazioni": 9 } },
-
-    { "id": "tableau", "nicchia": "eventi", "esclusiva": true, "grandeFormato": true,
-      "n": { "it": "Tableau de mariage", "en": "Seating chart" },
-      "macchine": ["co2", "uv"],
-      "processo": "CO2 taglia il pannello · UV stampa fiori e decori a colori",
-      "varianti": { "materiale": ["Legno", "Plexiglass"], "formato": ["50×70", "70×100"] },
-      "personalizzazione": ["elenco tavoli", "nomi", "tema grafico"],
-      "b2c": { "prezzoDa": 89.0 },
-      "foto": { "scatti": 2, "configurazioni": 4 },
-      "_dipendeDa": "dimensione del piano del CO2, da confermare" },
-
-    { "id": "cake-topper", "nicchia": "eventi", "esclusiva": false,
-      "n": { "it": "Cake topper", "en": "Cake toppers" },
-      "macchine": ["co2"],
-      "processo": "CO2 su plexiglass o legno sottile",
-      "varianti": { "materiale": ["Plexiglass", "Legno", "Specchiato"], "stile": ["corsivo", "stampatello", "sagomato"] },
-      "personalizzazione": ["nomi", "data", "età"],
-      "b2c": { "prezzoDa": 12.0 },
-      "foto": { "scatti": 3, "configurazioni": 9 } },
-
-    { "id": "medagliette-animali", "nicchia": "animali", "esclusiva": false,
-      "n": { "it": "Medagliette per animali", "en": "Pet ID tags" },
-      "macchine": ["f2ultra"],
-      "processo": "F2 MOPA: incisione a colori su inox o ottone, permanente e leggibile",
-      "varianti": { "materiale": ["Inox", "Ottone", "Alluminio anodizzato"], "forma": ["osso", "tonda", "cuore", "targhetta"] },
-      "personalizzazione": ["nome", "telefono", "microchip", "QR"],
-      "b2c": { "prezzoDa": 9.9 },
-      "b2b": { "minimo": 25, "scaglioni": [[25, 6.9], [100, 4.9]] },
-      "foto": { "scatti": 3, "configurazioni": 12 },
-      "nota": "Pezzo piccolo, metallo, colore, velocità 15.000 mm/s: è il lavoro che la F2 fa meglio di qualunque altra macchina in officina. Rivendibile a veterinari e toelettature." },
-
-    { "id": "targhe-nascita", "nicchia": "bambini", "esclusiva": true,
-      "n": { "it": "Targhe nascita", "en": "Birth announcement plaques" },
-      "macchine": ["co2", "uv"],
-      "processo": "CO2 sagoma · UV stampa a colori il disegno o l'illustrazione",
-      "varianti": { "materiale": ["Legno", "Plexiglass"], "formato": ["20×20", "30×20", "sagomata"] },
-      "personalizzazione": ["nome", "data", "peso", "lunghezza", "illustrazione"],
-      "b2c": { "prezzoDa": 26.0 },
-      "foto": { "scatti": 3, "configurazioni": 9 } },
-
-    { "id": "scritte-nome", "nicchia": "bambini", "esclusiva": false,
-      "n": { "it": "Scritte nome da parete", "en": "Name wall signs" },
-      "macchine": ["co2"],
-      "processo": "CO2: taglio del nome, anche a doppio strato",
-      "varianti": { "materiale": ["Legno", "Plexiglass"], "strati": ["singolo", "doppio", "con LED"] },
-      "personalizzazione": ["nome", "carattere", "colore"],
-      "b2c": { "prezzoDa": 24.0 },
-      "foto": { "scatti": 3, "configurazioni": 9 },
-      "nota": "Sostituisce i prodotti a tema personaggio: stessa forma, nessun rischio, l'originale lo porta il cliente." },
-
-    { "id": "misuratori", "nicchia": "bambini", "esclusiva": false, "grandeFormato": true,
-      "n": { "it": "Misuratori altezza", "en": "Growth charts" },
-      "macchine": ["co2"],
-      "processo": "CO2: incisione della scala su asse di legno",
-      "varianti": { "materiale": ["Legno"], "lunghezza": ["120 cm", "150 cm"] },
-      "personalizzazione": ["nome", "decoro"],
-      "b2c": { "prezzoDa": 38.0 },
-      "foto": { "scatti": 2, "configurazioni": 4 },
-      "_dipendeDa": "dimensione del piano del CO2" },
-
-    { "id": "borracce-tumbler", "nicchia": "accessori", "esclusiva": false,
-      "n": { "it": "Borracce e tumbler personalizzati", "en": "Custom bottles and tumblers" },
-      "macchine": ["uv"],
+      "varianti": {
+        "materiale": [
+          "Inox"
+        ],
+        "formato": [
+          "clip",
+          "adesiva",
+          "a spillo"
+        ]
+      },
+      "personalizzazione": [
+        "pittogrammi allergeni",
+        "numerazione"
+      ],
+      "b2c": {
+        "prezzoDa": 5.0
+      },
+      "b2b": {
+        "minimo": 25,
+        "scaglioni": [
+          [
+            25,
+            3.9
+          ],
+          [
+            100,
+            2.9
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 1,
+        "configurazioni": 3
+      }
+    },
+    {
+      "id": "targhe-matricola",
+      "nicchia": "industriale",
+      "esclusiva": false,
+      "n": {
+        "it": "Targhe matricola e dati macchina",
+        "en": "Machine data plates"
+      },
+      "macchine": [
+        "f2"
+      ],
+      "processo": "F2 marca inox o alluminio anodizzato acquistato già tagliato: marcatura permanente, resiste a oli e solventi",
+      "varianti": {
+        "materiale": [
+          "Inox",
+          "Alluminio anodizzato"
+        ],
+        "formato": [
+          "60×40",
+          "100×70",
+          "150×100"
+        ]
+      },
+      "personalizzazione": [
+        "dati targa",
+        "matricola progressiva",
+        "QR",
+        "marcatura CE"
+      ],
+      "b2c": {
+        "prezzoDa": 14.0
+      },
+      "b2b": {
+        "minimo": 25,
+        "scaglioni": [
+          [
+            25,
+            9.9
+          ],
+          [
+            100,
+            6.9
+          ],
+          [
+            500,
+            4.5
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 2,
+        "configurazioni": 6
+      },
+      "nota": "Riordino per obbligo normativo: il cliente torna perché deve, non perché vuole. Le piastrine si comprano a misura, non si producono."
+    },
+    {
+      "id": "etichette-quadri",
+      "nicchia": "industriale",
+      "esclusiva": false,
+      "n": {
+        "it": "Etichette per quadri elettrici",
+        "en": "Electrical panel labels"
+      },
+      "macchine": [
+        "f2"
+      ],
+      "processo": "F2 su alluminio anodizzato acquistato a misura: marcatura bianca netta, la più leggibile a distanza",
+      "varianti": {
+        "materiale": [
+          "Alluminio anodizzato",
+          "Inox"
+        ],
+        "fissaggio": [
+          "adesivo",
+          "forata",
+          "a incastro"
+        ]
+      },
+      "personalizzazione": [
+        "siglatura",
+        "numerazione progressiva"
+      ],
+      "b2b": {
+        "minimo": 50,
+        "scaglioni": [
+          [
+            50,
+            2.9
+          ],
+          [
+            200,
+            1.9
+          ],
+          [
+            1000,
+            1.2
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 1,
+        "configurazioni": 6
+      }
+    },
+    {
+      "id": "cartellonistica-sicurezza",
+      "nicchia": "industriale",
+      "esclusiva": true,
+      "n": {
+        "it": "Cartellonistica di sicurezza",
+        "en": "Safety signage"
+      },
+      "macchine": [
+        "p3",
+        "uv"
+      ],
+      "processo": "P3 sagoma il supporto · UV stampa i colori che la norma impone (rosso, giallo, verde, blu non sono opzionali)",
+      "varianti": {
+        "materiale": [
+          "Plexiglass",
+          "Alluminio composito"
+        ],
+        "formato": [
+          "A5",
+          "A4",
+          "A3"
+        ]
+      },
+      "personalizzazione": [
+        "pittogrammi UNI EN ISO 7010",
+        "testo",
+        "logo aziendale"
+      ],
+      "b2b": {
+        "minimo": 10,
+        "scaglioni": [
+          [
+            10,
+            12.9
+          ],
+          [
+            50,
+            8.9
+          ],
+          [
+            200,
+            6.5
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 2,
+        "configurazioni": 6
+      },
+      "nota": "Il colore è obbligatorio per norma: un concorrente con il solo CO2 non può farla. È l'esempio più chiaro del vantaggio delle tre macchine."
+    },
+    {
+      "id": "shadow-board",
+      "nicchia": "industriale",
+      "esclusiva": false,
+      "n": {
+        "it": "Pannelli sagomati porta-attrezzi",
+        "en": "Tool shadow boards"
+      },
+      "macchine": [
+        "p3"
+      ],
+      "processo": "P3 80 W taglia le sagome degli utensili; piano da 915 × 458 e convogliatore per i pannelli lunghi",
+      "varianti": {
+        "materiale": [
+          "Schiuma tecnica",
+          "Plexiglass",
+          "MDF"
+        ],
+        "formato": [
+          "su misura"
+        ]
+      },
+      "personalizzazione": [
+        "sagome utensili",
+        "siglatura postazione",
+        "logo"
+      ],
+      "b2b": {
+        "minimo": 1,
+        "suMisura": true
+      },
+      "foto": {
+        "scatti": 2,
+        "configurazioni": 4
+      },
+      "_verificare": "La schiuma va verificata: solo polietilene o poliuretano. Mai PVC."
+    },
+    {
+      "id": "premi-trofei",
+      "nicchia": "aziendale",
+      "esclusiva": true,
+      "n": {
+        "it": "Premi e trofei",
+        "en": "Awards and trophies"
+      },
+      "macchine": [
+        "p3",
+        "f2",
+        "uv"
+      ],
+      "processo": "P3 taglia la base · F2 incide la targhetta in metallo · UV stampa il logo a colori. Tutte e tre.",
+      "varianti": {
+        "materiale": [
+          "Plexiglass + metallo",
+          "Legno + metallo",
+          "Vetro + metallo"
+        ],
+        "formato": [
+          "piccolo",
+          "medio",
+          "grande"
+        ]
+      },
+      "personalizzazione": [
+        "nome premiato",
+        "anno",
+        "logo",
+        "motivazione"
+      ],
+      "b2c": {
+        "prezzoDa": 45.0
+      },
+      "b2b": {
+        "minimo": 5,
+        "scaglioni": [
+          [
+            5,
+            38.0
+          ],
+          [
+            15,
+            32.0
+          ],
+          [
+            40,
+            27.0
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 9
+      },
+      "nota": "La famiglia con il margine più alto del catalogo e la sola che usa tutte e tre le macchine."
+    },
+    {
+      "id": "biglietti-metallo",
+      "nicchia": "aziendale",
+      "esclusiva": false,
+      "n": {
+        "it": "Biglietti da visita in metallo",
+        "en": "Metal business cards"
+      },
+      "macchine": [
+        "f2"
+      ],
+      "processo": "F2 marca le tessere metalliche acquistate già tagliate a misura carta di credito",
+      "varianti": {
+        "materiale": [
+          "Inox",
+          "Ottone",
+          "Alluminio nero"
+        ],
+        "finitura": [
+          "marcato",
+          "marcato a colori (da validare)"
+        ]
+      },
+      "personalizzazione": [
+        "dati",
+        "logo",
+        "QR"
+      ],
+      "b2c": {
+        "prezzoDa": 8.5
+      },
+      "b2b": {
+        "minimo": 25,
+        "scaglioni": [
+          [
+            25,
+            6.5
+          ],
+          [
+            100,
+            4.9
+          ],
+          [
+            250,
+            3.9
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 9
+      }
+    },
+    {
+      "id": "regali-dipendenti",
+      "nicchia": "aziendale",
+      "esclusiva": true,
+      "n": {
+        "it": "Regali aziendali personalizzati",
+        "en": "Corporate gifts"
+      },
+      "macchine": [
+        "p3",
+        "uv"
+      ],
+      "processo": "P3 per la scatola e gli oggetti in legno · UV per il colore su borracce, taccuini, power bank",
+      "varianti": {
+        "articolo": [
+          "Borraccia",
+          "Taccuino",
+          "Set scrittura",
+          "Tagliere",
+          "Cofanetto"
+        ],
+        "confezione": [
+          "singola",
+          "kit"
+        ]
+      },
+      "personalizzazione": [
+        "logo",
+        "nome dipendente",
+        "messaggio"
+      ],
+      "b2b": {
+        "minimo": 20,
+        "scaglioni": [
+          [
+            20,
+            24.0
+          ],
+          [
+            60,
+            19.5
+          ],
+          [
+            150,
+            16.0
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 4,
+        "configurazioni": 20
+      }
+    },
+    {
+      "id": "bomboniere",
+      "nicchia": "eventi",
+      "esclusiva": true,
+      "n": {
+        "it": "Bomboniere personalizzate",
+        "en": "Wedding favours"
+      },
+      "macchine": [
+        "p3",
+        "uv"
+      ],
+      "processo": "P3 taglia e incide · UV aggiunge il colore dove il tema lo richiede",
+      "varianti": {
+        "materiale": [
+          "Legno",
+          "Plexiglass",
+          "Sughero"
+        ],
+        "occasione": [
+          "Matrimonio",
+          "Battesimo",
+          "Comunione",
+          "Cresima",
+          "Laurea"
+        ]
+      },
+      "personalizzazione": [
+        "nomi",
+        "data",
+        "frase",
+        "colore tema"
+      ],
+      "b2c": {
+        "prezzoDa": 3.5
+      },
+      "b2b": {
+        "minimo": 30,
+        "scaglioni": [
+          [
+            30,
+            2.9
+          ],
+          [
+            80,
+            2.4
+          ],
+          [
+            200,
+            1.9
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 5,
+        "configurazioni": 30
+      }
+    },
+    {
+      "id": "segnaposto",
+      "nicchia": "eventi",
+      "esclusiva": false,
+      "n": {
+        "it": "Segnaposto",
+        "en": "Place cards"
+      },
+      "macchine": [
+        "p3"
+      ],
+      "processo": "P3: taglio e incisione del nome",
+      "varianti": {
+        "materiale": [
+          "Legno",
+          "Plexiglass",
+          "Cartoncino"
+        ],
+        "forma": [
+          "rettangolare",
+          "sagomata",
+          "a foglia"
+        ]
+      },
+      "personalizzazione": [
+        "nome ospite",
+        "tavolo"
+      ],
+      "b2c": {
+        "prezzoDa": 1.8
+      },
+      "b2b": {
+        "minimo": 50,
+        "scaglioni": [
+          [
+            50,
+            1.4
+          ],
+          [
+            120,
+            1.1
+          ],
+          [
+            250,
+            0.9
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 9
+      }
+    },
+    {
+      "id": "tableau",
+      "nicchia": "eventi",
+      "esclusiva": true,
+      "n": {
+        "it": "Tableau de mariage",
+        "en": "Seating chart"
+      },
+      "macchine": [
+        "p3",
+        "uv"
+      ],
+      "processo": "P3 taglia il pannello fino a 915 × 458 mm · UV stampa fiori e decori a colori",
+      "varianti": {
+        "materiale": [
+          "Legno",
+          "Plexiglass"
+        ],
+        "formato": [
+          "50×70",
+          "70×100"
+        ]
+      },
+      "personalizzazione": [
+        "elenco tavoli",
+        "nomi",
+        "tema grafico"
+      ],
+      "b2c": {
+        "prezzoDa": 89.0
+      },
+      "foto": {
+        "scatti": 2,
+        "configurazioni": 4
+      }
+    },
+    {
+      "id": "cake-topper",
+      "nicchia": "eventi",
+      "esclusiva": false,
+      "n": {
+        "it": "Cake topper",
+        "en": "Cake toppers"
+      },
+      "macchine": [
+        "p3"
+      ],
+      "processo": "P3 su plexiglass o legno sottile",
+      "varianti": {
+        "materiale": [
+          "Plexiglass",
+          "Legno",
+          "Specchiato"
+        ],
+        "stile": [
+          "corsivo",
+          "stampatello",
+          "sagomato"
+        ]
+      },
+      "personalizzazione": [
+        "nomi",
+        "data",
+        "età"
+      ],
+      "b2c": {
+        "prezzoDa": 12.0
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 9
+      }
+    },
+    {
+      "id": "medagliette-animali",
+      "nicchia": "animali",
+      "esclusiva": false,
+      "n": {
+        "it": "Medagliette per animali",
+        "en": "Pet ID tags"
+      },
+      "macchine": [
+        "f2"
+      ],
+      "processo": "F2 marca le medagliette acquistate già sagomate. 6.000 mm/s e camera 50 MP: un lotto da cento in una sessione",
+      "varianti": {
+        "materiale": [
+          "Inox",
+          "Ottone",
+          "Alluminio anodizzato"
+        ],
+        "forma": [
+          "osso",
+          "tonda",
+          "cuore",
+          "targhetta"
+        ]
+      },
+      "personalizzazione": [
+        "nome",
+        "telefono",
+        "microchip",
+        "QR"
+      ],
+      "b2c": {
+        "prezzoDa": 9.9
+      },
+      "b2b": {
+        "minimo": 25,
+        "scaglioni": [
+          [
+            25,
+            6.9
+          ],
+          [
+            100,
+            4.9
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 12
+      },
+      "nota": "Il lavoro che la F2 fa meglio: pezzo piccolo, metallo, ripetitivo. Le medagliette grezze si comprano a pochi centesimi. Canale B2B naturale — veterinari e toelettature — che nessuno presidia."
+    },
+    {
+      "id": "targhe-nascita",
+      "nicchia": "bambini",
+      "esclusiva": true,
+      "n": {
+        "it": "Targhe nascita",
+        "en": "Birth announcement plaques"
+      },
+      "macchine": [
+        "p3",
+        "uv"
+      ],
+      "processo": "P3 sagoma · UV stampa a colori il disegno o l'illustrazione",
+      "varianti": {
+        "materiale": [
+          "Legno",
+          "Plexiglass"
+        ],
+        "formato": [
+          "20×20",
+          "30×20",
+          "sagomata"
+        ]
+      },
+      "personalizzazione": [
+        "nome",
+        "data",
+        "peso",
+        "lunghezza",
+        "illustrazione"
+      ],
+      "b2c": {
+        "prezzoDa": 26.0
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 9
+      }
+    },
+    {
+      "id": "scritte-nome",
+      "nicchia": "bambini",
+      "esclusiva": false,
+      "n": {
+        "it": "Scritte nome da parete",
+        "en": "Name wall signs"
+      },
+      "macchine": [
+        "p3"
+      ],
+      "processo": "P3: taglio del nome, anche a doppio strato",
+      "varianti": {
+        "materiale": [
+          "Legno",
+          "Plexiglass"
+        ],
+        "strati": [
+          "singolo",
+          "doppio",
+          "con LED"
+        ]
+      },
+      "personalizzazione": [
+        "nome",
+        "carattere",
+        "colore"
+      ],
+      "b2c": {
+        "prezzoDa": 24.0
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 9
+      },
+      "nota": "Sostituisce i prodotti a tema personaggio: stessa forma, nessun rischio, l'originale lo porta il cliente."
+    },
+    {
+      "id": "misuratori",
+      "nicchia": "bambini",
+      "esclusiva": false,
+      "n": {
+        "it": "Misuratori altezza",
+        "en": "Growth charts"
+      },
+      "macchine": [
+        "p3"
+      ],
+      "processo": "P3: con il convogliatore la lunghezza non è un limite",
+      "varianti": {
+        "materiale": [
+          "Legno"
+        ],
+        "lunghezza": [
+          "120 cm",
+          "150 cm"
+        ]
+      },
+      "personalizzazione": [
+        "nome",
+        "decoro"
+      ],
+      "b2c": {
+        "prezzoDa": 38.0
+      },
+      "foto": {
+        "scatti": 2,
+        "configurazioni": 4
+      }
+    },
+    {
+      "id": "borracce-tumbler",
+      "nicchia": "accessori",
+      "esclusiva": false,
+      "n": {
+        "it": "Borracce e tumbler personalizzati",
+        "en": "Custom bottles and tumblers"
+      },
+      "macchine": [
+        "uv"
+      ],
       "processo": "UV con rotativo: colore pieno su acciaio, senza calore né sublimazione",
-      "varianti": { "articolo": ["Borraccia 500", "Tumbler 600", "Termos"], "finitura": ["colore", "bianco coprente", "fluorescente"] },
-      "personalizzazione": ["nome", "logo", "illustrazione"],
-      "b2c": { "prezzoDa": 22.0 },
-      "b2b": { "minimo": 24, "scaglioni": [[24, 17.5], [60, 14.9], [150, 12.5]] },
-      "foto": { "scatti": 3, "configurazioni": 9 } },
-
-    { "id": "portachiavi", "nicchia": "accessori", "esclusiva": false,
-      "n": { "it": "Portachiavi personalizzati", "en": "Custom keychains" },
-      "macchine": ["co2", "f2ultra"],
-      "processo": "CO2 per legno, pelle, plexiglass · F2 per metallo con colore",
-      "varianti": { "materiale": ["Legno", "Pelle", "Plexiglass", "Inox", "Ottone"], "forma": ["tonda", "rettangolare", "sagomata"] },
-      "personalizzazione": ["nome", "logo", "coordinate", "QR"],
-      "b2c": { "prezzoDa": 5.9 },
-      "b2b": { "minimo": 50, "scaglioni": [[50, 3.9], [150, 2.9], [400, 2.2]] },
-      "foto": { "scatti": 5, "configurazioni": 25 } },
-
-    { "id": "taglieri", "nicchia": "casa", "esclusiva": true,
-      "n": { "it": "Taglieri personalizzati", "en": "Custom cutting boards" },
-      "macchine": ["co2", "uv"],
-      "processo": "CO2 incide sul retro · UV stampa a colori sul fronte decorativo",
-      "varianti": { "materiale": ["Legno"], "formato": ["piccolo", "medio", "grande"] },
-      "personalizzazione": ["nome", "ricetta", "illustrazione a colori"],
-      "b2c": { "prezzoDa": 29.0 },
-      "foto": { "scatti": 3, "configurazioni": 9 } },
-
-    { "id": "ritratto-sagomato", "nicchia": "regalo", "esclusiva": true,
-      "n": { "it": "Ritratto sagomato dal tuo disegno", "en": "Custom silhouette portrait" },
-      "macchine": ["co2", "uv"],
-      "processo": "CO2 taglia la sagoma a strati dal disegno del cliente · UV aggiunge i colori",
-      "varianti": { "materiale": ["Legno", "Plexiglass"], "strati": ["2", "3", "4"], "base": ["da appoggio", "da parete", "con LED"] },
-      "personalizzazione": ["disegno o foto del cliente", "nome", "colori"],
-      "b2c": { "prezzoDa": 34.99 },
-      "foto": { "scatti": 3, "configurazioni": 12 },
-      "nota": "Sostituisce i prodotti a tema Marvel e Ghibli: stessa lavorazione, stesso prezzo, margine migliore e nessun rischio — l'originale lo porta il cliente e nessun concorrente lo può copiare." }
-
-  ]
+      "varianti": {
+        "articolo": [
+          "Borraccia 500",
+          "Tumbler 600",
+          "Termos"
+        ],
+        "finitura": [
+          "colore",
+          "bianco coprente",
+          "fluorescente"
+        ]
+      },
+      "personalizzazione": [
+        "nome",
+        "logo",
+        "illustrazione"
+      ],
+      "b2c": {
+        "prezzoDa": 22.0
+      },
+      "b2b": {
+        "minimo": 24,
+        "scaglioni": [
+          [
+            24,
+            17.5
+          ],
+          [
+            60,
+            14.9
+          ],
+          [
+            150,
+            12.5
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 9
+      }
+    },
+    {
+      "id": "portachiavi",
+      "nicchia": "accessori",
+      "esclusiva": false,
+      "n": {
+        "it": "Portachiavi personalizzati",
+        "en": "Custom keychains"
+      },
+      "macchine": [
+        "p3",
+        "f2"
+      ],
+      "processo": "P3 taglia legno, pelle e plexiglass · F2 marca i portachiavi metallici acquistati grezzi",
+      "varianti": {
+        "materiale": [
+          "Legno",
+          "Pelle",
+          "Plexiglass",
+          "Inox",
+          "Ottone"
+        ],
+        "forma": [
+          "tonda",
+          "rettangolare",
+          "sagomata"
+        ]
+      },
+      "personalizzazione": [
+        "nome",
+        "logo",
+        "coordinate",
+        "QR"
+      ],
+      "b2c": {
+        "prezzoDa": 5.9
+      },
+      "b2b": {
+        "minimo": 50,
+        "scaglioni": [
+          [
+            50,
+            3.9
+          ],
+          [
+            150,
+            2.9
+          ],
+          [
+            400,
+            2.2
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 5,
+        "configurazioni": 25
+      }
+    },
+    {
+      "id": "taglieri",
+      "nicchia": "casa",
+      "esclusiva": true,
+      "n": {
+        "it": "Taglieri personalizzati",
+        "en": "Custom cutting boards"
+      },
+      "macchine": [
+        "p3",
+        "uv"
+      ],
+      "processo": "P3 incide sul retro · UV stampa a colori sul fronte decorativo",
+      "varianti": {
+        "materiale": [
+          "Legno"
+        ],
+        "formato": [
+          "piccolo",
+          "medio",
+          "grande"
+        ]
+      },
+      "personalizzazione": [
+        "nome",
+        "ricetta",
+        "illustrazione a colori"
+      ],
+      "b2c": {
+        "prezzoDa": 29.0
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 9
+      }
+    },
+    {
+      "id": "ritratto-sagomato",
+      "nicchia": "regalo",
+      "esclusiva": true,
+      "n": {
+        "it": "Ritratto sagomato dal tuo disegno",
+        "en": "Custom silhouette portrait"
+      },
+      "macchine": [
+        "p3",
+        "uv"
+      ],
+      "processo": "P3 taglia la sagoma a strati dal disegno del cliente · UV aggiunge i colori",
+      "varianti": {
+        "materiale": [
+          "Legno",
+          "Plexiglass"
+        ],
+        "strati": [
+          "2",
+          "3",
+          "4"
+        ],
+        "base": [
+          "da appoggio",
+          "da parete",
+          "con LED"
+        ]
+      },
+      "personalizzazione": [
+        "disegno o foto del cliente",
+        "nome",
+        "colori"
+      ],
+      "b2c": {
+        "prezzoDa": 34.99
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 12
+      },
+      "nota": "Sostituisce i prodotti a tema Marvel e Ghibli: stessa lavorazione, stesso prezzo, margine migliore e nessun rischio — l'originale lo porta il cliente e nessun concorrente lo può copiare."
+    },
+    {
+      "id": "grembiuli-divise",
+      "nicchia": "horeca",
+      "esclusiva": true,
+      "n": {
+        "it": "Grembiuli e divise personalizzate",
+        "en": "Custom aprons and uniforms"
+      },
+      "macchine": [
+        "uv",
+        "wonderpress"
+      ],
+      "processo": "UV stampa il trasferimento DTF · il forno lo cura · la pressa lo applica. Colore pieno, nessun minimo d'ordine",
+      "varianti": {
+        "articolo": [
+          "Grembiule",
+          "Polo",
+          "Camicia",
+          "Cappellino"
+        ],
+        "stampa": [
+          "logo",
+          "logo + nome"
+        ]
+      },
+      "personalizzazione": [
+        "logo locale",
+        "nome del dipendente",
+        "ruolo"
+      ],
+      "b2c": {
+        "prezzoDa": 24.0
+      },
+      "b2b": {
+        "minimo": 6,
+        "scaglioni": [
+          [
+            6,
+            19.5
+          ],
+          [
+            20,
+            16.5
+          ],
+          [
+            50,
+            13.9
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 16
+      },
+      "nota": "Il ristoratore che ordina i portamenu ordina anche i grembiuli, e li ricompra quando entra personale nuovo. Nessun minimo è l'argomento di vendita: i fornitori tessili ne impongono 50."
+    },
+    {
+      "id": "capi-aziendali",
+      "nicchia": "aziendale",
+      "esclusiva": true,
+      "n": {
+        "it": "Capi e gadget tessili aziendali",
+        "en": "Corporate apparel"
+      },
+      "macchine": [
+        "uv",
+        "wonderpress"
+      ],
+      "processo": "UV DTF stampato e curato in casa, applicato con la pressa a 100 kg",
+      "varianti": {
+        "articolo": [
+          "T-shirt",
+          "Felpa",
+          "Tote bag",
+          "Cappellino",
+          "Asciugamano"
+        ],
+        "stampa": [
+          "fronte",
+          "fronte + retro"
+        ]
+      },
+      "personalizzazione": [
+        "logo",
+        "claim",
+        "nome"
+      ],
+      "b2b": {
+        "minimo": 10,
+        "scaglioni": [
+          [
+            10,
+            18.5
+          ],
+          [
+            30,
+            15.0
+          ],
+          [
+            80,
+            12.5
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 4,
+        "configurazioni": 20
+      }
+    },
+    {
+      "id": "tazze-3d",
+      "nicchia": "accessori",
+      "esclusiva": true,
+      "n": {
+        "it": "Tazze e oggetti a stampa avvolgente",
+        "en": "Wrap-printed mugs and objects"
+      },
+      "macchine": [
+        "uv",
+        "wonderpress"
+      ],
+      "processo": "Modulo sottovuoto della WonderPress: sublimazione 3D che avvolge tutta la superficie, senza giunzioni",
+      "varianti": {
+        "articolo": [
+          "Tazza",
+          "Tazza termica",
+          "Cover telefono",
+          "Borraccia"
+        ],
+        "stampa": [
+          "fotografica",
+          "logo",
+          "colore pieno"
+        ]
+      },
+      "personalizzazione": [
+        "foto",
+        "nome",
+        "logo"
+      ],
+      "b2c": {
+        "prezzoDa": 14.0
+      },
+      "b2b": {
+        "minimo": 12,
+        "scaglioni": [
+          [
+            12,
+            11.0
+          ],
+          [
+            36,
+            9.2
+          ],
+          [
+            100,
+            7.9
+          ]
+        ]
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 12
+      },
+      "nota": "La sublimazione 3D avvolge il pezzo: è la differenza visibile da una stampa piana applicata male, ed è quello che giustifica il prezzo."
+    },
+    {
+      "id": "insegne-grandi",
+      "nicchia": "aziendale",
+      "esclusiva": true,
+      "n": {
+        "it": "Insegne e pannelli da parete",
+        "en": "Large signs and wall panels"
+      },
+      "macchine": [
+        "p3",
+        "uv"
+      ],
+      "processo": "P3 taglia fino a 915 × 458 mm, o senza limite di lunghezza col convogliatore · UV stampa i colori del brand",
+      "varianti": {
+        "materiale": [
+          "Legno",
+          "Plexiglass",
+          "Multistrato"
+        ],
+        "formato": [
+          "50×70",
+          "70×100",
+          "fuori misura"
+        ],
+        "montaggio": [
+          "a parete",
+          "distanziali",
+          "retroilluminata"
+        ]
+      },
+      "personalizzazione": [
+        "logo",
+        "testo",
+        "colori aziendali"
+      ],
+      "b2c": {
+        "prezzoDa": 95.0
+      },
+      "b2b": {
+        "minimo": 1,
+        "suMisura": true
+      },
+      "foto": {
+        "scatti": 3,
+        "configurazioni": 12
+      },
+      "nota": "Sbloccata dalla P3: con 80 W e un piano da quasi un metro il grande formato non va più subappaltato."
+    },
+    {
+      "id": "personalizzazione-dal-vivo",
+      "nicchia": "servizi",
+      "esclusiva": false,
+      "n": {
+        "it": "Personalizzazione dal vivo su evento",
+        "en": "Live on-site personalisation"
+      },
+      "macchine": [
+        "f2"
+      ],
+      "processo": "La F2 è portatile: si incide davanti al cliente, a fiere, inaugurazioni, eventi aziendali e in negozio",
+      "varianti": {
+        "supporto": [
+          "Portachiavi",
+          "Medagliette",
+          "Borracce",
+          "Penne",
+          "Accendini"
+        ],
+        "durata": [
+          "mezza giornata",
+          "giornata intera"
+        ]
+      },
+      "personalizzazione": [
+        "nome all'istante"
+      ],
+      "b2b": {
+        "minimo": 1,
+        "suMisura": true,
+        "note": "Si vende a giornata più il costo dei supporti"
+      },
+      "foto": {
+        "scatti": 2,
+        "configurazioni": 4
+      },
+      "nota": "Non è un prodotto, è un servizio: margine alto, nessun magazzino, e ogni evento è una vetrina davanti a centinaia di persone. È la ragione vera per cui una macchina portatile vale in azienda."
+    }
+  ],
+  "_correzione": "Corretto il 2026-08-08: la versione precedente dava alla F2 la capacità di TAGLIARE il metallo (era la F2 Ultra). La F2 reale lo MARCA soltanto, su 115×115 mm: i pezzi metallici si comprano già tagliati. In compenso la P3 80 W a 915×458 con convogliatore ha sbloccato tutto il grande formato, e la WonderPress ha aperto il tessile, che prima non era a catalogo."
 }

@@ -1,57 +1,65 @@
 {
-  "_nota": "Capacità reali del parco macchine. È la sorgente di verità per il preventivatore e per decidere cosa può entrare a catalogo: se una famiglia non è realizzabile da almeno una macchina, non si pubblica. Specifiche xTool verificate ad agosto 2026 sulle schede del produttore.",
+  "_nota": "Capacità reali del parco macchine. Sorgente di verità per il preventivatore e per decidere cosa può entrare a catalogo: se una famiglia non è realizzabile da almeno una macchina, non si pubblica. Specifiche dai dati di prodotto xTool, agosto 2026.",
+
+  "_correzione": "Versione precedente ERRATA: attribuiva alla F2 le specifiche della F2 Ultra (MOPA fibra 60 W, taglio metalli, 220x220). La macchina reale è la xTool F2 con IR 5 W + diodo 15 W, 115x115 mm, che il metallo lo MARCA e non lo taglia. Corretto il 2026-08-08.",
 
   "macchine": [
     {
-      "id": "co2",
-      "n": { "it": "Laser CO2", "en": "CO2 laser" },
-      "sorgente": "CO2 10.600 nm",
-      "ruolo": { "it": "La forma", "en": "Shape" },
-      "_daConfermare": "Potenza e dimensione del piano non dichiarate: determinano quali famiglie di grande formato sono possibili (tableau, misuratori, insegne). Compilare prima di pubblicare le famiglie marcate grandeFormato.",
-      "piano": { "x": null, "y": null },
-      "puo": ["taglio", "incisione", "marcatura"],
+      "id": "p3",
+      "n": { "it": "xTool P3", "en": "xTool P3" },
+      "sorgente": "CO2 80 W (10.600 nm)",
+      "ruolo": { "it": "La forma, in grande", "en": "Shape, at scale" },
+      "piano": { "x": 915, "y": 458, "z": 220, "unita": "mm",
+                 "note": "AutoLift motorizzato per 220 mm di altezza; con il Convogliatore Intelligente la lunghezza è praticamente illimitata" },
+      "velocitaMax": "1.200 mm/s",
+      "assistenza": "Autofocus LiDAR, doppia camera 16 MP",
+      "puo": ["taglio", "incisione", "marcatura", "produzione in serie"],
+      "spessoriTaglio": { "legno": "fino a 20 mm", "acrilico": "fino a 25 mm" },
       "materiali": [
-        { "m": "Legno massello", "taglio": true, "incisione": true, "note": "fino a ~10 mm secondo potenza" },
+        { "m": "Legno massello", "taglio": "fino a 20 mm", "incisione": true },
         { "m": "Compensato / MDF", "taglio": true, "incisione": true },
-        { "m": "Plexiglass (acrilico)", "taglio": true, "incisione": true, "note": "colato incide meglio dell'estruso: bianco satinato invece che trasparente" },
-        { "m": "Pelle e cuoio", "taglio": true, "incisione": true },
+        { "m": "Plexiglass (acrilico)", "taglio": "fino a 25 mm", "incisione": true,
+          "note": "colato incide bianco satinato, estruso resta trasparente" },
+        { "m": "Pelle conciata al vegetale", "taglio": true, "incisione": true },
         { "m": "Sughero", "taglio": true, "incisione": true },
         { "m": "Carta e cartoncino", "taglio": true, "incisione": true },
         { "m": "Tessuto", "taglio": true, "incisione": false },
         { "m": "Ardesia e pietra", "taglio": false, "incisione": true },
-        { "m": "Vetro", "taglio": false, "incisione": true, "note": "solo satinatura, non taglio" },
+        { "m": "Vetro", "taglio": false, "incisione": true, "note": "satinatura, non taglio" },
         { "m": "Gomma per timbri", "taglio": true, "incisione": true },
-        { "m": "Alluminio anodizzato", "taglio": false, "incisione": true, "note": "marca lo strato anodizzato, non il metallo" }
+        { "m": "Alluminio anodizzato", "taglio": false, "incisione": true, "note": "marca lo strato anodizzato" }
       ],
-      "nonPuo": [
-        "Metallo nudo: serve la fibra, oppure uno spray di marcatura",
-        "Colore: il CO2 brucia, non stampa"
-      ]
+      "nonPuo": ["Metallo nudo: serve la F2, oppure uno spray di marcatura", "Colore: brucia, non stampa"],
+      "nota": "È la macchina principale: piano da quasi un metro, 80 W e convogliatore. Tutto il grande formato e tutta la produzione in serie passano da qui."
     },
 
     {
-      "id": "f2ultra",
-      "n": { "it": "xTool F2 Ultra", "en": "xTool F2 Ultra" },
-      "sorgente": "MOPA fibra 60 W (1064 nm) + diodo 40 W (455 nm)",
-      "ruolo": { "it": "Il metallo, e il colore sul metallo", "en": "Metal and colour on metal" },
-      "piano": { "x": 220, "y": 220, "unita": "mm", "note": "espandibile; è il vincolo che esclude il grande formato" },
-      "velocitaMax": "15.000 mm/s",
-      "precisione": "0,2 mm, doppia camera 48 MP",
-      "puo": ["marcatura a colori", "incisione profonda", "taglio metalli sottili", "taglio legno e acrilico (diodo)"],
+      "id": "f2",
+      "n": { "it": "xTool F2", "en": "xTool F2" },
+      "sorgente": "IR 5 W (1064 nm) + diodo 15 W (455 nm)",
+      "ruolo": { "it": "Il metallo e il pezzo piccolo, anche fuori sede", "en": "Metal and small parts, also on site" },
+      "piano": { "x": 115, "y": 115, "unita": "mm", "esteso": "115 × 400 mm con la prolunga a slitta" },
+      "velocitaMax": "6.000 mm/s",
+      "assistenza": "Camera 50 MP, allineamento 0,1 mm",
+      "portatile": true,
+      "puo": ["marcatura metalli", "incisione", "rilievo 3D", "taglio materiali sottili (diodo)"],
+      "spessoriTaglio": { "tiglio": "fino a 15 mm", "mdf": "fino a 8 mm", "acrilico": "fino a 10 mm" },
       "materiali": [
-        { "m": "Acciaio inox", "taglio": "fino a 2 mm", "incisione": true, "colore": true, "note": "oltre 100 colori regolando la durata dell'impulso: è la capacità rara" },
-        { "m": "Ottone", "taglio": "fino a 2 mm", "incisione": true },
-        { "m": "Alluminio", "taglio": "fino a 1 mm", "incisione": true },
-        { "m": "Titanio", "taglio": false, "incisione": true, "colore": true },
-        { "m": "Alluminio anodizzato", "incisione": true, "note": "marcatura bianca netta, la più leggibile per targhette tecniche" },
-        { "m": "Oro e argento", "incisione": true, "note": "gioielleria e medagliette" },
-        { "m": "Legno e acrilico", "taglio": "legno fino a 23 mm a più passate", "incisione": true, "note": "con il diodo 40 W" }
+        { "m": "Acciaio inox", "taglio": false, "marcatura": true, "colore": "dichiarata dal produttore",
+          "note": "MARCA, non taglia. La resa a colori va validata sui vostri campioni: 5 W IR non è una fibra MOPA" },
+        { "m": "Ottone e alluminio", "taglio": false, "marcatura": true },
+        { "m": "Alluminio anodizzato", "taglio": false, "marcatura": true, "note": "marcatura bianca netta, la più leggibile per targhette tecniche" },
+        { "m": "Oro e argento", "taglio": false, "marcatura": true, "note": "gioielleria e medagliette" },
+        { "m": "Vetro e ceramica", "taglio": false, "marcatura": true },
+        { "m": "Plastiche tecniche", "taglio": false, "marcatura": true },
+        { "m": "Legno, pelle, acrilico", "taglio": "sottili, col diodo", "incisione": true }
       ],
       "nonPuo": [
-        "Grande formato: 220 × 220 mm è il limite",
-        "Vetro e pietra: la fibra non li incide",
-        "Colore fotografico: la MOPA dà tinte da ossidazione, non un'immagine stampata"
-      ]
+        "TAGLIARE il metallo: lo marca soltanto. I pezzi metallici si comprano già tagliati",
+        "Grande formato: 115 × 115 mm, o 115 × 400 con la prolunga",
+        "Sostituire la P3 sul taglio: 15 W contro 80 W"
+      ],
+      "nota": "È portatile: personalizzazione dal vivo a fiere, eventi e presso il cliente. È un servizio a margine alto e senza magazzino, non solo una macchina da banco."
     },
 
     {
@@ -59,9 +67,9 @@
       "n": { "it": "xTool O1 Omni Dual UV", "en": "xTool O1 Omni Dual UV" },
       "sorgente": "Stampa UV LED, doppia testa",
       "ruolo": { "it": "Il colore su qualunque cosa", "en": "Colour on anything" },
-      "piano": { "x": 330, "y": 420, "z": 150, "unita": "mm", "note": "A3+, altezza utile oltre 150 mm" },
+      "piano": { "x": 330, "y": 420, "z": 150, "unita": "mm", "note": "A3+, oltre 150 mm di altezza utile" },
       "inchiostri": ["CMYK", "bianco rigido", "bianco flessibile", "vernice matte/lucida/foil", "magenta e giallo fluorescenti"],
-      "puo": ["stampa diretta", "UV DTF", "stampa su tessuto e trasferimenti", "stampa su cilindri (rotativo)"],
+      "puo": ["stampa diretta", "produzione trasferimenti UV DTF", "stampa su tessuto", "stampa su cilindri (rotativo)"],
       "materiali": [
         { "m": "Vetro", "stampa": true, "note": "calici, bottiglie, bicchieri col rotativo" },
         { "m": "Metallo", "stampa": true, "note": "il bianco rigido copre i fondi scuri" },
@@ -70,20 +78,53 @@
         { "m": "Pelle", "stampa": true, "note": "bianco flessibile: non si crepa alla piega" },
         { "m": "Ceramica", "stampa": true },
         { "m": "Plastica e cover telefono", "stampa": true },
-        { "m": "Tessuto", "stampa": true, "note": "diretta o trasferimento" }
+        { "m": "Tessuto", "stampa": true, "note": "diretta, oppure trasferimento UV DTF applicato con la WonderPress" }
       ],
-      "nonPuo": [
-        "Tagliare o sagomare: la forma la fa il CO2",
-        "Oggetti oltre 150 mm di spessore o fuori da A3+",
-        "Superfici molto irregolari o porose senza primer"
-      ]
+      "nonPuo": ["Tagliare o sagomare: la forma la fa la P3", "Fuori da A3+ o oltre 150 mm di spessore", "Superfici molto porose senza primer"]
+    },
+
+    {
+      "id": "wonderpress",
+      "n": { "it": "xTool WonderPress", "en": "xTool WonderPress" },
+      "sorgente": "Pressa a caldo automatica modulare 3 in 1",
+      "ruolo": { "it": "Il trasferimento sul tessuto e sul 3D", "en": "Transfer onto textile and 3D" },
+      "piastra": { "x": 380, "y": 380, "unita": "mm", "note": "15 × 15 pollici" },
+      "pressione": "100 kg automatici",
+      "temperatura": "80–210 °C",
+      "apertura": "75 mm: entra anche una felpa spessa",
+      "moduli": [
+        { "id": "pressa", "fa": "HTV, DTF, UV DTF, sublimazione piana su capi e tessuti" },
+        { "id": "sottovuoto", "fa": "termoformatura e sublimazione 3D: tazze, borracce, cover, oggetti sagomati" },
+        { "id": "forno", "fa": "cura le pellicole DTF con purificazione dell'aria a 3 stadi" }
+      ],
+      "puo": ["capi e tessuti", "sublimazione 3D", "cura DTF in proprio"],
+      "nonPuo": ["Tagliare, incidere o stampare: applica soltanto", "Sublimazione su cotone: serve poliestere o supporto trattato — sul cotone si usa il DTF"],
+      "nota": "Chiude il cerchio con la UV: la stampante produce il trasferimento UV DTF, il forno lo cura, la pressa lo applica. Colore pieno su tessuto e su oggetti curvi, in casa, senza minimi d'ordine."
     }
   ],
 
+  "combinazioni": [
+    { "id": "forma-colore", "macchine": ["p3", "uv"],
+      "cosa": "P3 taglia la sagoma, UV stampa il colore",
+      "sblocca": "Cartellonistica normata, portamenu con logo, tableau, targhe nascita, taglieri" },
+    { "id": "tessile", "macchine": ["uv", "wonderpress"],
+      "cosa": "UV stampa il trasferimento DTF, il forno lo cura, la pressa lo applica",
+      "sblocca": "Grembiuli e divise HORECA, capi aziendali, tote bag — colore pieno senza minimi" },
+    { "id": "metallo-piccolo", "macchine": ["f2"],
+      "cosa": "Si comprano i pezzi metallici già tagliati e si personalizzano",
+      "sblocca": "Medagliette, targhette tecniche, biglietti da visita, gioielleria" },
+    { "id": "premio", "macchine": ["p3", "f2", "uv"],
+      "cosa": "P3 la base, F2 la targhetta metallica, UV il logo a colori",
+      "sblocca": "Premi e trofei: la famiglia col margine più alto" },
+    { "id": "tridimensionale", "macchine": ["uv", "wonderpress"],
+      "cosa": "Modulo sottovuoto per la sublimazione 3D",
+      "sblocca": "Tazze, borracce, cover telefono con stampa avvolgente" }
+  ],
+
   "maiLavorare": {
-    "_nota": "Non è una preferenza: è sicurezza e integrità della macchina. Da tenere anche come pagina pubblica — chi cerca «si può incidere il PVC» arriva sul sito e trova una risposta onesta.",
+    "_nota": "Sicurezza e integrità della macchina. Da tenere anche come pagina pubblica: chi cerca «si può incidere il PVC» arriva sul sito e trova una risposta onesta.",
     "materiali": [
-      { "m": "PVC e vinile", "perche": "Il taglio libera cloro gassoso: tossico per chi lavora e corrosivo per l'ottica e le guide della macchina." },
+      { "m": "PVC e vinile", "perche": "Il taglio libera cloro gassoso: tossico per chi lavora e corrosivo per ottica e guide." },
       { "m": "Policarbonato (Lexan)", "perche": "Non taglia pulito, brucia e ingiallisce sul bordo." },
       { "m": "ABS", "perche": "Fonde invece di vaporizzare e produce fumi nocivi." },
       { "m": "PTFE (Teflon)", "perche": "Libera composti fluorurati pericolosi." },
