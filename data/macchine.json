@@ -1,0 +1,94 @@
+{
+  "_nota": "Capacità reali del parco macchine. È la sorgente di verità per il preventivatore e per decidere cosa può entrare a catalogo: se una famiglia non è realizzabile da almeno una macchina, non si pubblica. Specifiche xTool verificate ad agosto 2026 sulle schede del produttore.",
+
+  "macchine": [
+    {
+      "id": "co2",
+      "n": { "it": "Laser CO2", "en": "CO2 laser" },
+      "sorgente": "CO2 10.600 nm",
+      "ruolo": { "it": "La forma", "en": "Shape" },
+      "_daConfermare": "Potenza e dimensione del piano non dichiarate: determinano quali famiglie di grande formato sono possibili (tableau, misuratori, insegne). Compilare prima di pubblicare le famiglie marcate grandeFormato.",
+      "piano": { "x": null, "y": null },
+      "puo": ["taglio", "incisione", "marcatura"],
+      "materiali": [
+        { "m": "Legno massello", "taglio": true, "incisione": true, "note": "fino a ~10 mm secondo potenza" },
+        { "m": "Compensato / MDF", "taglio": true, "incisione": true },
+        { "m": "Plexiglass (acrilico)", "taglio": true, "incisione": true, "note": "colato incide meglio dell'estruso: bianco satinato invece che trasparente" },
+        { "m": "Pelle e cuoio", "taglio": true, "incisione": true },
+        { "m": "Sughero", "taglio": true, "incisione": true },
+        { "m": "Carta e cartoncino", "taglio": true, "incisione": true },
+        { "m": "Tessuto", "taglio": true, "incisione": false },
+        { "m": "Ardesia e pietra", "taglio": false, "incisione": true },
+        { "m": "Vetro", "taglio": false, "incisione": true, "note": "solo satinatura, non taglio" },
+        { "m": "Gomma per timbri", "taglio": true, "incisione": true },
+        { "m": "Alluminio anodizzato", "taglio": false, "incisione": true, "note": "marca lo strato anodizzato, non il metallo" }
+      ],
+      "nonPuo": [
+        "Metallo nudo: serve la fibra, oppure uno spray di marcatura",
+        "Colore: il CO2 brucia, non stampa"
+      ]
+    },
+
+    {
+      "id": "f2ultra",
+      "n": { "it": "xTool F2 Ultra", "en": "xTool F2 Ultra" },
+      "sorgente": "MOPA fibra 60 W (1064 nm) + diodo 40 W (455 nm)",
+      "ruolo": { "it": "Il metallo, e il colore sul metallo", "en": "Metal and colour on metal" },
+      "piano": { "x": 220, "y": 220, "unita": "mm", "note": "espandibile; è il vincolo che esclude il grande formato" },
+      "velocitaMax": "15.000 mm/s",
+      "precisione": "0,2 mm, doppia camera 48 MP",
+      "puo": ["marcatura a colori", "incisione profonda", "taglio metalli sottili", "taglio legno e acrilico (diodo)"],
+      "materiali": [
+        { "m": "Acciaio inox", "taglio": "fino a 2 mm", "incisione": true, "colore": true, "note": "oltre 100 colori regolando la durata dell'impulso: è la capacità rara" },
+        { "m": "Ottone", "taglio": "fino a 2 mm", "incisione": true },
+        { "m": "Alluminio", "taglio": "fino a 1 mm", "incisione": true },
+        { "m": "Titanio", "taglio": false, "incisione": true, "colore": true },
+        { "m": "Alluminio anodizzato", "incisione": true, "note": "marcatura bianca netta, la più leggibile per targhette tecniche" },
+        { "m": "Oro e argento", "incisione": true, "note": "gioielleria e medagliette" },
+        { "m": "Legno e acrilico", "taglio": "legno fino a 23 mm a più passate", "incisione": true, "note": "con il diodo 40 W" }
+      ],
+      "nonPuo": [
+        "Grande formato: 220 × 220 mm è il limite",
+        "Vetro e pietra: la fibra non li incide",
+        "Colore fotografico: la MOPA dà tinte da ossidazione, non un'immagine stampata"
+      ]
+    },
+
+    {
+      "id": "uv",
+      "n": { "it": "xTool O1 Omni Dual UV", "en": "xTool O1 Omni Dual UV" },
+      "sorgente": "Stampa UV LED, doppia testa",
+      "ruolo": { "it": "Il colore su qualunque cosa", "en": "Colour on anything" },
+      "piano": { "x": 330, "y": 420, "z": 150, "unita": "mm", "note": "A3+, altezza utile oltre 150 mm" },
+      "inchiostri": ["CMYK", "bianco rigido", "bianco flessibile", "vernice matte/lucida/foil", "magenta e giallo fluorescenti"],
+      "puo": ["stampa diretta", "UV DTF", "stampa su tessuto e trasferimenti", "stampa su cilindri (rotativo)"],
+      "materiali": [
+        { "m": "Vetro", "stampa": true, "note": "calici, bottiglie, bicchieri col rotativo" },
+        { "m": "Metallo", "stampa": true, "note": "il bianco rigido copre i fondi scuri" },
+        { "m": "Plexiglass", "stampa": true },
+        { "m": "Legno", "stampa": true },
+        { "m": "Pelle", "stampa": true, "note": "bianco flessibile: non si crepa alla piega" },
+        { "m": "Ceramica", "stampa": true },
+        { "m": "Plastica e cover telefono", "stampa": true },
+        { "m": "Tessuto", "stampa": true, "note": "diretta o trasferimento" }
+      ],
+      "nonPuo": [
+        "Tagliare o sagomare: la forma la fa il CO2",
+        "Oggetti oltre 150 mm di spessore o fuori da A3+",
+        "Superfici molto irregolari o porose senza primer"
+      ]
+    }
+  ],
+
+  "maiLavorare": {
+    "_nota": "Non è una preferenza: è sicurezza e integrità della macchina. Da tenere anche come pagina pubblica — chi cerca «si può incidere il PVC» arriva sul sito e trova una risposta onesta.",
+    "materiali": [
+      { "m": "PVC e vinile", "perche": "Il taglio libera cloro gassoso: tossico per chi lavora e corrosivo per l'ottica e le guide della macchina." },
+      { "m": "Policarbonato (Lexan)", "perche": "Non taglia pulito, brucia e ingiallisce sul bordo." },
+      { "m": "ABS", "perche": "Fonde invece di vaporizzare e produce fumi nocivi." },
+      { "m": "PTFE (Teflon)", "perche": "Libera composti fluorurati pericolosi." },
+      { "m": "Fibra di carbonio e vetroresina", "perche": "Polveri e resine dannose, taglio comunque scadente." },
+      { "m": "Pelle conciata al cromo", "perche": "Libera cromo esavalente. Usare solo pelle conciata al vegetale." }
+    ]
+  }
+}
